@@ -20,4 +20,16 @@ extension Item {
 //    if dateBought + duration > currentDate
     return true
   }
+  
+  var timeSinceBuying: Int {
+    let calendar = Calendar.autoupdatingCurrent
+    let currentDate = calendar.startOfDay(for: Date())
+    let buyDate = calendar.startOfDay(for: dateBought)
+
+    let dayCount = calendar.dateComponents(
+      [.day],
+      from: currentDate, to: buyDate).day ?? 0
+
+    return dayCount
+  }
 }

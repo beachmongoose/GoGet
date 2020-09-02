@@ -41,7 +41,7 @@ extension FullListViewController: UITableViewDataSource, UITableViewDelegate {
     
     let item = allItems[indexPath.row]
     cell.item.text = item.name
-    cell.daysAgoBought.text = "\(timeSinceBuying(item)) days ago"
+    cell.daysAgoBought.text = "\(item.timeSinceBuying) days ago"
     
     return cell
   }
@@ -147,21 +147,6 @@ extension FullListViewController {
   
   override func viewWillAppear(_ animated: Bool) {
     loadItems()
-  }
-}
-
-extension FullListViewController {
-  
-  func timeSinceBuying(_ item: Item ) -> Int {
-    let calendar = Calendar.autoupdatingCurrent
-    let currentDate = calendar.startOfDay(for: Date())
-    let buyDate = calendar.startOfDay(for: item.dateBought)
-
-    let dayCount = calendar.dateComponents(
-      [.day],
-      from: currentDate, to: buyDate).day ?? 0
-
-    return dayCount
   }
 }
 
