@@ -9,6 +9,7 @@
 import UIKit
 
 class FullListViewController: UIViewController {
+  @IBOutlet var tableView: UITableView!
   var allItems = [Item]()
   var expiredItems = [Item]()
   var sincePurchase: Int {
@@ -16,10 +17,10 @@ class FullListViewController: UIViewController {
   }
   
     override func viewDidLoad() {
-      
+      loadItems()
       addNewItemButton()
-      
-        super.viewDidLoad()
+      title = "GoGet"
+      super.viewDidLoad()
     }
 
 
@@ -33,13 +34,16 @@ extension FullListViewController: UITableViewDataSource, UITableViewDelegate {
   }
   
   func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-    guard let cell = tableView.dequeueReusableCell(withIdentifier: "fullListCell", for: indexPath) as? FullListCell else {
-          fatalError("Unable to Dequeue")
-          }
+    guard let cell = tableView.dequeueReusableCell(
+      withIdentifier: "fullListCell",
+      for: indexPath)
+      as? FullListCell else {
+        fatalError("Unable to Dequeue")
+      }
     
     let item = allItems[indexPath.row]
     cell.item.text = item.name
-    cell.daysAgoBought.text = "Bought \(sincePurchase) days ago."
+    cell.daysAgoBought.text = "\(sincePurchase) days ago."
     
     return cell
   }
@@ -47,13 +51,34 @@ extension FullListViewController: UITableViewDataSource, UITableViewDelegate {
   
 }
 
-// MARK: - Adding
+// MARK: - Item Config
 extension FullListViewController {
+  
+  func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    let selectedItem = allItems[indexPath.row]
+    goToDetailView(currentItem: selectedItem,
+                   newItemBool: false,
+                   index: indexPath.row)
+    }
+  
   @objc func addItem() {
-    if let itemDetail = storyboard?.instantiateViewController(withIdentifier: "itemDetail") as? DetailViewController {
-      let newItem = Item(name: "", quantity: 1, dateBought: Date(), duration: 7)
-      itemDetail.currentItem = newItem
-      itemDetail.newItem = true
+    let newItem = Item(name: "", quantity: 1, dateBought: Date(), duration: 7)
+    goToDetailView(currentItem: newItem,
+                   newItemBool: true,
+                   index: 0)
+  }
+  
+  func goToDetailView(currentItem item: Item,
+                      newItemBool bool: Bool,
+                      index number: Int) {
+    if let itemDetail = storyboard?.instantiateViewController(
+      withIdentifier: "itemDetail")
+      as? DetailViewController {
+      
+      itemDetail.currentItem = item
+      itemDetail.newItem = bool
+      itemDetail.itemNumber = number
+      itemDetail.allItems = allItems
       navigationController?.pushViewController(itemDetail, animated: true)
     }
   }
@@ -62,7 +87,47 @@ extension FullListViewController {
 // MARK: - Top Button
 extension FullListViewController {
   func addNewItemButton() {
-    let add = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addItem))
+    let add = UIBarButtonItem(
+      barButtonSystemItem: .add,
+      target: self,
+      action: #selector(addItem)
+)
     navigationItem.rightBarButtonItem = add
   }
 }
+
+// MARK: - Data Handling
+extension FullListViewController {
+  func loadItems() {
+    let defaults = UserDefaults.standard
+    if let itemsData = defaults.object(forKey: "Items") as? Data {
+      let json = JSONDecoder()
+      
+      do {
+        allItems = try json.decode([Item].self, from: itemsData)
+      } catch {
+        print("Failed to Load")
+      }
+      tableView.reloadData()
+    }
+  }
+  
+  func save() {
+    let json = JSONEncoder()
+    if let savedData = try? json.encode(allItems) {
+      let defaults = UserDefaults.standard
+      defaults.set(savedData, forKey: "Items")
+    } else {
+      print("Failed to save")
+    }
+  }
+  
+  override func viewWillAppear(_ animated: Bool) {
+    loadItems()
+  }
+}
+
+
+
+
+
