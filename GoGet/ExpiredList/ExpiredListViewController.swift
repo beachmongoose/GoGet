@@ -19,15 +19,27 @@ class ExpiredListViewController: UIViewController {
         // Do any additional setup after loading the view.
     }
 
+}
 
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+extension ExpiredListViewController {
+  func getExpiredItems() {
+    for item in allItems {
+      let duration = item.duration
+      if timeSinceBuying(item) > duration {
+        expiredItems.append(item)
+      }
     }
-    */
+  }
+  
+  func timeSinceBuying(_ item: Item ) -> Int {
+    let calendar = Calendar.autoupdatingCurrent
+    let currentDate = calendar.startOfDay(for: Date())
+    let buyDate = calendar.startOfDay(for: item.dateBought)
 
+    let dayCount = calendar.dateComponents(
+      [.day],
+      from: currentDate, to: buyDate).day ?? 0
+
+    return dayCount
+  }
 }

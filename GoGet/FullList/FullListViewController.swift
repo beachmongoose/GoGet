@@ -12,11 +12,9 @@ class FullListViewController: UIViewController {
   @IBOutlet var tableView: UITableView!
   var allItems = [Item]()
   var expiredItems = [Item]()
-  var sincePurchase: Int {
-    return 4
-  }
   
     override func viewDidLoad() {
+      longPressDetector()
       loadItems()
       addNewItemButton()
       title = "GoGet"
@@ -43,7 +41,7 @@ extension FullListViewController: UITableViewDataSource, UITableViewDelegate {
     
     let item = allItems[indexPath.row]
     cell.item.text = item.name
-    cell.daysAgoBought.text = "\(sincePurchase) days ago."
+    cell.daysAgoBought.text = "\(item.timeSinceBuying) days ago"
     
     return cell
   }
@@ -84,8 +82,8 @@ extension FullListViewController {
   }
 }
 
-// MARK: - Top Button
-extension FullListViewController {
+// MARK: - User Input
+extension FullListViewController: UIGestureRecognizerDelegate {
   func addNewItemButton() {
     let add = UIBarButtonItem(
       barButtonSystemItem: .add,
@@ -94,6 +92,31 @@ extension FullListViewController {
 )
     navigationItem.rightBarButtonItem = add
   }
+  func longPressDetector() {
+  let longPressDetector = UILongPressGestureRecognizer(target: self, action: #selector(longPress))
+  view.addGestureRecognizer(longPressDetector)
+  }
+  
+  @objc func longPress(longPressGestureRecognizer: UILongPressGestureRecognizer) {
+    if longPressGestureRecognizer.state == UIGestureRecognizer.State.began {
+      let touchPoint = longPressGestureRecognizer.location(in: tableView)
+      if let selectedItem = tableView.indexPathForRow(at: touchPoint) {
+        deletePrompt(selectedItem.row)
+      }
+    }
+  }
+  
+  func deletePrompt(_ itemIndex: Int) {
+    let optionsAlert = UIAlertController(title: "Item Selected", message: nil, preferredStyle: .alert)
+    optionsAlert.addAction(UIAlertAction(title: "Delete", style: .default, handler: { action in
+      self.allItems.remove(at: itemIndex)
+      self.save()
+      self.tableView.reloadData()
+    }))
+    optionsAlert.addAction(UIAlertAction(title: "Cancel", style: .cancel))
+    present(optionsAlert, animated: true)
+  }
+  
 }
 
 // MARK: - Data Handling
