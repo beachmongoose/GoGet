@@ -8,8 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		9F34057A24FED00C0035A385 /* Item.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F34057924FED00C0035A385 /* Item.swift */; };
-		9F34058124FED5CF0035A385 /* ExpiredListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F34057F24FED5CF0035A385 /* ExpiredListViewController.swift */; };
-		9F34058224FED5CF0035A385 /* ExpiredListViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9F34058024FED5CF0035A385 /* ExpiredListViewController.xib */; };
+		9F34058124FED5CF0035A385 /* BuyListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F34057F24FED5CF0035A385 /* BuyListViewController.swift */; };
+		9F34058224FED5CF0035A385 /* BuyListViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9F34058024FED5CF0035A385 /* BuyListViewController.xib */; };
 		9F34058B24FED63E0035A385 /* FullListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F34058924FED63E0035A385 /* FullListViewController.swift */; };
 		9F34058C24FED63E0035A385 /* FullListViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9F34058A24FED63E0035A385 /* FullListViewController.xib */; };
 		9F34059024FED6580035A385 /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F34058E24FED6580035A385 /* DetailViewController.swift */; };
@@ -25,8 +25,8 @@
 
 /* Begin PBXFileReference section */
 		9F34057924FED00C0035A385 /* Item.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Item.swift; sourceTree = "<group>"; };
-		9F34057F24FED5CF0035A385 /* ExpiredListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpiredListViewController.swift; sourceTree = "<group>"; };
-		9F34058024FED5CF0035A385 /* ExpiredListViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ExpiredListViewController.xib; sourceTree = "<group>"; };
+		9F34057F24FED5CF0035A385 /* BuyListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuyListViewController.swift; sourceTree = "<group>"; };
+		9F34058024FED5CF0035A385 /* BuyListViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = BuyListViewController.xib; sourceTree = "<group>"; };
 		9F34058924FED63E0035A385 /* FullListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FullListViewController.swift; sourceTree = "<group>"; };
 		9F34058A24FED63E0035A385 /* FullListViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FullListViewController.xib; sourceTree = "<group>"; };
 		9F34058E24FED6580035A385 /* DetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
@@ -64,8 +64,8 @@
 		9F34057C24FED54D0035A385 /* ExpiredList */ = {
 			isa = PBXGroup;
 			children = (
-				9F34057F24FED5CF0035A385 /* ExpiredListViewController.swift */,
-				9F34058024FED5CF0035A385 /* ExpiredListViewController.xib */,
+				9F34057F24FED5CF0035A385 /* BuyListViewController.swift */,
+				9F34058024FED5CF0035A385 /* BuyListViewController.xib */,
 			);
 			path = ExpiredList;
 			sourceTree = "<group>";
@@ -192,7 +192,7 @@
 				9F930C0224FEC55F0034C8F7 /* LaunchScreen.storyboard in Resources */,
 				9F34059124FED6580035A385 /* DetailViewController.xib in Resources */,
 				9F930BFF24FEC55F0034C8F7 /* Assets.xcassets in Resources */,
-				9F34058224FED5CF0035A385 /* ExpiredListViewController.xib in Resources */,
+				9F34058224FED5CF0035A385 /* BuyListViewController.xib in Resources */,
 				9F34058C24FED63E0035A385 /* FullListViewController.xib in Resources */,
 				9F930BFD24FEC55E0034C8F7 /* Main.storyboard in Resources */,
 			);
@@ -208,7 +208,7 @@
 				9F930BF624FEC55E0034C8F7 /* AppDelegate.swift in Sources */,
 				9F34057A24FED00C0035A385 /* Item.swift in Sources */,
 				9F888C3925014EF8003810D4 /* GetItems.swift in Sources */,
-				9F34058124FED5CF0035A385 /* ExpiredListViewController.swift in Sources */,
+				9F34058124FED5CF0035A385 /* BuyListViewController.swift in Sources */,
 				9F34059024FED6580035A385 /* DetailViewController.swift in Sources */,
 				9F34059724FED7EE0035A385 /* FullListCell.swift in Sources */,
 				9F930BF824FEC55E0034C8F7 /* SceneDelegate.swift in Sources */,

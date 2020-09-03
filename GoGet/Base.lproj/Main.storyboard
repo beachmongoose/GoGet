@@ -27,32 +27,21 @@
                                             <rect key="frame" x="0.0" y="0.0" width="414" height="43.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Item" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8gw-uK-dMf">
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Item" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8gw-uK-dMf">
                                                     <rect key="frame" x="20" y="11" width="221" height="21"/>
-                                                    <constraints>
-                                                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="221" id="MKZ-IG-gAH"/>
-                                                    </constraints>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Last Bought" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="egc-Z0-jSy">
-                                                    <rect key="frame" x="265" y="11" width="129" height="21"/>
-                                                    <constraints>
-                                                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="129" id="Apx-nJ-4e3"/>
-                                                    </constraints>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Last Bought" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="egc-Z0-jSy">
+                                                    <rect key="frame" x="301.5" y="11" width="92.5" height="21"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <color key="textColor" systemColor="systemGrayColor" red="0.5568627451" green="0.5568627451" blue="0.57647058819999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                             </subviews>
-                                            <constraints>
-                                                <constraint firstItem="8gw-uK-dMf" firstAttribute="top" secondItem="8pV-34-Z6d" secondAttribute="topMargin" id="Ex3-J5-u61"/>
-                                                <constraint firstItem="8gw-uK-dMf" firstAttribute="leading" secondItem="8pV-34-Z6d" secondAttribute="leadingMargin" id="e4V-BK-aQe"/>
-                                                <constraint firstItem="egc-Z0-jSy" firstAttribute="trailing" secondItem="8pV-34-Z6d" secondAttribute="trailingMargin" id="etF-lv-yiJ"/>
-                                                <constraint firstItem="egc-Z0-jSy" firstAttribute="top" secondItem="8pV-34-Z6d" secondAttribute="topMargin" id="f2a-ok-PTb"/>
-                                                <constraint firstItem="egc-Z0-jSy" firstAttribute="leading" secondItem="8gw-uK-dMf" secondAttribute="trailing" priority="750" constant="24" id="n7l-6W-XAv"/>
-                                            </constraints>
                                         </tableViewCellContentView>
                                         <connections>
                                             <outlet property="daysAgoBought" destination="egc-Z0-jSy" id="FiW-jG-gVQ"/>
