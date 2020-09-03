@@ -32,6 +32,7 @@ class DetailViewController: UIViewController {
     }
 }
 
+// MARK: - Parse Data
 extension DetailViewController {
   func manageTextFields() {
     guard let item = currentItem else { return }
@@ -41,12 +42,14 @@ extension DetailViewController {
     intervalTextField.text = String(item.duration)
     
     if item.bought == false {
-      boughtTextField.isUserInteractionEnabled = false
-      boughtTextField.textColor = UIColor.gray
+      checkNo(self)
+      } else {
+      checkYes(self)
+      }
     }
-  }
 }
 
+// MARK: - Saving
 extension DetailViewController {
   func addSaveButton() {
     let saveButton = UIBarButtonItem(title: "Save", style: .plain, target: self, action: #selector(saveItem))
@@ -90,8 +93,9 @@ extension DetailViewController {
 
 }
 
+// MARK: - Bought Buttons
 extension DetailViewController {
-  @IBAction func checkYes(_ sender: UIButton) {
+  @IBAction func checkYes(_ sender: Any) {
     adjustButtons(yes: "circle.fill",
                   no: "circle",
                   enabled: true,
@@ -99,7 +103,7 @@ extension DetailViewController {
                   bought: true)
   }
   
-  @IBAction func checkNo(_ sender: UIButton) {
+  @IBAction func checkNo(_ sender: Any) {
     adjustButtons(yes: "circle",
                   no: "circle.fill",
                   enabled: false,

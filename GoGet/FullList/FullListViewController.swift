@@ -41,9 +41,14 @@ extension FullListViewController: UITableViewDataSource, UITableViewDelegate {
       }
     
     let item = allItems[indexPath.row]
-    cell.item.text = item.name
+    cell.item.text = "\(item.name) (\(item.quantity))"
+    
     if item.bought == true {
-    cell.daysAgoBought.text = "\(item.timeSinceBuying) days ago"
+      if item.quantity > 1 {
+        cell.daysAgoBought.text = "\(item.timeSinceBuying) days ago"
+      } else {
+        cell.daysAgoBought.text = "1 day ago"
+      }
     } else {
       cell.daysAgoBought.text = "Not bought"
     }
