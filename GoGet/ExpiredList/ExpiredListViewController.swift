@@ -14,32 +14,18 @@ class ExpiredListViewController: UIViewController {
   var expiredItems = [Item]()
   
     override func viewDidLoad() {
-        super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
+      getToBuyList()
+      super.viewDidLoad()
     }
 
 }
 
 extension ExpiredListViewController {
-  func getExpiredItems() {
+  func getToBuyList() {
     for item in allItems {
-      let duration = item.duration
-      if timeSinceBuying(item) > duration {
+      if item.needToBuy {
         expiredItems.append(item)
       }
     }
-  }
-  
-  func timeSinceBuying(_ item: Item ) -> Int {
-    let calendar = Calendar.autoupdatingCurrent
-    let currentDate = calendar.startOfDay(for: Date())
-    let buyDate = calendar.startOfDay(for: item.dateBought)
-
-    let dayCount = calendar.dateComponents(
-      [.day],
-      from: currentDate, to: buyDate).day ?? 0
-
-    return dayCount
   }
 }

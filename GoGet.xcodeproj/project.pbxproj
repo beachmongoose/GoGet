@@ -15,6 +15,7 @@
 		9F34059024FED6580035A385 /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F34058E24FED6580035A385 /* DetailViewController.swift */; };
 		9F34059124FED6580035A385 /* DetailViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9F34058F24FED6580035A385 /* DetailViewController.xib */; };
 		9F34059724FED7EE0035A385 /* FullListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F34059624FED7EE0035A385 /* FullListCell.swift */; };
+		9F888C3925014EF8003810D4 /* GetItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F888C3825014EF8003810D4 /* GetItems.swift */; };
 		9F930BF624FEC55E0034C8F7 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F930BF524FEC55E0034C8F7 /* AppDelegate.swift */; };
 		9F930BF824FEC55E0034C8F7 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F930BF724FEC55E0034C8F7 /* SceneDelegate.swift */; };
 		9F930BFD24FEC55E0034C8F7 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9F930BFB24FEC55E0034C8F7 /* Main.storyboard */; };
@@ -31,6 +32,7 @@
 		9F34058E24FED6580035A385 /* DetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
 		9F34058F24FED6580035A385 /* DetailViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = DetailViewController.xib; sourceTree = "<group>"; };
 		9F34059624FED7EE0035A385 /* FullListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FullListCell.swift; sourceTree = "<group>"; };
+		9F888C3825014EF8003810D4 /* GetItems.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetItems.swift; sourceTree = "<group>"; };
 		9F930BF224FEC55E0034C8F7 /* GoGet.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GoGet.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9F930BF524FEC55E0034C8F7 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		9F930BF724FEC55E0034C8F7 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -88,6 +90,14 @@
 			path = DetailView;
 			sourceTree = "<group>";
 		};
+		9F888C3725014EDC003810D4 /* Service Objects */ = {
+			isa = PBXGroup;
+			children = (
+				9F888C3825014EF8003810D4 /* GetItems.swift */,
+			);
+			path = "Service Objects";
+			sourceTree = "<group>";
+		};
 		9F930BE924FEC55E0034C8F7 = {
 			isa = PBXGroup;
 			children = (
@@ -107,6 +117,7 @@
 		9F930BF424FEC55E0034C8F7 /* GoGet */ = {
 			isa = PBXGroup;
 			children = (
+				9F888C3725014EDC003810D4 /* Service Objects */,
 				9F34057E24FED56B0035A385 /* FullList */,
 				9F34057C24FED54D0035A385 /* ExpiredList */,
 				9F34057B24FED3A60035A385 /* Models */,
@@ -196,6 +207,7 @@
 			files = (
 				9F930BF624FEC55E0034C8F7 /* AppDelegate.swift in Sources */,
 				9F34057A24FED00C0035A385 /* Item.swift in Sources */,
+				9F888C3925014EF8003810D4 /* GetItems.swift in Sources */,
 				9F34058124FED5CF0035A385 /* ExpiredListViewController.swift in Sources */,
 				9F34059024FED6580035A385 /* DetailViewController.swift in Sources */,
 				9F34059724FED7EE0035A385 /* FullListCell.swift in Sources */,

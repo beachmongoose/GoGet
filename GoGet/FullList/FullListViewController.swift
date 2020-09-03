@@ -12,6 +12,7 @@ class FullListViewController: UIViewController {
   @IBOutlet var tableView: UITableView!
   var allItems = [Item]()
   var expiredItems = [Item]()
+  private let getItems: GetItemsType = GetItems()
   
     override func viewDidLoad() {
       longPressDetector()
@@ -41,7 +42,11 @@ extension FullListViewController: UITableViewDataSource, UITableViewDelegate {
     
     let item = allItems[indexPath.row]
     cell.item.text = item.name
+    if item.bought == true {
     cell.daysAgoBought.text = "\(item.timeSinceBuying) days ago"
+    } else {
+      cell.daysAgoBought.text = "Not bought"
+    }
     
     return cell
   }
@@ -60,7 +65,7 @@ extension FullListViewController {
     }
   
   @objc func addItem() {
-    let newItem = Item(name: "", quantity: 1, dateBought: Date(), duration: 7)
+    let newItem = Item(name: "", quantity: 1, dateBought: Date(), duration: 7, bought: false)
     goToDetailView(currentItem: newItem,
                    newItemBool: true,
                    index: 0)
@@ -74,6 +79,7 @@ extension FullListViewController {
       as? DetailViewController {
       
       itemDetail.currentItem = item
+      itemDetail.boughtDate = item.dateBought
       itemDetail.newItem = bool
       itemDetail.itemNumber = number
       itemDetail.allItems = allItems
@@ -110,7 +116,7 @@ extension FullListViewController: UIGestureRecognizerDelegate {
     let optionsAlert = UIAlertController(title: "Item Selected", message: nil, preferredStyle: .alert)
     optionsAlert.addAction(UIAlertAction(title: "Delete", style: .default, handler: { action in
       self.allItems.remove(at: itemIndex)
-      self.save()
+      self.getItems.save(self.allItems)
       self.tableView.reloadData()
     }))
     optionsAlert.addAction(UIAlertAction(title: "Cancel", style: .cancel))
@@ -122,27 +128,8 @@ extension FullListViewController: UIGestureRecognizerDelegate {
 // MARK: - Data Handling
 extension FullListViewController {
   func loadItems() {
-    let defaults = UserDefaults.standard
-    if let itemsData = defaults.object(forKey: "Items") as? Data {
-      let json = JSONDecoder()
-      
-      do {
-        allItems = try json.decode([Item].self, from: itemsData)
-      } catch {
-        print("Failed to Load")
-      }
-      tableView.reloadData()
-    }
-  }
-  
-  func save() {
-    let json = JSONEncoder()
-    if let savedData = try? json.encode(allItems) {
-      let defaults = UserDefaults.standard
-      defaults.set(savedData, forKey: "Items")
-    } else {
-      print("Failed to save")
-    }
+    allItems = getItems.load()
+    tableView.reloadData()
   }
   
   override func viewWillAppear(_ animated: Bool) {
