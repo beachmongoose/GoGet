@@ -13,14 +13,39 @@ class BuyListViewController: UIViewController {
   var allItems = [Item]()
   var toBuyItems = [Item]()
   
-    override func viewDidLoad() {
-      getToBuyList()
+  private let coordinator: BuyListCoordinatorType
+  
+  init(coordinator: BuyListCoordinatorType) {
+    self.coordinator = coordinator
+    super.init(nibName: nil, bundle: nil)
+  }
+  
+  required init?(coder: NSCoder) {
+    fatalError("init(coder:) has not been implemented")
+  }
+  
+  override func viewDidLoad() {
+      setUpNavButton()
+      setUpBuyList()
       super.viewDidLoad()
     }
 
 }
 
 extension BuyListViewController {
+  
+    func setUpNavButton() {
+      let fullList = UIBarButtonItem(
+        barButtonSystemItem: .add,
+        target: self,
+        action: #selector(presentFullList))
+      navigationItem.rightBarButtonItem = fullList
+    }
+  
+  @objc func presentFullList() {
+    coordinator.presentFullList()
+  }
+  
 //  func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
 //    return toBuyItems.count
 //  }
@@ -51,7 +76,7 @@ extension BuyListViewController {
 }
 
 extension BuyListViewController {
-  func getToBuyList() {
+  func setUpBuyList() {
     for item in allItems {
       if item.needToBuy {
         toBuyItems.append(item)

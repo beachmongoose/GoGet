@@ -19,6 +19,7 @@ class FullListViewController: UIViewController {
       loadItems()
       addNewItemButton()
       title = "GoGet"
+      tableView.register(UINib(nibName: "FullListCell", bundle: nil), forCellReuseIdentifier: "FullListCell")
       super.viewDidLoad()
     }
 
@@ -34,24 +35,24 @@ extension FullListViewController: UITableViewDataSource, UITableViewDelegate {
   
   func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
     guard let cell = tableView.dequeueReusableCell(
-      withIdentifier: "fullListCell",
+      withIdentifier: "FullListCell",
       for: indexPath)
       as? FullListCell else {
         fatalError("Unable to Dequeue")
       }
     
-    let item = allItems[indexPath.row]
-    cell.item.text = "\(item.name) (\(item.quantity))"
-    
-    if item.bought == true {
-      if item.quantity > 1 {
-        cell.daysAgoBought.text = "\(item.timeSinceBuying) days ago"
-      } else {
-        cell.daysAgoBought.text = "1 day ago"
-      }
-    } else {
-      cell.daysAgoBought.text = "Not bought"
-    }
+//    let item = allItems[indexPath.row]
+//    cell.item.text = "\(item.name) (\(item.quantity))"
+//    
+//    if item.bought == true {
+//      if item.quantity > 1 {
+//        cell.daysAgoBought.text = "\(item.timeSinceBuying) days ago"
+//      } else {
+//        cell.daysAgoBought.text = "1 day ago"
+//      }
+//    } else {
+//      cell.daysAgoBought.text = "Not bought"
+//    }
     
     return cell
   }
