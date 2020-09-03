@@ -14,13 +14,17 @@ class DetailViewController: UIViewController {
   @IBOutlet var itemTextField: UITextField!
   @IBOutlet var quantityTextField: UITextField!
   @IBOutlet var boughtTextField: UITextField!
+  @IBOutlet var yesButton: UIButton!
+  @IBOutlet var noButton: UIButton!
   var boughtDate: Date?
   @IBOutlet var intervalTextField: UITextField!
   var currentItem: Item?
   var itemNumber: Int?
   var newItem = false
+
+  private let getItems: GetItemsType = GetItems()
   
-    override func viewDidLoad() {
+  override func viewDidLoad() {
       manageTextFields()
       addDatePicker()
       addSaveButton()
@@ -35,6 +39,11 @@ extension DetailViewController {
     quantityTextField.text = String(item.quantity)
     boughtTextField.text = convertedDate(item.dateBought)
     intervalTextField.text = String(item.duration)
+    
+    if item.bought == false {
+      boughtTextField.isUserInteractionEnabled = false
+      boughtTextField.textColor = UIColor.gray
+    }
   }
 }
 
@@ -46,9 +55,19 @@ extension DetailViewController {
   
   @objc func saveItem() {
     guard var item = currentItem else { return }
+    guard isNotFutureDate() else {
+      dateError()
+      return
+    }
     item.name = itemTextField.text ?? ""
     item.quantity = Int(quantityTextField.text ?? "") ?? 1
+    
+    if item.bought == true {
     item.dateBought = boughtDate ?? Date()
+    } else {
+      item.dateBought = Date()
+    }
+    
     item.duration = Int(intervalTextField.text ?? "") ?? 7
     
     if newItem {
@@ -57,28 +76,52 @@ extension DetailViewController {
       guard let indexNumber = itemNumber else { return }
       allItems[indexNumber] = item
     }
-    save()
+    getItems.save(self.allItems)
     confirmSave()
-  }
-  
-  func save() {
-    let json = JSONEncoder()
-    if let savedData = try? json.encode(allItems) {
-      let defaults = UserDefaults.standard
-      defaults.set(savedData, forKey: "Items")
-    } else {
-      print("Failed to save")
-    }
   }
   
   func confirmSave() {
     let saveConfirm = UIAlertController(title: "Item Saved", message: nil, preferredStyle: .alert)
-    saveConfirm.addAction(UIAlertAction(title: "OK", style: .default, handler: backToFullList))
+    saveConfirm.addAction(UIAlertAction(title: "OK", style: .default, handler: { action in
+      self.navigationController?.popViewController(animated: true)
+    }))
     present(saveConfirm, animated: true)
   }
+
+}
+
+extension DetailViewController {
+  @IBAction func checkYes(_ sender: UIButton) {
+    adjustButtons(yes: "circle.fill",
+                  no: "circle",
+                  enabled: true,
+                  textColor: UIColor.black,
+                  bought: true)
+  }
   
-  func backToFullList(action: UIAlertAction) {
-    navigationController?.popViewController(animated: true)
+  @IBAction func checkNo(_ sender: UIButton) {
+    adjustButtons(yes: "circle",
+                  no: "circle.fill",
+                  enabled: false,
+                  textColor: UIColor.gray,
+                  bought: false)
+
+  }
+  
+  func adjustButtons(yes yesSymbol: String,
+                     no noSymbol: String,
+                     enabled textBool: Bool,
+                     textColor color: UIColor,
+                     bought boughtBool: Bool) {
+    markButton(yesButton, with: yesSymbol)
+    markButton(noButton, with: noSymbol)
+    boughtTextField.isUserInteractionEnabled = textBool
+    boughtTextField.textColor = color
+    currentItem?.bought = boughtBool
+  }
+  
+  func markButton(_ button: UIButton, with symbol: String) {
+    button.setImage(UIImage(systemName: symbol), for: .normal)
   }
 }
 
@@ -94,13 +137,29 @@ extension DetailViewController {
   }
   
   @objc func datePicked(sender: UIDatePicker) {
-    
     let formatter = DateFormatter()
     formatter.dateStyle = DateFormatter.Style.short
     formatter.timeStyle = DateFormatter.Style.none
     boughtDate = sender.date
     boughtTextField.text = formatter.string(from: sender.date)
   }
+  
+  func isNotFutureDate() -> Bool {
+    let calendar = Calendar.autoupdatingCurrent
+    let currentDate = calendar.startOfDay(for: Date())
+    let dateBought = calendar.startOfDay(for: boughtDate ?? Date())
+    if dateBought > currentDate {
+      return false
+    } else {
+      return true
+    }
+  }
+  
+  func dateError() {
+      let dateError = UIAlertController(title: "Error", message: "Future date selected", preferredStyle: .alert)
+    dateError.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+      present(dateError, animated: true)
+    }
   
   override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
     view.endEditing(true)

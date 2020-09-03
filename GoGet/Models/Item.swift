@@ -7,18 +7,19 @@
 //
 
 import Foundation
+import UIKit
 
 struct Item: Codable {
   var name: String
   var quantity: Int
   var dateBought: Date
   var duration: Int
+  var bought: Bool
 }
 
 extension Item {
-  var isExpired: Bool {
-//    if dateBought + duration > currentDate
-    return true
+  var needToBuy: Bool {
+    timeSinceBuying > duration && bought == false
   }
   
   var timeSinceBuying: Int {
@@ -28,7 +29,7 @@ extension Item {
 
     let dayCount = calendar.dateComponents(
       [.day],
-      from: currentDate, to: buyDate).day ?? 0
+      from: buyDate, to: currentDate).day ?? 0
 
     return dayCount
   }
