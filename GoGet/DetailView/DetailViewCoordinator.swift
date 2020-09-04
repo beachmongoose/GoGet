@@ -9,20 +9,22 @@
 import UIKit
 
 protocol DetailCoordinatorType {
-  func start() -> DetailViewController
-  func dismissDetailList()
+  func showDetailView() -> DetailViewController
+  func dismissDetail()
 }
 
 class DetailCoordinator: DetailCoordinatorType {
+  
   weak var viewController: DetailViewController?
   
-  func start() -> DetailViewController {
-    let viewController = DetailViewController()
+  func showDetailView() -> DetailViewController {
+    let viewController = DetailViewController(coordinator: self)
     self.viewController = viewController
     return viewController
   }
   
-  func dismissDetailList() {
-    viewController?.dismiss(animated: true)
+  func dismissDetail() {
+    guard let navigationController = viewController?.navigationController else { return }
+    navigationController.popViewController(animated: true)
   }
 }

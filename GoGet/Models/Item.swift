@@ -19,7 +19,7 @@ struct Item: Codable {
 
 extension Item {
   var needToBuy: Bool {
-    timeSinceBuying > duration && bought == false
+    timeSinceBuying > duration || bought == false
   }
   
   var timeSinceBuying: Int {

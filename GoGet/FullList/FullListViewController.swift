@@ -14,6 +14,17 @@ class FullListViewController: UIViewController {
   var expiredItems = [Item]()
   private let getItems: GetItemsType = GetItems()
   
+  private let coordinator: FullListCoordinatorType
+  
+  init(coordinator: FullListCoordinatorType) {
+    self.coordinator = coordinator
+    super.init(nibName: nil, bundle: nil)
+  }
+  
+  required init?(coder: NSCoder) {
+    fatalError("init(coder:) has not been implemented")
+  }
+  
     override func viewDidLoad() {
       longPressDetector()
       loadItems()
@@ -41,18 +52,18 @@ extension FullListViewController: UITableViewDataSource, UITableViewDelegate {
         fatalError("Unable to Dequeue")
       }
     
-//    let item = allItems[indexPath.row]
-//    cell.item.text = "\(item.name) (\(item.quantity))"
-//    
-//    if item.bought == true {
-//      if item.quantity > 1 {
-//        cell.daysAgoBought.text = "\(item.timeSinceBuying) days ago"
-//      } else {
-//        cell.daysAgoBought.text = "1 day ago"
-//      }
-//    } else {
-//      cell.daysAgoBought.text = "Not bought"
-//    }
+    let item = allItems[indexPath.row]
+    cell.item.text = "\(item.name) (\(item.quantity))"
+    
+    if item.bought == true {
+      if item.timeSinceBuying > 1 || item.timeSinceBuying == 0 {
+        cell.daysAgoBought.text = "\(item.timeSinceBuying) days ago"
+      } else {
+        cell.daysAgoBought.text = "1 day ago"
+      }
+    } else {
+      cell.daysAgoBought.text = "Not bought"
+    }
     
     return cell
   }
@@ -65,32 +76,16 @@ extension FullListViewController {
   
   func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
     let selectedItem = allItems[indexPath.row]
-    goToDetailView(currentItem: selectedItem,
-                   newItemBool: false,
-                   index: indexPath.row)
+    coordinator.presentDetail(currentItem: selectedItem,
+                              newItem: false,
+                              index: indexPath.row)
     }
   
   @objc func addItem() {
     let newItem = Item(name: "", quantity: 1, dateBought: Date(), duration: 7, bought: false)
-    goToDetailView(currentItem: newItem,
-                   newItemBool: true,
-                   index: 0)
-  }
-  
-  func goToDetailView(currentItem item: Item,
-                      newItemBool bool: Bool,
-                      index number: Int) {
-    if let itemDetail = storyboard?.instantiateViewController(
-      withIdentifier: "itemDetail")
-      as? DetailViewController {
-      
-      itemDetail.currentItem = item
-      itemDetail.boughtDate = item.dateBought
-      itemDetail.newItem = bool
-      itemDetail.itemNumber = number
-      itemDetail.allItems = allItems
-      navigationController?.pushViewController(itemDetail, animated: true)
-    }
+    coordinator.presentDetail(currentItem: newItem,
+                              newItem: true,
+                              index: 0)
   }
 }
 
