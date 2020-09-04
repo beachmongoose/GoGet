@@ -13,7 +13,7 @@ class DetailViewController: UIViewController {
   var allItems = [Item]()
   @IBOutlet var itemTextField: UITextField!
   @IBOutlet var quantityTextField: UITextField!
-  @IBOutlet var boughtTextField: UITextField!
+  @IBOutlet var dateTextField: UITextField!
   @IBOutlet var yesButton: UIButton!
   @IBOutlet var noButton: UIButton!
   var boughtDate: Date?
@@ -23,6 +23,17 @@ class DetailViewController: UIViewController {
   var newItem = false
 
   private let getItems: GetItemsType = GetItems()
+  
+  private let coordinator: DetailCoordinatorType
+  
+  init(coordinator: DetailCoordinatorType) {
+    self.coordinator = coordinator
+    super.init(nibName: nil, bundle: nil)
+  }
+  
+  required init?(coder: NSCoder) {
+    fatalError("init(coder:) has not been implemented")
+  }
   
   override func viewDidLoad() {
       manageTextFields()
@@ -38,7 +49,7 @@ extension DetailViewController {
     guard let item = currentItem else { return }
     itemTextField.text = item.name
     quantityTextField.text = String(item.quantity)
-    boughtTextField.text = convertedDate(item.dateBought)
+    dateTextField.text = convertedDate(item.dateBought)
     intervalTextField.text = String(item.duration)
     
     if item.bought == false {
@@ -57,6 +68,7 @@ extension DetailViewController {
   }
   
   @objc func saveItem() {
+    allItems = getItems.load()
     guard var item = currentItem else { return }
     guard isNotFutureDate() else {
       dateError()
@@ -86,7 +98,7 @@ extension DetailViewController {
   func confirmSave() {
     let saveConfirm = UIAlertController(title: "Item Saved", message: nil, preferredStyle: .alert)
     saveConfirm.addAction(UIAlertAction(title: "OK", style: .default, handler: { action in
-      self.navigationController?.popViewController(animated: true)
+      self.coordinator.dismissDetail()
     }))
     present(saveConfirm, animated: true)
   }
@@ -119,8 +131,8 @@ extension DetailViewController {
                      bought boughtBool: Bool) {
     markButton(yesButton, with: yesSymbol)
     markButton(noButton, with: noSymbol)
-    boughtTextField.isUserInteractionEnabled = textBool
-    boughtTextField.textColor = color
+    dateTextField.isUserInteractionEnabled = textBool
+    dateTextField.textColor = color
     currentItem?.bought = boughtBool
   }
   
@@ -137,7 +149,7 @@ extension DetailViewController {
     
     datePicker.addTarget(self, action: #selector(DetailViewController.datePicked(sender:)),
                          for: UIControl.Event.valueChanged)
-    boughtTextField.inputView = datePicker
+    dateTextField.inputView = datePicker
   }
   
   @objc func datePicked(sender: UIDatePicker) {
@@ -145,7 +157,7 @@ extension DetailViewController {
     formatter.dateStyle = DateFormatter.Style.short
     formatter.timeStyle = DateFormatter.Style.none
     boughtDate = sender.date
-    boughtTextField.text = formatter.string(from: sender.date)
+    dateTextField.text = formatter.string(from: sender.date)
   }
   
   func isNotFutureDate() -> Bool {

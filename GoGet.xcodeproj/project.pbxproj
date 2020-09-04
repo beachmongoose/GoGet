@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		9F03404D250298F100B27BF3 /* BuyListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F03404B250298F100B27BF3 /* BuyListCell.swift */; };
+		9F03404E250298F100B27BF3 /* BuyListCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9F03404C250298F100B27BF3 /* BuyListCell.xib */; };
+		9F0340502502A90F00B27BF3 /* BuyListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F03404F2502A90F00B27BF3 /* BuyListViewModel.swift */; };
 		9F34057A24FED00C0035A385 /* Item.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F34057924FED00C0035A385 /* Item.swift */; };
 		9F34058124FED5CF0035A385 /* BuyListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F34057F24FED5CF0035A385 /* BuyListViewController.swift */; };
 		9F34058224FED5CF0035A385 /* BuyListViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9F34058024FED5CF0035A385 /* BuyListViewController.xib */; };
@@ -27,6 +30,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		9F03404B250298F100B27BF3 /* BuyListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuyListCell.swift; sourceTree = "<group>"; };
+		9F03404C250298F100B27BF3 /* BuyListCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = BuyListCell.xib; sourceTree = "<group>"; };
+		9F03404F2502A90F00B27BF3 /* BuyListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuyListViewModel.swift; sourceTree = "<group>"; };
 		9F34057924FED00C0035A385 /* Item.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Item.swift; sourceTree = "<group>"; };
 		9F34057F24FED5CF0035A385 /* BuyListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuyListViewController.swift; sourceTree = "<group>"; };
 		9F34058024FED5CF0035A385 /* BuyListViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = BuyListViewController.xib; sourceTree = "<group>"; };
@@ -59,6 +65,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		9F03404A250298D500B27BF3 /* Cells */ = {
+			isa = PBXGroup;
+			children = (
+				9F03404B250298F100B27BF3 /* BuyListCell.swift */,
+				9F03404C250298F100B27BF3 /* BuyListCell.xib */,
+			);
+			path = Cells;
+			sourceTree = "<group>";
+		};
 		9F34057B24FED3A60035A385 /* Models */ = {
 			isa = PBXGroup;
 			children = (
@@ -67,14 +82,16 @@
 			path = Models;
 			sourceTree = "<group>";
 		};
-		9F34057C24FED54D0035A385 /* ExpiredList */ = {
+		9F34057C24FED54D0035A385 /* ToBuyList */ = {
 			isa = PBXGroup;
 			children = (
+				9F03404A250298D500B27BF3 /* Cells */,
 				9F34057F24FED5CF0035A385 /* BuyListViewController.swift */,
 				9F34058024FED5CF0035A385 /* BuyListViewController.xib */,
 				9F888C3C25018F79003810D4 /* BuyListCoordinator.swift */,
+				9F03404F2502A90F00B27BF3 /* BuyListViewModel.swift */,
 			);
-			path = ExpiredList;
+			path = ToBuyList;
 			sourceTree = "<group>";
 		};
 		9F34057E24FED56B0035A385 /* FullList */ = {
@@ -84,7 +101,6 @@
 				9F34058924FED63E0035A385 /* FullListViewController.swift */,
 				9F888C3E250190EB003810D4 /* FullListCoordinator.swift */,
 				9F34058A24FED63E0035A385 /* FullListViewController.xib */,
-				9F34058D24FED6470035A385 /* DetailView */,
 			);
 			path = FullList;
 			sourceTree = "<group>";
@@ -136,8 +152,9 @@
 			isa = PBXGroup;
 			children = (
 				9F888C3725014EDC003810D4 /* Service Objects */,
+				9F34057C24FED54D0035A385 /* ToBuyList */,
 				9F34057E24FED56B0035A385 /* FullList */,
-				9F34057C24FED54D0035A385 /* ExpiredList */,
+				9F34058D24FED6470035A385 /* DetailView */,
 				9F34057B24FED3A60035A385 /* Models */,
 				9F930BF524FEC55E0034C8F7 /* AppDelegate.swift */,
 				9F930BFB24FEC55E0034C8F7 /* Main.storyboard */,
@@ -210,6 +227,7 @@
 				9F34059124FED6580035A385 /* DetailViewController.xib in Resources */,
 				9F930BFF24FEC55F0034C8F7 /* Assets.xcassets in Resources */,
 				9F34058224FED5CF0035A385 /* BuyListViewController.xib in Resources */,
+				9F03404E250298F100B27BF3 /* BuyListCell.xib in Resources */,
 				9F888C4B2501A14A003810D4 /* FullListCell.xib in Resources */,
 				9F34058C24FED63E0035A385 /* FullListViewController.xib in Resources */,
 				9F930BFD24FEC55E0034C8F7 /* Main.storyboard in Resources */,
@@ -224,10 +242,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				9F930BF624FEC55E0034C8F7 /* AppDelegate.swift in Sources */,
+				9F0340502502A90F00B27BF3 /* BuyListViewModel.swift in Sources */,
 				9F34057A24FED00C0035A385 /* Item.swift in Sources */,
 				9F888C41250195F4003810D4 /* DetailViewCoordinator.swift in Sources */,
 				9F888C3925014EF8003810D4 /* GetItems.swift in Sources */,
 				9F888C4A2501A14A003810D4 /* FullListCell.swift in Sources */,
+				9F03404D250298F100B27BF3 /* BuyListCell.swift in Sources */,
 				9F34058124FED5CF0035A385 /* BuyListViewController.swift in Sources */,
 				9F34059024FED6580035A385 /* DetailViewController.swift in Sources */,
 				9F888C3F250190EB003810D4 /* FullListCoordinator.swift in Sources */,

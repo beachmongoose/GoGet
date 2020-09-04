@@ -10,8 +10,8 @@ import UIKit
 
 class FullListCell: UITableViewCell {
   override func awakeFromNib() {
-    print("test")
   }
-//    @IBOutlet var item: UILabel!
-//    @IBOutlet var daysAgoBought: UILabel
+  @IBOutlet var item: UILabel!
+  @IBOutlet var daysAgoBought: UILabel!
+
 }
