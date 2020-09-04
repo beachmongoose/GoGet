@@ -12,6 +12,6 @@ class FullListCell: UITableViewCell {
   override func awakeFromNib() {
   }
   @IBOutlet var item: UILabel!
-  @IBOutlet var daysAgoBought: UILabel!
+  @IBOutlet var dateBought: UILabel!
 
 }

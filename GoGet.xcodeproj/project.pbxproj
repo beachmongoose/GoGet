@@ -10,6 +10,8 @@
 		9F03404D250298F100B27BF3 /* BuyListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F03404B250298F100B27BF3 /* BuyListCell.swift */; };
 		9F03404E250298F100B27BF3 /* BuyListCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9F03404C250298F100B27BF3 /* BuyListCell.xib */; };
 		9F0340502502A90F00B27BF3 /* BuyListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F03404F2502A90F00B27BF3 /* BuyListViewModel.swift */; };
+		9F0340522502BF7100B27BF3 /* FullListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F0340512502BF7100B27BF3 /* FullListViewModel.swift */; };
+		9F0340542502CDD400B27BF3 /* DetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F0340532502CDD400B27BF3 /* DetailViewModel.swift */; };
 		9F34057A24FED00C0035A385 /* Item.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F34057924FED00C0035A385 /* Item.swift */; };
 		9F34058124FED5CF0035A385 /* BuyListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F34057F24FED5CF0035A385 /* BuyListViewController.swift */; };
 		9F34058224FED5CF0035A385 /* BuyListViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9F34058024FED5CF0035A385 /* BuyListViewController.xib */; };
@@ -24,7 +26,6 @@
 		9F888C4A2501A14A003810D4 /* FullListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F888C482501A14A003810D4 /* FullListCell.swift */; };
 		9F888C4B2501A14A003810D4 /* FullListCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9F888C492501A14A003810D4 /* FullListCell.xib */; };
 		9F930BF624FEC55E0034C8F7 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F930BF524FEC55E0034C8F7 /* AppDelegate.swift */; };
-		9F930BFD24FEC55E0034C8F7 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9F930BFB24FEC55E0034C8F7 /* Main.storyboard */; };
 		9F930BFF24FEC55F0034C8F7 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9F930BFE24FEC55F0034C8F7 /* Assets.xcassets */; };
 		9F930C0224FEC55F0034C8F7 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9F930C0024FEC55F0034C8F7 /* LaunchScreen.storyboard */; };
 /* End PBXBuildFile section */
@@ -33,6 +34,8 @@
 		9F03404B250298F100B27BF3 /* BuyListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuyListCell.swift; sourceTree = "<group>"; };
 		9F03404C250298F100B27BF3 /* BuyListCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = BuyListCell.xib; sourceTree = "<group>"; };
 		9F03404F2502A90F00B27BF3 /* BuyListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuyListViewModel.swift; sourceTree = "<group>"; };
+		9F0340512502BF7100B27BF3 /* FullListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FullListViewModel.swift; sourceTree = "<group>"; };
+		9F0340532502CDD400B27BF3 /* DetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewModel.swift; sourceTree = "<group>"; };
 		9F34057924FED00C0035A385 /* Item.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Item.swift; sourceTree = "<group>"; };
 		9F34057F24FED5CF0035A385 /* BuyListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuyListViewController.swift; sourceTree = "<group>"; };
 		9F34058024FED5CF0035A385 /* BuyListViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = BuyListViewController.xib; sourceTree = "<group>"; };
@@ -48,7 +51,6 @@
 		9F888C492501A14A003810D4 /* FullListCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FullListCell.xib; sourceTree = "<group>"; };
 		9F930BF224FEC55E0034C8F7 /* GoGet.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GoGet.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9F930BF524FEC55E0034C8F7 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		9F930BFC24FEC55E0034C8F7 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		9F930BFE24FEC55F0034C8F7 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		9F930C0124FEC55F0034C8F7 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		9F930C0324FEC55F0034C8F7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -100,6 +102,7 @@
 				9F888C4325019C56003810D4 /* Cells */,
 				9F34058924FED63E0035A385 /* FullListViewController.swift */,
 				9F888C3E250190EB003810D4 /* FullListCoordinator.swift */,
+				9F0340512502BF7100B27BF3 /* FullListViewModel.swift */,
 				9F34058A24FED63E0035A385 /* FullListViewController.xib */,
 			);
 			path = FullList;
@@ -111,6 +114,7 @@
 				9F34058E24FED6580035A385 /* DetailViewController.swift */,
 				9F34058F24FED6580035A385 /* DetailViewController.xib */,
 				9F888C40250195F4003810D4 /* DetailViewCoordinator.swift */,
+				9F0340532502CDD400B27BF3 /* DetailViewModel.swift */,
 			);
 			path = DetailView;
 			sourceTree = "<group>";
@@ -157,7 +161,6 @@
 				9F34058D24FED6470035A385 /* DetailView */,
 				9F34057B24FED3A60035A385 /* Models */,
 				9F930BF524FEC55E0034C8F7 /* AppDelegate.swift */,
-				9F930BFB24FEC55E0034C8F7 /* Main.storyboard */,
 				9F930BFE24FEC55F0034C8F7 /* Assets.xcassets */,
 				9F930C0024FEC55F0034C8F7 /* LaunchScreen.storyboard */,
 				9F930C0324FEC55F0034C8F7 /* Info.plist */,
@@ -230,7 +233,6 @@
 				9F03404E250298F100B27BF3 /* BuyListCell.xib in Resources */,
 				9F888C4B2501A14A003810D4 /* FullListCell.xib in Resources */,
 				9F34058C24FED63E0035A385 /* FullListViewController.xib in Resources */,
-				9F930BFD24FEC55E0034C8F7 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -250,23 +252,17 @@
 				9F03404D250298F100B27BF3 /* BuyListCell.swift in Sources */,
 				9F34058124FED5CF0035A385 /* BuyListViewController.swift in Sources */,
 				9F34059024FED6580035A385 /* DetailViewController.swift in Sources */,
+				9F0340542502CDD400B27BF3 /* DetailViewModel.swift in Sources */,
 				9F888C3F250190EB003810D4 /* FullListCoordinator.swift in Sources */,
 				9F888C3D25018F79003810D4 /* BuyListCoordinator.swift in Sources */,
 				9F34058B24FED63E0035A385 /* FullListViewController.swift in Sources */,
+				9F0340522502BF7100B27BF3 /* FullListViewModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
-		9F930BFB24FEC55E0034C8F7 /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				9F930BFC24FEC55E0034C8F7 /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
 		9F930C0024FEC55F0034C8F7 /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (

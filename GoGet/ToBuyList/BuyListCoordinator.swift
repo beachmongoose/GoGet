@@ -15,8 +15,10 @@ protocol BuyListCoordinatorType {
 
 class BuyListCoordinator: BuyListCoordinatorType {
   weak var viewController: BuyListViewController?
+  
   func start() -> UINavigationController {
-    let viewController = BuyListViewController(coordinator: self)
+    let viewModel = BuyListViewModel(coordinator: self)
+    let viewController = BuyListViewController(viewModel: viewModel)
     self.viewController = viewController
     return UINavigationController(rootViewController: viewController)
   }

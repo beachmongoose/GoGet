@@ -10,14 +10,11 @@ import UIKit
 
 class FullListViewController: UIViewController {
   @IBOutlet var tableView: UITableView!
-  var allItems = [Item]()
-  var expiredItems = [Item]()
-  private let getItems: GetItemsType = GetItems()
   
-  private let coordinator: FullListCoordinatorType
+  private let viewModel: FullListViewModelType
   
-  init(coordinator: FullListCoordinatorType) {
-    self.coordinator = coordinator
+  init(viewModel: FullListViewModelType) {
+    self.viewModel = viewModel
     super.init(nibName: nil, bundle: nil)
   }
   
@@ -27,9 +24,8 @@ class FullListViewController: UIViewController {
   
     override func viewDidLoad() {
       longPressDetector()
-      loadItems()
       addNewItemButton()
-      title = "GoGet"
+      title = "All Items"
       tableView.register(UINib(nibName: "FullListCell", bundle: nil), forCellReuseIdentifier: "FullListCell")
       super.viewDidLoad()
     }
@@ -41,7 +37,7 @@ class FullListViewController: UIViewController {
 // MARK: - TableView
 extension FullListViewController: UITableViewDataSource, UITableViewDelegate {
   func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-    return allItems.count
+    return viewModel.tableData.count
   }
   
   func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -52,18 +48,9 @@ extension FullListViewController: UITableViewDataSource, UITableViewDelegate {
         fatalError("Unable to Dequeue")
       }
     
-    let item = allItems[indexPath.row]
-    cell.item.text = "\(item.name) (\(item.quantity))"
-    
-    if item.bought == true {
-      if item.timeSinceBuying > 1 || item.timeSinceBuying == 0 {
-        cell.daysAgoBought.text = "\(item.timeSinceBuying) days ago"
-      } else {
-        cell.daysAgoBought.text = "1 day ago"
-      }
-    } else {
-      cell.daysAgoBought.text = "Not bought"
-    }
+    let item = viewModel.tableData[indexPath.row]
+        cell.item.text = item.name
+        cell.dateBought.text = item.buyData
     
     return cell
   }
@@ -75,17 +62,12 @@ extension FullListViewController: UITableViewDataSource, UITableViewDelegate {
 extension FullListViewController {
   
   func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-    let selectedItem = allItems[indexPath.row]
-    coordinator.presentDetail(currentItem: selectedItem,
-                              newItem: false,
-                              index: indexPath.row)
+    let item = viewModel.selectedItem(index: indexPath.row)
+    viewModel.presentDetail(item: item)
     }
   
   @objc func addItem() {
-    let newItem = Item(name: "", quantity: 1, dateBought: Date(), duration: 7, bought: false)
-    coordinator.presentDetail(currentItem: newItem,
-                              newItem: true,
-                              index: 0)
+    viewModel.presentDetail(item: nil)
   }
 }
 
@@ -116,8 +98,7 @@ extension FullListViewController: UIGestureRecognizerDelegate {
   func deletePrompt(_ itemIndex: Int) {
     let optionsAlert = UIAlertController(title: "Item Selected", message: nil, preferredStyle: .alert)
     optionsAlert.addAction(UIAlertAction(title: "Delete", style: .default, handler: { action in
-      self.allItems.remove(at: itemIndex)
-      self.getItems.save(self.allItems)
+      self.viewModel.removeItem(at: itemIndex)
       self.tableView.reloadData()
     }))
     optionsAlert.addAction(UIAlertAction(title: "Cancel", style: .cancel))
@@ -128,13 +109,9 @@ extension FullListViewController: UIGestureRecognizerDelegate {
 
 // MARK: - Data Handling
 extension FullListViewController {
-  func loadItems() {
-    allItems = getItems.load()
-    tableView.reloadData()
-  }
   
   override func viewWillAppear(_ animated: Bool) {
-    loadItems()
+    tableView.reloadData()
   }
 }
 
