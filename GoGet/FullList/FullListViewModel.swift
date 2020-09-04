@@ -1,46 +1,45 @@
 //
-//  BuyListViewModel.swift
+//  FullListViewModel.swift
 //  GoGet
 //
 //  Created by Maggie Maldjian on 9/4/20.
 //  Copyright © 2020 Maggie Maldjian. All rights reserved.
 //
 
-protocol BuyListViewModelType {
-  var tableData: [BuyListViewModel.CellViewModel] { get }
-  func presentFullList()
+protocol FullListViewModelType {
+  var tableData: [FullListViewModel.CellViewModel] { get }
+  func presentDetail(item: Item?)
+  func removeItem(at index: Int)
+  func selectedItem(index: Int) -> Item
 }
 
-final class BuyListViewModel: BuyListViewModelType {
+final class FullListViewModel: FullListViewModelType {
+  
+  func presentDetail(item: Item?) {
+    coordinator.presentDetail(item: item)
+  }
+  
   var tableData = [CellViewModel]()
+  var allItems = [Item]()
   
   struct CellViewModel {
     var name: String
     var buyData: String
-    
   }
   
-  private let coordinator: BuyListCoordinatorType
+  private let coordinator: FullListCoordinatorType
   private let getItems: GetItemsType
-
-  init(coordinator: BuyListCoordinatorType, getItems: GetItemsType = GetItems()) {
+  
+  init(coordinator: FullListCoordinatorType, getItems: GetItemsType = GetItems())
+  {
     self.coordinator = coordinator
     self.getItems = getItems
     fetchTableData()
   }
   
-  func presentFullList() {
-    coordinator.presentFullList()
-  }
   func fetchTableData() {
-    var toBuyItems = [Item]()
-      let allItems = getItems.load()
+      allItems = getItems.load()
       for item in allItems {
-        if item.needToBuy {
-          toBuyItems.append(item)
-        }
-      }
-    for item in toBuyItems {
       tableData.append(CellViewModel(name: item.name, buyData: buyData(for: item)))
     }
   }
@@ -55,4 +54,16 @@ final class BuyListViewModel: BuyListViewModelType {
       return "1 day ago"
     }
   }
+  
+  func removeItem(at index: Int) {
+    allItems.remove(at: index)
+    getItems.save(allItems)
+  }
+  
+  func selectedItem(index: Int) -> Item {
+    let allItems = getItems.load()
+    return allItems[index]
+  }
+  
+  
 }

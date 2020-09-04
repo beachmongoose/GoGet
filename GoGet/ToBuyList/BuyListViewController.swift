@@ -9,15 +9,12 @@
 import UIKit
 
 class BuyListViewController: UIViewController {
-
   @IBOutlet var tableView: UITableView!
-  var allItems = [Item]()
-  var toBuyItems = [Item]()
   
-  private let getItems: GetItemsType = GetItems()
+  private let viewModel: BuyListViewModelType
     
-  init(coordinator: BuyListCoordinatorType) {
-    self.coordinator = coordinator
+  init(viewModel: BuyListViewModelType) {
+    self.viewModel = viewModel
     super.init(nibName: nil, bundle: nil)
   }
   
@@ -27,8 +24,8 @@ class BuyListViewController: UIViewController {
   
   override func viewDidLoad() {
       setUpNavButton()
-      setUpBuyList()
       tableView.register(UINib(nibName: "BuyListCell", bundle: nil), forCellReuseIdentifier: "BuyListCell")
+      title = "GoGet"
       super.viewDidLoad()
     }
 
@@ -38,18 +35,18 @@ extension BuyListViewController: UITableViewDataSource, UITableViewDelegate {
   
     func setUpNavButton() {
       let fullList = UIBarButtonItem(
-        barButtonSystemItem: .add,
+        barButtonSystemItem: .organize,
         target: self,
         action: #selector(presentFullList))
       navigationItem.rightBarButtonItem = fullList
     }
   
   @objc func presentFullList() {
-    coordinator.presentFullList()
+    viewModel.presentFullList()
   }
   
   func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-    return toBuyItems.count
+    return viewModel.tableData.count
   }
 
   func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -59,32 +56,11 @@ extension BuyListViewController: UITableViewDataSource, UITableViewDelegate {
       as? BuyListCell else {
         fatalError("Unable to Dequeue")
       }
-
-    let item = toBuyItems[indexPath.row]
-    cell.item.text = "\(item.name), (\(item.quantity))"
-
-    if item.bought == true {
-      if item.timeSinceBuying > 1 || item.timeSinceBuying == 0 {
-        cell.dateBought.text = "\(item.timeSinceBuying) days ago"
-      } else {
-        cell.dateBought.text = "1 day ago"
-      }
-    } else {
-      cell.dateBought.text = "Not bought"
-    }
+    
+    let item = viewModel.tableData[indexPath.row]
+    cell.item.text = item.name
+    cell.dateBought.text = item.buyData
 
     return cell
-  }
-}
-
-extension BuyListViewController {
-  func setUpBuyList() {
-    allItems = getItems.load()
-    for item in allItems {
-      if item.needToBuy {
-        toBuyItems.append(item)
-      }
-    }
-    tableView.reloadData()
   }
 }

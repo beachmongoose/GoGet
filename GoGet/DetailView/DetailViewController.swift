@@ -19,15 +19,15 @@ class DetailViewController: UIViewController {
   var boughtDate: Date?
   @IBOutlet var intervalTextField: UITextField!
   var currentItem: Item?
-  var itemNumber: Int?
-  var newItem = false
+//  var itemNumber: Int?
+//  var newItem = false
 
   private let getItems: GetItemsType = GetItems()
   
-  private let coordinator: DetailCoordinatorType
+  private let viewModel: DetailViewModelType
   
-  init(coordinator: DetailCoordinatorType) {
-    self.coordinator = coordinator
+  init(viewModel: DetailViewModelType) {
+    self.viewModel = viewModel
     super.init(nibName: nil, bundle: nil)
   }
   
@@ -36,11 +36,16 @@ class DetailViewController: UIViewController {
   }
   
   override func viewDidLoad() {
+      setupView()
       manageTextFields()
       addDatePicker()
       addSaveButton()
       super.viewDidLoad()
     }
+  
+  func setupViews() {
+    itemTextField.text = viewModel.itemName
+  }
 }
 
 // MARK: - Parse Data
@@ -98,7 +103,7 @@ extension DetailViewController {
   func confirmSave() {
     let saveConfirm = UIAlertController(title: "Item Saved", message: nil, preferredStyle: .alert)
     saveConfirm.addAction(UIAlertAction(title: "OK", style: .default, handler: { action in
-      self.coordinator.dismissDetail()
+      self.viewModel.dismissDetail()
     }))
     present(saveConfirm, animated: true)
   }
