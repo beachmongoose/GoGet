@@ -9,7 +9,6 @@
 import UIKit
 
 protocol FullListCoordinatorType {
-//  func start() -> FullListViewController
   func presentDetail(item: Item?)
   func dismiss()
 }
