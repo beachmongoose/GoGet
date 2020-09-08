@@ -16,7 +16,7 @@ protocol FullListViewModelType {
 final class FullListViewModel: FullListViewModelType {
   
   func presentDetail(item: Item?) {
-    coordinator.presentDetail(item: item)
+      coordinator.presentDetail(item: item)
   }
   
   var tableData = [CellViewModel]()
