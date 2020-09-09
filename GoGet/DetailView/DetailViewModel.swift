@@ -11,88 +11,87 @@ import UIKit
 struct DetailViewItem {
   var name: String
   var boughtBool: Bool
-  var date: Date
-  var quantity: Int
-  var interval: Int
+  var date: String
+  var quantity: String
+  var interval: String
 }
 
 protocol DetailViewModelType {
-  func dismissDetail()
-  func itemData() -> DetailViewItem
   func convertedDate(_ date: Date) -> String
-  func formattedDate(_ picked: UIDatePicker) -> String
-  func dateFromString(_ stringDate: String) -> Date
-  func saveItem(name: String?, boughtBool: Bool, date: Date?, quantity: String?, interval: String?)
+  func convertPickerDate(_ picked: UIDatePicker) -> String
+  func saveItem(name: String?, boughtBool: Bool, date: String?, quantity: String?, interval: String?)
+  var itemData: DetailViewItem! { get }
 }
 
 final class DetailViewModel: DetailViewModelType {
   
   var item: Item?
-  var isNew: Bool {
-    if item == nil {
-      return true
-    } else {
-      return false
-    }
-  }
   
   weak var viewController: DetailViewController?
-  private let coordinator: DetailViewCoordinator
+  private let coordinator: DetailViewCoordinatorType
   private let getItems: GetItemsType
+  var itemData: DetailViewItem!
+  var completion: () -> Void
   
-  init(coordinator: DetailViewCoordinator, getItems: GetItemsType = GetItems(), item: Item?)
+  init(coordinator: DetailViewCoordinatorType, getItems: GetItemsType = GetItems(), item: Item?, completion: @escaping () -> Void)
   {
-    
     self.coordinator = coordinator
     self.getItems = getItems
     self.item = item
+    self.completion = completion
+    self.itemData = getDetails()
   }
   
   
-  func itemData() -> DetailViewItem {
+  func getDetails() -> DetailViewItem {
+    
+    var date: Date {
+      get {
+        guard item?.bought == true else { return Date() }
+      return item?.dateBought ?? Date()
+      }
+    }
+    
     return DetailViewItem(
       name: item?.name ?? "",
       boughtBool: item?.bought ?? false,
-      date: item?.dateBought ?? Date(),
-      quantity: item?.quantity ?? 1,
-      interval: item?.duration ?? 7)
-
+      date: convertedDate(date),
+      quantity: String(item?.quantity ?? 0),
+      interval: String(item?.duration ?? 0)
+      )
   }
   
-  func dismissDetail() {
-    coordinator.dismissDetail()
-  }
-  
-  func saveItem(name: String?, boughtBool: Bool, date: Date?, quantity: String?, interval: String?) {
+  func saveItem(name: String?, boughtBool: Bool, date: String?, quantity: String?, interval: String?) {
     
     guard let name = name,
       let quantity = quantity,
       let date = date,
       let interval = interval else {
-        print("error")
+        coordinator.errorMessage("Invalid data.")
         return
-        // coordinator.presentAlert()
     }
     
     let adjustedItem = Item(
       name: name,
-      quantity: Int(quantity) ?? 0,
-      dateBought: date,
-      duration: Int(interval) ?? 0,
+      quantity: Int(quantity) ?? 1,
+      dateBought: dateFromString(date),
+      duration: Int(interval) ?? 7,
       bought: boughtBool)
     
-    guard isNotFutureDate(adjustedItem) else { print("error")
-      return
-    }
-    
+    validate(adjustedItem)
+  }
+  
+  func upSert(_ item: Item) {
     var allItems = getItems.load()
     
-    if isNew {
-      allItems.append(adjustedItem)
+    if self.item == nil {
+      allItems.append(item)
       getItems.save(allItems)
     } else {
-      replace(in: allItems, with: adjustedItem)
+      replace(in: allItems, with: item)
     }
+    completion()
+    coordinator.confirmSave()
   }
   
   func replace(in array: [Item], with item: Item) {
@@ -108,8 +107,21 @@ final class DetailViewModel: DetailViewModelType {
     return array.firstIndex { $0.name == item.name} ?? 0
   }
   
-  // MARK: - Date Info
+  func validate(_ item: Item) {
+    switch item {
+    case (let item) where item.quantity == 0:
+      return coordinator.errorMessage("No quantity entered.")
+    case (let item) where item.duration == 0:
+      return coordinator.errorMessage("No duration entered.")
+    case (let item) where item.dateBought > Date():
+      return coordinator.errorMessage("Future date selected.")
+    default:
+      break
+    }
+    upSert(item)
+  }
   
+  // MARK: - Date Info
   func convertedDate(_ date: Date) -> String {
     let formatter = DateFormatter()
     formatter.dateStyle = DateFormatter.Style.short
@@ -117,11 +129,8 @@ final class DetailViewModel: DetailViewModelType {
     return formatter.string(from: date)
   }
   
-  func formattedDate(_ picked: UIDatePicker) -> String {
-    let formatter = DateFormatter()
-    formatter.dateStyle = DateFormatter.Style.short
-    formatter.timeStyle = DateFormatter.Style.none
-    return formatter.string(from: picked.date)
+  func convertPickerDate(_ picked: UIDatePicker) -> String {
+    return convertedDate(picked.date)
   }
   
   func dateFromString(_ stringDate: String) -> Date {
@@ -130,7 +139,7 @@ final class DetailViewModel: DetailViewModelType {
     return format.date(from: stringDate) ?? Date()
   }
   
-  func isNotFutureDate(_ item: Item) -> Bool {
+  func futureDateCheck(_ item: Item) -> Bool {
     let calendar = Calendar.autoupdatingCurrent
     let currentDate = calendar.startOfDay(for: Date())
     let dateBought = calendar.startOfDay(for: item.dateBought)
