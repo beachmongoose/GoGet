@@ -28,6 +28,7 @@
 		9F930BF624FEC55E0034C8F7 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F930BF524FEC55E0034C8F7 /* AppDelegate.swift */; };
 		9F930BFF24FEC55F0034C8F7 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9F930BFE24FEC55F0034C8F7 /* Assets.xcassets */; };
 		9F930C0224FEC55F0034C8F7 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9F930C0024FEC55F0034C8F7 /* LaunchScreen.storyboard */; };
+		9F97E45625097E3B00823393 /* Item+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F97E45525097E3B00823393 /* Item+Extensions.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -54,6 +55,7 @@
 		9F930BFE24FEC55F0034C8F7 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		9F930C0124FEC55F0034C8F7 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		9F930C0324FEC55F0034C8F7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		9F97E45525097E3B00823393 /* Item+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Item+Extensions.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -80,6 +82,7 @@
 			isa = PBXGroup;
 			children = (
 				9F34057924FED00C0035A385 /* Item.swift */,
+				9F97E45425097E2700823393 /* Extensions */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -168,6 +171,14 @@
 			path = GoGet;
 			sourceTree = "<group>";
 		};
+		9F97E45425097E2700823393 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				9F97E45525097E3B00823393 /* Item+Extensions.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -254,6 +265,7 @@
 				9F34059024FED6580035A385 /* DetailViewController.swift in Sources */,
 				9F0340542502CDD400B27BF3 /* DetailViewModel.swift in Sources */,
 				9F888C3F250190EB003810D4 /* FullListCoordinator.swift in Sources */,
+				9F97E45625097E3B00823393 /* Item+Extensions.swift in Sources */,
 				9F888C3D25018F79003810D4 /* BuyListCoordinator.swift in Sources */,
 				9F34058B24FED63E0035A385 /* FullListViewController.swift in Sources */,
 				9F0340522502BF7100B27BF3 /* FullListViewModel.swift in Sources */,

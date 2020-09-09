@@ -16,7 +16,9 @@ protocol FullListViewModelType {
 final class FullListViewModel: FullListViewModelType {
   
   func presentDetail(item: Item?) {
-      coordinator.presentDetail(item: item)
+    coordinator.presentDetail(item: item, completion: {
+      self.fetchTableData()
+    })
   }
   
   var tableData = [CellViewModel]()
@@ -25,6 +27,11 @@ final class FullListViewModel: FullListViewModelType {
   struct CellViewModel {
     var name: String
     var buyData: String
+    
+    init(item: Item) {
+      self.name = item.name
+      self.buyData = item.buyData
+    }
   }
   
   private let coordinator: FullListCoordinatorType
@@ -39,31 +46,18 @@ final class FullListViewModel: FullListViewModelType {
   
   func fetchTableData() {
       allItems = getItems.load()
-      for item in allItems {
-      tableData.append(CellViewModel(name: item.name, buyData: buyData(for: item)))
-    }
-  }
-  
-  func buyData(for item: Item) -> String {
-    if item.bought != true {
-      return "Not bought"
-    }
-    if item.timeSinceBuying > 1 || item.timeSinceBuying == 0 {
-      return "\(item.timeSinceBuying) days ago"
-    } else {
-      return "1 day ago"
-    }
+      tableData = allItems.map(CellViewModel.init(item:))
   }
   
   func removeItem(at index: Int) {
     allItems.remove(at: index)
     getItems.save(allItems)
+    fetchTableData()
   }
   
   func selectedItem(index: Int) -> Item {
     let allItems = getItems.load()
     return allItems[index]
   }
-  
   
 }

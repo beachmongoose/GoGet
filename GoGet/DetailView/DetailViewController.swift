@@ -10,17 +10,15 @@ import UIKit
 import Foundation
 
 class DetailViewController: UIViewController {
-  var allItems = [Item]()
   @IBOutlet var itemTextField: UITextField!
   @IBOutlet var quantityTextField: UITextField!
   @IBOutlet var dateTextField: UITextField!
   @IBOutlet var yesButton: UIButton!
   @IBOutlet var noButton: UIButton!
-  var boughtDate: Date?
+  var boughtFlag = false
   @IBOutlet var intervalTextField: UITextField!
 
   private let getItems: GetItemsType = GetItems()
-  
   private let viewModel: DetailViewModelType
   
   init(viewModel: DetailViewModelType) {
@@ -43,13 +41,13 @@ class DetailViewController: UIViewController {
 // MARK: - Parse Data
 extension DetailViewController {
   func manageTextFields() {
-    let item = viewModel.itemData()
+    guard let item = viewModel.itemData else { return }
     itemTextField.text = item.name
-    quantityTextField.text = String(item.quantity)
-    dateTextField.text = viewModel.convertedDate(item.date)
-    intervalTextField.text = String(item.interval)
+    quantityTextField.text = item.quantity
+    dateTextField.text = item.date
+    intervalTextField.text = item.interval
     
-    if item.boughtBool == false {
+    if !item.boughtBool{
       checkNo(self)
       } else {
       checkYes(self)
@@ -65,18 +63,12 @@ extension DetailViewController {
   }
   
   @objc func saveItem() {
-    
-    let date = viewModel.dateFromString(dateTextField.text ?? viewModel.convertedDate(Date()))
-    
     viewModel.saveItem(
       name: itemTextField.text,
-      boughtBool: true,
-      date: date,
+      boughtBool: boughtFlag,
+      date: dateTextField.text,
       quantity: quantityTextField.text,
       interval: intervalTextField.text)
-    
-    confirmSave()
-    
     }
 
 }
@@ -99,12 +91,13 @@ extension DetailViewController {
   
   func adjustButtons(yes yesSymbol: String,
                      no noSymbol: String,
-                     enabled textBool: Bool,
+                     enabled bool: Bool,
                      textColor color: UIColor
                      ) {
     markButton(yesButton, with: yesSymbol)
     markButton(noButton, with: noSymbol)
-    dateTextField.isUserInteractionEnabled = textBool
+    boughtFlag = bool
+    dateTextField.isUserInteractionEnabled = bool
     dateTextField.textColor = color
   }
   
@@ -125,25 +118,10 @@ extension DetailViewController {
   }
   
   @objc func datePicked(sender: UIDatePicker) {
-    dateTextField.text = viewModel.formattedDate(sender)
+    dateTextField.text = viewModel.convertPickerDate(sender)
   }
   
   override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
     view.endEditing(true)
-  }
-  
-  // MARK: - Alerts
-  func errorMessage() {
-      let dateError = UIAlertController(title: "Error", message: "Future date selected", preferredStyle: .alert)
-    dateError.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
-      present(dateError, animated: true)
-  }
-  
-  func confirmSave() {
-    let saveConfirm = UIAlertController(title: "Item Saved", message: nil, preferredStyle: .alert)
-    saveConfirm.addAction(UIAlertAction(title: "OK", style: .default, handler: { action in
-      self.viewModel.dismissDetail()
-    }))
-    present(saveConfirm, animated: true)
   }
 }
