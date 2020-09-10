@@ -19,7 +19,11 @@ struct DetailViewItem {
 protocol DetailViewModelType {
   func convertedDate(_ date: Date) -> String
   func convertPickerDate(_ picked: UIDatePicker) -> String
-  func saveItem(name: String?, boughtBool: Bool, date: String?, quantity: String?, interval: String?)
+  func saveItem(name: String?,
+                bought: Int,
+                date: String?,
+                quantity: String?,
+                interval: String?)
   var itemData: DetailViewItem! { get }
 }
 
@@ -33,7 +37,10 @@ final class DetailViewModel: DetailViewModelType {
   var itemData: DetailViewItem!
   var completion: () -> Void
   
-  init(coordinator: DetailViewCoordinatorType, getItems: GetItemsType = GetItems(), item: Item?, completion: @escaping () -> Void)
+  init(coordinator: DetailViewCoordinatorType,
+       getItems: GetItemsType = GetItems(),
+       item: Item?,
+       completion: @escaping () -> Void)
   {
     self.coordinator = coordinator
     self.getItems = getItems
@@ -56,12 +63,16 @@ final class DetailViewModel: DetailViewModelType {
       name: item?.name ?? "",
       boughtBool: item?.bought ?? false,
       date: convertedDate(date),
-      quantity: String(item?.quantity ?? 0),
-      interval: String(item?.duration ?? 0)
+      quantity: String(item?.quantity ?? 1),
+      interval: String(item?.duration ?? 7)
       )
   }
   
-  func saveItem(name: String?, boughtBool: Bool, date: String?, quantity: String?, interval: String?) {
+  func saveItem(name: String?,
+                bought: Int,
+                date: String?,
+                quantity: String?,
+                interval: String?) {
     
     guard let name = name,
       let quantity = quantity,
@@ -76,7 +87,8 @@ final class DetailViewModel: DetailViewModelType {
       quantity: Int(quantity) ?? 1,
       dateBought: dateFromString(date),
       duration: Int(interval) ?? 7,
-      bought: boughtBool)
+      bought: bought == 0
+    )
     
     validate(adjustedItem)
   }
@@ -115,6 +127,8 @@ final class DetailViewModel: DetailViewModelType {
       return coordinator.errorMessage("No duration entered.")
     case (let item) where item.dateBought > Date():
       return coordinator.errorMessage("Future date selected.")
+    case (let item) where item.name == self.item?.name:
+      return coordinator.errorMessage("Duplicate item.")
     default:
       break
     }

@@ -13,11 +13,8 @@ class DetailViewController: UIViewController {
   @IBOutlet var itemTextField: UITextField!
   @IBOutlet var quantityTextField: UITextField!
   @IBOutlet var dateTextField: UITextField!
-  @IBOutlet var yesButton: UIButton!
-  @IBOutlet var noButton: UIButton!
-  var boughtFlag = false
   @IBOutlet var intervalTextField: UITextField!
-
+  @IBOutlet var boughtBoolButton: UISegmentedControl!
   private let getItems: GetItemsType = GetItems()
   private let viewModel: DetailViewModelType
   
@@ -31,7 +28,7 @@ class DetailViewController: UIViewController {
   }
   
   override func viewDidLoad() {
-      manageTextFields()
+      populateTextFields()
       addDatePicker()
       addSaveButton()
       super.viewDidLoad()
@@ -40,19 +37,16 @@ class DetailViewController: UIViewController {
 
 // MARK: - Parse Data
 extension DetailViewController {
-  func manageTextFields() {
+  func populateTextFields() {
     guard let item = viewModel.itemData else { return }
     itemTextField.text = item.name
     quantityTextField.text = item.quantity
     dateTextField.text = item.date
     intervalTextField.text = item.interval
+    boughtBoolButton.selectedSegmentIndex = item.boughtBool ? 0 : 1
+    buttonChanged(self)
     
-    if !item.boughtBool{
-      checkNo(self)
-      } else {
-      checkYes(self)
-      }
-    }
+  }
 }
 
 // MARK: - Saving
@@ -65,44 +59,31 @@ extension DetailViewController {
   @objc func saveItem() {
     viewModel.saveItem(
       name: itemTextField.text,
-      boughtBool: boughtFlag,
+      bought: boughtBoolButton.selectedSegmentIndex,
       date: dateTextField.text,
       quantity: quantityTextField.text,
       interval: intervalTextField.text)
     }
-
 }
+
 // MARK: - Bought Buttons
 extension DetailViewController {
-  @IBAction func checkYes(_ sender: Any) {
-    adjustButtons(yes: "circle.fill",
-                  no: "circle",
-                  enabled: true,
-                  textColor: UIColor.black)
+  @IBAction func buttonChanged(_ sender: Any) {
+    switch boughtBoolButton.selectedSegmentIndex {
+    case 0:
+      updateBoughtField(enabled: true,
+                    textColor: UIColor.black)
+    case 1:
+      updateBoughtField(enabled: false,
+                    textColor: UIColor.gray)
+    default:
+      break
+    }
   }
-   
-  @IBAction func checkNo(_ sender: Any) {
-    adjustButtons(yes: "circle",
-                  no: "circle.fill",
-                  enabled: false,
-                  textColor: UIColor.gray)
-
-  }
-  
-  func adjustButtons(yes yesSymbol: String,
-                     no noSymbol: String,
-                     enabled bool: Bool,
-                     textColor color: UIColor
-                     ) {
-    markButton(yesButton, with: yesSymbol)
-    markButton(noButton, with: noSymbol)
-    boughtFlag = bool
+  func updateBoughtField(enabled bool: Bool,
+                     textColor color: UIColor) {
     dateTextField.isUserInteractionEnabled = bool
     dateTextField.textColor = color
-  }
-  
-  func markButton(_ button: UIButton, with symbol: String) {
-    button.setImage(UIImage(systemName: symbol), for: .normal)
   }
 }
 
