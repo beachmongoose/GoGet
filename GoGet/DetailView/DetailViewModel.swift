@@ -109,14 +109,9 @@ final class DetailViewModel: DetailViewModelType {
   func replace(in array: [Item], with item: Item) {
     guard let originalItem = self.item else { return }
     var allItems = array
-    let index = indexNumber(for: originalItem, in: array)
+    let index = getItems.indexNumber(for: originalItem, in: array)
     allItems[index] = item
     getItems.save(allItems)
-  }
-  
-  
-  func indexNumber(for item: Item, in array: [Item]) -> Int {
-    return array.firstIndex { $0.name == item.name} ?? 0
   }
   
   func validate(_ item: Item) {
@@ -127,8 +122,8 @@ final class DetailViewModel: DetailViewModelType {
       return coordinator.errorMessage("No duration entered.")
     case (let item) where item.dateBought > Date():
       return coordinator.errorMessage("Future date selected.")
-    case (let item) where item.name == self.item?.name:
-      return coordinator.errorMessage("Duplicate item.")
+//    case (let item) where item.name == self.item?.name:
+//      return coordinator.errorMessage("Duplicate item.")
     default:
       break
     }
