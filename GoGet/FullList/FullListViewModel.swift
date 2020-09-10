@@ -11,6 +11,7 @@ protocol FullListViewModelType {
   func presentDetail(item: Item?)
   func removeItem(at index: Int)
   func selectedItem(index: Int) -> Item
+  func goingBack()
 }
 
 final class FullListViewModel: FullListViewModelType {
@@ -36,11 +37,13 @@ final class FullListViewModel: FullListViewModelType {
   
   private let coordinator: FullListCoordinatorType
   private let getItems: GetItemsType
+  var completion: () -> Void
   
-  init(coordinator: FullListCoordinatorType, getItems: GetItemsType = GetItems())
+  init(coordinator: FullListCoordinatorType, getItems: GetItemsType = GetItems(), completion: @escaping () -> Void)
   {
     self.coordinator = coordinator
     self.getItems = getItems
+    self.completion = completion
     fetchTableData()
   }
   
@@ -59,5 +62,7 @@ final class FullListViewModel: FullListViewModelType {
     let allItems = getItems.load()
     return allItems[index]
   }
-  
+  func goingBack() {
+    completion()
+  }
 }

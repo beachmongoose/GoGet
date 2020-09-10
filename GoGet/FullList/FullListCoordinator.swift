@@ -22,8 +22,8 @@ class FullListCoordinator: FullListCoordinatorType {
     self.getItems = getItems
   }
   
-  func start() -> FullListViewController {
-    let viewModel = FullListViewModel(coordinator: self)
+  func start(completion: @escaping () -> Void) -> FullListViewController {
+    let viewModel = FullListViewModel(coordinator: self, completion: completion)
     let viewController = FullListViewController(viewModel: viewModel)
     self.viewController = viewController
     return viewController

@@ -11,6 +11,7 @@ import Foundation
 protocol GetItemsType {
   func save(_ items: [Item])
   func load() -> [Item]
+  func indexNumber(for item: Item, in array: [Item]) -> Int
 }
 
 class GetItems: GetItemsType {
@@ -38,5 +39,14 @@ class GetItems: GetItemsType {
       }
     }
     return loadedItems
+  }
+  
+  func indexNumber(for item: Item, in array: [Item]) -> Int {
+    return array.firstIndex { $0.name == item.name &&
+                              $0.quantity == item.quantity &&
+                              $0.dateBought == item.dateBought &&
+                              $0.duration == item.duration &&
+                              $0.bought == item.bought
+                            } ?? 0
   }
 }

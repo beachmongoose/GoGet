@@ -5,10 +5,13 @@
 //  Created by Maggie Maldjian on 9/4/20.
 //  Copyright © 2020 Maggie Maldjian. All rights reserved.
 //
+import UIKit
+
 
 protocol BuyListViewModelType {
   var tableData: [BuyListViewModel.CellViewModel] { get }
   func presentFullList()
+  func markAsBought(_ index: Int)
 }
 
 final class BuyListViewModel: BuyListViewModelType {
@@ -18,6 +21,10 @@ final class BuyListViewModel: BuyListViewModelType {
     var name: String
     var buyData: String
     
+    init(item: Item) {
+      self.name = item.name
+      self.buyData = item.buyData
+    }
   }
   
   private let coordinator: BuyListCoordinatorType
@@ -30,29 +37,26 @@ final class BuyListViewModel: BuyListViewModelType {
   }
   
   func presentFullList() {
-    coordinator.presentFullList()
-  }
-  func fetchTableData() {
-    var toBuyItems = [Item]()
-      let allItems = getItems.load()
-      for item in allItems {
-        if item.needToBuy {
-          toBuyItems.append(item)
-        }
-      }
-    for item in toBuyItems {
-      tableData.append(CellViewModel(name: item.name, buyData: buyData(for: item)))
-    }
+    coordinator.presentFullList(completion: {
+      self.fetchTableData()
+    })
   }
   
-  func buyData(for item: Item) -> String {
-    if item.bought != true {
-      return "Not bought"
-    }
-    if item.timeSinceBuying > 1 || item.timeSinceBuying == 0 {
-      return "\(item.timeSinceBuying) days ago"
-    } else {
-      return "1 day ago"
-    }
+  func fetchTableData() {
+    let toBuyItems = getItems.load().filter { $0.needToBuy }
+    tableData = toBuyItems.map(CellViewModel.init(item:))
   }
+  
+  func markAsBought(_ index: Int) {
+    var allItems = getItems.load()
+    let formattedItem = allItems.filter { $0.needToBuy }[index]
+    let originalIndex = getItems.indexNumber(for: formattedItem, in: allItems)
+    var currentItem = allItems[originalIndex]
+    currentItem.bought = true
+    currentItem.dateBought = Date()
+    allItems[originalIndex] = currentItem
+    getItems.save(allItems)
+    fetchTableData()
+  }
+  
 }

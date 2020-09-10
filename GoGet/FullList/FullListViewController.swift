@@ -113,6 +113,10 @@ extension FullListViewController {
   override func viewWillAppear(_ animated: Bool) {
     tableView.reloadData()
   }
+  
+  override func viewWillDisappear(_ animated: Bool) {
+    viewModel.goingBack()
+  }
 }
 
 
