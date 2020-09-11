@@ -13,6 +13,7 @@ protocol BuyListViewModelType {
   func presentFullList()
   func presentDetail(_ index: Int)
   func markAsBought(_ index: Int)
+  func sortBy(_ element: String?)
 }
 
 final class BuyListViewModel: BuyListViewModelType {
@@ -20,23 +21,45 @@ final class BuyListViewModel: BuyListViewModelType {
   
   struct CellViewModel {
     var name: String
+    var quantity: String
     var buyData: String
     
     init(item: Item) {
       self.name = item.name
+      self.quantity = String(item.quantity)
       self.buyData = item.buyData
     }
   }
   
   private let coordinator: BuyListCoordinatorType
   private let getItems: GetItemsType
+  private let sortTypeInstance: SortingInstanceType
+  private var sortType: SortType {
+  sortTypeInstance.sortType
+  }
 
-  init(coordinator: BuyListCoordinatorType, getItems: GetItemsType = GetItems()) {
+  init(
+    coordinator: BuyListCoordinatorType,
+    getItems: GetItemsType = GetItems(),
+    sortTypeInstance: SortingInstanceType = SortingInstance.shared) {
     self.coordinator = coordinator
     self.getItems = getItems
+    self.sortTypeInstance = sortTypeInstance
+    fetchTableData()
+  }
+
+// MARK: - Organizing
+  func fetchTableData() {
+    let toBuyItems = getItems.load(orderBy: sortType).filter { $0.needToBuy }
+    tableData = toBuyItems.map(CellViewModel.init(item:))
+  }
+  
+  func sortBy(_ element: String?) {
+    sortTypeInstance.changeSortType(to: SortType(rawValue: element!)!)
     fetchTableData()
   }
   
+// MARK: - Change View
   func presentFullList() {
     coordinator.presentFullList(completion: {
       self.fetchTableData()
@@ -50,13 +73,8 @@ final class BuyListViewModel: BuyListViewModelType {
     })
   }
   
-  func fetchTableData() {
-    let toBuyItems = getItems.load().filter { $0.needToBuy }
-    tableData = toBuyItems.map(CellViewModel.init(item:))
-  }
-  
   func markAsBought(_ index: Int) {
-    var allItems = getItems.load()
+    var allItems = getItems.load(orderBy: sortType)
     var currentItem = getItems.fullItemInfo(for: index)
     let itemIndex = getItems.indexNumber(for: currentItem, in: allItems)
     currentItem.bought = true

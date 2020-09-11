@@ -10,7 +10,6 @@ import UIKit
 
 class BuyListViewController: UIViewController {
   @IBOutlet var tableView: UITableView!
-  
   private let viewModel: BuyListViewModelType
     
   init(viewModel: BuyListViewModelType) {
@@ -48,7 +47,7 @@ extension BuyListViewController: UITableViewDataSource, UITableViewDelegate {
       }
     
     let item = viewModel.tableData[indexPath.row]
-    cell.item.text = item.name
+    cell.item.text = "\(item.name) (\(item.quantity))"
     cell.dateBought.text = item.buyData
 
     return cell
@@ -56,7 +55,6 @@ extension BuyListViewController: UITableViewDataSource, UITableViewDelegate {
  
   
 // MARK: - Change State
-  
   func longPressDetector() {
     let longPressDetector = UILongPressGestureRecognizer(target: self, action: #selector(longPress))
     view.addGestureRecognizer(longPressDetector)
@@ -97,7 +95,24 @@ extension BuyListViewController {
         action: #selector(presentFullList))
       navigationItem.rightBarButtonItem = fullList
     }
+}
   
+  // MARK: - Sorting
+  extension BuyListViewController {
+    @IBAction func sortButton(_ sender: Any) {
+        let alertController = UIAlertController().withSortOptions(handler: sortMethod(action:))
+        present(alertController, animated: true)
+      }
+      
+      @objc func sortMethod(action: UIAlertAction) {
+        viewModel.sortBy(action.title!.lowercased())
+        tableView.reloadData()
+      }
+  }
+  
+  
+  extension BuyListViewController {
+// MARK: - Data Handling
   @objc func presentFullList() {
     viewModel.presentFullList()
   }

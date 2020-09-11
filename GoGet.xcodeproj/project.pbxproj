@@ -12,6 +12,8 @@
 		9F0340502502A90F00B27BF3 /* BuyListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F03404F2502A90F00B27BF3 /* BuyListViewModel.swift */; };
 		9F0340522502BF7100B27BF3 /* FullListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F0340512502BF7100B27BF3 /* FullListViewModel.swift */; };
 		9F0340542502CDD400B27BF3 /* DetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F0340532502CDD400B27BF3 /* DetailViewModel.swift */; };
+		9F085BBB250C0D0900682D05 /* UIAlertController+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F085BBA250C0D0900682D05 /* UIAlertController+Extensions.swift */; };
+		9F085BBD250C17DF00682D05 /* SortTypeSharedInstance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F085BBC250C17DF00682D05 /* SortTypeSharedInstance.swift */; };
 		9F34057A24FED00C0035A385 /* Item.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F34057924FED00C0035A385 /* Item.swift */; };
 		9F34058124FED5CF0035A385 /* BuyListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F34057F24FED5CF0035A385 /* BuyListViewController.swift */; };
 		9F34058224FED5CF0035A385 /* BuyListViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9F34058024FED5CF0035A385 /* BuyListViewController.xib */; };
@@ -37,6 +39,8 @@
 		9F03404F2502A90F00B27BF3 /* BuyListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuyListViewModel.swift; sourceTree = "<group>"; };
 		9F0340512502BF7100B27BF3 /* FullListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FullListViewModel.swift; sourceTree = "<group>"; };
 		9F0340532502CDD400B27BF3 /* DetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewModel.swift; sourceTree = "<group>"; };
+		9F085BBA250C0D0900682D05 /* UIAlertController+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIAlertController+Extensions.swift"; sourceTree = "<group>"; };
+		9F085BBC250C17DF00682D05 /* SortTypeSharedInstance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SortTypeSharedInstance.swift; sourceTree = "<group>"; };
 		9F34057924FED00C0035A385 /* Item.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Item.swift; sourceTree = "<group>"; };
 		9F34057F24FED5CF0035A385 /* BuyListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuyListViewController.swift; sourceTree = "<group>"; };
 		9F34058024FED5CF0035A385 /* BuyListViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = BuyListViewController.xib; sourceTree = "<group>"; };
@@ -78,6 +82,31 @@
 			path = Cells;
 			sourceTree = "<group>";
 		};
+		9F085BB7250C0CD800682D05 /* Core */ = {
+			isa = PBXGroup;
+			children = (
+				9F34057B24FED3A60035A385 /* Models */,
+				9F888C3725014EDC003810D4 /* Service Objects */,
+			);
+			path = Core;
+			sourceTree = "<group>";
+		};
+		9F085BB8250C0CE000682D05 /* Design */ = {
+			isa = PBXGroup;
+			children = (
+				9F085BB9250C0CF800682D05 /* Extensions */,
+			);
+			path = Design;
+			sourceTree = "<group>";
+		};
+		9F085BB9250C0CF800682D05 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				9F085BBA250C0D0900682D05 /* UIAlertController+Extensions.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
 		9F34057B24FED3A60035A385 /* Models */ = {
 			isa = PBXGroup;
 			children = (
@@ -104,9 +133,9 @@
 			children = (
 				9F888C4325019C56003810D4 /* Cells */,
 				9F34058924FED63E0035A385 /* FullListViewController.swift */,
+				9F34058A24FED63E0035A385 /* FullListViewController.xib */,
 				9F888C3E250190EB003810D4 /* FullListCoordinator.swift */,
 				9F0340512502BF7100B27BF3 /* FullListViewModel.swift */,
-				9F34058A24FED63E0035A385 /* FullListViewController.xib */,
 			);
 			path = FullList;
 			sourceTree = "<group>";
@@ -126,6 +155,7 @@
 			isa = PBXGroup;
 			children = (
 				9F888C3825014EF8003810D4 /* GetItems.swift */,
+				9F085BBC250C17DF00682D05 /* SortTypeSharedInstance.swift */,
 			);
 			path = "Service Objects";
 			sourceTree = "<group>";
@@ -158,11 +188,11 @@
 		9F930BF424FEC55E0034C8F7 /* GoGet */ = {
 			isa = PBXGroup;
 			children = (
-				9F888C3725014EDC003810D4 /* Service Objects */,
+				9F085BB8250C0CE000682D05 /* Design */,
+				9F085BB7250C0CD800682D05 /* Core */,
 				9F34057C24FED54D0035A385 /* ToBuyList */,
 				9F34057E24FED56B0035A385 /* FullList */,
 				9F34058D24FED6470035A385 /* DetailView */,
-				9F34057B24FED3A60035A385 /* Models */,
 				9F930BF524FEC55E0034C8F7 /* AppDelegate.swift */,
 				9F930BFE24FEC55F0034C8F7 /* Assets.xcassets */,
 				9F930C0024FEC55F0034C8F7 /* LaunchScreen.storyboard */,
@@ -262,8 +292,10 @@
 				9F888C4A2501A14A003810D4 /* FullListCell.swift in Sources */,
 				9F03404D250298F100B27BF3 /* BuyListCell.swift in Sources */,
 				9F34058124FED5CF0035A385 /* BuyListViewController.swift in Sources */,
+				9F085BBD250C17DF00682D05 /* SortTypeSharedInstance.swift in Sources */,
 				9F34059024FED6580035A385 /* DetailViewController.swift in Sources */,
 				9F0340542502CDD400B27BF3 /* DetailViewModel.swift in Sources */,
+				9F085BBB250C0D0900682D05 /* UIAlertController+Extensions.swift in Sources */,
 				9F888C3F250190EB003810D4 /* FullListCoordinator.swift in Sources */,
 				9F97E45625097E3B00823393 /* Item+Extensions.swift in Sources */,
 				9F888C3D25018F79003810D4 /* BuyListCoordinator.swift in Sources */,
