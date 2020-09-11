@@ -11,6 +11,7 @@ import UIKit
 protocol BuyListCoordinatorType {
   func start() -> UINavigationController
   func presentFullList(completion: @escaping () -> Void)
+  func presentDetail(_ item: Item, completion: @escaping () -> Void)
 }
 
 class BuyListCoordinator: BuyListCoordinatorType {
@@ -30,7 +31,12 @@ class BuyListCoordinator: BuyListCoordinatorType {
     let fullListViewController = FullListCoordinator().start(completion: completion)
     navigationController.pushViewController(fullListViewController, animated: true)
   }
-
+  
+  func presentDetail(_ item: Item, completion: @escaping () -> Void) {
+  guard let navigationController = viewController?.navigationController else { return }
+    let detailViewController = DetailViewCoordinator().start(item: item, completion: completion)
+  navigationController.pushViewController(detailViewController, animated: true)
+  }
 //  func deletePrompt(){
 //    let deletePrompt = UIAlertController(title: "Mark as Bought?", message: nil, preferredStyle: .alert)
 //    deletePrompt.addAction(UIAlertAction(title: "Yes", style: .default, handler: { action in
