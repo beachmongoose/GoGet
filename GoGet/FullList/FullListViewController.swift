@@ -10,7 +10,6 @@ import UIKit
 
 class FullListViewController: UIViewController {
   @IBOutlet var tableView: UITableView!
-  
   private let viewModel: FullListViewModelType
   
   init(viewModel: FullListViewModelType) {
@@ -49,7 +48,7 @@ extension FullListViewController: UITableViewDataSource, UITableViewDelegate {
       }
     
     let item = viewModel.tableData[indexPath.row]
-        cell.item.text = item.name
+        cell.item.text = "\(item.name) (\(item.quantity))"
         cell.dateBought.text = item.buyData
     
     return cell
@@ -62,12 +61,11 @@ extension FullListViewController: UITableViewDataSource, UITableViewDelegate {
 extension FullListViewController {
   
   func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-    let item = viewModel.selectedItem(index: indexPath.row)
-    viewModel.presentDetail(item: item)
+    viewModel.editItem(at: indexPath.row)
     }
   
   @objc func addItem() {
-    viewModel.presentDetail(item: nil)
+    viewModel.presentDetail(for: nil)
   }
 }
 
@@ -96,6 +94,8 @@ extension FullListViewController: UIGestureRecognizerDelegate {
   }
   
   func deletePrompt(_ itemIndex: Int) {
+//    let deleteController = UIAlertController().deletePrompt(handler: deleteItem(itemIndex, action:))
+//    present(deleteController, animated: true)
     let optionsAlert = UIAlertController(title: "Item Selected", message: nil, preferredStyle: .alert)
     optionsAlert.addAction(UIAlertAction(title: "Delete", style: .default, handler: { action in
       self.viewModel.removeItem(at: itemIndex)
@@ -105,7 +105,28 @@ extension FullListViewController: UIGestureRecognizerDelegate {
     present(optionsAlert, animated: true)
   }
   
+//  @objc func deleteItem(_ index: Int, action: UIAlertAction) {
+//    viewModel.removeItem(at: index)
+//    tableView.reloadData()
+//  }
+  
+  
 }
+
+// MARK: - Sorting
+extension FullListViewController {
+  @IBAction func sortButton(_ sender: Any) {
+    let alertController = UIAlertController().withSortOptions(handler: sortMethod(action:))
+    present(alertController, animated: true)
+  }
+  
+  @objc func sortMethod(action: UIAlertAction) {
+    viewModel.sortBy(action.title!.lowercased())
+    tableView.reloadData()
+  }
+}
+
+
 
 // MARK: - Data Handling
 extension FullListViewController {
@@ -118,8 +139,3 @@ extension FullListViewController {
     viewModel.goingBack()
   }
 }
-
-
-
-
-

@@ -34,6 +34,7 @@ final class DetailViewModel: DetailViewModelType {
   weak var viewController: DetailViewController?
   private let coordinator: DetailViewCoordinatorType
   private let getItems: GetItemsType
+  private var sortType: SortType = .added
   var itemData: DetailViewItem!
   var completion: () -> Void
   
@@ -87,14 +88,15 @@ final class DetailViewModel: DetailViewModelType {
       quantity: Int(quantity) ?? 1,
       dateBought: dateFromString(date),
       duration: Int(interval) ?? 7,
-      bought: bought == 0
+      bought: bought == 0,
+      dateAdded: item?.dateAdded ?? Date()
     )
     
     validate(adjustedItem)
   }
   
   func upSert(_ item: Item) {
-    var allItems = getItems.load()
+    var allItems = getItems.load(orderBy: sortType)
     
     if self.item == nil {
       allItems.append(item)
