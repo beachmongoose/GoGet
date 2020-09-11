@@ -11,6 +11,7 @@ import UIKit
 protocol BuyListViewModelType {
   var tableData: [BuyListViewModel.CellViewModel] { get }
   func presentFullList()
+  func presentDetail(_ index: Int)
   func markAsBought(_ index: Int)
 }
 
@@ -42,6 +43,13 @@ final class BuyListViewModel: BuyListViewModelType {
     })
   }
   
+  func presentDetail(_ index: Int) {
+    let item = getItems.fullItemInfo(for: index)
+    coordinator.presentDetail(item, completion: {
+      self.fetchTableData()
+    })
+  }
+  
   func fetchTableData() {
     let toBuyItems = getItems.load().filter { $0.needToBuy }
     tableData = toBuyItems.map(CellViewModel.init(item:))
@@ -49,12 +57,11 @@ final class BuyListViewModel: BuyListViewModelType {
   
   func markAsBought(_ index: Int) {
     var allItems = getItems.load()
-    let formattedItem = allItems.filter { $0.needToBuy }[index]
-    let originalIndex = getItems.indexNumber(for: formattedItem, in: allItems)
-    var currentItem = allItems[originalIndex]
+    var currentItem = getItems.fullItemInfo(for: index)
+    let itemIndex = getItems.indexNumber(for: currentItem, in: allItems)
     currentItem.bought = true
     currentItem.dateBought = Date()
-    allItems[originalIndex] = currentItem
+    allItems[itemIndex] = currentItem
     getItems.save(allItems)
     fetchTableData()
   }

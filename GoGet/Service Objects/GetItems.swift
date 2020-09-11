@@ -12,6 +12,7 @@ protocol GetItemsType {
   func save(_ items: [Item])
   func load() -> [Item]
   func indexNumber(for item: Item, in array: [Item]) -> Int
+  func fullItemInfo(for index: Int) -> Item
 }
 
 class GetItems: GetItemsType {
@@ -48,5 +49,12 @@ class GetItems: GetItemsType {
                               $0.duration == item.duration &&
                               $0.bought == item.bought
                             } ?? 0
+  }
+  
+  func fullItemInfo(for index: Int) -> Item {
+    let allItems = load()
+    let selectedItem = allItems.filter { $0.needToBuy} [index]
+    let originalIndex = indexNumber(for: selectedItem, in: allItems)
+    return allItems[originalIndex]
   }
 }

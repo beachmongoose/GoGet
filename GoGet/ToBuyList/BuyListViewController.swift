@@ -24,6 +24,7 @@ class BuyListViewController: UIViewController {
   
   override func viewDidLoad() {
       setUpNavButton()
+      longPressDetector()
       tableView.register(UINib(nibName: "BuyListCell", bundle: nil), forCellReuseIdentifier: "BuyListCell")
       title = "GoGet"
       super.viewDidLoad()
@@ -52,9 +53,27 @@ extension BuyListViewController: UITableViewDataSource, UITableViewDelegate {
 
     return cell
   }
+ 
+  
+// MARK: - Change State
+  
+  func longPressDetector() {
+    let longPressDetector = UILongPressGestureRecognizer(target: self, action: #selector(longPress))
+    view.addGestureRecognizer(longPressDetector)
+  }
+  
+  @objc func longPress(longPress: UILongPressGestureRecognizer) {
+    if longPress.state == UIGestureRecognizer.State.began {
+      let touchPoint = longPress.location(in: tableView)
+      if let selectedItem = tableView.indexPathForRow(at: touchPoint) {
+        changeStatePrompt(selectedItem.row)
+        self.tableView.reloadData()
+      }
+    }
+  }
   
   func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-    changeStatePrompt(indexPath.row)
+    viewModel.presentDetail(indexPath.row)
     self.tableView.reloadData()
   }
   
