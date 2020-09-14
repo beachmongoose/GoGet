@@ -31,6 +31,7 @@
 		9F930BFF24FEC55F0034C8F7 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9F930BFE24FEC55F0034C8F7 /* Assets.xcassets */; };
 		9F930C0224FEC55F0034C8F7 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9F930C0024FEC55F0034C8F7 /* LaunchScreen.storyboard */; };
 		9F97E45625097E3B00823393 /* Item+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F97E45525097E3B00823393 /* Item+Extensions.swift */; };
+		9FE4BA16250FD77000960506 /* UIViewController+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FE4BA15250FD77000960506 /* UIViewController+Extensions.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -60,6 +61,7 @@
 		9F930C0124FEC55F0034C8F7 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		9F930C0324FEC55F0034C8F7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		9F97E45525097E3B00823393 /* Item+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Item+Extensions.swift"; sourceTree = "<group>"; };
+		9FE4BA15250FD77000960506 /* UIViewController+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Extensions.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -103,6 +105,7 @@
 			isa = PBXGroup;
 			children = (
 				9F085BBA250C0D0900682D05 /* UIAlertController+Extensions.swift */,
+				9FE4BA15250FD77000960506 /* UIViewController+Extensions.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -288,6 +291,7 @@
 				9F0340502502A90F00B27BF3 /* BuyListViewModel.swift in Sources */,
 				9F34057A24FED00C0035A385 /* Item.swift in Sources */,
 				9F888C41250195F4003810D4 /* DetailViewCoordinator.swift in Sources */,
+				9FE4BA16250FD77000960506 /* UIViewController+Extensions.swift in Sources */,
 				9F888C3925014EF8003810D4 /* GetItems.swift in Sources */,
 				9F888C4A2501A14A003810D4 /* FullListCell.swift in Sources */,
 				9F03404D250298F100B27BF3 /* BuyListCell.swift in Sources */,

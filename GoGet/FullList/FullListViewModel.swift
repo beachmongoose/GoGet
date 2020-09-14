@@ -5,13 +5,14 @@
 //  Created by Maggie Maldjian on 9/4/20.
 //  Copyright © 2020 Maggie Maldjian. All rights reserved.
 //
+import UIKit
 
 protocol FullListViewModelType {
   var tableData: [FullListViewModel.CellViewModel] { get }
   func editItem(at index: Int)
   func presentDetail(for item: Item?)
-  func selectDeselectIndex(at: Int)
-  func removeItem(at index: Int)
+  func selectDeselectIndex(_ index: Int?)
+  func removeItems()
   func sortBy(_ element: String?)
   func goingBack()
 }
@@ -32,6 +33,7 @@ final class FullListViewModel: FullListViewModelType {
   
   var tableData = [CellViewModel]()
   var allItems = [Item]()
+  private var selectedItems: [Int] = []
   
   private let coordinator: FullListCoordinatorType
   private let getItems: GetItemsType
@@ -72,8 +74,15 @@ final class FullListViewModel: FullListViewModelType {
 // MARK: - Item Handling
 extension FullListViewModel {
   
-  func selectDeselectIndex(at: Int) {
-    
+  func selectDeselectIndex(_ index: Int?) {
+    guard index != nil else { selectedItems.removeAll()
+      return
+    }
+    if let item = selectedItems.firstIndex(of: index!) {
+      selectedItems.remove(at: item)
+    } else {
+    selectedItems.append(index!)
+    }
   }
   
   func editItem(at index: Int) {
@@ -87,8 +96,15 @@ extension FullListViewModel {
     })
   }
   
-  func removeItem(at index: Int) {
-    allItems.remove(at: index)
+  func removeItems() {
+    var itemList: [Item] = []
+    for item in selectedItems {
+      itemList.append(getItems.fullItemInfo(for: item))
+    }
+    for item in itemList {
+      allItems.remove(at: getItems.indexNumber(for: item, in: allItems))
+    }
+    selectedItems.removeAll()
     getItems.save(allItems)
     fetchTableData()
   }

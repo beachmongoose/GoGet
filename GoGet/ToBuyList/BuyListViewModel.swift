@@ -12,8 +12,9 @@ protocol BuyListViewModelType {
   var tableData: [BuyListViewModel.CellViewModel] { get }
   func presentFullList()
   func presentDetail(_ index: Int)
-  func markAsBought(_ index: Int)
+  func markAsBought()
   func sortBy(_ element: String?)
+  func selectDeselectIndex(_ index: Int)
 }
 
 final class BuyListViewModel: BuyListViewModelType {
@@ -31,6 +32,7 @@ final class BuyListViewModel: BuyListViewModelType {
     }
   }
   
+  private var itemIndexes: [Int] = []
   private let coordinator: BuyListCoordinatorType
   private let getItems: GetItemsType
   private let sortTypeInstance: SortingInstanceType
@@ -73,13 +75,19 @@ final class BuyListViewModel: BuyListViewModelType {
     })
   }
   
-  func markAsBought(_ index: Int) {
+  func selectDeselectIndex(_ index: Int) {
+    itemIndexes.append(index)
+  }
+  
+  func markAsBought() {
     var allItems = getItems.load(orderBy: sortType)
+    for index in itemIndexes {
     var currentItem = getItems.fullItemInfo(for: index)
     let itemIndex = getItems.indexNumber(for: currentItem, in: allItems)
     currentItem.bought = true
     currentItem.dateBought = Date()
     allItems[itemIndex] = currentItem
+    }
     getItems.save(allItems)
     fetchTableData()
   }
