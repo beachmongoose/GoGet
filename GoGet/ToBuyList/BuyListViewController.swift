@@ -64,8 +64,8 @@ extension BuyListViewController: UITableViewDataSource, UITableViewDelegate {
     if longPress.state == UIGestureRecognizer.State.began {
       let touchPoint = longPress.location(in: tableView)
       if let selectedItem = tableView.indexPathForRow(at: touchPoint) {
-        changeStatePrompt(selectedItem.row)
-        self.tableView.reloadData()
+        viewModel.selectDeselectIndex(selectedItem.row)
+        changeStatePrompt()
       }
     }
   }
@@ -75,14 +75,13 @@ extension BuyListViewController: UITableViewDataSource, UITableViewDelegate {
     self.tableView.reloadData()
   }
   
-  func changeStatePrompt(_ index: Int) {
-    let markBoughtPrompt = UIAlertController(title: "Mark as Bought?", message: nil, preferredStyle: .alert)
-    markBoughtPrompt.addAction(UIAlertAction(title: "Yes", style: .default, handler: { action in
-      self.viewModel.markAsBought(index)
-      self.tableView.reloadData()
-    }))
-    markBoughtPrompt.addAction(UIAlertAction(title: "No", style: .cancel))
-    present(markBoughtPrompt, animated: true)
+  func changeStatePrompt() {
+    presentBoughtAlert(handler: markAsBought(action:))
+  }
+  
+  @objc func markAsBought(action: UIAlertAction) {
+    self.viewModel.markAsBought()
+    self.tableView.reloadData()
   }
 }
 
@@ -100,10 +99,9 @@ extension BuyListViewController {
   // MARK: - Sorting
   extension BuyListViewController {
     @IBAction func sortButton(_ sender: Any) {
-        let alertController = UIAlertController().withSortOptions(handler: sortMethod(action:))
-        present(alertController, animated: true)
+      presentSortOptions(handler: sortMethod(action:))
       }
-      
+       
       @objc func sortMethod(action: UIAlertAction) {
         viewModel.sortBy(action.title!.lowercased())
         tableView.reloadData()
