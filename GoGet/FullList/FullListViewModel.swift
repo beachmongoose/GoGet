@@ -9,9 +9,10 @@ import UIKit
 
 protocol FullListViewModelType {
   var tableData: [FullListViewModel.CellViewModel] { get }
-  func editItem(at index: Int)
   func presentDetail(for item: Item?)
-  func selectDeselectIndex(_ index: Int?)
+  func editItem(at index: Int)
+  func selectDeselectIndex(_ index: Int)
+  func clearIndex()
   func removeItems()
   func sortBy(_ element: String?)
   func goingBack()
@@ -23,17 +24,20 @@ final class FullListViewModel: FullListViewModelType {
     var name: String
     var quantity: String
     var buyData: String
+    var isSelected: Bool
     
     init(item: Item) {
       self.name = item.name
       self.quantity = String(item.quantity)
       self.buyData = item.buyData
+      self.isSelected = false
     }
   }
   
   var tableData = [CellViewModel]()
   var allItems = [Item]()
   private var selectedItems: [Int] = []
+  
   
   private let coordinator: FullListCoordinatorType
   private let getItems: GetItemsType
@@ -74,15 +78,25 @@ final class FullListViewModel: FullListViewModelType {
 // MARK: - Item Handling
 extension FullListViewModel {
   
-  func selectDeselectIndex(_ index: Int?) {
-    guard index != nil else { selectedItems.removeAll()
-      return
-    }
-    if let item = selectedItems.firstIndex(of: index!) {
-      selectedItems.remove(at: item)
+  func selectDeselectIndex(_ index: Int) {
+    if selectedItems.contains(index) {
+      selectedItems.remove(at: selectedItems.firstIndex(of: index)!)
+      tableData[index].isSelected = false
     } else {
-    selectedItems.append(index!)
+    selectedItems.append(index)
+    tableData[index].isSelected = true
     }
+  }
+  
+  func clearIndex() {
+    selectedItems.removeAll()
+    for item in 0..<tableData.count {
+      tableData[item].isSelected = false
+    }
+  }
+  
+  func selectionToggle(_ index: Int, to bool: Bool) {
+    tableData[index].isSelected = bool
   }
   
   func editItem(at index: Int) {
@@ -99,7 +113,7 @@ extension FullListViewModel {
   func removeItems() {
     var itemList: [Item] = []
     for item in selectedItems {
-      itemList.append(getItems.fullItemInfo(for: item))
+      itemList.append(getItems.fullItemInfo(for: item, buyView: false))
     }
     for item in itemList {
       allItems.remove(at: getItems.indexNumber(for: item, in: allItems))

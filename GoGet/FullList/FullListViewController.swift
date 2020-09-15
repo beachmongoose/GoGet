@@ -10,8 +10,9 @@ import UIKit
 
 class FullListViewController: UIViewController {
   @IBOutlet var tableView: UITableView!
+  @IBOutlet var sortButton: UIButton!
   private let viewModel: FullListViewModelType
-  var deleteMode = false
+  var inDeleteMode = false
   
   init(viewModel: FullListViewModelType) {
     self.viewModel = viewModel
@@ -43,10 +44,8 @@ extension FullListViewController: UITableViewDataSource, UITableViewDelegate {
         fatalError("Unable to Dequeue")
       }
     
-    let item = viewModel.tableData[indexPath.row]
-        cell.item.text = "\(item.name) (\(item.quantity))"
-        cell.dateBought.text = item.buyData
-    
+    let cellViewModel = viewModel.tableData[indexPath.row]
+    cell.viewModel = cellViewModel
     return cell
   }
 }
@@ -64,36 +63,34 @@ extension FullListViewController: UIGestureRecognizerDelegate {
       style: .plain,
       target: self,
       action: #selector(massDeleteMode))
-    navigationItem.rightBarButtonItem = add
-    navigationItem.leftBarButtonItem = delete
+    navigationItem.rightBarButtonItems = [add, delete]
+    navigationItem.leftBarButtonItem = navigationItem.backBarButtonItem
   }
   
   func addConfirmAndCancelButtons() {
-    let confirm = UIBarButtonItem(title: "Confirm", style: .plain, target: self, action: #selector(confirmDelete))
-        let cancel = UIBarButtonItem(title: "Cancel", style: .plain, target: self, action: #selector(cancelDelete))
-    navigationItem.rightBarButtonItem = confirm
-    navigationItem.leftBarButtonItem = cancel
+    let confirm = UIBarButtonItem(title: "Confirm",
+                                  style: .plain,
+                                  target: self,
+                                  action: #selector(confirmDelete))
+    let cancel = UIBarButtonItem(title: "Cancel",
+                                 style: .plain,
+                                 target: self,
+                                 action: #selector(cancelDelete))
+    navigationItem.rightBarButtonItems = [cancel]
+    navigationItem.leftBarButtonItem = confirm
   }
 }
 // MARK: - User Input
 extension FullListViewController {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-      if deleteMode == false {
+      if !inDeleteMode {
       viewModel.editItem(at: indexPath.row)
-      }
+      } else {
       viewModel.selectDeselectIndex(indexPath.row)
-      if let cell = tableView.cellForRow(at: indexPath) {
-        cell.isHighlighted.toggle()
+      self.tableView.reloadData()
       }
     }
-  
-//  func tableView(tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
-//    viewModel.selectDeselectIndex(indexPath.row)
-//    if let cell = tableView.cellForRow(at: indexPath) {
-//      cell.isHighlighted = false
-//    }
-//  }
     
     @objc func addItem() {
       viewModel.presentDetail(for: nil)
@@ -107,7 +104,7 @@ extension FullListViewController {
   @objc func longPress(longPressGestureRecognizer: UILongPressGestureRecognizer) {
     if longPressGestureRecognizer.state == UIGestureRecognizer.State.began {
       let touchPoint = longPressGestureRecognizer.location(in: tableView)
-      viewModel.selectDeselectIndex(nil)
+      viewModel.clearIndex()
       if let selectedItem = tableView.indexPathForRow(at: touchPoint) {
         viewModel.selectDeselectIndex(selectedItem.row)
         deletePrompt(selectedItem.row)
@@ -137,11 +134,9 @@ extension FullListViewController {
   }
   
   @objc func cancelDelete() {
-    viewModel.selectDeselectIndex(nil)
+    viewModel.clearIndex()
     changeEditing(to: false)
-    for cell in tableView.visibleCells {
-      cell.isHighlighted = false
-    }
+    self.tableView.reloadData()
   }
 }
 
@@ -169,7 +164,9 @@ extension FullListViewController {
   }
   
   func changeEditing(to bool: Bool) {
-    deleteMode = bool
+    inDeleteMode = bool
+    tableView.allowsMultipleSelection = bool
+    sortButton.isEnabled.toggle()
     if bool == false {
       longPressDetector()
       addNewAndDeleteButtons()

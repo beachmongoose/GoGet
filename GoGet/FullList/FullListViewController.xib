@@ -9,6 +9,7 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="FullListViewController" customModule="GoGet" customModuleProvider="target">
             <connections>
+                <outlet property="sortButton" destination="Mji-2C-481" id="Kcz-HZ-kgp"/>
                 <outlet property="tableView" destination="caA-fD-6Gx" id="eiW-dw-OkN"/>
                 <outlet property="view" destination="0Zb-Oa-cBS" id="GN9-Td-9ZJ"/>
             </connections>

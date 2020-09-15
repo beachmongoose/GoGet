@@ -18,11 +18,18 @@ protocol GetItemsType {
   func save(_ items: [Item])
   func load(orderBy: SortType) -> [Item]
   func indexNumber(for item: Item, in array: [Item]) -> Int
-  func fullItemInfo(for index: Int) -> Item
+  func fullItemInfo(for index: Int, buyView isBuyView: Bool) -> Item
 }
 
 class GetItems: GetItemsType {
 
+  let sortTypeInstance: SortingInstanceType
+
+  init(sortTypeInstance: SortingInstanceType = SortingInstance.shared) {
+    self.sortTypeInstance = sortTypeInstance
+  }
+  
+  
   func save(_ items: [Item]) {
     let json = JSONEncoder()
     if let savedData = try? json.encode(items) {
@@ -63,12 +70,20 @@ class GetItems: GetItemsType {
   }
 
 // MARK: - For Buy List
-  func fullItemInfo(for index: Int) -> Item {
-    let allItems = load(orderBy: .added)
-    let selectedItem = allItems.filter { $0.needToBuy} [index]
+  func fullItemInfo(for index: Int, buyView isBuyView: Bool) -> Item {
+    let allItems = load(orderBy: sortTypeInstance.sortType)
+    let selectedItem = isBuyView ? allItems.filter{ $0.needToBuy }[index] : allItems[index]
     let originalIndex = indexNumber(for: selectedItem, in: allItems)
     return allItems[originalIndex]
   }
+
+// MARK: - For Full List
+//  func fullItem(for index: Int) -> Item {
+//    let allItems = load(orderBy: sortTypeInstance.sortType)
+//    let selectedItem = allItems[index]
+//    let originalIndex = indexNumber(for: selectedItem, in: allItems)
+//    return allItems[originalIndex]
+//  }
 
 // MARK: - Sorting
   func byName(_ array: [Item]) -> [Item] {
