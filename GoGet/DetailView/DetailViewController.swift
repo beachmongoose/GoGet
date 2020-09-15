@@ -52,7 +52,10 @@ extension DetailViewController {
 // MARK: - Saving
 extension DetailViewController {
   func addSaveButton() {
-    let saveButton = UIBarButtonItem(title: "Save", style: .plain, target: self, action: #selector(saveItem))
+    let saveButton = UIBarButtonItem(title: "Save",
+                                     style: .plain,
+                                     target: self,
+                                     action: #selector(saveItem))
     navigationItem.rightBarButtonItem = saveButton
   }
   

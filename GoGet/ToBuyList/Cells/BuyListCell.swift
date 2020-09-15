@@ -9,11 +9,19 @@
 import UIKit
 
 class BuyListCell: UITableViewCell {
-
-    override func awakeFromNib() {
-    }
   @IBOutlet var item: UILabel!
   @IBOutlet var dateBought: UILabel!
   
-    
+  var viewModel: BuyListViewModel.CellViewModel? {
+    didSet { setupCell() }
+  }
+}
+
+extension BuyListCell {
+  func setupCell() {
+    guard let viewModel = viewModel else { return }
+    selectionStyle = .none
+    item.text = "\(viewModel.name) (\(viewModel.quantity))"
+    dateBought.text = viewModel.buyData
+  }
 }

@@ -45,11 +45,8 @@ extension BuyListViewController: UITableViewDataSource, UITableViewDelegate {
       as? BuyListCell else {
         fatalError("Unable to Dequeue")
       }
-    
-    let item = viewModel.tableData[indexPath.row]
-    cell.item.text = "\(item.name) (\(item.quantity))"
-    cell.dateBought.text = item.buyData
-
+    let cellViewModel = viewModel.tableData[indexPath.row]
+    cell.viewModel = cellViewModel
     return cell
   }
  
@@ -102,9 +99,9 @@ extension BuyListViewController {
       presentSortOptions(handler: sortMethod(action:))
       }
        
-      @objc func sortMethod(action: UIAlertAction) {
-        viewModel.sortBy(action.title!.lowercased())
-        tableView.reloadData()
+    @objc func sortMethod(action: UIAlertAction) {
+      viewModel.sortBy(action.title!.lowercased())
+      tableView.reloadData()
       }
   }
   

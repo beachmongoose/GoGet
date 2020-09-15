@@ -69,7 +69,7 @@ final class BuyListViewModel: BuyListViewModelType {
   }
   
   func presentDetail(_ index: Int) {
-    let item = getItems.fullItemInfo(for: index)
+    let item = getItems.fullItemInfo(for: index, buyView: true)
     coordinator.presentDetail(item, completion: {
       self.fetchTableData()
     })
@@ -82,7 +82,7 @@ final class BuyListViewModel: BuyListViewModelType {
   func markAsBought() {
     var allItems = getItems.load(orderBy: sortType)
     for index in itemIndexes {
-    var currentItem = getItems.fullItemInfo(for: index)
+      var currentItem = getItems.fullItemInfo(for: index, buyView: true)
     let itemIndex = getItems.indexNumber(for: currentItem, in: allItems)
     currentItem.bought = true
     currentItem.dateBought = Date()
