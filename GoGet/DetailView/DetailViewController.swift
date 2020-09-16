@@ -8,6 +8,7 @@
 
 import UIKit
 import Foundation
+//import DropDown
 
 class DetailViewController: UIViewController {
   @IBOutlet var itemTextField: UITextField!
@@ -15,8 +16,10 @@ class DetailViewController: UIViewController {
   @IBOutlet var dateTextField: UITextField!
   @IBOutlet var intervalTextField: UITextField!
   @IBOutlet var boughtBoolButton: UISegmentedControl!
+  @IBOutlet var dropDownView: UIView!
   private let getItems: GetItemsType = GetItems()
   private let viewModel: DetailViewModelType
+//  let dropDown = DropDown()
 
   init(viewModel: DetailViewModelType) {
     self.viewModel = viewModel
@@ -106,5 +109,24 @@ extension DetailViewController {
 
   override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
     view.endEditing(true)
+  }
+}
+
+// MARK: - Category
+extension DetailViewController {
+
+  func addDropDownMenu() {
+//    dropDown.anchorView = dropDownView
+//    dropDown.dataSource = viewModel.collectCategories()
+  }
+
+  func addCategory() {
+    addCategory(handler: saveCategory)
+  }
+
+  func saveCategory(action: UIAlertAction, category: String?) {
+    guard category != nil else { presentError(message: "Name not entered")
+      return }
+
   }
 }

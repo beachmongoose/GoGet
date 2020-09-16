@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -21,6 +21,10 @@
 		9F34058C24FED63E0035A385 /* FullListViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9F34058A24FED63E0035A385 /* FullListViewController.xib */; };
 		9F34059024FED6580035A385 /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F34058E24FED6580035A385 /* DetailViewController.swift */; };
 		9F34059124FED6580035A385 /* DetailViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9F34058F24FED6580035A385 /* DetailViewController.xib */; };
+		9F62A38E2512A92800F5AF63 /* Category.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F62A38D2512A92800F5AF63 /* Category.swift */; };
+		9F62A3942512B43300F5AF63 /* GetCategories.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F62A3932512B43300F5AF63 /* GetCategories.swift */; };
+		9F62A3962512B4EF00F5AF63 /* Data.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F62A3952512B4EF00F5AF63 /* Data.swift */; };
+		9F62A3992512B98500F5AF63 /* Item+UserDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F62A3982512B98500F5AF63 /* Item+UserDefaults.swift */; };
 		9F888C3925014EF8003810D4 /* GetItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F888C3825014EF8003810D4 /* GetItems.swift */; };
 		9F888C3D25018F79003810D4 /* BuyListCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F888C3C25018F79003810D4 /* BuyListCoordinator.swift */; };
 		9F888C3F250190EB003810D4 /* FullListCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F888C3E250190EB003810D4 /* FullListCoordinator.swift */; };
@@ -53,6 +57,10 @@
 		9F34058A24FED63E0035A385 /* FullListViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FullListViewController.xib; sourceTree = "<group>"; };
 		9F34058E24FED6580035A385 /* DetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
 		9F34058F24FED6580035A385 /* DetailViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = DetailViewController.xib; sourceTree = "<group>"; };
+		9F62A38D2512A92800F5AF63 /* Category.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Category.swift; sourceTree = "<group>"; };
+		9F62A3932512B43300F5AF63 /* GetCategories.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetCategories.swift; sourceTree = "<group>"; };
+		9F62A3952512B4EF00F5AF63 /* Data.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Data.swift; sourceTree = "<group>"; };
+		9F62A3982512B98500F5AF63 /* Item+UserDefaults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Item+UserDefaults.swift"; sourceTree = "<group>"; };
 		9F888C3825014EF8003810D4 /* GetItems.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetItems.swift; sourceTree = "<group>"; };
 		9F888C3C25018F79003810D4 /* BuyListCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuyListCoordinator.swift; sourceTree = "<group>"; };
 		9F888C3E250190EB003810D4 /* FullListCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FullListCoordinator.swift; sourceTree = "<group>"; };
@@ -109,6 +117,7 @@
 		9F085BB7250C0CD800682D05 /* Core */ = {
 			isa = PBXGroup;
 			children = (
+				9F62A3972512B97500F5AF63 /* Entities */,
 				9F34057B24FED3A60035A385 /* Models */,
 				9F888C3725014EDC003810D4 /* Service Objects */,
 			);
@@ -136,6 +145,7 @@
 			isa = PBXGroup;
 			children = (
 				9F34057924FED00C0035A385 /* Item.swift */,
+				9F62A38D2512A92800F5AF63 /* Category.swift */,
 				9F97E45425097E2700823393 /* Extensions */,
 			);
 			path = Models;
@@ -176,11 +186,21 @@
 			path = DetailView;
 			sourceTree = "<group>";
 		};
+		9F62A3972512B97500F5AF63 /* Entities */ = {
+			isa = PBXGroup;
+			children = (
+				9F62A3982512B98500F5AF63 /* Item+UserDefaults.swift */,
+			);
+			path = Entities;
+			sourceTree = "<group>";
+		};
 		9F888C3725014EDC003810D4 /* Service Objects */ = {
 			isa = PBXGroup;
 			children = (
 				9F888C3825014EF8003810D4 /* GetItems.swift */,
 				9F085BBC250C17DF00682D05 /* SortTypeSharedInstance.swift */,
+				9F62A3932512B43300F5AF63 /* GetCategories.swift */,
+				9F62A3952512B4EF00F5AF63 /* Data.swift */,
 			);
 			path = "Service Objects";
 			sourceTree = "<group>";
@@ -243,8 +263,8 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 9F930C0624FEC55F0034C8F7 /* Build configuration list for PBXNativeTarget "GoGet" */;
 			buildPhases = (
-				9F62A38C25126EEF00F5AF63 /* ShellScript */,
 				0D5BEE96A9CBAC9F2CC8817F /* [CP] Check Pods Manifest.lock */,
+				9F62A38C25126EEF00F5AF63 /* ShellScript */,
 				9F930BEE24FEC55E0034C8F7 /* Sources */,
 				9F930BEF24FEC55E0034C8F7 /* Frameworks */,
 				9F930BF024FEC55E0034C8F7 /* Resources */,
@@ -357,13 +377,16 @@
 			files = (
 				9F930BF624FEC55E0034C8F7 /* AppDelegate.swift in Sources */,
 				9F0340502502A90F00B27BF3 /* BuyListViewModel.swift in Sources */,
+				9F62A38E2512A92800F5AF63 /* Category.swift in Sources */,
 				9F34057A24FED00C0035A385 /* Item.swift in Sources */,
 				9F888C41250195F4003810D4 /* DetailViewCoordinator.swift in Sources */,
 				9FE4BA16250FD77000960506 /* UIViewController+Extensions.swift in Sources */,
 				9F888C3925014EF8003810D4 /* GetItems.swift in Sources */,
+				9F62A3962512B4EF00F5AF63 /* Data.swift in Sources */,
 				9F888C4A2501A14A003810D4 /* FullListCell.swift in Sources */,
 				9F03404D250298F100B27BF3 /* BuyListCell.swift in Sources */,
 				9F34058124FED5CF0035A385 /* BuyListViewController.swift in Sources */,
+				9F62A3942512B43300F5AF63 /* GetCategories.swift in Sources */,
 				9F085BBD250C17DF00682D05 /* SortTypeSharedInstance.swift in Sources */,
 				9F34059024FED6580035A385 /* DetailViewController.swift in Sources */,
 				9F0340542502CDD400B27BF3 /* DetailViewModel.swift in Sources */,
@@ -373,6 +396,7 @@
 				9F888C3D25018F79003810D4 /* BuyListCoordinator.swift in Sources */,
 				9F34058B24FED63E0035A385 /* FullListViewController.swift in Sources */,
 				9F0340522502BF7100B27BF3 /* FullListViewModel.swift in Sources */,
+				9F62A3992512B98500F5AF63 /* Item+UserDefaults.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -45,4 +45,20 @@ extension UIViewController {
       return "\(title) ↑" }
     return (sortTypeInstance.sortAscending == true) ? "\(title) ↓" : "\(title) ↑"
   }
+
+  func addCategory(handler: ((UIAlertAction, String) -> Void)?) {
+    let newCategoryController = UIAlertController(title: "Enter Category Name", message: nil, preferredStyle: .alert)
+    newCategoryController.addTextField()
+    let submitCategory = UIAlertAction(title: "OK", style: .default) { [weak newCategoryController] action in
+      guard let category = newCategoryController?.textFields?[0].text else { return }
+      handler!(action, category)
+    }
+    newCategoryController.addAction(submitCategory)
+    newCategoryController.addAction(UIAlertAction(title: "Cancel", style: .cancel))
+    present(newCategoryController, animated: true)
+  }
+
+  func presentError(message: String) {
+
+  }
 }
