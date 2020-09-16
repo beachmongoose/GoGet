@@ -13,28 +13,25 @@ protocol FullListCoordinatorType {
 }
 
 class FullListCoordinator: FullListCoordinatorType {
-  
+
   weak var viewController: FullListViewController?
-  
+
   private let getItems: GetItemsType
-  
+
   init(getItems: GetItemsType = GetItems()) {
     self.getItems = getItems
   }
-  
+
   func start(completion: @escaping () -> Void) -> FullListViewController {
     let viewModel = FullListViewModel(coordinator: self, completion: completion)
     let viewController = FullListViewController(viewModel: viewModel)
     self.viewController = viewController
     return viewController
   }
-  
+
   func presentDetail(item: Item?, completion: @escaping () -> Void) {
     guard let navigationController = viewController?.navigationController else { return }
     let detailViewController = DetailViewCoordinator().start(item: item, completion: completion)
     navigationController.pushViewController(detailViewController, animated: true)
   }
-  
-  
-  
 }

@@ -15,37 +15,26 @@ protocol BuyListCoordinatorType {
 }
 
 class BuyListCoordinator: BuyListCoordinatorType {
-  
+
   weak var viewController: BuyListViewController?
   var delete = false
-  
+
   func start() -> UINavigationController {
     let viewModel = BuyListViewModel(coordinator: self)
     let viewController = BuyListViewController(viewModel: viewModel)
     self.viewController = viewController
     return UINavigationController(rootViewController: viewController)
   }
-  
+
   func presentFullList(completion: @escaping () -> Void) {
     guard let navigationController = viewController?.navigationController else { return }
     let fullListViewController = FullListCoordinator().start(completion: completion)
     navigationController.pushViewController(fullListViewController, animated: true)
   }
-  
+
   func presentDetail(_ item: Item, completion: @escaping () -> Void) {
   guard let navigationController = viewController?.navigationController else { return }
     let detailViewController = DetailViewCoordinator().start(item: item, completion: completion)
   navigationController.pushViewController(detailViewController, animated: true)
   }
-//  func deletePrompt(){
-//    let deletePrompt = UIAlertController(title: "Mark as Bought?", message: nil, preferredStyle: .alert)
-//    deletePrompt.addAction(UIAlertAction(title: "Yes", style: .default, handler: { action in
-//      self.delete = true
-//    }))
-//    deletePrompt.addAction(UIAlertAction(title: "No", style: .default, handler: { action in
-//      self.delete = false
-//    }))
-//    viewController?.present(deletePrompt, animated: true)
-//  }
-  
 }

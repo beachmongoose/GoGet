@@ -13,7 +13,7 @@ class FullListViewController: UIViewController {
   @IBOutlet var sortButton: UIButton!
   private let viewModel: FullListViewModelType
   var inDeleteMode = false
-  
+
   init(viewModel: FullListViewModelType) {
     self.viewModel = viewModel
     super.init(nibName: nil, bundle: nil)
@@ -35,7 +35,7 @@ extension FullListViewController: UITableViewDataSource, UITableViewDelegate {
   func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
     return viewModel.tableData.count
   }
-  
+
   func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
     guard let cell = tableView.dequeueReusableCell(
       withIdentifier: "FullListCell",
@@ -43,7 +43,7 @@ extension FullListViewController: UITableViewDataSource, UITableViewDelegate {
       as? FullListCell else {
         fatalError("Unable to Dequeue")
       }
-    
+
     let cellViewModel = viewModel.tableData[indexPath.row]
     cell.viewModel = cellViewModel
     return cell
@@ -52,7 +52,7 @@ extension FullListViewController: UITableViewDataSource, UITableViewDelegate {
 
 // MARK: - Buttons
 extension FullListViewController: UIGestureRecognizerDelegate {
-  
+
   func addNewAndDeleteButtons() {
     let add = UIBarButtonItem(
       barButtonSystemItem: .add,
@@ -66,7 +66,7 @@ extension FullListViewController: UIGestureRecognizerDelegate {
     navigationItem.rightBarButtonItems = [add, delete]
     navigationItem.leftBarButtonItem = navigationItem.backBarButtonItem
   }
-  
+
   func addConfirmAndCancelButtons() {
     let confirm = UIBarButtonItem(title: "Confirm",
                                   style: .plain,
@@ -82,7 +82,7 @@ extension FullListViewController: UIGestureRecognizerDelegate {
 }
 // MARK: - User Input
 extension FullListViewController {
-    
+
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
       if !inDeleteMode {
       viewModel.editItem(at: indexPath.row)
@@ -91,16 +91,16 @@ extension FullListViewController {
       self.tableView.reloadData()
       }
     }
-    
+
     @objc func addItem() {
       viewModel.presentDetail(for: nil)
     }
-  
+
   func longPressDetector() {
   let longPressDetector = UILongPressGestureRecognizer(target: self, action: #selector(longPress))
   view.addGestureRecognizer(longPressDetector)
   }
-  
+
   @objc func longPress(longPressGestureRecognizer: UILongPressGestureRecognizer) {
     if longPressGestureRecognizer.state == UIGestureRecognizer.State.began {
       let touchPoint = longPressGestureRecognizer.location(in: tableView)
@@ -112,27 +112,27 @@ extension FullListViewController {
     }
   }
 }
-  
+
   // MARK: - Removing Items
 extension FullListViewController {
   func deletePrompt(_ itemIndex: Int) {
     presentDeleteAlert(handler: removeItems)
   }
-  
+
   @objc func massDeleteMode() {
     changeEditing(to: true)
   }
-  
+
   @objc func confirmDelete() {
     presentConfirmRequest(handler: removeItems(action:))
   }
-  
+
   @objc func removeItems(action: UIAlertAction) {
     viewModel.removeItems()
     changeEditing(to: false)
     tableView.reloadData()
   }
-  
+
   @objc func cancelDelete() {
     viewModel.clearIndex()
     changeEditing(to: false)
@@ -145,7 +145,7 @@ extension FullListViewController {
   @IBAction func sortButton(_ sender: Any) {
     presentSortOptions(handler: sortMethod(action:))
   }
-  
+
   @objc func sortMethod(action: UIAlertAction) {
     viewModel.sortBy(action.title!.lowercased())
     tableView.reloadData()
@@ -154,15 +154,15 @@ extension FullListViewController {
 
 // MARK: - Data Handling
 extension FullListViewController {
-  
+
   override func viewWillAppear(_ animated: Bool) {
     tableView.reloadData()
   }
-  
+
   override func viewWillDisappear(_ animated: Bool) {
     viewModel.goingBack()
   }
-  
+
   func changeEditing(to bool: Bool) {
     inDeleteMode = bool
     tableView.allowsMultipleSelection = bool

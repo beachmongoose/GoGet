@@ -11,7 +11,6 @@ import UIKit
 class FullListCell: UITableViewCell {
   @IBOutlet var item: UILabel!
   @IBOutlet var dateBought: UILabel!
-  
   var viewModel: FullListViewModel.CellViewModel? {
     didSet { setupCell() }
   }
@@ -23,7 +22,7 @@ extension FullListCell {
     selectionStyle = .none
     item.text = "\(viewModel.name) (\(viewModel.quantity))"
     dateBought.text = viewModel.buyData
-    
+
     if viewModel.isSelected {
       changeCellFormat(bg: UIColor.blue, item: UIColor.white, date: UIColor.white)
     } else {
