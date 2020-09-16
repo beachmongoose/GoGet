@@ -17,16 +17,16 @@ class DetailViewController: UIViewController {
   @IBOutlet var boughtBoolButton: UISegmentedControl!
   private let getItems: GetItemsType = GetItems()
   private let viewModel: DetailViewModelType
-  
+
   init(viewModel: DetailViewModelType) {
     self.viewModel = viewModel
     super.init(nibName: nil, bundle: nil)
   }
-  
+
   required init?(coder: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }
-  
+
   override func viewDidLoad() {
       populateTextFields()
       addDatePicker()
@@ -45,7 +45,6 @@ extension DetailViewController {
     intervalTextField.text = item.interval
     boughtBoolButton.selectedSegmentIndex = item.boughtBool ? 0 : 1
     buttonChanged(self)
-    
   }
 }
 
@@ -58,7 +57,7 @@ extension DetailViewController {
                                      action: #selector(saveItem))
     navigationItem.rightBarButtonItem = saveButton
   }
-  
+
   @objc func saveItem() {
     viewModel.saveItem(
       name: itemTextField.text,
@@ -84,7 +83,7 @@ extension DetailViewController {
     }
   }
   func updateBoughtField(enabled bool: Bool,
-                     textColor color: UIColor) {
+                         textColor color: UIColor) {
     dateTextField.isUserInteractionEnabled = bool
     dateTextField.textColor = color
   }
@@ -95,16 +94,16 @@ extension DetailViewController {
   func addDatePicker() {
     let datePicker = UIDatePicker()
     datePicker.datePickerMode = UIDatePicker.Mode.date
-    
+
     datePicker.addTarget(self, action: #selector(DetailViewController.datePicked(sender:)),
                          for: UIControl.Event.valueChanged)
     dateTextField.inputView = datePicker
   }
-  
+
   @objc func datePicked(sender: UIDatePicker) {
     dateTextField.text = viewModel.convertPickerDate(sender)
   }
-  
+
   override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
     view.endEditing(true)
   }

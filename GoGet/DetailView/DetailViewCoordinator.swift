@@ -16,16 +16,16 @@ protocol DetailViewCoordinatorType {
 }
 
 class DetailViewCoordinator: DetailViewCoordinatorType {
-  
+
   weak var viewController: DetailViewController?
-  
+
   func start(item: Item?, completion: @escaping () -> Void) -> DetailViewController {
     let viewModel = DetailViewModel(coordinator: self, item: item, completion: completion)
     let viewController = DetailViewController(viewModel: viewModel)
     self.viewController = viewController
     return viewController
   }
-  
+
 func dismissDetail(action: UIAlertAction) {
     guard let navigationController = viewController?.navigationController else { return }
     navigationController.popViewController(animated: true)
@@ -40,7 +40,7 @@ extension DetailViewCoordinator {
     errorAlert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
     viewController?.present(errorAlert, animated: true)
     }
-  
+
   func confirmSave() {
     let saveConfirm = UIAlertController(title: "Item Saved", message: nil, preferredStyle: .alert)
     saveConfirm.addAction(UIAlertAction(title: "OK", style: .default, handler: dismissDetail))

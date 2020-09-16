@@ -11,7 +11,7 @@ import UIKit
 class BuyListCell: UITableViewCell {
   @IBOutlet var item: UILabel!
   @IBOutlet var dateBought: UILabel!
-  
+
   var viewModel: BuyListViewModel.CellViewModel? {
     didSet { setupCell() }
   }

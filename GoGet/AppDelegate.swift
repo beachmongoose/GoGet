@@ -19,14 +19,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     self.window = window
   }
 
-
-  func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+  func application(_ application: UIApplication,
+                   didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
     let viewController = BuyListCoordinator().start()
     window?.makeKeyAndVisible()
-    
+
     window?.rootViewController = viewController
     return true
   }
 
 }
-

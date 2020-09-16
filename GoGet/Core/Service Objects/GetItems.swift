@@ -28,8 +28,7 @@ class GetItems: GetItemsType {
   init(sortTypeInstance: SortingInstanceType = SortingInstance.shared) {
     self.sortTypeInstance = sortTypeInstance
   }
-  
-  
+
   func save(_ items: [Item]) {
     let json = JSONEncoder()
     if let savedData = try? json.encode(items) {
@@ -39,13 +38,15 @@ class GetItems: GetItemsType {
       print("Failed to save")
     }
   }
-  
+
   func load(orderBy: SortType) -> [Item] {
+    let sortAscending = sortTypeInstance.sortAscending
     var loadedItems = [Item]()
+    var finalItemData = [Item]()
     let defaults = UserDefaults.standard
     if let itemsData = defaults.object(forKey: "Items") as? Data {
       let json = JSONDecoder()
-      
+
       do {
         let item = try json.decode([Item].self, from: itemsData)
         loadedItems = item
@@ -54,12 +55,13 @@ class GetItems: GetItemsType {
       }
     }
     switch orderBy {
-    case .name: return byName(loadedItems)
-    case .date: return byDate(loadedItems)
-    case .added: return byAdded(loadedItems)
+    case .name: finalItemData = byName(loadedItems)
+    case .date: finalItemData = byDate(loadedItems)
+    case .added: finalItemData = byAdded(loadedItems)
     }
+    return (sortAscending == true) ? finalItemData : finalItemData.reversed()
   }
-  
+
   func indexNumber(for item: Item, in array: [Item]) -> Int {
     return array.firstIndex { $0.name == item.name &&
                               $0.quantity == item.quantity &&
@@ -72,18 +74,10 @@ class GetItems: GetItemsType {
 // MARK: - For Buy List
   func fullItemInfo(for index: Int, buyView isBuyView: Bool) -> Item {
     let allItems = load(orderBy: sortTypeInstance.sortType)
-    let selectedItem = isBuyView ? allItems.filter{ $0.needToBuy }[index] : allItems[index]
+    let selectedItem = isBuyView ? allItems.filter { $0.needToBuy } [index] : allItems[index]
     let originalIndex = indexNumber(for: selectedItem, in: allItems)
     return allItems[originalIndex]
   }
-
-// MARK: - For Full List
-//  func fullItem(for index: Int) -> Item {
-//    let allItems = load(orderBy: sortTypeInstance.sortType)
-//    let selectedItem = allItems[index]
-//    let originalIndex = indexNumber(for: selectedItem, in: allItems)
-//    return allItems[originalIndex]
-//  }
 
 // MARK: - Sorting
   func byName(_ array: [Item]) -> [Item] {
@@ -98,9 +92,8 @@ class GetItems: GetItemsType {
       sortedList.insert(item, at: 0)}
     return sortedList
   }
-  
+
   func byAdded(_ array: [Item]) -> [Item] {
     return array.sorted(by: { $0.dateAdded < $1.dateAdded})
   }
-  
 }

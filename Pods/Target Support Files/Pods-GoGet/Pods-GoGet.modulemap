@@ -1,0 +1,6 @@
+framework module Pods_GoGet {
+  umbrella header "Pods-GoGet-umbrella.h"
+
+  export *
+  module * { export * }
+}

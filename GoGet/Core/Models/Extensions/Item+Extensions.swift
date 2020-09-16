@@ -12,7 +12,7 @@ extension Item {
   var needToBuy: Bool {
     timeSinceBuying > duration || bought == false
   }
-  
+
   var timeSinceBuying: Int {
     let calendar = Calendar.autoupdatingCurrent
     let currentDate = calendar.startOfDay(for: Date())
@@ -24,7 +24,7 @@ extension Item {
 
     return dayCount
   }
-  
+
   var buyData: String {
     if !bought {
       return "Not bought"

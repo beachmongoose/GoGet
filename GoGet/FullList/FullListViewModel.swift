@@ -19,13 +19,13 @@ protocol FullListViewModelType {
 }
 
 final class FullListViewModel: FullListViewModelType {
-  
+
   struct CellViewModel {
     var name: String
     var quantity: String
     var buyData: String
     var isSelected: Bool
-    
+
     init(item: Item) {
       self.name = item.name
       self.quantity = String(item.quantity)
@@ -33,12 +33,11 @@ final class FullListViewModel: FullListViewModelType {
       self.isSelected = false
     }
   }
-  
+
   var tableData = [CellViewModel]()
   var allItems = [Item]()
   private var selectedItems: [Int] = []
-  
-  
+
   private let coordinator: FullListCoordinatorType
   private let getItems: GetItemsType
   private let sortTypeInstance: SortingInstanceType
@@ -46,12 +45,11 @@ final class FullListViewModel: FullListViewModelType {
   private var sortType: SortType {
     sortTypeInstance.sortType
   }
-  
+
   init(coordinator: FullListCoordinatorType,
        getItems: GetItemsType = GetItems(),
        sortTypeInstance: SortingInstanceType = SortingInstance.shared,
-       completion: @escaping () -> Void)
-  {
+       completion: @escaping () -> Void) {
     self.coordinator = coordinator
     self.getItems = getItems
     self.sortTypeInstance = sortTypeInstance
@@ -64,12 +62,13 @@ final class FullListViewModel: FullListViewModelType {
     allItems = getItems.load(orderBy: sortType)
     tableData = allItems.map(CellViewModel.init(item:))
   }
-  
+
   func sortBy(_ element: String?) {
-    sortTypeInstance.changeSortType(to: SortType(rawValue: element!)!)
+    let method = String((element?.components(separatedBy: " ")[0])!)
+    sortTypeInstance.changeSortType(to: SortType(rawValue: method)!)
     fetchTableData()
   }
-  
+
   func goingBack() {
     completion()
   }
@@ -77,7 +76,7 @@ final class FullListViewModel: FullListViewModelType {
 
 // MARK: - Item Handling
 extension FullListViewModel {
-  
+
   func selectDeselectIndex(_ index: Int) {
     if selectedItems.contains(index) {
       selectedItems.remove(at: selectedItems.firstIndex(of: index)!)
@@ -87,29 +86,29 @@ extension FullListViewModel {
     tableData[index].isSelected = true
     }
   }
-  
+
   func clearIndex() {
     selectedItems.removeAll()
     for item in 0..<tableData.count {
       tableData[item].isSelected = false
     }
   }
-  
+
   func selectionToggle(_ index: Int, to bool: Bool) {
     tableData[index].isSelected = bool
   }
-  
+
   func editItem(at index: Int) {
     let item = allItems[index]
     presentDetail(for: item)
   }
-  
+
   func presentDetail(for item: Item?) {
     coordinator.presentDetail(item: item, completion: {
       self.fetchTableData()
     })
   }
-  
+
   func removeItems() {
     var itemList: [Item] = []
     for item in selectedItems {
