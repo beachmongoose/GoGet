@@ -15,4 +15,5 @@ struct Item: Codable {
   var duration: Int
   var bought: Bool
   var dateAdded: Date
+  var category: Category?
 }

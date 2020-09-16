@@ -11,6 +11,7 @@
             <connections>
                 <outlet property="boughtBoolButton" destination="aX3-pS-DkN" id="0Ac-6b-vAY"/>
                 <outlet property="dateTextField" destination="LfZ-Ol-LkY" id="Gmw-cw-iLR"/>
+                <outlet property="dropDownView" destination="0O0-VN-vXe" id="69b-TO-EXP"/>
                 <outlet property="intervalTextField" destination="Hkc-Bd-zEP" id="a4i-UH-LrH"/>
                 <outlet property="itemTextField" destination="d8S-4W-lvP" id="YAD-pA-mvs"/>
                 <outlet property="quantityTextField" destination="Jd6-Br-LoM" id="D1A-rl-bc7"/>
@@ -134,6 +135,34 @@
                     </subviews>
                     <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                 </view>
+                <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="sfG-rE-6ap">
+                    <rect key="frame" x="20" y="502" width="374" height="64"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <subviews>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Category" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jEr-hz-ASM">
+                            <rect key="frame" x="8" y="17" width="110" height="30"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="25"/>
+                            <nil key="textColor"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                        <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="0O0-VN-vXe">
+                            <rect key="frame" x="133" y="13" width="235" height="34"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        </view>
+                    </subviews>
+                    <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                </view>
+                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="aSJ-iQ-IXd">
+                    <rect key="frame" x="150" y="561" width="130" height="42"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="25"/>
+                    <state key="normal" title="+ Add New"/>
+                    <connections>
+                        <action selector="addNewCategory:" destination="-1" eventType="touchUpInside" id="4bB-xs-v9d"/>
+                    </connections>
+                </button>
             </subviews>
             <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
             <viewLayoutGuide key="safeArea" id="fnl-2z-Ty3"/>

@@ -30,13 +30,10 @@ class GetItems: GetItemsType {
   }
 
   func save(_ items: [Item]) {
-    let json = JSONEncoder()
-    if let savedData = try? json.encode(items) {
-      let defaults = UserDefaults.standard
-      defaults.set(savedData, forKey: "Items")
-    } else {
-      print("Failed to save")
+    guard let persistenceData = items.persistenceData else { print("Error")
+      return
     }
+    saveData(persistenceData)
   }
 
   func load(orderBy: SortType) -> [Item] {

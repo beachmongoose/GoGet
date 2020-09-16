@@ -25,6 +25,7 @@ protocol DetailViewModelType {
                 quantity: String?,
                 interval: String?)
   var itemData: DetailViewItem! { get }
+//  func collectCategories()
 }
 
 final class DetailViewModel: DetailViewModelType {
@@ -156,4 +157,8 @@ final class DetailViewModel: DetailViewModelType {
     }
   }
 
+// MARK: - Categories
+//  func collectCategories() -> [Category] {
+//    return
+//  }
 }
