@@ -8,7 +8,8 @@
 
 import Foundation
 
-struct Category: Codable {
+struct Category: Codable, Hashable {
   var name: String
   var nameId: Int
+  var added: Date
 }

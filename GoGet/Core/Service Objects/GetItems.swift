@@ -40,17 +40,16 @@ class GetItems: GetItemsType {
     let sortAscending = sortTypeInstance.sortAscending
     var loadedItems = [Item]()
     var finalItemData = [Item]()
-    let defaults = UserDefaults.standard
-    if let itemsData = defaults.object(forKey: "Items") as? Data {
-      let json = JSONDecoder()
+    let data = loadData(for: "Items")
+    guard data != nil else { return [] }
 
       do {
-        let item = try json.decode([Item].self, from: itemsData)
+        let item = try jsonDecoder.decode([Item].self, from: data!)
         loadedItems = item
       } catch {
         print("Failed to Load")
       }
-    }
+  
     switch orderBy {
     case .name: finalItemData = byName(loadedItems)
     case .date: finalItemData = byDate(loadedItems)
@@ -65,7 +64,7 @@ class GetItems: GetItemsType {
                               $0.dateBought == item.dateBought &&
                               $0.duration == item.duration &&
                               $0.bought == item.bought
-                            } ?? 0
+                            } ?? 900
   }
 
 // MARK: - For Buy List
