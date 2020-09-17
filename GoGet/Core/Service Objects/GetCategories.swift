@@ -11,6 +11,7 @@ import Foundation
 protocol GetCategoriesType {
   func loadCategories(orderBy: SortType) -> [Category]
   func createCategory(for category: String)
+  func createArrays(_ categories: [Category]) -> [[FullListViewModel.CellViewModel]]
 }
 
 class GetCategories: GetCategoriesType {
@@ -44,18 +45,18 @@ class GetCategories: GetCategoriesType {
         } catch {
           print("Failed to load categories")
       }
-    
+
     switch orderBy {
-    case .name: sortedCategories = loadedCategories.sorted(by: { $0.name < $1.name } )
-    case .date: sortedCategories = loadedCategories.sorted(by: { $0.added < $1.added } )
-    case .added: sortedCategories = loadedCategories.sorted(by: { $0.added < $1.added } )
+    case .name: sortedCategories = loadedCategories.sorted(by: { $0.name < $1.name })
+    case .date: sortedCategories = loadedCategories.sorted(by: { $0.added < $1.added })
+    case .added: sortedCategories = loadedCategories.sorted(by: { $0.added < $1.added })
     }
 
     return (sortTypeInstance.sortAscending == true) ? sortedCategories : sortedCategories.reversed()
   }
 
   func createCategory(for category: String) {
-    let newCategory = Category(name: category, nameId: getIDNumber(),   added: Date())
+    let newCategory = Category(name: category, nameId: getIDNumber(), added: Date())
     var categoryList = loadCategories(orderBy: sortType)
     categoryList.append(newCategory)
     saveCategories(categoryList)
@@ -65,22 +66,27 @@ class GetCategories: GetCategoriesType {
     let categories = loadCategories(orderBy: sortType)
     var idNumber = 0
     guard !categories.isEmpty else { return 0 }
-    for entry in categories {
-      if entry.nameId == idNumber {
+    for entry in categories where entry.nameId == idNumber {
         idNumber += 1
       }
-    }
     return idNumber
   }
 
   func updateCategory(_ category: Category, with newName: String) {
     var categories = loadCategories(orderBy: sortType)
-    for index in 0..<categories.count {
-      if categories[index].nameId == category.nameId {
+    for index in 0..<categories.count
+    where categories[index].nameId == category.nameId {
         categories[index].name = newName
       }
-    }
     saveCategories(categories)
+  }
+
+  func createArrays(_ categories: [Category]) -> [[FullListViewModel.CellViewModel]] {
+    var emptyArrays = [[FullListViewModel.CellViewModel]]()
+    for _ in categories {
+      emptyArrays.append([])
+    }
+    return emptyArrays
   }
 
   func sortItems(_ categories: [Category], items: [Item]) -> [[Item]] {

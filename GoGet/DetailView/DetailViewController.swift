@@ -16,10 +16,11 @@ class DetailViewController: UIViewController {
   @IBOutlet var dateTextField: UITextField!
   @IBOutlet var intervalTextField: UITextField!
   @IBOutlet var boughtBoolButton: UISegmentedControl!
+  @IBOutlet var categoryButton: UIButton!
   @IBOutlet var dropDownView: UIView!
   private let getItems: GetItemsType = GetItems()
   private let viewModel: DetailViewModelType
-//  let dropDown = DropDown()
+  //  let dropDown = DropDown()
 
   init(viewModel: DetailViewModelType) {
     self.viewModel = viewModel
@@ -67,7 +68,8 @@ extension DetailViewController {
       bought: boughtBoolButton.selectedSegmentIndex,
       date: dateTextField.text,
       quantity: quantityTextField.text,
-      interval: intervalTextField.text)
+      interval: intervalTextField.text,
+      category: categoryButton.titleLabel?.text ?? "")
     }
 }
 
@@ -115,18 +117,19 @@ extension DetailViewController {
 // MARK: - Category
 extension DetailViewController {
 
+  @IBAction func addCategory(_ sender: Any) {
+    addCategory(handler: populateCategoryField)
+  }
+
   func addDropDownMenu() {
 //    dropDown.anchorView = dropDownView
 //    dropDown.dataSource = viewModel.collectCategories()
   }
 
-  func addCategory() {
-    addCategory(handler: saveCategory)
-  }
-
-  func saveCategory(action: UIAlertAction, category: String?) {
+  func populateCategoryField(action: UIAlertAction, category: String?) {
     guard category != nil else { presentError(message: "Name not entered")
       return }
-    
+    if viewModel.isDuplicate(category) { presentError(message: "Category already exists")}
+    categoryButton.setTitle(category, for: .normal)
   }
 }
