@@ -32,8 +32,13 @@ class FullListViewController: UIViewController {
 
 // MARK: - TableView
 extension FullListViewController: UITableViewDataSource, UITableViewDelegate {
+
+  func numberOfSections(in tableView: UITableView) -> Int {
+    return viewModel.tableCategories.count
+  }
+
   func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-    return viewModel.tableData.count
+    return viewModel.tableCategories[section].count
   }
 
   func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -44,7 +49,7 @@ extension FullListViewController: UITableViewDataSource, UITableViewDelegate {
         fatalError("Unable to Dequeue")
       }
 
-    let cellViewModel = viewModel.tableData[indexPath.row]
+    let cellViewModel = viewModel.tableCategories[indexPath.section][indexPath.row]
     cell.viewModel = cellViewModel
     return cell
   }

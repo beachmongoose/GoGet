@@ -49,7 +49,7 @@ class GetItems: GetItemsType {
       } catch {
         print("Failed to Load")
       }
-  
+
     switch orderBy {
     case .name: finalItemData = byName(loadedItems)
     case .date: finalItemData = byDate(loadedItems)

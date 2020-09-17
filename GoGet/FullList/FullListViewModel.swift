@@ -9,6 +9,7 @@ import UIKit
 
 protocol FullListViewModelType {
   var tableData: [FullListViewModel.CellViewModel] { get }
+  var tableCategories: [[FullListViewModel.CellViewModel]] { get }
   func presentDetail(for item: Item?)
   func editItem(at index: Int)
   func selectDeselectIndex(_ index: Int)
@@ -25,14 +26,18 @@ final class FullListViewModel: FullListViewModelType {
     var quantity: String
     var buyData: String
     var isSelected: Bool
+    var category: Category?
 
     init(item: Item) {
       self.name = item.name
       self.quantity = String(item.quantity)
       self.buyData = item.buyData
       self.isSelected = false
+      self.category = item.category
     }
   }
+
+  var tableCategories = [[FullListViewModel.CellViewModel]]()
 
   var tableData = [CellViewModel]()
   var allItems = [Item]()
@@ -40,6 +45,7 @@ final class FullListViewModel: FullListViewModelType {
 
   private let coordinator: FullListCoordinatorType
   private let getItems: GetItemsType
+  private let getCategories: GetCategoriesType
   private let sortTypeInstance: SortingInstanceType
   var completion: () -> Void
   private var sortType: SortType {
@@ -48,10 +54,12 @@ final class FullListViewModel: FullListViewModelType {
 
   init(coordinator: FullListCoordinatorType,
        getItems: GetItemsType = GetItems(),
+       getCategories: GetCategoriesType = GetCategories(),
        sortTypeInstance: SortingInstanceType = SortingInstance.shared,
        completion: @escaping () -> Void) {
     self.coordinator = coordinator
     self.getItems = getItems
+    self.getCategories = getCategories
     self.sortTypeInstance = sortTypeInstance
     self.completion = completion
     fetchTableData()
@@ -61,6 +69,20 @@ final class FullListViewModel: FullListViewModelType {
   func fetchTableData() {
     allItems = getItems.load(orderBy: sortType)
     tableData = allItems.map(CellViewModel.init(item:))
+  }
+
+  func fetchTableDataAlso() {
+    allItems = getItems.load(orderBy: sortType)
+    let convertedItems = allItems.map(CellViewModel.init(item:))
+    let categories = getCategories.loadCategories(orderBy: sortType)
+    var arrays = getCategories.createArrays(categories)
+
+    for item in convertedItems {
+      guard item.category != nil else { continue }
+      let int = categories.firstIndex(of: item.category!)!
+      arrays[int].append(item)
+    }
+    tableCategories = arrays
   }
 
   func sortBy(_ element: String?) {

@@ -23,9 +23,12 @@ protocol DetailViewModelType {
                 bought: Int,
                 date: String?,
                 quantity: String?,
-                interval: String?)
+                interval: String?,
+                category: String?)
   var itemData: DetailViewItem! { get }
-//  func collectCategories()
+  var categories: [Category] { get }
+  func getCategory(for name: String) -> Category?
+  func isDuplicate(_ entry: String?) -> Bool
 }
 
 final class DetailViewModel: DetailViewModelType {
@@ -35,19 +38,24 @@ final class DetailViewModel: DetailViewModelType {
   weak var viewController: DetailViewController?
   private let coordinator: DetailViewCoordinatorType
   private let getItems: GetItemsType
+  private let getCategories: GetCategoriesType
   private var sortType: SortType = .added
   var itemData: DetailViewItem!
+  var categories = [Category]()
   var completion: () -> Void
 
   init(coordinator: DetailViewCoordinatorType,
        getItems: GetItemsType = GetItems(),
+       getCategories: GetCategoriesType = GetCategories(),
        item: Item?,
        completion: @escaping () -> Void) {
     self.coordinator = coordinator
     self.getItems = getItems
+    self.getCategories = getCategories
     self.item = item
     self.completion = completion
     self.itemData = getDetails()
+    self.categories = getCategories.loadCategories(orderBy: sortType)
   }
 
   func getDetails() -> DetailViewItem {
@@ -69,12 +77,14 @@ final class DetailViewModel: DetailViewModelType {
                 bought: Int,
                 date: String?,
                 quantity: String?,
-                interval: String?) {
+                interval: String?,
+                category: String?) {
 
     guard let name = name,
       let quantity = quantity,
       let date = date,
-      let interval = interval else {
+      let interval = interval,
+      let category = category else {
         coordinator.errorMessage("Invalid data.")
         return
     }
@@ -85,7 +95,8 @@ final class DetailViewModel: DetailViewModelType {
       dateBought: dateFromString(date),
       duration: Int(interval) ?? 7,
       bought: bought == 0,
-      dateAdded: item?.dateAdded ?? Date()
+      dateAdded: item?.dateAdded ?? Date(),
+      category: getCategory(for: category)
     )
 
     validate(adjustedItem)
@@ -158,6 +169,29 @@ final class DetailViewModel: DetailViewModelType {
   }
 
 // MARK: - Categories
+  
+  func getCategory(for name: String) -> Category? {
+    guard name != "" else { return nil }
+    for category in categories where name == category.name {
+      return category }
+    getCategories.createCategory(for: name)
+    fetchCategoryData()
+    return categories.last!
+  }
+  
+  func fetchCategoryData() {
+    categories = getCategories.loadCategories(orderBy: sortType)
+  }
+  
+  func isDuplicate(_ entry: String?) -> Bool {
+    for category in categories {
+      if category.name == entry {
+        return true
+      }
+    }
+    return false
+  }
+
 //  func collectCategories() -> [Category] {
 //    return
 //  }
