@@ -127,6 +127,6 @@ extension DetailViewController {
   func saveCategory(action: UIAlertAction, category: String?) {
     guard category != nil else { presentError(message: "Name not entered")
       return }
-
+    
   }
 }

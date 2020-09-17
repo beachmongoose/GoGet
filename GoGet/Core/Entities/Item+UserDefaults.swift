@@ -11,8 +11,7 @@ import Foundation
 // MARK: - Mutation
 extension Array where Element == Item {
   var persistenceData: (Data, String)? {
-    let json = JSONEncoder()
-    guard let data = try? json.encode(self) else {
+    guard let data = try? jsonEncoder.encode(self) else {
       return nil
     }
     return (data, "Items")
@@ -21,8 +20,7 @@ extension Array where Element == Item {
 
 extension Array where Element == Category {
   var persistenceData: SaveData? {
-    let json = JSONEncoder()
-    guard let data = try? json.encode(self) else {
+    guard let data = try? jsonEncoder.encode(self) else {
       return nil
     }
     return (data, "Categories")
