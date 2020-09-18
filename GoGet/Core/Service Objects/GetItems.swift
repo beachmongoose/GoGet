@@ -14,19 +14,28 @@ enum SortType: String {
   case added
 }
 
+enum ListView: String {
+  case buyList
+  case fullList
+}
+
 protocol GetItemsType {
   func save(_ items: [Item])
   func load(orderBy: SortType) -> [Item]
   func indexNumber(for item: Item, in array: [Item]) -> Int
   func fullItemInfo(for index: Int, buyView isBuyView: Bool) -> Item
+  func fetchByCategory() -> [String: [Item]]
 }
 
 class GetItems: GetItemsType {
 
   let sortTypeInstance: SortingInstanceType
+  let categoryStore: CategoryStoreType
 
-  init(sortTypeInstance: SortingInstanceType = SortingInstance.shared) {
+  init(sortTypeInstance: SortingInstanceType = SortingInstance.shared,
+       categoryStore: CategoryStoreType = CategoryStore.shared) {
     self.sortTypeInstance = sortTypeInstance
+    self.categoryStore = categoryStore
   }
 
   func save(_ items: [Item]) {
@@ -65,6 +74,20 @@ class GetItems: GetItemsType {
                               $0.duration == item.duration &&
                               $0.bought == item.bought
                             } ?? 900
+  }
+
+  func fetchByCategory() -> [String: [Item]] {
+    let items = load(orderBy: sortTypeInstance.sortType)
+    var tableFormat = [String: [Item]]()
+
+    let tableData = items.reduce(into: [String: [Item]]()) { dict, item in
+      if let itemID = item.categoryID {
+        dict[itemID]!.append(item)
+      } else {
+        tableFormat["Uncategorized", default: []].append(item)
+      }
+    }
+    return tableData
   }
 
 // MARK: - For Buy List

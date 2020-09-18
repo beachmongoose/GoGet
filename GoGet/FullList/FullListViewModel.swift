@@ -8,7 +8,7 @@
 import UIKit
 
 protocol FullListViewModelType {
-  var tableData: [FullListViewModel.CellViewModel] { get }
+  var tableData: [String: [FullListViewModel.CellViewModel]] { get }
   var tableCategories: [[FullListViewModel.CellViewModel]] { get }
   func presentDetail(for item: Item?)
   func editItem(at index: Int)
@@ -26,20 +26,18 @@ final class FullListViewModel: FullListViewModelType {
     var quantity: String
     var buyData: String
     var isSelected: Bool
-    var category: Category?
 
     init(item: Item) {
       self.name = item.name
       self.quantity = String(item.quantity)
       self.buyData = item.buyData
       self.isSelected = false
-      self.category = item.category
     }
   }
 
   var tableCategories = [[FullListViewModel.CellViewModel]]()
 
-  var tableData = [CellViewModel]()
+  var tableData = [String: [FullListViewModel.CellViewModel]]()
   var allItems = [Item]()
   private var selectedItems: [Int] = []
 
@@ -67,22 +65,17 @@ final class FullListViewModel: FullListViewModelType {
 
 // MARK: - Organzing
   func fetchTableData() {
-    allItems = getItems.load(orderBy: sortType)
-    tableData = allItems.map(CellViewModel.init(item:))
-  }
+//    let items = getItems.load(orderBy: sortType).map(CellViewModel.init(item:))
+//    tableData = items
+    let allItems = getItems.fetchByCategory()
+    var formattedDict: [String: [CellViewModel]] = [:]
 
-  func fetchTableDataAlso() {
-    allItems = getItems.load(orderBy: sortType)
-    let convertedItems = allItems.map(CellViewModel.init(item:))
-    let categories = getCategories.loadCategories(orderBy: sortType)
-    var arrays = getCategories.createArrays(categories)
-
-    for item in convertedItems {
-      guard item.category != nil else { continue }
-      let int = categories.firstIndex(of: item.category!)!
-      arrays[int].append(item)
+    for category in allItems {
+      let array = category.value.map(CellViewModel.init(item:))
+      let sectionName = getCategories.getName(for: category.key)
+      formattedDict[sectionName] = array
     }
-    tableCategories = arrays
+    tableData = formattedDict
   }
 
   func sortBy(_ element: String?) {
