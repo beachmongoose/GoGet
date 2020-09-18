@@ -24,10 +24,10 @@ protocol DetailViewModelType {
                 date: String?,
                 quantity: String?,
                 interval: String?,
-                category: String?)
+                categoryID: String?
+  )
   var itemData: DetailViewItem! { get }
   var categories: [Category] { get }
-  func getCategory(for name: String) -> Category?
   func isDuplicate(_ entry: String?) -> Bool
 }
 
@@ -55,7 +55,7 @@ final class DetailViewModel: DetailViewModelType {
     self.item = item
     self.completion = completion
     self.itemData = getDetails()
-    self.categories = getCategories.loadCategories(orderBy: sortType)
+    self.categories = getCategories.load()
   }
 
   func getDetails() -> DetailViewItem {
@@ -78,13 +78,13 @@ final class DetailViewModel: DetailViewModelType {
                 date: String?,
                 quantity: String?,
                 interval: String?,
-                category: String?) {
+                categoryID: String?) {
 
     guard let name = name,
       let quantity = quantity,
       let date = date,
       let interval = interval,
-      let category = category else {
+      let category = categoryID else {
         coordinator.errorMessage("Invalid data.")
         return
     }
@@ -96,7 +96,7 @@ final class DetailViewModel: DetailViewModelType {
       duration: Int(interval) ?? 7,
       bought: bought == 0,
       dateAdded: item?.dateAdded ?? Date(),
-      category: getCategory(for: category)
+      categoryID: getID(for: category)
     )
 
     validate(adjustedItem)
@@ -131,8 +131,6 @@ final class DetailViewModel: DetailViewModelType {
       return coordinator.errorMessage("No duration entered.")
     case (let item) where item.dateBought > Date():
       return coordinator.errorMessage("Future date selected.")
-//    case (let item) where item.name == self.item?.name:
-//      return coordinator.errorMessage("Duplicate item.")
     default:
       break
     }
@@ -161,38 +159,25 @@ final class DetailViewModel: DetailViewModelType {
     let calendar = Calendar.autoupdatingCurrent
     let currentDate = calendar.startOfDay(for: Date())
     let dateBought = calendar.startOfDay(for: item.dateBought)
-    if dateBought > currentDate {
-      return false
-    } else {
-      return true
-    }
+    return dateBought < currentDate
   }
 
 // MARK: - Categories
-  
-  func getCategory(for name: String) -> Category? {
+
+  func getID(for name: String) -> CategoryID? {
     guard name != "" else { return nil }
     for category in categories where name == category.name {
-      return category }
-    getCategories.createCategory(for: name)
+      return category.nameId }
+    let newID = getCategories.createCategory(for: name)
     fetchCategoryData()
-    return categories.last!
-  }
-  
-  func fetchCategoryData() {
-    categories = getCategories.loadCategories(orderBy: sortType)
-  }
-  
-  func isDuplicate(_ entry: String?) -> Bool {
-    for category in categories {
-      if category.name == entry {
-        return true
-      }
-    }
-    return false
+    return newID
   }
 
-//  func collectCategories() -> [Category] {
-//    return
-//  }
+  func fetchCategoryData() {
+    categories = getCategories.load()
+  }
+
+  func isDuplicate(_ entry: String?) -> Bool {
+    return getCategories.checkIfDuplicate(entry)
+  }
 }

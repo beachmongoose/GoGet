@@ -34,11 +34,11 @@ class FullListViewController: UIViewController {
 extension FullListViewController: UITableViewDataSource, UITableViewDelegate {
 
   func numberOfSections(in tableView: UITableView) -> Int {
-    return viewModel.tableCategories.count
+    return viewModel.tableData.count
   }
 
   func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-    return viewModel.tableCategories[section].count
+    return 
   }
 
   func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {

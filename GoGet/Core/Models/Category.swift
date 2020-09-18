@@ -8,8 +8,20 @@
 
 import Foundation
 
-struct Category: Codable, Hashable {
+struct Category: Codable, Hashable, Equatable {
+  var nameId: String
   var name: String
-  var nameId: Int
-  var added: Date
+}
+
+extension Category {
+  init(nameId: String = UUID().uuidString, name: String, added: Date) {
+    self.name = name
+    self.nameId = nameId
+  }
+}
+
+extension Category {
+  static func == (lhs: Category, rhs: Category) -> Bool {
+    return lhs.nameId == rhs.nameId && lhs.name == rhs.name
+  }
 }

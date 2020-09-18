@@ -69,7 +69,7 @@ extension DetailViewController {
       date: dateTextField.text,
       quantity: quantityTextField.text,
       interval: intervalTextField.text,
-      category: categoryButton.titleLabel?.text ?? "")
+      categoryID: categoryButton.titleLabel?.text ?? "")
     }
 }
 
@@ -123,7 +123,7 @@ extension DetailViewController {
 
   func addDropDownMenu() {
 //    dropDown.anchorView = dropDownView
-//    dropDown.dataSource = viewModel.collectCategories()
+//    dropDown.dataSource = viewModel.fetchCategoryData()
   }
 
   func populateCategoryField(action: UIAlertAction, category: String?) {

@@ -9,23 +9,27 @@
 import Foundation
 
 protocol GetCategoriesType {
-  func loadCategories(orderBy: SortType) -> [Category]
-  func createCategory(for category: String)
-  func createArrays(_ categories: [Category]) -> [[FullListViewModel.CellViewModel]]
+  func load() -> [Category]
+  func createCategory(for category: String) -> String
+  func checkIfDuplicate(_ newCategory: String?) -> Bool
+  func getName(for categoryID: String) -> String
 }
 
 class GetCategories: GetCategoriesType {
 
   let sortTypeInstance: SortingInstanceType
+  let categoryStore: CategoryStoreType
   private var sortType: SortType {
     sortTypeInstance.sortType
   }
 
-  init(sortTypeInstance: SortingInstanceType = SortingInstance.shared) {
+  init(sortTypeInstance: SortingInstanceType = SortingInstance.shared,
+       categoryStore: CategoryStoreType = CategoryStore.shared) {
     self.sortTypeInstance = sortTypeInstance
+    self.categoryStore = categoryStore
   }
 
-  func saveCategories(_ categories: [Category]) {
+  func save(_ categories: [Category]) {
     guard let persistenceData = categories.persistenceData else {
       print("Error")
       return
@@ -33,9 +37,8 @@ class GetCategories: GetCategoriesType {
     saveData(persistenceData)
   }
 
-  func loadCategories(orderBy: SortType) -> [Category] {
+  func load() -> [Category] {
     var loadedCategories = [Category]()
-    var sortedCategories = [Category]()
     let data = loadData(for: "Category")
     guard data != nil else { return [] }
 
@@ -45,60 +48,33 @@ class GetCategories: GetCategoriesType {
         } catch {
           print("Failed to load categories")
       }
-
-    switch orderBy {
-    case .name: sortedCategories = loadedCategories.sorted(by: { $0.name < $1.name })
-    case .date: sortedCategories = loadedCategories.sorted(by: { $0.added < $1.added })
-    case .added: sortedCategories = loadedCategories.sorted(by: { $0.added < $1.added })
-    }
-
-    return (sortTypeInstance.sortAscending == true) ? sortedCategories : sortedCategories.reversed()
+    return loadedCategories
   }
 
-  func createCategory(for category: String) {
-    let newCategory = Category(name: category, nameId: getIDNumber(), added: Date())
-    var categoryList = loadCategories(orderBy: sortType)
+  func createCategory(for category: String) -> String {
+    let newCategory = Category(name: category, added: Date())
+    var categoryList = load()
     categoryList.append(newCategory)
-    saveCategories(categoryList)
+    save(categoryList)
+    return newCategory.nameId
   }
 
-  func getIDNumber() -> Int {
-    let categories = loadCategories(orderBy: sortType)
-    var idNumber = 0
-    guard !categories.isEmpty else { return 0 }
-    for entry in categories where entry.nameId == idNumber {
-        idNumber += 1
-      }
-    return idNumber
+  func checkIfDuplicate(_ newCategory: String?) -> Bool {
+    let categories = load()
+    return (categories.map {$0.name == newCategory}).contains(true)
   }
 
   func updateCategory(_ category: Category, with newName: String) {
-    var categories = loadCategories(orderBy: sortType)
+    var categories = load()
     for index in 0..<categories.count
     where categories[index].nameId == category.nameId {
         categories[index].name = newName
       }
-    saveCategories(categories)
+    save(categories)
   }
 
-  func createArrays(_ categories: [Category]) -> [[FullListViewModel.CellViewModel]] {
-    var emptyArrays = [[FullListViewModel.CellViewModel]]()
-    for _ in categories {
-      emptyArrays.append([])
-    }
-    return emptyArrays
-  }
-
-  func sortItems(_ categories: [Category], items: [Item]) -> [[Item]] {
-    var categoryArrays = [[Item]]()
-    for _ in categories {
-      categoryArrays.append([])
-    }
-    for item in items {
-      guard item.category != nil else { continue }
-      let int = categories.firstIndex(of: item.category!)!
-      categoryArrays[int].append(item)
-    }
-    return categoryArrays
+  func getName(for categoryID: String) -> String {
+    guard let category = categoryStore.categories[categoryID] else { return "Uncategorized" }
+    return category.name
   }
 }

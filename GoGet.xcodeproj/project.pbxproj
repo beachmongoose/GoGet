@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 51;
+	objectVersion = 50;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -25,6 +25,7 @@
 		9F62A3942512B43300F5AF63 /* GetCategories.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F62A3932512B43300F5AF63 /* GetCategories.swift */; };
 		9F62A3962512B4EF00F5AF63 /* Data.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F62A3952512B4EF00F5AF63 /* Data.swift */; };
 		9F62A3992512B98500F5AF63 /* Item+UserDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F62A3982512B98500F5AF63 /* Item+UserDefaults.swift */; };
+		9F6C705B2515197500C6A3C3 /* CategorySharedInstance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F6C705A2515197500C6A3C3 /* CategorySharedInstance.swift */; };
 		9F888C3925014EF8003810D4 /* GetItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F888C3825014EF8003810D4 /* GetItems.swift */; };
 		9F888C3D25018F79003810D4 /* BuyListCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F888C3C25018F79003810D4 /* BuyListCoordinator.swift */; };
 		9F888C3F250190EB003810D4 /* FullListCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F888C3E250190EB003810D4 /* FullListCoordinator.swift */; };
@@ -61,6 +62,7 @@
 		9F62A3932512B43300F5AF63 /* GetCategories.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetCategories.swift; sourceTree = "<group>"; };
 		9F62A3952512B4EF00F5AF63 /* Data.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Data.swift; sourceTree = "<group>"; };
 		9F62A3982512B98500F5AF63 /* Item+UserDefaults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Item+UserDefaults.swift"; sourceTree = "<group>"; };
+		9F6C705A2515197500C6A3C3 /* CategorySharedInstance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategorySharedInstance.swift; sourceTree = "<group>"; };
 		9F888C3825014EF8003810D4 /* GetItems.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetItems.swift; sourceTree = "<group>"; };
 		9F888C3C25018F79003810D4 /* BuyListCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuyListCoordinator.swift; sourceTree = "<group>"; };
 		9F888C3E250190EB003810D4 /* FullListCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FullListCoordinator.swift; sourceTree = "<group>"; };
@@ -178,8 +180,8 @@
 		9F34058D24FED6470035A385 /* DetailView */ = {
 			isa = PBXGroup;
 			children = (
-				9F34058E24FED6580035A385 /* DetailViewController.swift */,
 				9F34058F24FED6580035A385 /* DetailViewController.xib */,
+				9F34058E24FED6580035A385 /* DetailViewController.swift */,
 				9F888C40250195F4003810D4 /* DetailViewCoordinator.swift */,
 				9F0340532502CDD400B27BF3 /* DetailViewModel.swift */,
 			);
@@ -199,6 +201,7 @@
 			children = (
 				9F888C3825014EF8003810D4 /* GetItems.swift */,
 				9F085BBC250C17DF00682D05 /* SortTypeSharedInstance.swift */,
+				9F6C705A2515197500C6A3C3 /* CategorySharedInstance.swift */,
 				9F62A3932512B43300F5AF63 /* GetCategories.swift */,
 				9F62A3952512B4EF00F5AF63 /* Data.swift */,
 			);
@@ -390,6 +393,7 @@
 				9F085BBD250C17DF00682D05 /* SortTypeSharedInstance.swift in Sources */,
 				9F34059024FED6580035A385 /* DetailViewController.swift in Sources */,
 				9F0340542502CDD400B27BF3 /* DetailViewModel.swift in Sources */,
+				9F6C705B2515197500C6A3C3 /* CategorySharedInstance.swift in Sources */,
 				9F085BBB250C0D0900682D05 /* UIAlertController+Extensions.swift in Sources */,
 				9F888C3F250190EB003810D4 /* FullListCoordinator.swift in Sources */,
 				9F97E45625097E3B00823393 /* Item+Extensions.swift in Sources */,
