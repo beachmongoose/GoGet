@@ -37,8 +37,12 @@ extension FullListViewController: UITableViewDataSource, UITableViewDelegate {
     return viewModel.tableData.count
   }
 
+  func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+    viewModel.tableData[section].0
+  }
+
   func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-    return 
+    return viewModel.tableData[section].1.count
   }
 
   func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -49,7 +53,7 @@ extension FullListViewController: UITableViewDataSource, UITableViewDelegate {
         fatalError("Unable to Dequeue")
       }
 
-    let cellViewModel = viewModel.tableCategories[indexPath.section][indexPath.row]
+    let cellViewModel = viewModel.tableData[indexPath.section].1[indexPath.row]
     cell.viewModel = cellViewModel
     return cell
   }
@@ -90,9 +94,9 @@ extension FullListViewController {
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
       if !inDeleteMode {
-      viewModel.editItem(at: indexPath.row)
+      viewModel.editItem(in: indexPath.section, at: indexPath.row)
       } else {
-      viewModel.selectDeselectIndex(indexPath.row)
+        viewModel.selectDeselectIndex(in: indexPath.section, at: indexPath.row)
       self.tableView.reloadData()
       }
     }
@@ -111,7 +115,7 @@ extension FullListViewController {
       let touchPoint = longPressGestureRecognizer.location(in: tableView)
       viewModel.clearIndex()
       if let selectedItem = tableView.indexPathForRow(at: touchPoint) {
-        viewModel.selectDeselectIndex(selectedItem.row)
+        viewModel.selectDeselectIndex(in: selectedItem.section, at: selectedItem.row)
         deletePrompt(selectedItem.row)
       }
     }

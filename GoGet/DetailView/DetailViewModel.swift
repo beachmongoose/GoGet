@@ -14,6 +14,7 @@ struct DetailViewItem {
   var date: String
   var quantity: String
   var interval: String
+  var category: String
 }
 
 protocol DetailViewModelType {
@@ -69,7 +70,8 @@ final class DetailViewModel: DetailViewModelType {
       boughtBool: item?.bought ?? false,
       date: convertedDate(date),
       quantity: String(item?.quantity ?? 1),
-      interval: String(item?.duration ?? 7)
+      interval: String(item?.duration ?? 7),
+      category: String(getCategories.getName(for: item?.categoryID ?? ""))
       )
   }
 
@@ -103,7 +105,7 @@ final class DetailViewModel: DetailViewModelType {
   }
 
   func upSert(_ item: Item) {
-    var allItems = getItems.load(orderBy: sortType)
+    var allItems = getItems.load()
 
     if self.item == nil {
       allItems.append(item)
@@ -118,7 +120,7 @@ final class DetailViewModel: DetailViewModelType {
   func replace(in array: [Item], with item: Item) {
     guard let originalItem = self.item else { return }
     var allItems = array
-    let index = getItems.indexNumber(for: originalItem, in: array)
+    let index = getItems.indexNumber(for: originalItem.name, in: array)
     allItems[index] = item
     getItems.save(allItems)
   }
@@ -131,6 +133,10 @@ final class DetailViewModel: DetailViewModelType {
       return coordinator.errorMessage("No duration entered.")
     case (let item) where item.dateBought > Date():
       return coordinator.errorMessage("Future date selected.")
+    case (let item) where item.name == "":
+      return coordinator.errorMessage("No name entered.")
+    case (let item) where getItems.isDuplicate(item.name):
+      return coordinator.errorMessage("Item already exists.")
     default:
       break
     }

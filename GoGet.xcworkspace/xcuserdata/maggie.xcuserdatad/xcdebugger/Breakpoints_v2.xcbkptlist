@@ -7,16 +7,16 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "E512AD10-47BB-442F-B914-F42F362C623A"
+            uuid = "CBC76AE0-15CF-49B1-B1A2-711F0C5B4D39"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "GoGet/Core/Service Objects/GetCategories.swift"
+            filePath = "GoGet/DetailView/DetailViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "32"
-            endingLineNumber = "32"
-            landmarkName = "save(_:)"
+            startingLineNumber = "44"
+            endingLineNumber = "44"
+            landmarkName = "populateTextFields()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

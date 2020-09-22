@@ -21,10 +21,11 @@ enum ListView: String {
 
 protocol GetItemsType {
   func save(_ items: [Item])
-  func load(orderBy: SortType) -> [Item]
-  func indexNumber(for item: Item, in array: [Item]) -> Int
-  func fullItemInfo(for index: Int, buyView isBuyView: Bool) -> Item
-  func fetchByCategory() -> [String: [Item]]
+  func load() -> [Item]
+  func indexNumber(for item: String, in array: [Item]) -> Int
+  func fullItemInfo(for name: String) -> Item
+  func fetchByCategory(_ view: String) -> [String: [Item]]
+  func isDuplicate(_ name: String) -> Bool
 }
 
 class GetItems: GetItemsType {
@@ -45,7 +46,8 @@ class GetItems: GetItemsType {
     saveData(persistenceData)
   }
 
-  func load(orderBy: SortType) -> [Item] {
+  func load() -> [Item] {
+    let sortType = sortTypeInstance.sortType
     let sortAscending = sortTypeInstance.sortAscending
     var loadedItems = [Item]()
     var finalItemData = [Item]()
@@ -59,7 +61,7 @@ class GetItems: GetItemsType {
         print("Failed to Load")
       }
 
-    switch orderBy {
+    switch sortType {
     case .name: finalItemData = byName(loadedItems)
     case .date: finalItemData = byDate(loadedItems)
     case .added: finalItemData = byAdded(loadedItems)
@@ -67,35 +69,35 @@ class GetItems: GetItemsType {
     return (sortAscending == true) ? finalItemData : finalItemData.reversed()
   }
 
-  func indexNumber(for item: Item, in array: [Item]) -> Int {
-    return array.firstIndex { $0.name == item.name &&
-                              $0.quantity == item.quantity &&
-                              $0.dateBought == item.dateBought &&
-                              $0.duration == item.duration &&
-                              $0.bought == item.bought
+  func indexNumber(for item: String, in array: [Item]) -> Int {
+    return array.firstIndex { $0.name.lowercased() == item
                             } ?? 900
   }
 
-  func fetchByCategory() -> [String: [Item]] {
-    let items = load(orderBy: sortTypeInstance.sortType)
-    var tableFormat = [String: [Item]]()
+  func fetchByCategory(_ view: String) -> [String: [Item]] {
+    let data = load()
+    let items = (view == "buy") ? data.filter { $0.needToBuy } : data
 
     let tableData = items.reduce(into: [String: [Item]]()) { dict, item in
-      if let itemID = item.categoryID {
-        dict[itemID]!.append(item)
+      let categoryID = item.categoryID
+      if item.categoryID == nil {
+        dict["Uncategorized", default: []].append(item)
       } else {
-        tableFormat["Uncategorized", default: []].append(item)
+        dict[categoryID!, default: []].append(item)
       }
     }
     return tableData
   }
 
-// MARK: - For Buy List
-  func fullItemInfo(for index: Int, buyView isBuyView: Bool) -> Item {
-    let allItems = load(orderBy: sortTypeInstance.sortType)
-    let selectedItem = isBuyView ? allItems.filter { $0.needToBuy } [index] : allItems[index]
-    let originalIndex = indexNumber(for: selectedItem, in: allItems)
-    return allItems[originalIndex]
+  func fullItemInfo(for name: String) -> Item {
+    let allItems = load()
+    let index = indexNumber(for: name, in: allItems)
+    return allItems[index]
+  }
+
+  func isDuplicate(_ name: String) -> Bool {
+    let items = load()
+    return (items.map {$0.name.lowercased() == name.lowercased()}).contains(true)
   }
 
 // MARK: - Sorting

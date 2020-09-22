@@ -33,8 +33,16 @@ class BuyListViewController: UIViewController {
 // MARK: - Populate Table
 extension BuyListViewController: UITableViewDataSource, UITableViewDelegate {
 
-  func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+  func numberOfSections(in tableView: UITableView) -> Int {
     return viewModel.tableData.count
+  }
+
+  func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+    viewModel.tableData[section].0
+  }
+
+  func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    return viewModel.tableData[section].1.count
   }
 
   func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -44,7 +52,7 @@ extension BuyListViewController: UITableViewDataSource, UITableViewDelegate {
       as? BuyListCell else {
         fatalError("Unable to Dequeue")
       }
-    let cellViewModel = viewModel.tableData[indexPath.row]
+    let cellViewModel = viewModel.tableData[indexPath.section].1[indexPath.row]
     cell.viewModel = cellViewModel
     return cell
   }
@@ -66,7 +74,7 @@ extension BuyListViewController: UITableViewDataSource, UITableViewDelegate {
   }
 
   func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-    viewModel.presentDetail(indexPath.row)
+    viewModel.presentDetail(for: indexPath.row, in: indexPath.section)
     self.tableView.reloadData()
   }
 

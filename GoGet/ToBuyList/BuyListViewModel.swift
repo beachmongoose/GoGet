@@ -8,32 +8,36 @@
 import UIKit
 
 protocol BuyListViewModelType {
-  var tableData: [BuyListViewModel.CellViewModel] { get }
+  var tableData: [(String, [BuyListViewModel.CellViewModel])] { get }
   func presentFullList()
-  func presentDetail(_ index: Int)
+  func presentDetail(for index: Int, in section: Int)
   func markAsBought()
   func sortBy(_ element: String?)
   func selectDeselectIndex(_ index: Int)
 }
 
 final class BuyListViewModel: BuyListViewModelType {
-  var tableData = [CellViewModel]()
+  var tableData = [(String, [CellViewModel])]()
 
   struct CellViewModel {
     var name: String
     var quantity: String
     var buyData: String
+    var isSelected: Bool
 
-    init(item: Item) {
+    init(item: Item, isSelected: Bool) {
       self.name = item.name
       self.quantity = String(item.quantity)
       self.buyData = item.buyData
+      self.isSelected = isSelected
     }
   }
 
   private var itemIndexes: [Int] = []
+  private var selectedItems = (Set<String>())
   private let coordinator: BuyListCoordinatorType
   private let getItems: GetItemsType
+  private let getCategories: GetCategoriesType
   private let sortTypeInstance: SortingInstanceType
   private var sortType: SortType {
   sortTypeInstance.sortType
@@ -42,17 +46,31 @@ final class BuyListViewModel: BuyListViewModelType {
   init(
     coordinator: BuyListCoordinatorType,
     getItems: GetItemsType = GetItems(),
+    getCategories: GetCategoriesType = GetCategories(),
     sortTypeInstance: SortingInstanceType = SortingInstance.shared) {
     self.coordinator = coordinator
     self.getItems = getItems
+    self.getCategories = getCategories
     self.sortTypeInstance = sortTypeInstance
     fetchTableData()
   }
 
 // MARK: - Organizing
   func fetchTableData() {
-    let toBuyItems = getItems.load(orderBy: sortType).filter { $0.needToBuy }
-    tableData = toBuyItems.map(CellViewModel.init(item:))
+    let data = createDictionary()
+    tableData = data.map { ($0.key, $0.value) }
+  }
+
+  func createDictionary() -> [String: [CellViewModel]] {
+    let dictionary = getItems.fetchByCategory("buy")
+    let formattedDict: [String: [CellViewModel]] = dictionary.mapValues {
+      $0.map { item in
+        let isSelected = selectedItems.contains(item.name)
+        return CellViewModel(item: item, isSelected: isSelected)
+      }
+    }
+    return formattedDict
+
   }
 
   func sortBy(_ element: String?) {
@@ -68,8 +86,9 @@ final class BuyListViewModel: BuyListViewModelType {
     })
   }
 
-  func presentDetail(_ index: Int) {
-    let item = getItems.fullItemInfo(for: index, buyView: true)
+  func presentDetail(for index: Int, in section: Int) {
+    let data = tableData[section].1[index]
+    let item = getItems.fullItemInfo(for: data.name)
     coordinator.presentDetail(item, completion: {
       self.fetchTableData()
     })
@@ -80,13 +99,13 @@ final class BuyListViewModel: BuyListViewModelType {
   }
 
   func markAsBought() {
-    var allItems = getItems.load(orderBy: sortType)
-    for index in itemIndexes {
-      var currentItem = getItems.fullItemInfo(for: index, buyView: true)
-    let itemIndex = getItems.indexNumber(for: currentItem, in: allItems)
-    currentItem.bought = true
-    currentItem.dateBought = Date()
-    allItems[itemIndex] = currentItem
+    var allItems = getItems.load()
+    for item in selectedItems {
+      var currentItem = getItems.fullItemInfo(for: item)
+      let itemIndex = getItems.indexNumber(for: currentItem.name, in: allItems)
+      currentItem.bought = true
+      currentItem.dateBought = Date()
+      allItems[itemIndex] = currentItem
     }
     getItems.save(allItems)
     fetchTableData()

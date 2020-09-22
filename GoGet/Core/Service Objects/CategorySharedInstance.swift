@@ -16,22 +16,21 @@ protocol CategoryStoreType {
 
 class CategoryStore: CategoryStoreType {
 
-  var categories: [String: Category] = [:]
-  let getCategories: GetCategoriesType
-
-  init(getCategories: GetCategoriesType = GetCategories()) {
-    self.getCategories = getCategories
-    getDictionary()
-  }
-
   static var shared = CategoryStore()
-
-  func getDictionary() {
-    let categories = getCategories.load()
-    let data = categories.reduce(into: [:]) { dict, category in
-      dict[category.nameId] = category
-    }
-    self.categories = data
-  }
+  var categories: [String: Category] = [:]
+//  let getCategories: GetCategoriesType
+//
+//  init(getCategories: GetCategoriesType = GetCategories()) {
+//    self.getCategories = getCategories
+//    getDictionary()
+//  }
+//
+//  func getDictionary() {
+//    let categories = getCategories.load()
+//    let data = categories.reduce(into: [:]) { dict, category in
+//      dict[category.nameId] = category
+//    }
+//    self.categories = data
+//  }
 
 }
