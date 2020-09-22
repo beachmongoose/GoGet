@@ -77,11 +77,10 @@ class GetItems: GetItemsType {
   func fetchByCategory(_ view: String) -> [String: [Item]] {
     let data = load()
     let items = (view == "buy") ? data.filter { $0.needToBuy } : data
-
     let tableData = items.reduce(into: [String: [Item]]()) { dict, item in
       let categoryID = item.categoryID
       if item.categoryID == nil {
-        dict["Uncategorized", default: []].append(item)
+        dict["", default: []].append(item)
       } else {
         dict[categoryID!, default: []].append(item)
       }

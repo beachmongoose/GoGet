@@ -12,21 +12,17 @@ protocol GetCategoriesType {
   func load() -> [Category]
   func createCategory(for category: String) -> String
   func checkIfDuplicate(_ newCategory: String?) -> Bool
-  func getName(for categoryID: String) -> String
 }
 
 class GetCategories: GetCategoriesType {
 
   let sortTypeInstance: SortingInstanceType
-  let categoryStore: CategoryStoreType
   private var sortType: SortType {
     sortTypeInstance.sortType
   }
 
-  init(sortTypeInstance: SortingInstanceType = SortingInstance.shared,
-       categoryStore: CategoryStoreType = CategoryStore.shared) {
+  init(sortTypeInstance: SortingInstanceType = SortingInstance.shared) {
     self.sortTypeInstance = sortTypeInstance
-    self.categoryStore = categoryStore
   }
 
   func save(_ categories: [Category]) {
@@ -39,9 +35,8 @@ class GetCategories: GetCategoriesType {
 
   func load() -> [Category] {
     var loadedCategories = [Category]()
-    let data = loadData(for: "Category")
+    let data = loadData(for: "Categories")
     guard data != nil else { return [] }
-
       do {
         let loadedData = try jsonDecoder.decode([Category].self, from: data!)
         loadedCategories = loadedData
@@ -71,18 +66,5 @@ class GetCategories: GetCategoriesType {
         categories[index].name = newName
       }
     save(categories)
-  }
-
-  func getName(for categoryID: String) -> String {
-    guard let category = getDictionary()[categoryID] else { return "" }
-    return category.name
-  }
-
-  func getDictionary() -> [String: Category] {
-    let categories = load()
-    let data = categories.reduce(into: [:]) { dict, category in
-      dict[category.nameId] = category
-    }
-    return data
   }
 }
