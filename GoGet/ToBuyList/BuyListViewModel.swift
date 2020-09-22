@@ -70,7 +70,6 @@ final class BuyListViewModel: BuyListViewModelType {
       }
     }
     return formattedDict
-
   }
 
   func sortBy(_ element: String?) {

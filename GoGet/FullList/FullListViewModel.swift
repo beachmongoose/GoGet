@@ -38,7 +38,6 @@ final class FullListViewModel: FullListViewModelType {
   var tableCategories = [[CellViewModel]]()
 
   var tableData = [(String, [CellViewModel])]()
-  var allItems = [Item]()
   private var selectedItems = (Set<String>())
 
   private let coordinator: FullListCoordinatorType
@@ -130,12 +129,11 @@ extension FullListViewModel {
   }
 
   func removeItems() {
-    var itemList: [Item] = []
+    var allItems = getItems.load()
     for item in selectedItems {
-      itemList.append(getItems.fullItemInfo(for: item))
-    }
-    for item in itemList {
-      allItems.remove(at: getItems.indexNumber(for: item.name.lowercased(), in: allItems))
+      guard !item.isEmpty else { continue }
+      let index = getItems.indexNumber(for: item, in: allItems)
+      allItems.remove(at: index)
     }
     selectedItems.removeAll()
     getItems.save(allItems)

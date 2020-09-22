@@ -25,7 +25,7 @@ protocol DetailViewModelType {
                 date: String?,
                 quantity: String?,
                 interval: String?,
-                categoryID: String?
+                category: String?
   )
   var itemData: DetailViewItem! { get }
   var categories: [Category] { get }
@@ -71,7 +71,7 @@ final class DetailViewModel: DetailViewModelType {
       date: convertedDate(date),
       quantity: String(item?.quantity ?? 1),
       interval: String(item?.duration ?? 7),
-      category: String(getCategories.getName(for: item?.categoryID ?? ""))
+      category: String(getName(for: item?.categoryID ?? ""))
       )
   }
 
@@ -80,13 +80,13 @@ final class DetailViewModel: DetailViewModelType {
                 date: String?,
                 quantity: String?,
                 interval: String?,
-                categoryID: String?) {
+                category: String?) {
 
     guard let name = name,
       let quantity = quantity,
       let date = date,
       let interval = interval,
-      let category = categoryID else {
+      let category = category else {
         coordinator.errorMessage("Invalid data.")
         return
     }
@@ -173,10 +173,16 @@ final class DetailViewModel: DetailViewModelType {
   func getID(for name: String) -> CategoryID? {
     guard name != "" else { return nil }
     for category in categories where name == category.name {
-      return category.nameId }
-    let newID = getCategories.createCategory(for: name)
-    fetchCategoryData()
-    return newID
+      return category.nameId
+    }
+    return getCategories.createCategory(for: name)
+  }
+
+  func getName(for categoryID: String) -> String {
+    for category in categories where categoryID == category.nameId {
+      return category.nameId
+    }
+    return ""
   }
 
   func fetchCategoryData() {

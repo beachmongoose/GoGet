@@ -16,7 +16,7 @@ class DetailViewController: UIViewController {
   @IBOutlet var dateTextField: UITextField!
   @IBOutlet var intervalTextField: UITextField!
   @IBOutlet var boughtBoolButton: UISegmentedControl!
-  @IBOutlet var categoryButton: UIButton!
+  @IBOutlet var categoryBox: UITextField!
   @IBOutlet var dropDownView: UIView!
   private let getItems: GetItemsType = GetItems()
   private let viewModel: DetailViewModelType
@@ -48,7 +48,7 @@ extension DetailViewController {
     dateTextField.text = item.date
     intervalTextField.text = item.interval
     boughtBoolButton.selectedSegmentIndex = item.boughtBool ? 0 : 1
-    categoryButton.titleLabel!.text = "testing"
+    categoryBox.text = item.category
     buttonChanged(self)
   }
 }
@@ -70,7 +70,7 @@ extension DetailViewController {
       date: dateTextField.text,
       quantity: quantityTextField.text,
       interval: intervalTextField.text,
-      categoryID: categoryButton.titleLabel?.text ?? "")
+      category: categoryBox.text ?? "")
     }
 }
 
@@ -131,6 +131,6 @@ extension DetailViewController {
     guard category != nil else { presentError(message: "Name not entered")
       return }
     if viewModel.isDuplicate(category) { presentError(message: "Category already exists")}
-    categoryButton.setTitle(category, for: .normal)
+    categoryBox.text = category
   }
 }
