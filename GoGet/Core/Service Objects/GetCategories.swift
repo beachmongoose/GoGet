@@ -74,7 +74,15 @@ class GetCategories: GetCategoriesType {
   }
 
   func getName(for categoryID: String) -> String {
-    guard let category = categoryStore.categories[categoryID] else { return "Uncategorized" }
+    guard let category = getDictionary()[categoryID] else { return "" }
     return category.name
+  }
+
+  func getDictionary() -> [String: Category] {
+    let categories = load()
+    let data = categories.reduce(into: [:]) { dict, category in
+      dict[category.nameId] = category
+    }
+    return data
   }
 }

@@ -48,6 +48,7 @@ extension DetailViewController {
     dateTextField.text = item.date
     intervalTextField.text = item.interval
     boughtBoolButton.selectedSegmentIndex = item.boughtBool ? 0 : 1
+    categoryButton.titleLabel!.text = "testing"
     buttonChanged(self)
   }
 }
