@@ -12,8 +12,8 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="DetailViewController" customModule="GoGet" customModuleProvider="target">
             <connections>
                 <outlet property="boughtBoolButton" destination="aX3-pS-DkN" id="0Ac-6b-vAY"/>
-                <outlet property="categoryBox" destination="MUx-4R-cRq" id="dbs-M9-mVo"/>
                 <outlet property="dateTextField" destination="LfZ-Ol-LkY" id="Gmw-cw-iLR"/>
+                <outlet property="dropDownField" destination="F41-UY-RK4" id="SDR-WP-DDi"/>
                 <outlet property="intervalTextField" destination="Hkc-Bd-zEP" id="a4i-UH-LrH"/>
                 <outlet property="itemTextField" destination="d8S-4W-lvP" id="YAD-pA-mvs"/>
                 <outlet property="quantityTextField" destination="Jd6-Br-LoM" id="D1A-rl-bc7"/>
@@ -148,10 +148,10 @@
                             <nil key="textColor"/>
                             <nil key="highlightedColor"/>
                         </label>
-                        <textField opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="MUx-4R-cRq">
-                            <rect key="frame" x="139" y="15" width="227" height="34"/>
+                        <textField opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="F41-UY-RK4" customClass="DropDown" customModule="iOSDropDown">
+                            <rect key="frame" x="133" y="12" width="235" height="39.5"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                            <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="25"/>
                             <textInputTraits key="textInputTraits"/>
                         </textField>
                     </subviews>

@@ -7,8 +7,8 @@
 //
 
 import UIKit
+import iOSDropDown
 import Foundation
-import DropDown
 
 class DetailViewController: UIViewController {
   @IBOutlet var itemTextField: UITextField!
@@ -16,11 +16,9 @@ class DetailViewController: UIViewController {
   @IBOutlet var dateTextField: UITextField!
   @IBOutlet var intervalTextField: UITextField!
   @IBOutlet var boughtBoolButton: UISegmentedControl!
-  @IBOutlet var categoryBox: UITextField!
-  @IBOutlet var dropDownView: UIView!
+  @IBOutlet var dropDownField: DropDown!
   private let getItems: GetItemsType = GetItems()
   private let viewModel: DetailViewModelType
-  private let dropDown = DropDown()
 
   init(viewModel: DetailViewModelType) {
     self.viewModel = viewModel
@@ -35,6 +33,7 @@ class DetailViewController: UIViewController {
       populateTextFields()
       addDatePicker()
       addSaveButton()
+      dropDownMenu()
       super.viewDidLoad()
     }
 }
@@ -48,9 +47,14 @@ extension DetailViewController {
     dateTextField.text = item.date
     intervalTextField.text = item.interval
     boughtBoolButton.selectedSegmentIndex = item.boughtBool ? 0 : 1
-    categoryBox.text = item.category
+    dropDownField.text = (item.category == "") ? item.category : "--Select--"
     buttonChanged(self)
   }
+
+  func dropDownMenu() {
+    dropDownField.optionArray = viewModel.fetchDropDownList()
+  }
+
 }
 
 // MARK: - Saving
@@ -70,7 +74,7 @@ extension DetailViewController {
       date: dateTextField.text,
       quantity: quantityTextField.text,
       interval: intervalTextField.text,
-      category: categoryBox.text ?? "")
+      category: dropDownField.text ?? "")
     }
 }
 
@@ -122,15 +126,10 @@ extension DetailViewController {
     addCategory(handler: populateCategoryField)
   }
 
-  func addDropDownMenu() {
-//    dropDown.anchorView = dropDownView
-//    dropDown.dataSource = viewModel.fetchCategoryData()
-  }
-
   func populateCategoryField(action: UIAlertAction, category: String?) {
     guard category != nil else { presentError(message: "Name not entered")
       return }
     if viewModel.isDuplicate(category) { presentError(message: "Category already exists")}
-    categoryBox.text = category
+    dropDownField.text = category
   }
 }

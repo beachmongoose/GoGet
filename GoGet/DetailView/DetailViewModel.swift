@@ -28,8 +28,8 @@ protocol DetailViewModelType {
                 category: String?
   )
   var itemData: DetailViewItem! { get }
-  var categories: [Category] { get }
   func isDuplicate(_ entry: String?) -> Bool
+  func fetchDropDownList() -> [String]
 }
 
 final class DetailViewModel: DetailViewModelType {
@@ -190,6 +190,15 @@ final class DetailViewModel: DetailViewModelType {
 
   func fetchCategoryData() {
     categories = getCategories.load()
+  }
+
+  func fetchDropDownList() -> [String] {
+    var dropDownList = categories.reduce(into: [String]()) { array, category in
+      array.append(category.name)
+    }
+    dropDownList.insert("--Select--", at: 0)
+    dropDownList.append("--Add New--")
+    return dropDownList
   }
 
   func isDuplicate(_ entry: String?) -> Bool {
