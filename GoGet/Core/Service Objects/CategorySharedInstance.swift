@@ -11,7 +11,8 @@ import Foundation
 typealias CategoryID = String
 
 protocol CategoryStoreType {
-  var categories: [CategoryID: Category] { get }
+  func getDictionary() -> [String: Category]
+//  var categories: [CategoryID: Category] { get }
 }
 
 class CategoryStore: CategoryStoreType {
@@ -19,16 +20,17 @@ class CategoryStore: CategoryStoreType {
   var categories: [String: Category] = [:]
   private let getCategories: GetCategoriesType
 
-  init(getCategories: GetCategoriesType = GetCategories()) {
+  init(getCategories: GetCategoriesType = GetCategories(),
+       categories: [String: Category] = [:]) {
     self.getCategories = getCategories
-    getDictionary()
+//    self.categories = getDictionary()
   }
 
-  func getDictionary() {
+  func getDictionary() -> [String: Category] {
     let categories = getCategories.load()
     let data = categories.reduce(into: [:]) { dict, category in
       dict[category.nameId] = category
     }
-    self.categories = data
+    return data
   }
 }

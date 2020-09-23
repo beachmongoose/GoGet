@@ -23,13 +23,11 @@ final class BuyListViewModel: BuyListViewModelType {
     var name: String
     var quantity: String
     var buyData: String
-    var isSelected: Bool
 
     init(item: Item, isSelected: Bool) {
       self.name = item.name
       self.quantity = String(item.quantity)
       self.buyData = item.buyData
-      self.isSelected = isSelected
     }
   }
 
@@ -55,7 +53,7 @@ final class BuyListViewModel: BuyListViewModelType {
     fetchTableData()
   }
 
-// MARK: - Organizing
+// MARK: - Fetch Data
   func fetchTableData() {
     let data = createDictionary()
     tableData = data.map { ($0.key, $0.value) }
