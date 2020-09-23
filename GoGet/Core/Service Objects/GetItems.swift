@@ -70,20 +70,24 @@ class GetItems: GetItemsType {
   }
 
   func indexNumber(for item: String, in array: [Item]) -> Int {
-    return array.firstIndex { $0.name.lowercased() == item
+    return array.firstIndex { $0.name.lowercased() == item.lowercased()
                             } ?? 900
   }
 
   func fetchByCategory(_ view: String) -> [String: [Item]] {
     let data = load()
     let items = (view == "buy") ? data.filter { $0.needToBuy } : data
+    let categories = categoryStore.getDictionary()
+
     let tableData = items.reduce(into: [String: [Item]]()) { dict, item in
-      let categoryID = item.categoryID
-      if item.categoryID == nil {
-        dict["", default: []].append(item)
-      } else {
-        dict[categoryID!, default: []].append(item)
+      var keyName = ""
+      for category in categories {
+        guard item.categoryID != nil else { break }
+        if category.key == item.categoryID {
+          keyName = category.value.name
+          }
       }
+      dict[keyName, default: []].append(item)
     }
     return tableData
   }

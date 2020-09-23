@@ -8,15 +8,15 @@
 
 import Foundation
 
-struct Category: Codable, Hashable, Equatable {
+struct Category: Codable, Equatable {
   var nameId: String
   var name: String
 }
 
 extension Category {
-  init(nameId: String = UUID().uuidString, name: String, added: Date) {
-    self.name = name
+  init(nameId: String = UUID().uuidString, name: String, date: Date) {
     self.nameId = nameId
+    self.name = name
   }
 }
 

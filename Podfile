@@ -7,4 +7,5 @@ target 'GoGet' do
 
   # Pods for GoGet
   pod 'SwiftLint'
+  pod 'DropDown'
 end

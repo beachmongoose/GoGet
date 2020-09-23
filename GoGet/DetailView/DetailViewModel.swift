@@ -136,7 +136,10 @@ final class DetailViewModel: DetailViewModelType {
     case (let item) where item.name == "":
       return coordinator.errorMessage("No name entered.")
     case (let item) where getItems.isDuplicate(item.name):
-      return coordinator.errorMessage("Item already exists.")
+      if self.item != nil {
+        break
+      } else {
+        return coordinator.errorMessage("Item already exists.") }
     default:
       break
     }

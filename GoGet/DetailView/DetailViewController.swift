@@ -8,7 +8,7 @@
 
 import UIKit
 import Foundation
-//import DropDown
+import DropDown
 
 class DetailViewController: UIViewController {
   @IBOutlet var itemTextField: UITextField!
@@ -20,7 +20,7 @@ class DetailViewController: UIViewController {
   @IBOutlet var dropDownView: UIView!
   private let getItems: GetItemsType = GetItems()
   private let viewModel: DetailViewModelType
-  //  let dropDown = DropDown()
+  private let dropDown = DropDown()
 
   init(viewModel: DetailViewModelType) {
     self.viewModel = viewModel

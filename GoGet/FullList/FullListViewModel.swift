@@ -76,6 +76,7 @@ final class FullListViewModel: FullListViewModelType {
   }
 
   func fetchTableData() {
+    tableData.removeAll()
     let data = createDictionary()
     tableData = data.map { ($0.key, $0.value) }
   }
