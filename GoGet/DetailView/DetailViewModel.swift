@@ -44,18 +44,16 @@ final class DetailViewModel: DetailViewModelType {
   private var sortType: SortType = .added
   var itemData: DetailViewItem!
   var categories = [Category]()
-  var completion: () -> Void
 
   init(coordinator: DetailViewCoordinatorType,
        getItems: GetItemsType = GetItems(),
        getCategories: GetCategoriesType = GetCategories(),
-       item: Item?,
-       completion: @escaping () -> Void) {
+       item: Item?
+       ) {
     self.coordinator = coordinator
     self.getItems = getItems
     self.getCategories = getCategories
     self.item = item
-    self.completion = completion
     self.itemData = getDetails()
     self.categories = getCategories.load()
   }
@@ -114,7 +112,7 @@ final class DetailViewModel: DetailViewModelType {
     } else {
       replace(in: allItems, with: item)
     }
-    completion()
+//    completion()
     coordinator.confirmSave()
   }
 

@@ -9,7 +9,7 @@
 import UIKit
 
 protocol DetailViewCoordinatorType {
-  func start(item: Item?, completion: @escaping () -> Void) -> DetailViewController
+  func start(item: Item?) -> DetailViewController
   func errorMessage(_ message: String)
   func confirmSave()
   func dismissDetail(action: UIAlertAction)
@@ -19,9 +19,10 @@ class DetailViewCoordinator: DetailViewCoordinatorType {
 
   weak var viewController: DetailViewController?
 
-  func start(item: Item?, completion: @escaping () -> Void) -> DetailViewController {
-    let viewModel = DetailViewModel(coordinator: self, item: item, completion: completion)
+  func start(item: Item?) -> DetailViewController {
+    let viewModel = DetailViewModel(coordinator: self, item: nil)
     let viewController = DetailViewController(viewModel: viewModel)
+    viewController.title = "New"
     self.viewController = viewController
     return viewController
   }

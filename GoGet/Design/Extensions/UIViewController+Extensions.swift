@@ -63,7 +63,7 @@ extension UIViewController {
     errorAlert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
     present(errorAlert, animated: true)
   }
-  
+
   func presentMenu(handler: ((UIAlertAction) -> Void)?) {
     let menu = UIAlertController(title: "Sort by...", message: nil, preferredStyle: .actionSheet)
     menu.addAction(UIAlertAction(title: "Sort Items", style: .default, handler: handler))

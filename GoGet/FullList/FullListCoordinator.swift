@@ -10,7 +10,7 @@ import UIKit
 
 protocol FullListCoordinatorType {
   func presentDetail(item: Item?, completion: @escaping () -> Void)
-  func start(completion: @escaping () -> Void) -> FullListViewController
+  func start() -> FullListViewController
 }
 
 class FullListCoordinator: FullListCoordinatorType {
@@ -23,16 +23,17 @@ class FullListCoordinator: FullListCoordinatorType {
     self.getItems = getItems
   }
 
-  func start(completion: @escaping () -> Void) -> FullListViewController {
-    let viewModel = FullListViewModel(coordinator: self, completion: completion)
+  func start() -> FullListViewController {
+    let viewModel = FullListViewModel(coordinator: self)
     let viewController = FullListViewController(viewModel: viewModel)
+    viewController.title = "Full List"
     self.viewController = viewController
     return viewController
   }
 
   func presentDetail(item: Item?, completion: @escaping () -> Void) {
     guard let navigationController = viewController?.navigationController else { return }
-    let detailViewController = DetailViewCoordinator().start(item: item, completion: completion)
+    let detailViewController = DetailViewCoordinator().start(item: item)
     navigationController.pushViewController(detailViewController, animated: true)
   }
 }

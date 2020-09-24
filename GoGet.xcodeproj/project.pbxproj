@@ -36,8 +36,8 @@
 		9F930BFF24FEC55F0034C8F7 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9F930BFE24FEC55F0034C8F7 /* Assets.xcassets */; };
 		9F930C0224FEC55F0034C8F7 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9F930C0024FEC55F0034C8F7 /* LaunchScreen.storyboard */; };
 		9F97E45625097E3B00823393 /* Item+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F97E45525097E3B00823393 /* Item+Extensions.swift */; };
-		9FC28C25251D26A5004A58DF /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FC28C23251D26A5004A58DF /* ViewController.swift */; };
-		9FC28C26251D26A5004A58DF /* ViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9FC28C24251D26A5004A58DF /* ViewController.xib */; };
+		9FC28C25251D26A5004A58DF /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FC28C23251D26A5004A58DF /* TabBarController.swift */; };
+		9FC28C26251D26A5004A58DF /* TabBarController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9FC28C24251D26A5004A58DF /* TabBarController.xib */; };
 		9FE4BA16250FD77000960506 /* UIViewController+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FE4BA15250FD77000960506 /* UIViewController+Extensions.swift */; };
 		C6FE7913255BBF8F81AF4624 /* Pods_GoGet.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 259A21156006B2C8B1F243DE /* Pods_GoGet.framework */; };
 /* End PBXBuildFile section */
@@ -77,8 +77,8 @@
 		9F930C0124FEC55F0034C8F7 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		9F930C0324FEC55F0034C8F7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		9F97E45525097E3B00823393 /* Item+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Item+Extensions.swift"; sourceTree = "<group>"; };
-		9FC28C23251D26A5004A58DF /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
-		9FC28C24251D26A5004A58DF /* ViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ViewController.xib; sourceTree = "<group>"; };
+		9FC28C23251D26A5004A58DF /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
+		9FC28C24251D26A5004A58DF /* TabBarController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TabBarController.xib; sourceTree = "<group>"; };
 		9FE4BA15250FD77000960506 /* UIViewController+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Extensions.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -267,8 +267,8 @@
 		9FC28C1C251D2638004A58DF /* Tab Bar */ = {
 			isa = PBXGroup;
 			children = (
-				9FC28C23251D26A5004A58DF /* ViewController.swift */,
-				9FC28C24251D26A5004A58DF /* ViewController.xib */,
+				9FC28C23251D26A5004A58DF /* TabBarController.swift */,
+				9FC28C24251D26A5004A58DF /* TabBarController.xib */,
 			);
 			path = "Tab Bar";
 			sourceTree = "<group>";
@@ -336,7 +336,7 @@
 			files = (
 				9F930C0224FEC55F0034C8F7 /* LaunchScreen.storyboard in Resources */,
 				9F34059124FED6580035A385 /* DetailViewController.xib in Resources */,
-				9FC28C26251D26A5004A58DF /* ViewController.xib in Resources */,
+				9FC28C26251D26A5004A58DF /* TabBarController.xib in Resources */,
 				9F930BFF24FEC55F0034C8F7 /* Assets.xcassets in Resources */,
 				9F34058224FED5CF0035A385 /* BuyListViewController.xib in Resources */,
 				9F03404E250298F100B27BF3 /* BuyListCell.xib in Resources */,
@@ -417,7 +417,7 @@
 				9F34057A24FED00C0035A385 /* Item.swift in Sources */,
 				9F888C41250195F4003810D4 /* DetailViewCoordinator.swift in Sources */,
 				9FE4BA16250FD77000960506 /* UIViewController+Extensions.swift in Sources */,
-				9FC28C25251D26A5004A58DF /* ViewController.swift in Sources */,
+				9FC28C25251D26A5004A58DF /* TabBarController.swift in Sources */,
 				9F888C3925014EF8003810D4 /* GetItems.swift in Sources */,
 				9F62A3962512B4EF00F5AF63 /* Data.swift in Sources */,
 				9F888C4A2501A14A003810D4 /* FullListCell.swift in Sources */,

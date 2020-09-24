@@ -21,10 +21,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
   func application(_ application: UIApplication,
                    didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-    let viewController = BuyListCoordinator().start()
+//    let viewController = BuyListCoordinator().start()
     window?.makeKeyAndVisible()
 
-    window?.rootViewController = viewController
+    let tabViewController = TabViewController()
+    window?.rootViewController = tabViewController
     return true
   }
 }
