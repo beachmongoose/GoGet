@@ -186,7 +186,7 @@ final class DetailViewModel: DetailViewModelType {
     var name = ""
     let categories = getCategories.load()
     for category in categories where categoryID == category.nameId {
-      name = category.nameId
+      name = category.name
     }
     return name
   }

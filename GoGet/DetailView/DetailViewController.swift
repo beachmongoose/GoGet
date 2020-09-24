@@ -47,12 +47,13 @@ extension DetailViewController {
     dateTextField.text = item.date
     intervalTextField.text = item.interval
     boughtBoolButton.selectedSegmentIndex = item.boughtBool ? 0 : 1
-    dropDownField.selectedIndex = viewModel.dropDownIndex(for: item.category.lowercased())
+    dropDownField.text = (item.category.isEmpty) ? "--Select--" : item.category
     buttonChanged(self)
   }
 
   func dropDownMenu() {
     dropDownField.optionArray = viewModel.fetchDropDownList()
+    dropDownField.selectedRowColor = UIColor.white
   }
 
 }
@@ -68,13 +69,16 @@ extension DetailViewController {
   }
 
   @objc func saveItem() {
+    let categoryText = (dropDownField.text == "--Select--") ? "" : dropDownField.text
+
     viewModel.saveItem(
       name: itemTextField.text,
       bought: boughtBoolButton.selectedSegmentIndex,
       date: dateTextField.text,
       quantity: quantityTextField.text,
       interval: intervalTextField.text,
-      category: dropDownField.text ?? "")
+      category: categoryText
+    )
     }
 }
 
@@ -127,7 +131,7 @@ extension DetailViewController {
   }
 
   func populateCategoryField(action: UIAlertAction, category: String?) {
-    guard category != nil else { presentError(message: "Name not entered")
+    guard category != nil || category != "--Select--" else { presentError(message: "Name not entered")
       return }
     if viewModel.isDuplicate(category) { presentError(message: "Category already exists")}
     dropDownField.text = category
