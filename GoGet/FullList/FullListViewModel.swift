@@ -77,8 +77,14 @@ final class FullListViewModel: FullListViewModelType {
 
   func fetchTableData() {
     tableData.removeAll()
-    let data = createDictionary()
-    tableData = data.map { ($0.key, $0.value) }
+    var data = createDictionary().map { ($0.key, $0.value) }.sorted(by: { $0.0 < $1.0 })
+    if data.contains(where: {$0.0 == "Uncategorized"}) {
+      let index = data.firstIndex(where: { $0.0 == "Uncategorized" })
+      let uncategorized = data[index!]
+      data.remove(at: index!)
+      data.append(uncategorized)
+    }
+    tableData = data
   }
 
   func sortBy(_ element: String?) {

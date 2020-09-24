@@ -12,7 +12,6 @@ typealias CategoryID = String
 
 protocol CategoryStoreType {
   func getDictionary() -> [String: Category]
-//  var categories: [CategoryID: Category] { get }
 }
 
 class CategoryStore: CategoryStoreType {
@@ -23,7 +22,6 @@ class CategoryStore: CategoryStoreType {
   init(getCategories: GetCategoriesType = GetCategories(),
        categories: [String: Category] = [:]) {
     self.getCategories = getCategories
-//    self.categories = getDictionary()
   }
 
   func getDictionary() -> [String: Category] {

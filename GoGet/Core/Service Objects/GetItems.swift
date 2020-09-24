@@ -80,12 +80,9 @@ class GetItems: GetItemsType {
     let categories = categoryStore.getDictionary()
 
     let tableData = items.reduce(into: [String: [Item]]()) { dict, item in
-      var keyName = ""
-      for category in categories {
-        guard item.categoryID != nil else { break }
-        if category.key == item.categoryID {
+      var keyName = "Uncategorized"
+      for category in categories where category.key == item.categoryID {
           keyName = category.value.name
-          }
       }
       dict[keyName, default: []].append(item)
     }

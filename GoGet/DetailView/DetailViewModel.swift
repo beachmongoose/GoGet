@@ -30,6 +30,7 @@ protocol DetailViewModelType {
   var itemData: DetailViewItem! { get }
   func isDuplicate(_ entry: String?) -> Bool
   func fetchDropDownList() -> [String]
+  func dropDownIndex(for category: String) -> Int
 }
 
 final class DetailViewModel: DetailViewModelType {
@@ -182,10 +183,12 @@ final class DetailViewModel: DetailViewModelType {
   }
 
   func getName(for categoryID: String) -> String {
+    var name = ""
+    let categories = getCategories.load()
     for category in categories where categoryID == category.nameId {
-      return category.nameId
+      name = category.nameId
     }
-    return ""
+    return name
   }
 
   func fetchCategoryData() {
@@ -199,6 +202,12 @@ final class DetailViewModel: DetailViewModelType {
     dropDownList.insert("--Select--", at: 0)
     dropDownList.append("--Add New--")
     return dropDownList
+  }
+
+  func dropDownIndex(for category: String) -> Int {
+    guard category != "" else { return 0 }
+    let list = fetchDropDownList()
+    return list.firstIndex(where: {$0.lowercased() == category}) ?? 0
   }
 
   func isDuplicate(_ entry: String?) -> Bool {

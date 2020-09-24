@@ -47,7 +47,7 @@ extension DetailViewController {
     dateTextField.text = item.date
     intervalTextField.text = item.interval
     boughtBoolButton.selectedSegmentIndex = item.boughtBool ? 0 : 1
-    dropDownField.text = (item.category == "") ? item.category : "--Select--"
+    dropDownField.selectedIndex = viewModel.dropDownIndex(for: item.category.lowercased())
     buttonChanged(self)
   }
 
