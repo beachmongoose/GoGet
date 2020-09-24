@@ -23,8 +23,7 @@ class FullListViewController: UIViewController {
   }
     override func viewDidLoad() {
       longPressDetector()
-      addNewAndDeleteButtons()
-      title = "All Items"
+//      addNewAndDeleteButtons()
       tableView.register(UINib(nibName: "FullListCell", bundle: nil), forCellReuseIdentifier: "FullListCell")
       super.viewDidLoad()
     }
@@ -88,6 +87,7 @@ extension FullListViewController: UIGestureRecognizerDelegate {
     navigationItem.rightBarButtonItems = [cancel]
     navigationItem.leftBarButtonItem = confirm
   }
+
 }
 // MARK: - User Input
 extension FullListViewController {

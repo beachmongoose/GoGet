@@ -22,10 +22,9 @@ class BuyListViewController: UIViewController {
   }
 
   override func viewDidLoad() {
-      setUpNavButton()
+//      setUpNavButton()
       longPressDetector()
       tableView.register(UINib(nibName: "BuyListCell", bundle: nil), forCellReuseIdentifier: "BuyListCell")
-      title = "GoGet"
       super.viewDidLoad()
     }
 }

@@ -9,9 +9,10 @@
 import UIKit
 
 class TabViewController: UITabBarController {
-  let buyList: BuyListCoordinatorType = BuyListCoordinator()
-  let fullList: FullListCoordinatorType = FullListCoordinator()
-  
+  let buyView: BuyListCoordinatorType = BuyListCoordinator()
+  let fullView: FullListCoordinatorType = FullListCoordinator()
+  let detailView: DetailViewCoordinatorType = DetailViewCoordinator()
+
   weak var viewController: FullListViewController?
 
     override func viewDidLoad() {
@@ -22,10 +23,11 @@ class TabViewController: UITabBarController {
 
 extension TabViewController {
   func setupTabs() {
-    
+
     viewControllers = [
-      buyList.start(),
-      fullList.start(completion: () -> Void)
+      buyView.start(),
+      detailView.start(item: nil),
+      fullView.start()
     ]
   }
 }

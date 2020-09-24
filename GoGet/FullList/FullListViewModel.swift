@@ -44,7 +44,6 @@ final class FullListViewModel: FullListViewModelType {
   private let getItems: GetItemsType
   private let getCategories: GetCategoriesType
   private let sortTypeInstance: SortingInstanceType
-  var completion: () -> Void
   private var sortType: SortType {
     sortTypeInstance.sortType
   }
@@ -52,13 +51,12 @@ final class FullListViewModel: FullListViewModelType {
   init(coordinator: FullListCoordinatorType,
        getItems: GetItemsType = GetItems(),
        getCategories: GetCategoriesType = GetCategories(),
-       sortTypeInstance: SortingInstanceType = SortingInstance.shared,
-       completion: @escaping () -> Void) {
+       sortTypeInstance: SortingInstanceType = SortingInstance.shared
+      ) {
     self.coordinator = coordinator
     self.getItems = getItems
     self.getCategories = getCategories
     self.sortTypeInstance = sortTypeInstance
-    self.completion = completion
     fetchTableData()
   }
 
@@ -99,7 +97,7 @@ final class FullListViewModel: FullListViewModelType {
   }
 
   func goingBack() {
-    completion()
+//    completion()
   }
 }
 
