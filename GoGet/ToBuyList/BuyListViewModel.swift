@@ -55,8 +55,15 @@ final class BuyListViewModel: BuyListViewModelType {
 
 // MARK: - Fetch Data
   func fetchTableData() {
-    let data = createDictionary()
-    tableData = data.map { ($0.key, $0.value) }
+    tableData.removeAll()
+    var data = createDictionary().map { ($0.key, $0.value) }.sorted(by: { $0.0 < $1.0 })
+    if data.contains(where: {$0.0 == "Uncategorized"}) {
+      let index = data.firstIndex(where: { $0.0 == "Uncategorized" })
+      let uncategorized = data[index!]
+      data.remove(at: index!)
+      data.append(uncategorized)
+    }
+    tableData = data
   }
 
   func createDictionary() -> [String: [CellViewModel]] {
