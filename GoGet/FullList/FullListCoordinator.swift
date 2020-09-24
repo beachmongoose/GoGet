@@ -10,6 +10,7 @@ import UIKit
 
 protocol FullListCoordinatorType {
   func presentDetail(item: Item?, completion: @escaping () -> Void)
+  func start(completion: @escaping () -> Void) -> FullListViewController
 }
 
 class FullListCoordinator: FullListCoordinatorType {
