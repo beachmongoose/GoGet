@@ -28,8 +28,7 @@ class DetailViewCoordinator: DetailViewCoordinatorType {
   }
 
 func dismissDetail(action: UIAlertAction) {
-    guard let navigationController = viewController?.navigationController else { return }
-    navigationController.popViewController(animated: true)
+  viewController?.tabBarController?.selectedIndex = 0
   }
 
 }

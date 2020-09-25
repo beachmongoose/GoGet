@@ -5,9 +5,12 @@
 //  Created by Maggie Maldjian on 9/4/20.
 //  Copyright © 2020 Maggie Maldjian. All rights reserved.
 //
-import UIKit
+
+import Bond
+import ReactiveKit
 
 protocol FullListViewModelType {
+  var observableTableData: MutableObservableArray<FullListViewModel.CellViewModel> { get }
   var tableData: [(String, [FullListViewModel.CellViewModel])] { get }
   var tableCategories: [[FullListViewModel.CellViewModel]] { get }
   func presentDetail(for item: Item?)
@@ -17,6 +20,7 @@ protocol FullListViewModelType {
   func removeItems()
   func sortBy(_ element: String?)
   func goingBack()
+  func clear()
 }
 
 final class FullListViewModel: FullListViewModelType {
@@ -37,6 +41,7 @@ final class FullListViewModel: FullListViewModelType {
 
   var tableCategories = [[CellViewModel]]()
 
+  let observableTableData = MutableObservableArray<FullListViewModel.CellViewModel>([])
   var tableData = [(String, [CellViewModel])]()
   private var selectedItems = (Set<String>())
 
@@ -57,6 +62,7 @@ final class FullListViewModel: FullListViewModelType {
     self.getItems = getItems
     self.getCategories = getCategories
     self.sortTypeInstance = sortTypeInstance
+    observeItemStoreUpdates()
     fetchTableData()
   }
 
@@ -73,8 +79,17 @@ final class FullListViewModel: FullListViewModelType {
     return formattedDict
   }
 
+  func observeItemStoreUpdates() {
+    let item = Item(name: "", quantity: 0, dateBought: Date(), duration: 0, bought: true, dateAdded: Date(), categoryID: nil)
+    let cellViewModel: [CellViewModel] = [CellViewModel(item: item, isSelected: false)]
+    observableTableData.replace(with: cellViewModel)
+  }
+  
+  func clear() {
+    observableTableData.removeAll()
+  }
+
   func fetchTableData() {
-    tableData.removeAll()
     var data = createDictionary().map { ($0.key, $0.value) }.sorted(by: { $0.0 < $1.0 })
     if data.contains(where: {$0.0 == "Uncategorized"}) {
       let index = data.firstIndex(where: { $0.0 == "Uncategorized" })

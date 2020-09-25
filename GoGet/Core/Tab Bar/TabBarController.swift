@@ -12,7 +12,6 @@ class TabViewController: UITabBarController {
   let buyView: BuyListCoordinatorType = BuyListCoordinator()
   let fullView: FullListCoordinatorType = FullListCoordinator()
   let detailView: DetailViewCoordinatorType = DetailViewCoordinator()
-
   weak var viewController: FullListViewController?
 
     override func viewDidLoad() {

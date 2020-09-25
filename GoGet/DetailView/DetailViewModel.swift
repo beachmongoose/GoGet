@@ -7,6 +7,8 @@
 //
 import Foundation
 import UIKit
+import Bond
+import ReactiveKit
 
 struct DetailViewItem {
   var name: String
@@ -31,6 +33,7 @@ protocol DetailViewModelType {
   func isDuplicate(_ entry: String?) -> Bool
   func fetchDropDownList() -> [String]
   func dropDownIndex(for category: String) -> Int
+  var itemName: Property<String?> { get }
 }
 
 final class DetailViewModel: DetailViewModelType {
@@ -42,6 +45,7 @@ final class DetailViewModel: DetailViewModelType {
   private let getItems: GetItemsType
   private let getCategories: GetCategoriesType
   private var sortType: SortType = .added
+  let itemName = Property<String?>(nil)
   var itemData: DetailViewItem!
   var categories = [Category]()
 
@@ -99,7 +103,6 @@ final class DetailViewModel: DetailViewModelType {
       dateAdded: item?.dateAdded ?? Date(),
       categoryID: getID(for: category)
     )
-
     validate(adjustedItem)
   }
 
@@ -112,7 +115,6 @@ final class DetailViewModel: DetailViewModelType {
     } else {
       replace(in: allItems, with: item)
     }
-//    completion()
     coordinator.confirmSave()
   }
 

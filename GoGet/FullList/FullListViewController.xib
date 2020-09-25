@@ -37,9 +37,6 @@
                     </constraints>
                     <fontDescription key="fontDescription" type="system" pointSize="20"/>
                     <state key="normal" title="Sort"/>
-                    <connections>
-                        <action selector="sortButton:" destination="-1" eventType="touchUpInside" id="dkP-A0-FWk"/>
-                    </connections>
                 </button>
             </subviews>
             <viewLayoutGuide key="safeArea" id="Z4V-ag-TzR"/>

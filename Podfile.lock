@@ -1,20 +1,33 @@
 PODS:
+  - Bond (7.6.6):
+    - Differ (~> 1.4)
+    - ReactiveKit (~> 3.14)
+  - Differ (1.4.5)
   - iOSDropDown (0.3.4)
+  - ReactiveKit (3.17.4)
   - SwiftLint (0.40.2)
 
 DEPENDENCIES:
+  - Bond
   - iOSDropDown
+  - ReactiveKit
   - SwiftLint
 
 SPEC REPOS:
   trunk:
+    - Bond
+    - Differ
     - iOSDropDown
+    - ReactiveKit
     - SwiftLint
 
 SPEC CHECKSUMS:
+  Bond: 9e7d901cf4ed825b6004a93dd0a7f1c7479e2834
+  Differ: 3b6bd78e2b20cc795d9a86f7641d087524e4273e
   iOSDropDown: c10a761f9a00c3f1cc9d3bce43ae504628e2f692
+  ReactiveKit: f9f9e079efa39312c597bf1508ef4810d111ce76
   SwiftLint: 1216c910d27c2633ade33b4f071bb6b930982e62
 
-PODFILE CHECKSUM: d69803affe6e6192d2f5dd0d058e513954f34c11
+PODFILE CHECKSUM: 8f1317d036687bad0abecf3cbf9b93211e693685
 
 COCOAPODS: 1.9.3
