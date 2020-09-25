@@ -11,6 +11,7 @@ import iOSDropDown
 import Foundation
 
 class DetailViewController: UIViewController {
+  @IBOutlet var navigation: UINavigationBar!
   @IBOutlet var itemTextField: UITextField!
   @IBOutlet var quantityTextField: UITextField!
   @IBOutlet var dateTextField: UITextField!
@@ -30,6 +31,7 @@ class DetailViewController: UIViewController {
   }
 
   override func viewDidLoad() {
+      itemTextField.reactive.text.bind(to: viewModel.itemName)
       populateTextFields()
       addDatePicker()
       addSaveButton()
@@ -79,7 +81,7 @@ extension DetailViewController {
       interval: intervalTextField.text,
       category: categoryText
     )
-    }
+  }
 }
 
 // MARK: - Bought Buttons
@@ -135,5 +137,25 @@ extension DetailViewController {
       return }
     if viewModel.isDuplicate(category) { presentError(message: "Category already exists")}
     dropDownField.text = category
+  }
+}
+
+// MARK: - Navigation
+
+extension DetailViewController: UITabBarControllerDelegate {
+  override func viewWillLayoutSubviews() {
+    let navigationBar = self.navigation
+    self.view.addSubview(navigation)
+    let navigationItem = UINavigationItem(title: "Navigation Bar")
+    let saveButton = UIBarButtonItem(title: "Save",
+                                     style: .plain,
+                                     target: self,
+                                     action: #selector(saveItem))
+    navigationItem.rightBarButtonItem = saveButton
+    navigationBar!.setItems([navigationItem], animated: false)
+  }
+
+  func dismiss() {
+    self.tabBarController!.selectedIndex = 0
   }
 }

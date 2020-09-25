@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import ReactiveKit
+import Bond
 
 class BuyListViewController: UIViewController {
   @IBOutlet var tableView: UITableView!
@@ -14,6 +16,7 @@ class BuyListViewController: UIViewController {
 
   init(viewModel: BuyListViewModelType) {
     self.viewModel = viewModel
+
     super.init(nibName: nil, bundle: nil)
   }
 
@@ -22,7 +25,6 @@ class BuyListViewController: UIViewController {
   }
 
   override func viewDidLoad() {
-//      setUpNavButton()
       longPressDetector()
       tableView.register(UINib(nibName: "BuyListCell", bundle: nil), forCellReuseIdentifier: "BuyListCell")
       super.viewDidLoad()
@@ -73,7 +75,7 @@ extension BuyListViewController: UITableViewDataSource, UITableViewDelegate {
   }
 
   func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-    viewModel.presentDetail(for: indexPath.row, in: indexPath.section)
+//    viewModel.presentDetail(for: indexPath.row, in: indexPath.section)
     self.tableView.reloadData()
   }
 

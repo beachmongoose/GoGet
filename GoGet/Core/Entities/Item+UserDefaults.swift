@@ -9,7 +9,7 @@
 import Foundation
 
 // MARK: - Mutation
-extension Array where Element == Item {
+extension Array where Element == GoGet.Item {
   var persistenceData: (Data, String)? {
     guard let data = try? jsonEncoder.encode(self) else {
       return nil

@@ -16,6 +16,7 @@
                 <outlet property="dropDownField" destination="F41-UY-RK4" id="SDR-WP-DDi"/>
                 <outlet property="intervalTextField" destination="Hkc-Bd-zEP" id="a4i-UH-LrH"/>
                 <outlet property="itemTextField" destination="d8S-4W-lvP" id="YAD-pA-mvs"/>
+                <outlet property="navigation" destination="Ir7-Wq-Euf" id="yM2-IL-BOS"/>
                 <outlet property="quantityTextField" destination="Jd6-Br-LoM" id="D1A-rl-bc7"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
@@ -166,6 +167,13 @@
                         <action selector="addCategory:" destination="-1" eventType="touchUpInside" id="ZV6-Ly-Hnb"/>
                     </connections>
                 </button>
+                <navigationBar contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Ir7-Wq-Euf">
+                    <rect key="frame" x="0.0" y="44" width="414" height="44"/>
+                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                    <items>
+                        <navigationItem title="Item Details" id="1w5-lC-woN"/>
+                    </items>
+                </navigationBar>
             </subviews>
             <viewLayoutGuide key="safeArea" id="fnl-2z-Ty3"/>
             <color key="backgroundColor" systemColor="systemBackgroundColor"/>

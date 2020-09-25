@@ -6,6 +6,8 @@ target 'GoGet' do
   use_frameworks!
 
   # Pods for GoGet
-  pod 'SwiftLint'
+  pod 'Bond'
   pod 'iOSDropDown'
+  pod 'ReactiveKit'
+  pod 'SwiftLint'
 end

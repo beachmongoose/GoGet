@@ -5,7 +5,9 @@
 //  Created by Maggie Maldjian on 9/4/20.
 //  Copyright © 2020 Maggie Maldjian. All rights reserved.
 //
-import UIKit
+
+import Bond
+import ReactiveKit
 
 protocol BuyListViewModelType {
   var tableData: [(String, [BuyListViewModel.CellViewModel])] { get }

@@ -22,41 +22,58 @@ class FullListViewController: UIViewController {
     fatalError("init(coder:) has not been implemented")
   }
     override func viewDidLoad() {
-      longPressDetector()
+//      longPressDetector()
 //      addNewAndDeleteButtons()
       tableView.register(UINib(nibName: "FullListCell", bundle: nil), forCellReuseIdentifier: "FullListCell")
+      setupTable()
+      observeButtonEvents()
       super.viewDidLoad()
     }
-}
 
-// MARK: - TableView
-extension FullListViewController: UITableViewDataSource, UITableViewDelegate {
-
-  func numberOfSections(in tableView: UITableView) -> Int {
-    return viewModel.tableData.count
+  func observeButtonEvents() {
+    sortButton.reactive.tap.bind(to: self) { $0.viewModel.clear() }
   }
 
-  func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-    viewModel.tableData[section].0
-  }
+  func setupTable() {
+    viewModel.observableTableData.bind(to: tableView) { dataSource, indexPath, tableView in
+      guard let cell = tableView.dequeueReusableCell(withIdentifier: "FullListCell", for: indexPath)
+        as? FullListCell else { fatalError("Unable to Dequeue") }
 
-  func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-    return viewModel.tableData[section].1.count
-  }
-
-  func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-    guard let cell = tableView.dequeueReusableCell(
-      withIdentifier: "FullListCell",
-      for: indexPath)
-      as? FullListCell else {
-        fatalError("Unable to Dequeue")
-      }
-
-    let cellViewModel = viewModel.tableData[indexPath.section].1[indexPath.row]
-    cell.viewModel = cellViewModel
-    return cell
+      let cellViewModel = dataSource[indexPath.row]
+      cell.viewModel = cellViewModel
+      return cell
+    }
   }
 }
+
+//// MARK: - TableView
+//extension FullListViewController: UITableViewDataSource, UITableViewDelegate {
+//
+//  func numberOfSections(in tableView: UITableView) -> Int {
+//    return viewModel.tableData.count
+//  }
+//
+//  func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+//    viewModel.tableData[section].0
+//  }
+//
+//  func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+//    return viewModel.tableData[section].1.count
+//  }
+//
+//  func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+//    guard let cell = tableView.dequeueReusableCell(
+//      withIdentifier: "FullListCell",
+//      for: indexPath)
+//      as? FullListCell else {
+//        fatalError("Unable to Dequeue")
+//      }
+//
+//    let cellViewModel = viewModel.tableData[indexPath.section].1[indexPath.row]
+//    cell.viewModel = cellViewModel
+//    return cell
+//  }
+//}
 
 // MARK: - Buttons
 extension FullListViewController: UIGestureRecognizerDelegate {
@@ -151,9 +168,9 @@ extension FullListViewController {
 
 // MARK: - Sorting
 extension FullListViewController {
-  @IBAction func sortButton(_ sender: Any) {
-    presentSortOptions(handler: sortMethod(action:))
-  }
+//  @IBAction func sortButton(_ sender: Any) {
+//    presentSortOptions(handler: sortMethod(action:))
+//  }
 
   @objc func sortMethod(action: UIAlertAction) {
     viewModel.sortBy(action.title!.lowercased())
