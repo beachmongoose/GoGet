@@ -6,9 +6,9 @@
 //  Copyright © 2020 Maggie Maldjian. All rights reserved.
 //
 
-import UIKit
-import ReactiveKit
 import Bond
+import ReactiveKit
+import UIKit
 
 class BuyListViewController: UIViewController {
   @IBOutlet var tableView: UITableView!
@@ -25,40 +25,33 @@ class BuyListViewController: UIViewController {
   }
 
   override func viewDidLoad() {
-      longPressDetector()
-      tableView.register(UINib(nibName: "BuyListCell", bundle: nil), forCellReuseIdentifier: "BuyListCell")
-      super.viewDidLoad()
+    longPressDetector()
+    setupTable()
+    tableView.register(UINib(nibName: "BuyListCell", bundle: nil), forCellReuseIdentifier: "BuyListCell")
+    super.viewDidLoad()
     }
 }
 
 // MARK: - Populate Table
-extension BuyListViewController: UITableViewDataSource, UITableViewDelegate {
-
-  func numberOfSections(in tableView: UITableView) -> Int {
-    return viewModel.tableData.count
+extension BuyListViewController: UITableViewDelegate {
+  func setupTable() {
+    let dataSource = SectionedTableViewBinderDataSource<BuyListViewModel.CellViewModel>(createCell: createCell)
+    viewModel.tableData.bind(to: tableView, using: dataSource)
+    tableView.delegate = self
   }
-
-  func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-    viewModel.tableData[section].0
-  }
-
-  func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-    return viewModel.tableData[section].1.count
-  }
-
-  func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-    guard let cell = tableView.dequeueReusableCell(
-      withIdentifier: "BuyListCell",
-      for: indexPath)
-      as? BuyListCell else {
-        fatalError("Unable to Dequeue")
-      }
-    let cellViewModel = viewModel.tableData[indexPath.section].1[indexPath.row]
+  private func createCell(dataSource: Array2D<String, BuyListViewModel.CellViewModel>,
+                          indexPath: IndexPath,
+                          tableView: UITableView) -> UITableViewCell {
+    guard let cell = tableView.dequeueReusableCell(withIdentifier: "BuyListCell",
+                                                   for: indexPath) as? BuyListCell else { fatalError("Unable to dequeue") }
+    let cellViewModel = dataSource[childAt: indexPath].item
     cell.viewModel = cellViewModel
     return cell
   }
+}
 
 // MARK: - Change State
+extension BuyListViewController {
   func longPressDetector() {
     let longPressDetector = UILongPressGestureRecognizer(target: self, action: #selector(longPress))
     view.addGestureRecognizer(longPressDetector)
@@ -75,7 +68,7 @@ extension BuyListViewController: UITableViewDataSource, UITableViewDelegate {
   }
 
   func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-//    viewModel.presentDetail(for: indexPath.row, in: indexPath.section)
+//    viewModel.presentDetail(in section: indexPath.section, for row: indexPath.row)
     self.tableView.reloadData()
   }
 

@@ -31,7 +31,7 @@ class DetailViewController: UIViewController {
   }
 
   override func viewDidLoad() {
-      itemTextField.reactive.text.bind(to: viewModel.itemName)
+      textFieldBindings()
       populateTextFields()
       addDatePicker()
       addSaveButton()
@@ -58,6 +58,9 @@ extension DetailViewController {
     dropDownField.selectedRowColor = UIColor.white
   }
 
+  func textFieldBindings() {
+    itemTextField.reactive.text.bind(to: viewModel.itemName)
+  }
 }
 
 // MARK: - Saving

@@ -38,6 +38,7 @@
 		9F97E45625097E3B00823393 /* Item+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F97E45525097E3B00823393 /* Item+Extensions.swift */; };
 		9FA4E78C251E417600328981 /* CategoryListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FA4E78A251E417600328981 /* CategoryListViewController.swift */; };
 		9FA4E78D251E417600328981 /* CategoryListViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9FA4E78B251E417600328981 /* CategoryListViewController.xib */; };
+		9FAF69B62522793100E10B41 /* SectionTableViewBinder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FAF69B52522793100E10B41 /* SectionTableViewBinder.swift */; };
 		9FC28C25251D26A5004A58DF /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FC28C23251D26A5004A58DF /* TabBarController.swift */; };
 		9FC28C26251D26A5004A58DF /* TabBarController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9FC28C24251D26A5004A58DF /* TabBarController.xib */; };
 		9FE4BA16250FD77000960506 /* UIViewController+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FE4BA15250FD77000960506 /* UIViewController+Extensions.swift */; };
@@ -81,6 +82,7 @@
 		9F97E45525097E3B00823393 /* Item+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Item+Extensions.swift"; sourceTree = "<group>"; };
 		9FA4E78A251E417600328981 /* CategoryListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryListViewController.swift; sourceTree = "<group>"; };
 		9FA4E78B251E417600328981 /* CategoryListViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CategoryListViewController.xib; sourceTree = "<group>"; };
+		9FAF69B52522793100E10B41 /* SectionTableViewBinder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SectionTableViewBinder.swift; sourceTree = "<group>"; };
 		9FC28C23251D26A5004A58DF /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
 		9FC28C24251D26A5004A58DF /* TabBarController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TabBarController.xib; sourceTree = "<group>"; };
 		9FE4BA15250FD77000960506 /* UIViewController+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Extensions.swift"; sourceTree = "<group>"; };
@@ -127,6 +129,7 @@
 		9F085BB7250C0CD800682D05 /* Core */ = {
 			isa = PBXGroup;
 			children = (
+				9FAF69B42522791600E10B41 /* Binders */,
 				9FC28C1C251D2638004A58DF /* Tab Bar */,
 				9F62A3972512B97500F5AF63 /* Entities */,
 				9F34057B24FED3A60035A385 /* Models */,
@@ -189,8 +192,8 @@
 		9F34058D24FED6470035A385 /* DetailView */ = {
 			isa = PBXGroup;
 			children = (
-				9F34058F24FED6580035A385 /* DetailViewController.xib */,
 				9F34058E24FED6580035A385 /* DetailViewController.swift */,
+				9F34058F24FED6580035A385 /* DetailViewController.xib */,
 				9F888C40250195F4003810D4 /* DetailViewCoordinator.swift */,
 				9F0340532502CDD400B27BF3 /* DetailViewModel.swift */,
 			);
@@ -276,6 +279,14 @@
 				9FA4E78B251E417600328981 /* CategoryListViewController.xib */,
 			);
 			path = CategoryList;
+			sourceTree = "<group>";
+		};
+		9FAF69B42522791600E10B41 /* Binders */ = {
+			isa = PBXGroup;
+			children = (
+				9FAF69B52522793100E10B41 /* SectionTableViewBinder.swift */,
+			);
+			path = Binders;
 			sourceTree = "<group>";
 		};
 		9FC28C1C251D2638004A58DF /* Tab Bar */ = {
@@ -445,6 +456,7 @@
 				9F0340542502CDD400B27BF3 /* DetailViewModel.swift in Sources */,
 				9F6C705B2515197500C6A3C3 /* CategorySharedInstance.swift in Sources */,
 				9F085BBB250C0D0900682D05 /* UIAlertController+Extensions.swift in Sources */,
+				9FAF69B62522793100E10B41 /* SectionTableViewBinder.swift in Sources */,
 				9F888C3F250190EB003810D4 /* FullListCoordinator.swift in Sources */,
 				9F97E45625097E3B00823393 /* Item+Extensions.swift in Sources */,
 				9F888C3D25018F79003810D4 /* BuyListCoordinator.swift in Sources */,

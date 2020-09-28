@@ -10,12 +10,11 @@ import Bond
 import ReactiveKit
 
 protocol FullListViewModelType {
-  var observableTableData: MutableObservableArray<FullListViewModel.CellViewModel> { get }
-  var tableData: [(String, [FullListViewModel.CellViewModel])] { get }
+  var tableData: MutableObservableArray2D<String, FullListViewModel.CellViewModel> { get }
   var tableCategories: [[FullListViewModel.CellViewModel]] { get }
   func presentDetail(for item: Item?)
   func editItem(in section: Int, at row: Int)
-  func selectDeselectIndex(in section: Int, at row: Int)
+  func selectDeselectIndex(at indexPath: IndexPath)
   func clearIndex()
   func removeItems()
   func sortBy(_ element: String?)
@@ -40,9 +39,7 @@ final class FullListViewModel: FullListViewModelType {
   }
 
   var tableCategories = [[CellViewModel]]()
-
-  let observableTableData = MutableObservableArray<FullListViewModel.CellViewModel>([])
-  var tableData = [(String, [CellViewModel])]()
+  let tableData = MutableObservableArray2D<String, FullListViewModel.CellViewModel>(Array2D(sections: []))
   private var selectedItems = (Set<String>())
 
   private let coordinator: FullListCoordinatorType
@@ -62,8 +59,7 @@ final class FullListViewModel: FullListViewModelType {
     self.getItems = getItems
     self.getCategories = getCategories
     self.sortTypeInstance = sortTypeInstance
-    observeItemStoreUpdates()
-    fetchTableData()
+    fetchArrayData()
   }
 
 // MARK: - Organzing
@@ -79,35 +75,37 @@ final class FullListViewModel: FullListViewModelType {
     return formattedDict
   }
 
-  func observeItemStoreUpdates() {
-    let item = Item(name: "", quantity: 0, dateBought: Date(), duration: 0, bought: true, dateAdded: Date(), categoryID: nil)
-    let cellViewModel: [CellViewModel] = [CellViewModel(item: item, isSelected: false)]
-    observableTableData.replace(with: cellViewModel)
-  }
-  
-  func clear() {
-    observableTableData.removeAll()
+  func fetchArrayData() {
+    let data = createDictionary().map { ($0.key, $0.value) }.sorted(by: {$0.0 < $1.0 })
+    let sortedData = reOrder(data)
+    let sections = sortedData.map { entry in
+      return Array2D.Section(metadata: entry.0, items: entry.1)
+    }
+    tableData.replace(with: Array2D(sections: sections))
   }
 
-  func fetchTableData() {
-    var data = createDictionary().map { ($0.key, $0.value) }.sorted(by: { $0.0 < $1.0 })
-    if data.contains(where: {$0.0 == "Uncategorized"}) {
-      let index = data.firstIndex(where: { $0.0 == "Uncategorized" })
-      let uncategorized = data[index!]
-      data.remove(at: index!)
-      data.append(uncategorized)
-    }
-    tableData = data
+  func clear() {
+    tableData.removeAll()
+  }
+
+  func reOrder(_ array: [(String, [CellViewModel])]) -> [(String, [CellViewModel])] {
+    var data = array
+    guard data.contains(where: {$0.0 == "Uncategorized"}) else { return data }
+    let index = data.firstIndex(where: { $0.0 == "Uncategorized" })
+    let uncategorized = data[index!]
+    data.remove(at: index!)
+    data.append(uncategorized)
+    return data
   }
 
   func sortBy(_ element: String?) {
     let method = String((element?.components(separatedBy: " ")[0])!)
     sortTypeInstance.changeSortType(to: SortType(rawValue: method)!)
-    fetchTableData()
+    fetchArrayData()
   }
 
   func getItemInfo(in section: Int, for row: Int) -> Item {
-    let item = tableData[section].1[row]
+    let item = tableData.collection.sections[section].items[row]
     return getItems.fullItemInfo(for: item.name.lowercased())
   }
 
@@ -119,13 +117,13 @@ final class FullListViewModel: FullListViewModelType {
 // MARK: - Item Handling
 extension FullListViewModel {
 
-  func selectDeselectIndex(in section: Int, at row: Int) {
-    let name = tableData[section].1[row].name.lowercased()
+  func selectDeselectIndex(at indexPath: IndexPath) {
+    let name = tableData.collection.sections[indexPath.section].metadata
     if selectedItems.contains(name) {
       selectedItems.remove(at: selectedItems.firstIndex(of: name)!)
     } else {
     selectedItems.insert(name)
-    fetchTableData()
+    fetchArrayData()
     }
   }
 
@@ -137,14 +135,14 @@ extension FullListViewModel {
   }
 
   func editItem(in section: Int, at row: Int) {
-    let item = tableData[section].1[row].name.lowercased()
+    let item = tableData.collection.sections[section].items[row].name.lowercased()
     let details = getItems.fullItemInfo(for: item)
     presentDetail(for: details)
   }
 
   func presentDetail(for item: Item?) {
     coordinator.presentDetail(item: item, completion: {
-      self.fetchTableData()
+      self.fetchArrayData()
     })
   }
 
@@ -157,6 +155,6 @@ extension FullListViewModel {
     }
     selectedItems.removeAll()
     getItems.save(allItems)
-    fetchTableData()
+    fetchArrayData()
   }
 }

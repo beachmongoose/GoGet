@@ -34,6 +34,7 @@ protocol DetailViewModelType {
   func fetchDropDownList() -> [String]
   func dropDownIndex(for category: String) -> Int
   var itemName: Property<String?> { get }
+  var item: Item? { get }
 }
 
 final class DetailViewModel: DetailViewModelType {
