@@ -6,6 +6,8 @@
 //  Copyright © 2020 Maggie Maldjian. All rights reserved.
 //
 
+import Bond
+import ReactiveKit
 import UIKit
 
 class FullListViewController: UIViewController {
@@ -33,47 +35,26 @@ class FullListViewController: UIViewController {
   func observeButtonEvents() {
     sortButton.reactive.tap.bind(to: self) { $0.viewModel.clear() }
   }
+}
 
+extension FullListViewController: UITableViewDelegate {
   func setupTable() {
-    viewModel.observableTableData.bind(to: tableView) { dataSource, indexPath, tableView in
-      guard let cell = tableView.dequeueReusableCell(withIdentifier: "FullListCell", for: indexPath)
-        as? FullListCell else { fatalError("Unable to Dequeue") }
-
-      let cellViewModel = dataSource[indexPath.row]
-      cell.viewModel = cellViewModel
-      return cell
-    }
+    let dataSource =
+      SectionedTableViewBinderDataSource<FullListViewModel.CellViewModel>(createCell: createCell)
+    viewModel.tableData.bind(to: tableView, using: dataSource)
+    tableView.delegate = self
   }
 }
 
-//// MARK: - TableView
-//extension FullListViewController: UITableViewDataSource, UITableViewDelegate {
-//
-//  func numberOfSections(in tableView: UITableView) -> Int {
-//    return viewModel.tableData.count
-//  }
-//
-//  func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-//    viewModel.tableData[section].0
-//  }
-//
-//  func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-//    return viewModel.tableData[section].1.count
-//  }
-//
-//  func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-//    guard let cell = tableView.dequeueReusableCell(
-//      withIdentifier: "FullListCell",
-//      for: indexPath)
-//      as? FullListCell else {
-//        fatalError("Unable to Dequeue")
-//      }
-//
-//    let cellViewModel = viewModel.tableData[indexPath.section].1[indexPath.row]
-//    cell.viewModel = cellViewModel
-//    return cell
-//  }
-//}
+private func createCell(dataSource: Array2D<String, FullListViewModel.CellViewModel>,
+                        indexPath: IndexPath,
+                        tableView: UITableView) -> UITableViewCell {
+  guard let cell = tableView.dequeueReusableCell(withIdentifier: "FullListCell",
+                                                 for: indexPath) as? FullListCell else { fatalError("Unable to Dequeue") }
+        let cellViewModel = dataSource[childAt: indexPath].item
+        cell.viewModel = cellViewModel
+        return cell
+}
 
 // MARK: - Buttons
 extension FullListViewController: UIGestureRecognizerDelegate {
@@ -113,7 +94,7 @@ extension FullListViewController {
       if !inDeleteMode {
       viewModel.editItem(in: indexPath.section, at: indexPath.row)
       } else {
-        viewModel.selectDeselectIndex(in: indexPath.section, at: indexPath.row)
+        viewModel.selectDeselectIndex(at: indexPath)
       self.tableView.reloadData()
       }
     }
@@ -132,7 +113,7 @@ extension FullListViewController {
       let touchPoint = longPressGestureRecognizer.location(in: tableView)
       viewModel.clearIndex()
       if let selectedItem = tableView.indexPathForRow(at: touchPoint) {
-        viewModel.selectDeselectIndex(in: selectedItem.section, at: selectedItem.row)
+        viewModel.selectDeselectIndex(at: selectedItem)
         deletePrompt(selectedItem.row)
       }
     }

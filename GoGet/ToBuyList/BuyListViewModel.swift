@@ -10,29 +10,31 @@ import Bond
 import ReactiveKit
 
 protocol BuyListViewModelType {
-  var tableData: [(String, [BuyListViewModel.CellViewModel])] { get }
+  var tableData: MutableObservableArray2D<String, BuyListViewModel.CellViewModel> { get }
   func presentFullList()
-  func presentDetail(for index: Int, in section: Int)
+  func presentDetail(in section: Int, for row: Int)
   func markAsBought()
   func sortBy(_ element: String?)
   func selectDeselectIndex(_ index: Int)
 }
 
 final class BuyListViewModel: BuyListViewModelType {
-  var tableData = [(String, [CellViewModel])]()
 
   struct CellViewModel {
     var name: String
     var quantity: String
     var buyData: String
+    var isSelected: Bool
 
     init(item: Item, isSelected: Bool) {
       self.name = item.name
       self.quantity = String(item.quantity)
       self.buyData = item.buyData
+      self.isSelected = isSelected
     }
   }
 
+  let tableData = MutableObservableArray2D<String, BuyListViewModel.CellViewModel>(Array2D(sections: []))
   private var itemIndexes: [Int] = []
   private var selectedItems = (Set<String>())
   private let coordinator: BuyListCoordinatorType
@@ -57,15 +59,22 @@ final class BuyListViewModel: BuyListViewModelType {
 
 // MARK: - Fetch Data
   func fetchTableData() {
-    tableData.removeAll()
-    var data = createDictionary().map { ($0.key, $0.value) }.sorted(by: { $0.0 < $1.0 })
-    if data.contains(where: {$0.0 == "Uncategorized"}) {
-      let index = data.firstIndex(where: { $0.0 == "Uncategorized" })
-      let uncategorized = data[index!]
-      data.remove(at: index!)
-      data.append(uncategorized)
+    let data = createDictionary().map { ($0.key, $0.value) }.sorted(by: { $0.0 < $1.0 })
+    let sortedData = reOrder(data)
+    let sections = sortedData.map { entry in
+      return Array2D.Section(metadata: entry.0, items: entry.1)
     }
-    tableData = data
+    tableData.replace(with: Array2D(sections: sections))
+  }
+
+  func reOrder(_ array: [(String, [CellViewModel])]) -> [(String, [CellViewModel])] {
+    var data = array
+    guard data.contains(where: {$0.0 == "Uncategorized"}) else { return data }
+    let index = data.firstIndex(where: { $0.0 == "Uncategorized" })
+    let uncategorized = data[index!]
+    data.remove(at: index!)
+    data.append(uncategorized)
+    return data
   }
 
   func createDictionary() -> [String: [CellViewModel]] {
@@ -92,8 +101,8 @@ final class BuyListViewModel: BuyListViewModelType {
     })
   }
 
-  func presentDetail(for index: Int, in section: Int) {
-    let data = tableData[section].1[index]
+  func presentDetail(in section: Int, for row: Int) {
+    let data = tableData.collection.sections[section].items[row]
     let item = getItems.fullItemInfo(for: data.name)
     coordinator.presentDetail(item, completion: {
       self.fetchTableData()
