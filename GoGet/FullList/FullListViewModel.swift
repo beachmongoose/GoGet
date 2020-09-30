@@ -13,12 +13,11 @@ protocol FullListViewModelType {
   var tableData: MutableObservableArray2D<String, FullListViewModel.CellViewModel> { get }
   var tableCategories: [[FullListViewModel.CellViewModel]] { get }
   func presentDetail(for item: Item?)
-  func editItem(in section: Int, at row: Int)
+  func editItem(_ index: IndexPath)
   func selectDeselectIndex(at indexPath: IndexPath)
   func clearIndex()
   func removeItems()
   func sortBy(_ element: String?)
-  func goingBack()
   func clear()
 }
 
@@ -26,12 +25,14 @@ final class FullListViewModel: FullListViewModelType {
 
   struct CellViewModel: Equatable {
     var name: String
+    var id: String?
     var quantity: String
     var buyData: String
     var isSelected: Bool
 
     init(item: Item, isSelected: Bool) {
       self.name = item.name
+      self.id = item.id
       self.quantity = String(item.quantity)
       self.buyData = item.buyData
       self.isSelected = isSelected
@@ -40,8 +41,7 @@ final class FullListViewModel: FullListViewModelType {
 
   var tableCategories = [[CellViewModel]]()
   let tableData = MutableObservableArray2D<String, FullListViewModel.CellViewModel>(Array2D(sections: []))
-  private var selectedItems = (Set<String>())
-
+  private var selectedItems = [String]()
   private let coordinator: FullListCoordinatorType
   private let getItems: GetItemsType
   private let getCategories: GetCategoriesType
@@ -68,7 +68,7 @@ final class FullListViewModel: FullListViewModelType {
     let dictionary = getItems.fetchByCategory("full")
     let formattedDict: [String: [CellViewModel]] = dictionary.mapValues {
       $0.map { item in
-        let isSelected = selectedItems.contains(item.name)
+        let isSelected = selectedItems.contains(item.id)
         return CellViewModel(item: item, isSelected: isSelected)
       }
     }
@@ -108,22 +108,17 @@ final class FullListViewModel: FullListViewModelType {
     let item = tableData.collection.sections[section].items[row]
     return getItems.fullItemInfo(for: item.name.lowercased())
   }
-
-  func goingBack() {
-//    completion()
-  }
 }
 
 // MARK: - Item Handling
 extension FullListViewModel {
 
   func selectDeselectIndex(at indexPath: IndexPath) {
-    let name = tableData.collection.sections[indexPath.section].metadata
-    if selectedItems.contains(name) {
-      selectedItems.remove(at: selectedItems.firstIndex(of: name)!)
+    let itemID = tableData.collection.sections[indexPath.section].items[indexPath.row].id
+    if selectedItems.contains(itemID!) {
+      selectedItems.remove(at: selectedItems.firstIndex(of: itemID!)!)
     } else {
-    selectedItems.insert(name)
-    fetchArrayData()
+      selectedItems.append(itemID!)
     }
   }
 
@@ -134,9 +129,9 @@ extension FullListViewModel {
   func deselect() {
   }
 
-  func editItem(in section: Int, at row: Int) {
-    let item = tableData.collection.sections[section].items[row].name.lowercased()
-    let details = getItems.fullItemInfo(for: item)
+  func editItem(_ index: IndexPath) {
+    let item = tableData.collection.sections[index.section].items[index.row].id
+    let details = getItems.fullItemInfo(for: item!)
     presentDetail(for: details)
   }
 
@@ -148,13 +143,11 @@ extension FullListViewModel {
 
   func removeItems() {
     var allItems = getItems.load()
-    for item in selectedItems {
-      guard !item.isEmpty else { continue }
-      let index = getItems.indexNumber(for: item, in: allItems)
+    for id in selectedItems {
+      let index = getItems.indexNumber(for: id, in: allItems)
       allItems.remove(at: index)
     }
     selectedItems.removeAll()
     getItems.save(allItems)
-    fetchArrayData()
   }
 }

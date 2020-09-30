@@ -9,19 +9,19 @@
 import Foundation
 
 struct Category: Codable, Equatable {
-  var nameId: String
+  var id: String
   var name: String
 }
 
 extension Category {
   init(nameId: String = UUID().uuidString, name: String, date: Date) {
-    self.nameId = nameId
+    self.id = nameId
     self.name = name
   }
 }
 
 extension Category {
   static func == (lhs: Category, rhs: Category) -> Bool {
-    return lhs.nameId == rhs.nameId && lhs.name == rhs.name
+    return lhs.id == rhs.id && lhs.name == rhs.name
   }
 }

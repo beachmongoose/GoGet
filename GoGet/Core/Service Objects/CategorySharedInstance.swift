@@ -27,7 +27,7 @@ class CategoryStore: CategoryStoreType {
   func getDictionary() -> [String: Category] {
     let categories = getCategories.load()
     let data = categories.reduce(into: [:]) { dict, category in
-      dict[category.nameId] = category
+      dict[category.id] = category
     }
     return data
   }

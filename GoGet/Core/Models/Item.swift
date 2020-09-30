@@ -8,12 +8,30 @@
 
 import Foundation
 
+enum BoughtStatus {
+  case bought(Date)
+  case notBought
+}
+
+
 struct Item: Codable {
   var name: String
   var quantity: Int
-  var dateBought: Date
+  var boughtStatus: BoughtStatus
   var duration: Int
-  var bought: Bool
-  var dateAdded: Date
+  var dateAdded: Date?
+  var id: String
   var categoryID: String?
+}
+
+extension Item {
+  init(name: String, quantity: Int, dateBought: Date?, duration: Int, bought: Bool, id: String = UUID().uuidString, dateBought: Date?) {
+  self.name = name
+    
+  
+  self.quantity = quantity
+  self.duration = duration
+  self.bought = bought
+  self.id = id
+  }
 }

@@ -12,6 +12,7 @@ import ReactiveKit
 
 struct DetailViewItem {
   var name: String
+  var id: String?
   var boughtBool: Bool
   var date: String
   var quantity: String
@@ -22,33 +23,36 @@ struct DetailViewItem {
 protocol DetailViewModelType {
   func convertedDate(_ date: Date) -> String
   func convertPickerDate(_ picked: UIDatePicker) -> String
-  func saveItem(name: String?,
-                bought: Int,
-                date: String?,
-                quantity: String?,
-                interval: String?,
-                category: String?
-  )
+  func saveItem()
+  var item: Item? { get }
   var itemData: DetailViewItem! { get }
   func isDuplicate(_ entry: String?) -> Bool
   func fetchDropDownList() -> [String]
   func dropDownIndex(for category: String) -> Int
   var itemName: Property<String?> { get }
-  var item: Item? { get }
+  var itemQuantity: Property<String?> { get }
+  var dateBought: Property<String?> { get }
+  var duration: Property<String?> { get }
+  var bought: Property<Int?> { get }
+  var categoryName: Property<CategoryID?> { get }
 }
 
 final class DetailViewModel: DetailViewModelType {
-
-  var item: Item?
 
   weak var viewController: DetailViewController?
   private let coordinator: DetailViewCoordinatorType
   private let getItems: GetItemsType
   private let getCategories: GetCategoriesType
-  private var sortType: SortType = .added
-  let itemName = Property<String?>(nil)
+  var item: Item?
   var itemData: DetailViewItem!
   var categories = [Category]()
+  private var sortType: SortType = .added
+  let itemName = Property<String?>(nil)
+  var itemQuantity = Property<String?>(nil)
+  var dateBought = Property<String?>(nil)
+  var duration = Property<String?>(nil)
+  var bought = Property<Int?>(nil)
+  var categoryName = Property<CategoryID?>(nil)
 
   init(coordinator: DetailViewCoordinatorType,
        getItems: GetItemsType = GetItems(),
@@ -68,9 +72,12 @@ final class DetailViewModel: DetailViewModelType {
       guard item?.bought == true else { return Date() }
       return item?.dateBought ?? Date()
     }
+    
+    
 
     return DetailViewItem(
       name: item?.name ?? "",
+      id: item?.id ?? nil,
       boughtBool: item?.bought ?? false,
       date: convertedDate(date),
       quantity: String(item?.quantity ?? 1),
@@ -79,32 +86,27 @@ final class DetailViewModel: DetailViewModelType {
       )
   }
 
-  func saveItem(name: String?,
-                bought: Int,
-                date: String?,
-                quantity: String?,
-                interval: String?,
-                category: String?) {
-
-    guard let name = name,
-      let quantity = quantity,
-      let date = date,
-      let interval = interval,
-      let category = category else {
-        coordinator.errorMessage("Invalid data.")
-        return
+  func saveItem() {
+    var idString: String {
+      return (self.item == nil) ? newID() : item!.id
     }
 
     let adjustedItem = Item(
-      name: name,
-      quantity: Int(quantity) ?? 1,
-      dateBought: dateFromString(date),
-      duration: Int(interval) ?? 7,
+      name: finalName,
+      quantity: finalQuantity,
+      dateBought: Date
+      dateBought: dateFromString(dateBought.value),
+      duration: Int(duration) ?? 7,
       bought: bought == 0,
       dateAdded: item?.dateAdded ?? Date(),
-      categoryID: getID(for: category)
+      id: idString,
+      categoryID: getID(for: categoryName)
     )
     validate(adjustedItem)
+  }
+
+  func newID() -> String {
+    return UUID().uuidString
   }
 
   func upSert(_ item: Item) {
@@ -133,7 +135,7 @@ final class DetailViewModel: DetailViewModelType {
       return coordinator.errorMessage("No quantity entered.")
     case (let item) where item.duration == 0:
       return coordinator.errorMessage("No duration entered.")
-    case (let item) where item.dateBought > Date():
+    case (let item) where item.dateBought ?? Date() > Date():
       return coordinator.errorMessage("Future date selected.")
     case (let item) where item.name == "":
       return coordinator.errorMessage("No name entered.")
@@ -169,7 +171,7 @@ final class DetailViewModel: DetailViewModelType {
   func futureDateCheck(_ item: Item) -> Bool {
     let calendar = Calendar.autoupdatingCurrent
     let currentDate = calendar.startOfDay(for: Date())
-    let dateBought = calendar.startOfDay(for: item.dateBought)
+    let dateBought = calendar.startOfDay(for: item.dateBought ?? Date())
     return dateBought < currentDate
   }
 
@@ -178,7 +180,7 @@ final class DetailViewModel: DetailViewModelType {
   func getID(for name: String) -> CategoryID? {
     guard name != "" else { return nil }
     for category in categories where name == category.name {
-      return category.nameId
+      return category.id
     }
     return getCategories.createCategory(for: name)
   }
@@ -186,7 +188,7 @@ final class DetailViewModel: DetailViewModelType {
   func getName(for categoryID: String) -> String {
     var name = ""
     let categories = getCategories.load()
-    for category in categories where categoryID == category.nameId {
+    for category in categories where categoryID == category.id {
       name = category.name
     }
     return name
@@ -213,5 +215,27 @@ final class DetailViewModel: DetailViewModelType {
 
   func isDuplicate(_ entry: String?) -> Bool {
     return getCategories.checkIfDuplicate(entry)
+  }
+}
+
+// MARK: - Unwrapped Binds
+extension DetailViewModel {
+  var finalName: String {
+    guard let itemName = itemName.value else {
+      fatalError("Failed to create item, name was nil")
+    }
+    return itemName
+  }
+  var finalQuantity: Int {
+    guard let itemQuantity = itemQuantity.value else {
+      fatalError("Failed to enter quantity, quantity was nil")
+    }
+    return Int(itemQuantity) ?? 1
+  }
+  var finalBoughtDate: Date {
+    guard let dateBought = dateBought.value else {
+      fatalError("Failed to enter date bought, no date found")
+    }
+    
   }
 }

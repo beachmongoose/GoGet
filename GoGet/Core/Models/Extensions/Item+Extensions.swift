@@ -16,7 +16,7 @@ extension Item {
   var timeSinceBuying: Int {
     let calendar = Calendar.autoupdatingCurrent
     let currentDate = calendar.startOfDay(for: Date())
-    let buyDate = calendar.startOfDay(for: dateBought)
+    let buyDate = calendar.startOfDay(for: dateBought ?? Date())
 
     let dayCount = calendar.dateComponents(
       [.day],

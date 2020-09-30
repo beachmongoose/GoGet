@@ -60,6 +60,11 @@ extension DetailViewController {
 
   func textFieldBindings() {
     itemTextField.reactive.text.bind(to: viewModel.itemName)
+    quantityTextField.reactive.text.bind(to: viewModel.itemQuantity)
+    dateTextField.reactive.text.bind(to: viewModel.dateBought)
+    intervalTextField.reactive.text.bind(to: viewModel.duration)
+    boughtBoolButton.reactive.selectedSegmentIndex.bind(to: viewModel.bought)
+    dropDownField.reactive.text.bind(to: viewModel.categoryName)
   }
 }
 
