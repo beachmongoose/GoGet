@@ -23,7 +23,7 @@ protocol GetItemsType {
   func save(_ items: [Item])
   func load() -> [Item]
   func indexNumber(for item: String, in array: [Item]) -> Int
-  func fullItemInfo(for name: String) -> Item
+  func fullItemInfo(for id: String) -> Item
   func fetchByCategory(_ view: String) -> [String: [Item]]
   func isDuplicate(_ name: String) -> Bool
 }
@@ -70,8 +70,7 @@ class GetItems: GetItemsType {
   }
 
   func indexNumber(for item: String, in array: [Item]) -> Int {
-    return array.firstIndex { $0.name.lowercased() == item.lowercased()
-                            } ?? 900
+    return array.firstIndex { $0.id == item } ?? 900
   }
 
   func fetchByCategory(_ view: String) -> [String: [Item]] {
@@ -89,9 +88,9 @@ class GetItems: GetItemsType {
     return tableData
   }
 
-  func fullItemInfo(for name: String) -> Item {
+  func fullItemInfo(for id: String) -> Item {
     let allItems = load()
-    let index = indexNumber(for: name, in: allItems)
+    let index = indexNumber(for: id, in: allItems)
     return allItems[index]
   }
 
@@ -108,13 +107,13 @@ class GetItems: GetItemsType {
   func byDate(_ array: [Item]) -> [Item] {
     let boughtItems = array.filter { $0.bought }
     let unboughtItems = array.filter {!$0.bought}
-    var sortedList = boughtItems.sorted(by: { $0.dateBought < $1.dateBought})
+    var sortedList = boughtItems.sorted(by: { $0.dateBought ?? Date() < $1.dateBought ?? Date()})
     for item in unboughtItems {
       sortedList.insert(item, at: 0)}
     return sortedList
   }
 
   func byAdded(_ array: [Item]) -> [Item] {
-    return array.sorted(by: { $0.dateAdded < $1.dateAdded})
+    return array.sorted(by: { $0.dateAdded ?? Date() < $1.dateAdded ?? Date()})
   }
 }

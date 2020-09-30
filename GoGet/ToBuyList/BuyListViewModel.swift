@@ -15,7 +15,7 @@ protocol BuyListViewModelType {
   func presentDetail(in section: Int, for row: Int)
   func markAsBought()
   func sortBy(_ element: String?)
-  func selectDeselectIndex(_ index: Int)
+  func selectDeselectIndex(_ index: IndexPath)
 }
 
 final class BuyListViewModel: BuyListViewModelType {
@@ -35,7 +35,7 @@ final class BuyListViewModel: BuyListViewModelType {
   }
 
   let tableData = MutableObservableArray2D<String, BuyListViewModel.CellViewModel>(Array2D(sections: []))
-  private var itemIndexes: [Int] = []
+  private var itemIndexes: [IndexPath] = []
   private var selectedItems = (Set<String>())
   private let coordinator: BuyListCoordinatorType
   private let getItems: GetItemsType
@@ -109,7 +109,7 @@ final class BuyListViewModel: BuyListViewModelType {
     })
   }
 
-  func selectDeselectIndex(_ index: Int) {
+  func selectDeselectIndex(_ index: IndexPath) {
     itemIndexes.append(index)
   }
 

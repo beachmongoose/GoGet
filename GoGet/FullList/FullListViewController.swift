@@ -13,6 +13,7 @@ import UIKit
 class FullListViewController: UIViewController {
   @IBOutlet var tableView: UITableView!
   @IBOutlet var sortButton: UIButton!
+  @IBOutlet var navigation: UINavigationBar!
   private let viewModel: FullListViewModelType
   var inDeleteMode = false
 
@@ -24,8 +25,8 @@ class FullListViewController: UIViewController {
     fatalError("init(coder:) has not been implemented")
   }
     override func viewDidLoad() {
-//      longPressDetector()
-//      addNewAndDeleteButtons()
+      longPressDetector()
+      addMenuButton()
       tableView.register(UINib(nibName: "FullListCell", bundle: nil), forCellReuseIdentifier: "FullListCell")
       setupTable()
       observeButtonEvents()
@@ -37,6 +38,7 @@ class FullListViewController: UIViewController {
   }
 }
 
+// MARK: - Populate Table
 extension FullListViewController: UITableViewDelegate {
   func setupTable() {
     let dataSource =
@@ -50,27 +52,38 @@ private func createCell(dataSource: Array2D<String, FullListViewModel.CellViewMo
                         indexPath: IndexPath,
                         tableView: UITableView) -> UITableViewCell {
   guard let cell = tableView.dequeueReusableCell(withIdentifier: "FullListCell",
-                                                 for: indexPath) as? FullListCell else { fatalError("Unable to Dequeue") }
+                                                 for: indexPath) as? FullListCell else {
+                                                 fatalError("Unable to Dequeue") }
         let cellViewModel = dataSource[childAt: indexPath].item
         cell.viewModel = cellViewModel
         return cell
 }
 
-// MARK: - Buttons
-extension FullListViewController: UIGestureRecognizerDelegate {
+// MARK: - Navigation
+extension FullListViewController {
+  override func viewWillLayoutSubviews() {
+    let navigationBar = self.navigation
+    self.view.addSubview(navigation)
 
-  func addNewAndDeleteButtons() {
-    let add = UIBarButtonItem(
-      barButtonSystemItem: .add,
-      target: self,
-      action: #selector(addItem))
-    let delete = UIBarButtonItem(
-      title: "Delete",
+    let navigationItem = UINavigationItem(title: "All Items")
+    let menuButton = UIBarButtonItem(title: "Menu",
+                                     style: .plain,
+                                     target: self,
+                                     action: #selector(menuPrompt))
+    navigationItem.rightBarButtonItem = menuButton
+    navigationBar!.setItems([navigationItem], animated: false)
+  }
+
+  @objc func menuPrompt() {
+  }
+
+  func addMenuButton() {
+    let menu = UIBarButtonItem(
+      title: "Menu",
       style: .plain,
       target: self,
-      action: #selector(massDeleteMode))
-    navigationItem.rightBarButtonItems = [add, delete]
-    navigationItem.leftBarButtonItem = navigationItem.backBarButtonItem
+      action: #selector(menuPrompt))
+    navigationItem.rightBarButtonItem = menu
   }
 
   func addConfirmAndCancelButtons() {
@@ -88,19 +101,15 @@ extension FullListViewController: UIGestureRecognizerDelegate {
 
 }
 // MARK: - User Input
-extension FullListViewController {
+extension FullListViewController: UIGestureRecognizerDelegate {
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
       if !inDeleteMode {
-      viewModel.editItem(in: indexPath.section, at: indexPath.row)
+        viewModel.editItem(indexPath)
       } else {
         viewModel.selectDeselectIndex(at: indexPath)
       self.tableView.reloadData()
       }
-    }
-
-    @objc func addItem() {
-      viewModel.presentDetail(for: nil)
     }
 
   func longPressDetector() {
@@ -110,11 +119,11 @@ extension FullListViewController {
 
   @objc func longPress(longPressGestureRecognizer: UILongPressGestureRecognizer) {
     if longPressGestureRecognizer.state == UIGestureRecognizer.State.began {
+      print("selected")
       let touchPoint = longPressGestureRecognizer.location(in: tableView)
-      viewModel.clearIndex()
       if let selectedItem = tableView.indexPathForRow(at: touchPoint) {
+        changeEditing(to: true)
         viewModel.selectDeselectIndex(at: selectedItem)
-        deletePrompt(selectedItem.row)
       }
     }
   }
@@ -165,18 +174,19 @@ extension FullListViewController {
   override func viewWillAppear(_ animated: Bool) {
     tableView.reloadData()
   }
-
-  override func viewWillDisappear(_ animated: Bool) {
-    viewModel.goingBack()
-  }
+//
+//  override func viewWillDisappear(_ animated: Bool) {
+//    viewModel.goingBack()
+//  }
 
   func changeEditing(to bool: Bool) {
     inDeleteMode = bool
+    viewModel.clearIndex()
     tableView.allowsMultipleSelection = bool
     sortButton.isEnabled.toggle()
     if bool == false {
       longPressDetector()
-      addNewAndDeleteButtons()
+      addMenuButton()
     } else {
       addConfirmAndCancelButtons()
       view.gestureRecognizers?.removeAll()

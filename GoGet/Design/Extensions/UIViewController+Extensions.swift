@@ -65,7 +65,7 @@ extension UIViewController {
   }
 
   func presentMenu(handler: ((UIAlertAction) -> Void)?) {
-    let menu = UIAlertController(title: "Sort by...", message: nil, preferredStyle: .actionSheet)
+    let menu = UIAlertController(title: "Menu", message: nil, preferredStyle: .actionSheet)
     menu.addAction(UIAlertAction(title: "Sort Items", style: .default, handler: handler))
     menu.addAction(UIAlertAction(title: "Sort Category", style: .default, handler: handler))
     menu.addAction(UIAlertAction(title: "Mass Delete", style: .default, handler: handler))

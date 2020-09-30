@@ -63,7 +63,7 @@ class GetCategories: GetCategoriesType {
     var categoryList = load()
     categoryList.append(newCategory)
     save(categoryList)
-    return newCategory.nameId
+    return newCategory.id
   }
 
   func checkIfDuplicate(_ newCategory: String?) -> Bool {
@@ -74,7 +74,7 @@ class GetCategories: GetCategoriesType {
   func updateCategory(_ category: Category, with newName: String) {
     var categories = load()
     for index in 0..<categories.count
-    where categories[index].nameId == category.nameId {
+    where categories[index].id == category.id {
         categories[index].name = newName
       }
     save(categories)

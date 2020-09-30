@@ -12,6 +12,7 @@ import UIKit
 
 class BuyListViewController: UIViewController {
   @IBOutlet var tableView: UITableView!
+  @IBOutlet var navigation: UINavigationBar!
   private let viewModel: BuyListViewModelType
 
   init(viewModel: BuyListViewModelType) {
@@ -43,7 +44,8 @@ extension BuyListViewController: UITableViewDelegate {
                           indexPath: IndexPath,
                           tableView: UITableView) -> UITableViewCell {
     guard let cell = tableView.dequeueReusableCell(withIdentifier: "BuyListCell",
-                                                   for: indexPath) as? BuyListCell else { fatalError("Unable to dequeue") }
+                                                   for: indexPath) as? BuyListCell else {
+                                                   fatalError("Unable to dequeue") }
     let cellViewModel = dataSource[childAt: indexPath].item
     cell.viewModel = cellViewModel
     return cell
@@ -61,7 +63,7 @@ extension BuyListViewController {
     if longPress.state == UIGestureRecognizer.State.began {
       let touchPoint = longPress.location(in: tableView)
       if let selectedItem = tableView.indexPathForRow(at: touchPoint) {
-        viewModel.selectDeselectIndex(selectedItem.row)
+        viewModel.selectDeselectIndex(selectedItem)
         changeStatePrompt()
       }
     }
@@ -84,13 +86,21 @@ extension BuyListViewController {
 
 // MARK: - Navigation
 extension BuyListViewController {
-    func setUpNavButton() {
-      let fullList = UIBarButtonItem(
-        barButtonSystemItem: .organize,
-        target: self,
-        action: #selector(presentFullList))
-      navigationItem.rightBarButtonItem = fullList
-    }
+  override func viewWillLayoutSubviews() {
+    let navigationBar = self.navigation
+    self.view.addSubview(navigation)
+
+    let navigationItem = UINavigationItem(title: "GoGet")
+    let menuButton = UIBarButtonItem(title: "Menu",
+                                     style: .plain,
+                                     target: self,
+                                     action: #selector(menuPrompt))
+    navigationItem.rightBarButtonItem = menuButton
+    navigationBar!.setItems([navigationItem], animated: false)
+  }
+
+  @objc func menuPrompt() {
+  }
 }
 
   // MARK: - Sorting
