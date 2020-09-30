@@ -118,8 +118,7 @@ final class BuyListViewModel: BuyListViewModelType {
     for item in selectedItems {
       var currentItem = getItems.fullItemInfo(for: item)
       let itemIndex = getItems.indexNumber(for: currentItem.name, in: allItems)
-      currentItem.bought = true
-      currentItem.dateBought = Date()
+      currentItem.boughtStatus = .bought(Date())
       allItems[itemIndex] = currentItem
     }
     getItems.save(allItems)

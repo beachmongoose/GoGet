@@ -20,6 +20,7 @@ class DetailViewController: UIViewController {
   @IBOutlet var dropDownField: DropDown!
   private let getItems: GetItemsType = GetItems()
   private let viewModel: DetailViewModelType
+  private var category = ""
 
   init(viewModel: DetailViewModelType) {
     self.viewModel = viewModel
@@ -79,16 +80,7 @@ extension DetailViewController {
   }
 
   @objc func saveItem() {
-    let categoryText = (dropDownField.text == "--Select--") ? "" : dropDownField.text
-
-    viewModel.saveItem(
-      name: itemTextField.text,
-      bought: boughtBoolButton.selectedSegmentIndex,
-      date: dateTextField.text,
-      quantity: quantityTextField.text,
-      interval: intervalTextField.text,
-      category: categoryText
-    )
+    viewModel.saveItem()
   }
 }
 
@@ -152,9 +144,10 @@ extension DetailViewController {
 
 extension DetailViewController: UITabBarControllerDelegate {
   override func viewWillLayoutSubviews() {
+    let title: String = (viewModel.item == nil) ? "New Item" : "Item Details"
     let navigationBar = self.navigation
     self.view.addSubview(navigation)
-    let navigationItem = UINavigationItem(title: "Navigation Bar")
+    let navigationItem = UINavigationItem(title: title)
     let saveButton = UIBarButtonItem(title: "Save",
                                      style: .plain,
                                      target: self,
