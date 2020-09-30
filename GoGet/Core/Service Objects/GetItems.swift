@@ -58,7 +58,7 @@ class GetItems: GetItemsType {
         let item = try jsonDecoder.decode([Item].self, from: data!)
         loadedItems = item
       } catch {
-        print("Failed to Load")
+        print("Error when loading Items. Failed to Load.")
       }
 
     switch sortType {
@@ -105,9 +105,9 @@ class GetItems: GetItemsType {
   }
 
   func byDate(_ array: [Item]) -> [Item] {
-    let boughtItems = array.filter { $0.bought }
-    let unboughtItems = array.filter {!$0.bought}
-    var sortedList = boughtItems.sorted(by: { $0.dateBought ?? Date() < $1.dateBought ?? Date()})
+    let boughtItems = array.filter { $0.boughtStatus != .notBought}
+    let unboughtItems = array.filter {$0.boughtStatus == .notBought}
+    var sortedList = boughtItems.sorted(by: { $0.dateBought < $1.dateBought })
     for item in unboughtItems {
       sortedList.insert(item, at: 0)}
     return sortedList

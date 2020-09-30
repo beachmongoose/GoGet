@@ -14,6 +14,10 @@
 		9F0340542502CDD400B27BF3 /* DetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F0340532502CDD400B27BF3 /* DetailViewModel.swift */; };
 		9F085BBB250C0D0900682D05 /* UIAlertController+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F085BBA250C0D0900682D05 /* UIAlertController+Extensions.swift */; };
 		9F085BBD250C17DF00682D05 /* SortTypeSharedInstance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F085BBC250C17DF00682D05 /* SortTypeSharedInstance.swift */; };
+		9F2BCAC72525272300E760D1 /* CategoryListViewCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F2BCAC62525272300E760D1 /* CategoryListViewCoordinator.swift */; };
+		9F2BCACA2525272D00E760D1 /* CategoryListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F2BCAC92525272D00E760D1 /* CategoryListViewModel.swift */; };
+		9F2BCACF25252B5600E760D1 /* CategoryListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F2BCACD25252B5600E760D1 /* CategoryListCell.swift */; };
+		9F2BCAD025252B5600E760D1 /* CategoryListCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9F2BCACE25252B5600E760D1 /* CategoryListCell.xib */; };
 		9F34057A24FED00C0035A385 /* Item.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F34057924FED00C0035A385 /* Item.swift */; };
 		9F34058124FED5CF0035A385 /* BuyListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F34057F24FED5CF0035A385 /* BuyListViewController.swift */; };
 		9F34058224FED5CF0035A385 /* BuyListViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9F34058024FED5CF0035A385 /* BuyListViewController.xib */; };
@@ -56,6 +60,10 @@
 		9F0340532502CDD400B27BF3 /* DetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewModel.swift; sourceTree = "<group>"; };
 		9F085BBA250C0D0900682D05 /* UIAlertController+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIAlertController+Extensions.swift"; sourceTree = "<group>"; };
 		9F085BBC250C17DF00682D05 /* SortTypeSharedInstance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SortTypeSharedInstance.swift; sourceTree = "<group>"; };
+		9F2BCAC62525272300E760D1 /* CategoryListViewCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryListViewCoordinator.swift; sourceTree = "<group>"; };
+		9F2BCAC92525272D00E760D1 /* CategoryListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryListViewModel.swift; sourceTree = "<group>"; };
+		9F2BCACD25252B5600E760D1 /* CategoryListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryListCell.swift; sourceTree = "<group>"; };
+		9F2BCACE25252B5600E760D1 /* CategoryListCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CategoryListCell.xib; sourceTree = "<group>"; };
 		9F34057924FED00C0035A385 /* Item.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Item.swift; sourceTree = "<group>"; };
 		9F34057F24FED5CF0035A385 /* BuyListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuyListViewController.swift; sourceTree = "<group>"; };
 		9F34058024FED5CF0035A385 /* BuyListViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = BuyListViewController.xib; sourceTree = "<group>"; };
@@ -153,6 +161,15 @@
 				9FE4BA15250FD77000960506 /* UIViewController+Extensions.swift */,
 			);
 			path = Extensions;
+			sourceTree = "<group>";
+		};
+		9F2BCACC25252B2900E760D1 /* Cells */ = {
+			isa = PBXGroup;
+			children = (
+				9F2BCACD25252B5600E760D1 /* CategoryListCell.swift */,
+				9F2BCACE25252B5600E760D1 /* CategoryListCell.xib */,
+			);
+			path = Cells;
 			sourceTree = "<group>";
 		};
 		9F34057B24FED3A60035A385 /* Models */ = {
@@ -275,8 +292,11 @@
 		9FA4E789251E414100328981 /* CategoryList */ = {
 			isa = PBXGroup;
 			children = (
+				9F2BCACC25252B2900E760D1 /* Cells */,
 				9FA4E78A251E417600328981 /* CategoryListViewController.swift */,
 				9FA4E78B251E417600328981 /* CategoryListViewController.xib */,
+				9F2BCAC62525272300E760D1 /* CategoryListViewCoordinator.swift */,
+				9F2BCAC92525272D00E760D1 /* CategoryListViewModel.swift */,
 			);
 			path = CategoryList;
 			sourceTree = "<group>";
@@ -360,6 +380,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				9F930C0224FEC55F0034C8F7 /* LaunchScreen.storyboard in Resources */,
+				9F2BCAD025252B5600E760D1 /* CategoryListCell.xib in Resources */,
 				9F34059124FED6580035A385 /* DetailViewController.xib in Resources */,
 				9FC28C26251D26A5004A58DF /* TabBarController.xib in Resources */,
 				9F930BFF24FEC55F0034C8F7 /* Assets.xcassets in Resources */,
@@ -437,6 +458,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9F2BCAC72525272300E760D1 /* CategoryListViewCoordinator.swift in Sources */,
 				9F930BF624FEC55E0034C8F7 /* AppDelegate.swift in Sources */,
 				9F0340502502A90F00B27BF3 /* BuyListViewModel.swift in Sources */,
 				9F62A38E2512A92800F5AF63 /* Category.swift in Sources */,
@@ -453,6 +475,7 @@
 				9F62A3942512B43300F5AF63 /* GetCategories.swift in Sources */,
 				9F085BBD250C17DF00682D05 /* SortTypeSharedInstance.swift in Sources */,
 				9F34059024FED6580035A385 /* DetailViewController.swift in Sources */,
+				9F2BCACF25252B5600E760D1 /* CategoryListCell.swift in Sources */,
 				9F0340542502CDD400B27BF3 /* DetailViewModel.swift in Sources */,
 				9F6C705B2515197500C6A3C3 /* CategorySharedInstance.swift in Sources */,
 				9F085BBB250C0D0900682D05 /* UIAlertController+Extensions.swift in Sources */,
@@ -460,6 +483,7 @@
 				9F888C3F250190EB003810D4 /* FullListCoordinator.swift in Sources */,
 				9F97E45625097E3B00823393 /* Item+Extensions.swift in Sources */,
 				9F888C3D25018F79003810D4 /* BuyListCoordinator.swift in Sources */,
+				9F2BCACA2525272D00E760D1 /* CategoryListViewModel.swift in Sources */,
 				9F34058B24FED63E0035A385 /* FullListViewController.swift in Sources */,
 				9F0340522502BF7100B27BF3 /* FullListViewModel.swift in Sources */,
 				9F62A3992512B98500F5AF63 /* Item+UserDefaults.swift in Sources */,

@@ -1,6 +1,7 @@
 disabled_rules:
   - identifier_name
   - function_parameter_count
+  - empty_enum_arguments
 
 excluded:
   - Pods

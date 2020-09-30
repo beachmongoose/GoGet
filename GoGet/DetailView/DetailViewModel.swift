@@ -34,7 +34,7 @@ protocol DetailViewModelType {
   var dateBought: Property<String?> { get }
   var duration: Property<String?> { get }
   var bought: Property<Int?> { get }
-  var categoryName: Property<CategoryID?> { get }
+  var categoryName: Property<String?> { get }
 }
 
 final class DetailViewModel: DetailViewModelType {
@@ -52,7 +52,7 @@ final class DetailViewModel: DetailViewModelType {
   var dateBought = Property<String?>(nil)
   var duration = Property<String?>(nil)
   var bought = Property<Int?>(nil)
-  var categoryName = Property<CategoryID?>(nil)
+  var categoryName = Property<String?>(nil)
 
   init(coordinator: DetailViewCoordinatorType,
        getItems: GetItemsType = GetItems(),
@@ -68,18 +68,16 @@ final class DetailViewModel: DetailViewModelType {
   }
 
   func getDetails() -> DetailViewItem {
-    var date: Date {
-      guard item?.bought == true else { return Date() }
-      return item?.dateBought ?? Date()
-    }
-    
-    
+    var boughtBool: Bool {
+      guard item != nil || item?.boughtStatus != .notBought else { return false }
+      return true
+  }
 
     return DetailViewItem(
       name: item?.name ?? "",
       id: item?.id ?? nil,
-      boughtBool: item?.bought ?? false,
-      date: convertedDate(date),
+      boughtBool: boughtBool,
+      date: convertedDate(item?.dateBought ?? Date()),
       quantity: String(item?.quantity ?? 1),
       interval: String(item?.duration ?? 7),
       category: String(getName(for: item?.categoryID ?? ""))
@@ -93,14 +91,12 @@ final class DetailViewModel: DetailViewModelType {
 
     let adjustedItem = Item(
       name: finalName,
-      quantity: finalQuantity,
-      dateBought: Date
-      dateBought: dateFromString(dateBought.value),
-      duration: Int(duration) ?? 7,
-      bought: bought == 0,
-      dateAdded: item?.dateAdded ?? Date(),
       id: idString,
-      categoryID: getID(for: categoryName)
+      quantity: finalQuantity,
+      duration: finalDuration,
+      boughtStatus: finalBoughtStatus,
+      dateAdded: item?.dateAdded ?? Date(),
+      categoryID: finalCategoryID
     )
     validate(adjustedItem)
   }
@@ -130,12 +126,13 @@ final class DetailViewModel: DetailViewModelType {
   }
 
   func validate(_ item: Item) {
+
     switch item {
     case (let item) where item.quantity == 0:
       return coordinator.errorMessage("No quantity entered.")
     case (let item) where item.duration == 0:
       return coordinator.errorMessage("No duration entered.")
-    case (let item) where item.dateBought ?? Date() > Date():
+    case ( _) where item.dateBought > Date():
       return coordinator.errorMessage("Future date selected.")
     case (let item) where item.name == "":
       return coordinator.errorMessage("No name entered.")
@@ -171,20 +168,11 @@ final class DetailViewModel: DetailViewModelType {
   func futureDateCheck(_ item: Item) -> Bool {
     let calendar = Calendar.autoupdatingCurrent
     let currentDate = calendar.startOfDay(for: Date())
-    let dateBought = calendar.startOfDay(for: item.dateBought ?? Date())
+    let dateBought = calendar.startOfDay(for: item.dateBought)
     return dateBought < currentDate
   }
 
 // MARK: - Categories
-
-  func getID(for name: String) -> CategoryID? {
-    guard name != "" else { return nil }
-    for category in categories where name == category.name {
-      return category.id
-    }
-    return getCategories.createCategory(for: name)
-  }
-
   func getName(for categoryID: String) -> String {
     var name = ""
     let categories = getCategories.load()
@@ -192,6 +180,14 @@ final class DetailViewModel: DetailViewModelType {
       name = category.name
     }
     return name
+  }
+
+  func getCategoryID(for name: String) -> String? {
+    guard name != "--Select--" && name != "" else { return nil }
+    for category in categories where name == category.name {
+      return category.id
+    }
+    return getCategories.createCategory(for: name)
   }
 
   func fetchCategoryData() {
@@ -212,7 +208,6 @@ final class DetailViewModel: DetailViewModelType {
     let list = fetchDropDownList()
     return list.firstIndex(where: {$0.lowercased() == category}) ?? 0
   }
-
   func isDuplicate(_ entry: String?) -> Bool {
     return getCategories.checkIfDuplicate(entry)
   }
@@ -226,16 +221,37 @@ extension DetailViewModel {
     }
     return itemName
   }
+
   var finalQuantity: Int {
     guard let itemQuantity = itemQuantity.value else {
-      fatalError("Failed to enter quantity, quantity was nil")
+      fatalError("Failed to create item, quantity was nil")
     }
     return Int(itemQuantity) ?? 1
   }
-  var finalBoughtDate: Date {
-    guard let dateBought = dateBought.value else {
-      fatalError("Failed to enter date bought, no date found")
+
+  var finalDuration: Int {
+    guard let duration = duration.value else {
+      fatalError("Failed to create item, duration was nil")
     }
-    
+    return Int(duration) ?? 7
+  }
+
+  var finalBoughtStatus: BoughtStatus {
+    guard let bought = bought.value else {
+      fatalError("Failed to create item, no bought status.")
+    }
+    guard let dateBought = dateBought.value else {
+      fatalError("Failed to create item, no date bought selected")
+    }
+    guard bought == 1 else { return .notBought }
+    let date = dateFromString(dateBought)
+    return .bought(date)
+    }
+
+  var finalCategoryID: String? {
+    guard let categoryName = categoryName.value else {
+      fatalError("Failed to create Item, could not parse Category")
+    }
+    return getCategoryID(for: categoryName)
   }
 }
