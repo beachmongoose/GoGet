@@ -10,7 +10,7 @@ import UIKit
 
 class CategoryListCell: UITableViewCell {
   @IBOutlet var nameLabel: UILabel!
-  var viewModel: String? {
+  var viewModel: CategoryListViewModel.CellViewModel? {
     didSet { setupCell() }
   }
 }
@@ -19,6 +19,6 @@ extension CategoryListCell {
   func setupCell() {
     guard let viewModel = viewModel else { return }
     selectionStyle = .none
-    nameLabel.text = viewModel
+    nameLabel.text = viewModel.name
   }
 }

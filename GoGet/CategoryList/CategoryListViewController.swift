@@ -16,11 +16,11 @@ class CategoryListViewController: UIViewController {
     self.viewModel = viewModel
     super.init(nibName: nil, bundle: nil)
   }
-
   required init?(coder: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }
   override func viewDidLoad() {
+    tableView.register(UINib(nibName: "CategoryListCell", bundle: nil), forCellReuseIdentifier: "CategoryListCell")
     setupTable()
         super.viewDidLoad()
     }
@@ -28,17 +28,14 @@ class CategoryListViewController: UIViewController {
 
 extension CategoryListViewController: UITableViewDelegate {
   func setupTable() {
-    let dataSource = SectionedTableViewBinderDataSource<String>(createCell: createCell)
-    viewModel.tableData.bind(to: tableView, using: dataSoruce)
-    tableView.delegate = self
-  }
-}
-
-private func createCell(dataSource: Array<String>) -> UITableViewCell {
-  guard let cell = tableView.dequeueReusableCell(withIdentifier: "CategoryListCell", for: indexPath) as? CategoryListCell else {
-    fatalError("Unable to Dequeue Category List Cell") }
-  let cellModel = dataSource(childAt: indexPath)
-  cell.viewModel = cellModel
-  return cell
+    viewModel.tableData.bind(to: tableView) { dataSource, indexPath, tableView in
+      guard let cell = tableView.dequeueReusableCell(withIdentifier: "CategoryListCell",
+                                                     for: indexPath) as? CategoryListCell else {
+        fatalError("Failed to populate Category Table")
+      }
+      let viewModel = dataSource[indexPath.row]
+      cell.viewModel = viewModel
+      return cell
+    }
   }
 }

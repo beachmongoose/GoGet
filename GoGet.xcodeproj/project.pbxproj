@@ -12,7 +12,6 @@
 		9F0340502502A90F00B27BF3 /* BuyListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F03404F2502A90F00B27BF3 /* BuyListViewModel.swift */; };
 		9F0340522502BF7100B27BF3 /* FullListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F0340512502BF7100B27BF3 /* FullListViewModel.swift */; };
 		9F0340542502CDD400B27BF3 /* DetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F0340532502CDD400B27BF3 /* DetailViewModel.swift */; };
-		9F085BBB250C0D0900682D05 /* UIAlertController+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F085BBA250C0D0900682D05 /* UIAlertController+Extensions.swift */; };
 		9F085BBD250C17DF00682D05 /* SortTypeSharedInstance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F085BBC250C17DF00682D05 /* SortTypeSharedInstance.swift */; };
 		9F2BCAC72525272300E760D1 /* CategoryListViewCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F2BCAC62525272300E760D1 /* CategoryListViewCoordinator.swift */; };
 		9F2BCACA2525272D00E760D1 /* CategoryListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F2BCAC92525272D00E760D1 /* CategoryListViewModel.swift */; };
@@ -58,7 +57,6 @@
 		9F03404F2502A90F00B27BF3 /* BuyListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuyListViewModel.swift; sourceTree = "<group>"; };
 		9F0340512502BF7100B27BF3 /* FullListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FullListViewModel.swift; sourceTree = "<group>"; };
 		9F0340532502CDD400B27BF3 /* DetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewModel.swift; sourceTree = "<group>"; };
-		9F085BBA250C0D0900682D05 /* UIAlertController+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIAlertController+Extensions.swift"; sourceTree = "<group>"; };
 		9F085BBC250C17DF00682D05 /* SortTypeSharedInstance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SortTypeSharedInstance.swift; sourceTree = "<group>"; };
 		9F2BCAC62525272300E760D1 /* CategoryListViewCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryListViewCoordinator.swift; sourceTree = "<group>"; };
 		9F2BCAC92525272D00E760D1 /* CategoryListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryListViewModel.swift; sourceTree = "<group>"; };
@@ -157,7 +155,6 @@
 		9F085BB9250C0CF800682D05 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
-				9F085BBA250C0D0900682D05 /* UIAlertController+Extensions.swift */,
 				9FE4BA15250FD77000960506 /* UIViewController+Extensions.swift */,
 			);
 			path = Extensions;
@@ -478,7 +475,6 @@
 				9F2BCACF25252B5600E760D1 /* CategoryListCell.swift in Sources */,
 				9F0340542502CDD400B27BF3 /* DetailViewModel.swift in Sources */,
 				9F6C705B2515197500C6A3C3 /* CategorySharedInstance.swift in Sources */,
-				9F085BBB250C0D0900682D05 /* UIAlertController+Extensions.swift in Sources */,
 				9FAF69B62522793100E10B41 /* SectionTableViewBinder.swift in Sources */,
 				9F888C3F250190EB003810D4 /* FullListCoordinator.swift in Sources */,
 				9F97E45625097E3B00823393 /* Item+Extensions.swift in Sources */,

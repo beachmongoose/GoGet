@@ -21,8 +21,7 @@ public final class SectionedTableViewBinderDataSource<Data>: TableViewBinderData
 //
 // - createCell: A closure that creates cell for a given table view and configures it with the given data
 //  source at the given index path.
-// - sectionIndexTitle: A closure that provides the section index title for the given section. If `nil`, the
-//  section string itself is used as the title
+// - sectionIndexTitle: A closure that provides the section index title for the given section. If `nil`, the section string itself is used as the title
 // - hideSectionIndexTitles: Hides section indices if `true`. Returns `false` by default
 
 public init(

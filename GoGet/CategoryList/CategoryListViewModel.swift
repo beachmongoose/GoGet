@@ -10,27 +10,32 @@ import Bond
 import ReactiveKit
 
 protocol CategoryListViewModelType {
-  var tableData: MutableObservableArray<String> { get }
+  var tableData: MutableObservableArray<CategoryListViewModel.CellViewModel> { get }
 }
 
 final class CategoryListViewModel: CategoryListViewModelType {
-  
-  var tableData = MutableObservableArray<String>(Array([]))
+  struct CellViewModel {
+    var name: String
+    init(category: Category) {
+      self.name = category.name
+    }
+  }
+
+  var tableData = MutableObservableArray<CategoryListViewModel.CellViewModel>([])
+  private var categories: [Category] = []
   private let getCategories: GetCategoriesType
-  private let viewModel: CategoryListViewModelType
-  
+
   init(getCategories: GetCategoriesType, viewModel: CategoryListViewModelType) {
     self.getCategories = getCategories
-    self.viewModel = viewModel
     fetchTableData()
   }
 }
 
 extension CategoryListViewModel {
   func fetchTableData() {
-    let data = getCategories.load()
-    for category in data {
-      tableData.append(category.name)
-    }
+    let categories = getCategories.load()
+    self.categories = categories
+    let cellViewModels = categories.map(CellViewModel.init)
+    tableData.replace(with: cellViewModels)
   }
 }
