@@ -8,7 +8,7 @@
 
 import UIKit
 
-class CategoryListViewController: UIViewController {
+class CategoryViewController: UIViewController {
   @IBOutlet var tableView: UITableView!
   private var viewModel: CategoryListViewModelType
 
@@ -20,13 +20,13 @@ class CategoryListViewController: UIViewController {
     fatalError("init(coder:) has not been implemented")
   }
   override func viewDidLoad() {
+//    setupTable()
     tableView.register(UINib(nibName: "CategoryListCell", bundle: nil), forCellReuseIdentifier: "CategoryListCell")
-    setupTable()
         super.viewDidLoad()
     }
 }
 
-extension CategoryListViewController: UITableViewDelegate {
+extension CategoryViewController: UITableViewDelegate {
   func setupTable() {
     viewModel.tableData.bind(to: tableView) { dataSource, indexPath, tableView in
       guard let cell = tableView.dequeueReusableCell(withIdentifier: "CategoryListCell",
