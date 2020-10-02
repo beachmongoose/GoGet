@@ -10,7 +10,7 @@ import UIKit
 import iOSDropDown
 import Foundation
 
-class DetailViewController: UIViewController {
+class DetailViewController: UIViewController, UIPopoverPresentationControllerDelegate {
   @IBOutlet var navigation: UINavigationBar!
   @IBOutlet var itemTextField: UITextField!
   @IBOutlet var quantityTextField: UITextField!
@@ -18,6 +18,7 @@ class DetailViewController: UIViewController {
   @IBOutlet var intervalTextField: UITextField!
   @IBOutlet var boughtBoolButton: UISegmentedControl!
   @IBOutlet var dropDownField: DropDown!
+  @IBOutlet var categoryButton: UIButton!
   private let getItems: GetItemsType = GetItems()
   private let viewModel: DetailViewModelType
   private var category = ""
@@ -138,6 +139,22 @@ extension DetailViewController {
     if viewModel.isDuplicate(category) { presentError(message: "Category already exists")}
     dropDownField.text = category
   }
+
+  @IBAction func openCategories(_ sender: UIButton) {
+    viewModel.presentPopover(sender: sender)
+  }
+
+  func adaptivePresentationStyle(for controller: UIPresentationController) -> UIModalPresentationStyle {
+  return .none
+  }
+
+  func popoverPresentationControllerDidDismissPopover(_ popoverPresentationController: UIPopoverPresentationController) {
+  }
+
+  func popoverPresentationControllerShouldDismissPopover(_ popoverPresentationController: UIPopoverPresentationController) -> Bool {
+  return true
+  }
+
 }
 
 // MARK: - Navigation

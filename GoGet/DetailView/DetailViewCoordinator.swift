@@ -6,6 +6,8 @@
 //  Copyright © 2020 Maggie Maldjian. All rights reserved.
 //
 
+import Bond
+import ReactiveKit
 import UIKit
 
 protocol DetailViewCoordinatorType {
@@ -13,6 +15,7 @@ protocol DetailViewCoordinatorType {
   func errorMessage(_ message: String)
   func confirmSave()
   func dismissDetail(action: UIAlertAction)
+  func presentPopover(sender: UIButton, dataSource: [Category])
 }
 
 class DetailViewCoordinator: DetailViewCoordinatorType {
@@ -29,6 +32,20 @@ class DetailViewCoordinator: DetailViewCoordinatorType {
 
 func dismissDetail(action: UIAlertAction) {
   viewController?.tabBarController?.selectedIndex = 0
+  }
+
+  func presentPopover(sender: UIButton, dataSource: [Category]) {
+    guard let viewController = viewController else { return }
+    let buttonFrame = sender.frame
+
+    let categoryController = CategoryViewCoordinator().start(dataSource: dataSource)
+    categoryController.modalPresentationStyle = .popover
+    if let presentationController = categoryController.popoverPresentationController {
+      presentationController.sourceView = viewController.view
+      presentationController.sourceRect = buttonFrame
+      presentationController.delegate = viewController.self
+      viewController.present(categoryController, animated: true, completion: nil)
+    }
   }
 
 }

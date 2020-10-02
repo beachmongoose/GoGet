@@ -5,10 +5,9 @@
 //  Created by Maggie Maldjian on 9/4/20.
 //  Copyright © 2020 Maggie Maldjian. All rights reserved.
 //
-import Foundation
-import UIKit
 import Bond
 import ReactiveKit
+import UIKit
 
 struct DetailViewItem {
   var name: String
@@ -24,11 +23,13 @@ protocol DetailViewModelType {
   func convertedDate(_ date: Date) -> String
   func convertPickerDate(_ picked: UIDatePicker) -> String
   func saveItem()
-  var item: Item? { get }
-  var itemData: DetailViewItem! { get }
   func isDuplicate(_ entry: String?) -> Bool
   func fetchDropDownList() -> [String]
   func dropDownIndex(for category: String) -> Int
+  func presentPopover(sender: UIButton)
+
+  var item: Item? { get }
+  var itemData: DetailViewItem! { get }
   var itemName: Property<String?> { get }
   var itemQuantity: Property<String?> { get }
   var dateBought: Property<String?> { get }
@@ -210,6 +211,12 @@ final class DetailViewModel: DetailViewModelType {
   }
   func isDuplicate(_ entry: String?) -> Bool {
     return getCategories.checkIfDuplicate(entry)
+  }
+}
+
+extension DetailViewModel {
+  func presentPopover(sender: UIButton) {
+    coordinator.presentPopover(sender: sender, dataSource: getCategories.load())
   }
 }
 
