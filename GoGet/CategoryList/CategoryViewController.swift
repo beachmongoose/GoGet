@@ -20,7 +20,7 @@ class CategoryViewController: UIViewController {
     fatalError("init(coder:) has not been implemented")
   }
   override func viewDidLoad() {
-//    setupTable()
+    setupTable()
     tableView.register(UINib(nibName: "CategoryListCell", bundle: nil), forCellReuseIdentifier: "CategoryListCell")
         super.viewDidLoad()
     }
@@ -37,5 +37,22 @@ extension CategoryViewController: UITableViewDelegate {
       cell.viewModel = viewModel
       return cell
     }
+  }
+}
+
+extension CategoryViewController: UIGestureRecognizerDelegate {
+  func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    if viewModel.tableData[indexPath.row].name != "--Select--" {
+        self.dismiss(animated: true, completion: nil)
+    } else {
+      viewModel.changeSelectedIndex(to: indexPath.row)
+      self.dismiss(animated: true, completion: nil)
+    }
+  }
+
+  func changeButtonName(action: UIAlertAction, category: String?) {
+    guard category != nil || category != "--Select--" else { presentError(message: "Name not entered.")
+      return }
+    if viewModel.isDuplicate(category!) { presentError(message: "Category already exists")}
   }
 }

@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import iOSDropDown
 import Foundation
 
 class DetailViewController: UIViewController, UIPopoverPresentationControllerDelegate {
@@ -17,7 +16,6 @@ class DetailViewController: UIViewController, UIPopoverPresentationControllerDel
   @IBOutlet var dateTextField: UITextField!
   @IBOutlet var intervalTextField: UITextField!
   @IBOutlet var boughtBoolButton: UISegmentedControl!
-  @IBOutlet var dropDownField: DropDown!
   @IBOutlet var categoryButton: UIButton!
   private let getItems: GetItemsType = GetItems()
   private let viewModel: DetailViewModelType
@@ -46,18 +44,18 @@ class DetailViewController: UIViewController, UIPopoverPresentationControllerDel
 extension DetailViewController {
   func populateTextFields() {
     guard let item = viewModel.itemData else { return }
+    let category = (item.category != "") ? item.category : "--Select--"
     itemTextField.text = item.name
     quantityTextField.text = item.quantity
     dateTextField.text = item.date
     intervalTextField.text = item.interval
     boughtBoolButton.selectedSegmentIndex = item.boughtBool ? 0 : 1
-    dropDownField.text = (item.category.isEmpty) ? "--Select--" : item.category
-    buttonChanged(self)
+    categoryButton.setTitle(category, for: .normal)
   }
 
   func dropDownMenu() {
-    dropDownField.optionArray = viewModel.fetchDropDownList()
-    dropDownField.selectedRowColor = UIColor.white
+//    dropDownField.optionArray = viewModel.fetchDropDownList()
+//    dropDownField.selectedRowColor = UIColor.white
   }
 
   func textFieldBindings() {
@@ -66,7 +64,7 @@ extension DetailViewController {
     dateTextField.reactive.text.bind(to: viewModel.dateBought)
     intervalTextField.reactive.text.bind(to: viewModel.duration)
     boughtBoolButton.reactive.selectedSegmentIndex.bind(to: viewModel.bought)
-    dropDownField.reactive.text.bind(to: viewModel.categoryName)
+    
   }
 }
 
@@ -129,16 +127,16 @@ extension DetailViewController {
 // MARK: - Category
 extension DetailViewController {
 
-  @IBAction func addCategory(_ sender: Any) {
-    addCategory(handler: populateCategoryField)
-  }
+//  @IBAction func addCategory(_ sender: Any) {
+//    addCategory(handler: populateCategoryField)
+//  }
 
-  func populateCategoryField(action: UIAlertAction, category: String?) {
-    guard category != nil || category != "--Select--" else { presentError(message: "Name not entered")
-      return }
-    if viewModel.isDuplicate(category) { presentError(message: "Category already exists")}
-    dropDownField.text = category
-  }
+//  func populateCategoryField(action: UIAlertAction, category: String?) {
+//    guard category != nil || category != "--Select--" else { presentError(message: "Name not entered")
+//      return }
+//    if viewModel.isDuplicate(category) { presentError(message: "Category already exists")}
+////    dropDownField.text = category
+//  }
 
   @IBAction func openCategories(_ sender: UIButton) {
     viewModel.presentPopover(sender: sender)

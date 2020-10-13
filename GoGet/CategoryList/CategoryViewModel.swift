@@ -13,6 +13,8 @@ typealias CategoryCell = CategoryViewModel.CellViewModel
 
 protocol CategoryListViewModelType {
   var tableData: MutableObservableArray<CategoryCell> { get }
+  func isDuplicate(_ input: String) -> Bool
+  func changeSelectedIndex(to index: Int)
 }
 
 final class CategoryViewModel: CategoryListViewModelType {
@@ -24,25 +26,36 @@ final class CategoryViewModel: CategoryListViewModelType {
   }
 
   var tableData = MutableObservableArray<CategoryCell>([])
-  private var categories: [Category] = []
+  private var categories: [Category]
+  var selectedIndex: Property<Int?>
   private let coordinator: CategoryViewCoordinatorType
 
-  init(coordinator: CategoryViewCoordinatorType, categories: [Category]) {
+  init(coordinator: CategoryViewCoordinatorType, selectedIndex: Property<Int?>, categories: [Category]) {
     self.coordinator = coordinator
+    self.selectedIndex = selectedIndex
+    self.categories = categories
     fetchTableData()
   }
 }
 
 extension CategoryViewModel {
-//  func fetchTableData() {
-//    let categories = getCategories.load()
-//    self.categories = categories
-//    let cellViewModels = categories.map(CellViewModel.init)
-//    tableData.replace(with: cellViewModels)
-//  }
 
   func fetchTableData() {
-    let data = (!categories.isEmpty) ? ([]) : categories.map(CellViewModel.init)
-    tableData.replace(with: data)
+//    let createNew = CellViewModel(category: Category(id: "n/a", name: "--Select--", date: Date()))
+    let categoryList = (categories.isEmpty) ? ([]) : categories.map(CellViewModel.init)
+//    categoryList.insert(createNew, at: 0)
+    tableData.replace(with: categoryList)
   }
+
+  func isDuplicate(_ input: String) -> Bool {
+    for category in categories where category.name == input {
+      return true
+    }
+    return false
+  }
+
+  func changeSelectedIndex(to index: Int) {
+    selectedIndex.value = index
+  }
+
 }

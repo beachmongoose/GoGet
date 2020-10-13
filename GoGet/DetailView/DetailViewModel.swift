@@ -23,9 +23,6 @@ protocol DetailViewModelType {
   func convertedDate(_ date: Date) -> String
   func convertPickerDate(_ picked: UIDatePicker) -> String
   func saveItem()
-  func isDuplicate(_ entry: String?) -> Bool
-  func fetchDropDownList() -> [String]
-  func dropDownIndex(for category: String) -> Int
   func presentPopover(sender: UIButton)
 
   var item: Item? { get }
@@ -39,21 +36,24 @@ protocol DetailViewModelType {
 }
 
 final class DetailViewModel: DetailViewModelType {
+  
+  var item: Item?
+  var itemData: DetailViewItem!
 
-  weak var viewController: DetailViewController?
+  let selectedCategoryIndex = Property<Int?>(nil)
+  var selectedCategory: Category?
+  var categories: [Category] = []
+  let itemName = Property<String?>(nil)
+  let itemQuantity = Property<String?>(nil)
+  let dateBought = Property<String?>(nil)
+  let duration = Property<String?>(nil)
+  let bought = Property<Int?>(nil)
+  let categoryName = Property<String?>(nil)
+
+  private var sortType: SortType = .added
   private let coordinator: DetailViewCoordinatorType
   private let getItems: GetItemsType
   private let getCategories: GetCategoriesType
-  var item: Item?
-  var itemData: DetailViewItem!
-  var categories = [Category]()
-  private var sortType: SortType = .added
-  let itemName = Property<String?>(nil)
-  var itemQuantity = Property<String?>(nil)
-  var dateBought = Property<String?>(nil)
-  var duration = Property<String?>(nil)
-  var bought = Property<Int?>(nil)
-  var categoryName = Property<String?>(nil)
 
   init(coordinator: DetailViewCoordinatorType,
        getItems: GetItemsType = GetItems(),
@@ -66,6 +66,7 @@ final class DetailViewModel: DetailViewModelType {
     self.item = item
     self.itemData = getDetails()
     self.categories = getCategories.load()
+    observeCategorySelection()
   }
 
   func getDetails() -> DetailViewItem {
@@ -176,47 +177,33 @@ final class DetailViewModel: DetailViewModelType {
 // MARK: - Categories
   func getName(for categoryID: String) -> String {
     var name = ""
-    let categories = getCategories.load()
     for category in categories where categoryID == category.id {
       name = category.name
     }
     return name
   }
 
-  func getCategoryID(for name: String) -> String? {
-    guard name != "--Select--" && name != "" else { return nil }
-    for category in categories where name == category.name {
-      return category.id
-    }
-    return getCategories.createCategory(for: name)
-  }
+//  func getCategoryID(for name: String) -> String? {
+//    guard name != "--Select--" && name != "" else { return nil }
+//    for category in categories where name == category.name {
+//      return category.id
+//    }
+//    return getCategories.createCategory(for: name)
+//  }
 
   func fetchCategoryData() {
     categories = getCategories.load()
-  }
-
-  func fetchDropDownList() -> [String] {
-    var dropDownList = categories.reduce(into: [String]()) { array, category in
-      array.append(category.name)
-    }
-    dropDownList.insert("--Select--", at: 0)
-    dropDownList.append("--Add New--")
-    return dropDownList
-  }
-
-  func dropDownIndex(for category: String) -> Int {
-    guard category != "" else { return 0 }
-    let list = fetchDropDownList()
-    return list.firstIndex(where: {$0.lowercased() == category}) ?? 0
-  }
-  func isDuplicate(_ entry: String?) -> Bool {
-    return getCategories.checkIfDuplicate(entry)
   }
 }
 
 extension DetailViewModel {
   func presentPopover(sender: UIButton) {
-    coordinator.presentPopover(sender: sender, dataSource: getCategories.load())
+    coordinator.presentPopover(sender: sender, dataSource: categories, selectedIndex: selectedCategoryIndex)
+  }
+  func observeCategorySelection() {
+    selectedCategoryIndex.observeNext { [self] index in
+      selectedCategory = categories[index!]
+    }
   }
 }
 
@@ -256,9 +243,6 @@ extension DetailViewModel {
     }
 
   var finalCategoryID: String? {
-    guard let categoryName = categoryName.value else {
-      fatalError("Failed to create Item, could not parse Category")
-    }
-    return getCategoryID(for: categoryName)
+    return (selectedCategory != nil) ? nil : selectedCategory?.id
   }
 }
