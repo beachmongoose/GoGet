@@ -11,12 +11,14 @@ import Foundation
 struct Category: Codable, Equatable {
   var id: String
   var name: String
+  var date: Date
 }
 
 extension Category {
   init(nameId: String = UUID().uuidString, name: String, date: Date) {
     self.id = nameId
     self.name = name
+    self.date = date
   }
 }
 
