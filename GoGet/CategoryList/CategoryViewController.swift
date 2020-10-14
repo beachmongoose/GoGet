@@ -26,7 +26,7 @@ class CategoryViewController: UIViewController {
     }
 }
 
-extension CategoryViewController: UITableViewDelegate {
+extension CategoryViewController: UITableViewDelegate, UIGestureRecognizerDelegate {
   func setupTable() {
     viewModel.tableData.bind(to: tableView) { dataSource, indexPath, tableView in
       guard let cell = tableView.dequeueReusableCell(withIdentifier: "CategoryListCell",
@@ -38,21 +38,28 @@ extension CategoryViewController: UITableViewDelegate {
       return cell
     }
   }
-}
-
-extension CategoryViewController: UIGestureRecognizerDelegate {
   func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-    if viewModel.tableData[indexPath.row].name != "--Select--" {
-        self.dismiss(animated: true, completion: nil)
-    } else {
+//    if viewModel.tableData[indexPath.row].name != "--Select--" {
+//        self.dismiss(animated: true, completion: nil)
+//    } else {
       viewModel.changeSelectedIndex(to: indexPath.row)
       self.dismiss(animated: true, completion: nil)
-    }
+//    }
+  }
+}
+
+extension CategoryViewController {
+
+  @IBAction func createNew(_ sender: Any) {
+    addCategory(handler: checkName)
   }
 
-  func changeButtonName(action: UIAlertAction, category: String?) {
+  func checkName(action: UIAlertAction, category: String?) {
     guard category != nil || category != "--Select--" else { presentError(message: "Name not entered.")
       return }
     if viewModel.isDuplicate(category!) { presentError(message: "Category already exists")}
+    let index = viewModel.createNewCategory(for: category!)
+    viewModel.changeSelectedIndex(to: index)
+    self.dismiss(animated: true, completion: nil)
   }
 }

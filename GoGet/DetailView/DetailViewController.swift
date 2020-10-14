@@ -19,7 +19,6 @@ class DetailViewController: UIViewController, UIPopoverPresentationControllerDel
   @IBOutlet var categoryButton: UIButton!
   private let getItems: GetItemsType = GetItems()
   private let viewModel: DetailViewModelType
-  private var category = ""
 
   init(viewModel: DetailViewModelType) {
     self.viewModel = viewModel
@@ -35,7 +34,6 @@ class DetailViewController: UIViewController, UIPopoverPresentationControllerDel
       populateTextFields()
       addDatePicker()
       addSaveButton()
-      dropDownMenu()
       super.viewDidLoad()
     }
 }
@@ -53,18 +51,13 @@ extension DetailViewController {
     categoryButton.setTitle(category, for: .normal)
   }
 
-  func dropDownMenu() {
-//    dropDownField.optionArray = viewModel.fetchDropDownList()
-//    dropDownField.selectedRowColor = UIColor.white
-  }
-
   func textFieldBindings() {
     itemTextField.reactive.text.bind(to: viewModel.itemName)
     quantityTextField.reactive.text.bind(to: viewModel.itemQuantity)
     dateTextField.reactive.text.bind(to: viewModel.dateBought)
     intervalTextField.reactive.text.bind(to: viewModel.duration)
     boughtBoolButton.reactive.selectedSegmentIndex.bind(to: viewModel.bought)
-    
+
   }
 }
 
@@ -135,7 +128,7 @@ extension DetailViewController {
 //    guard category != nil || category != "--Select--" else { presentError(message: "Name not entered")
 //      return }
 //    if viewModel.isDuplicate(category) { presentError(message: "Category already exists")}
-////    dropDownField.text = category
+//   dropDownField.text = category
 //  }
 
   @IBAction func openCategories(_ sender: UIButton) {
@@ -146,10 +139,12 @@ extension DetailViewController {
   return .none
   }
 
-  func popoverPresentationControllerDidDismissPopover(_ popoverPresentationController: UIPopoverPresentationController) {
+  func popoverPresentationControllerDidDismissPopover(
+    _ popoverPresentationController: UIPopoverPresentationController) {
   }
 
-  func popoverPresentationControllerShouldDismissPopover(_ popoverPresentationController: UIPopoverPresentationController) -> Bool {
+  func popoverPresentationControllerShouldDismissPopover(
+    _ popoverPresentationController: UIPopoverPresentationController) -> Bool {
   return true
   }
 
