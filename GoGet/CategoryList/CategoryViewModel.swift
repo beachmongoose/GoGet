@@ -15,6 +15,7 @@ protocol CategoryListViewModelType {
   var tableData: MutableObservableArray<CategoryCell> { get }
   func isDuplicate(_ input: String) -> Bool
   func changeSelectedIndex(to index: Int)
+  func createNewCategory(for category: String) -> Int
 }
 
 final class CategoryViewModel: CategoryListViewModelType {
@@ -56,6 +57,12 @@ extension CategoryViewModel {
 
   func changeSelectedIndex(to index: Int) {
     selectedIndex.value = index
+  }
+
+  func createNewCategory(for category: String) -> Int {
+    let getCategories: GetCategoriesType = GetCategories()
+    let index = getCategories.createCategory(for: category)
+    return index
   }
 
 }

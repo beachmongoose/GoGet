@@ -26,31 +26,35 @@ protocol DetailViewModelType {
   func presentPopover(sender: UIButton)
 
   var item: Item? { get }
+// ^ may not need anymore
+
+// Data field bindings
   var itemData: DetailViewItem! { get }
   var itemName: Property<String?> { get }
   var itemQuantity: Property<String?> { get }
   var dateBought: Property<String?> { get }
   var duration: Property<String?> { get }
   var bought: Property<Int?> { get }
-  var categoryName: Property<String?> { get }
 }
 
 final class DetailViewModel: DetailViewModelType {
-  
+
   var item: Item?
+// ^ may not need anymore
+
   var itemData: DetailViewItem!
 
   let selectedCategoryIndex = Property<Int?>(nil)
   var selectedCategory: Category?
   var categories: [Category] = []
+
+// Data field bindings
   let itemName = Property<String?>(nil)
   let itemQuantity = Property<String?>(nil)
   let dateBought = Property<String?>(nil)
   let duration = Property<String?>(nil)
   let bought = Property<Int?>(nil)
-  let categoryName = Property<String?>(nil)
 
-  private var sortType: SortType = .added
   private let coordinator: DetailViewCoordinatorType
   private let getItems: GetItemsType
   private let getCategories: GetCategoriesType
@@ -70,15 +74,11 @@ final class DetailViewModel: DetailViewModelType {
   }
 
   func getDetails() -> DetailViewItem {
-    var boughtBool: Bool {
-      guard item != nil || item?.boughtStatus != .notBought else { return false }
-      return true
-  }
 
     return DetailViewItem(
       name: item?.name ?? "",
       id: item?.id ?? nil,
-      boughtBool: boughtBool,
+      boughtBool: (item != nil || item?.boughtStatus != .notBought) ? true : false,
       date: convertedDate(item?.dateBought ?? Date()),
       quantity: String(item?.quantity ?? 1),
       interval: String(item?.duration ?? 7),
@@ -182,28 +182,20 @@ final class DetailViewModel: DetailViewModelType {
     }
     return name
   }
-
-//  func getCategoryID(for name: String) -> String? {
-//    guard name != "--Select--" && name != "" else { return nil }
-//    for category in categories where name == category.name {
-//      return category.id
-//    }
-//    return getCategories.createCategory(for: name)
-//  }
-
-  func fetchCategoryData() {
-    categories = getCategories.load()
-  }
 }
 
 extension DetailViewModel {
   func presentPopover(sender: UIButton) {
     coordinator.presentPopover(sender: sender, dataSource: categories, selectedIndex: selectedCategoryIndex)
   }
+
   func observeCategorySelection() {
-    selectedCategoryIndex.observeNext { [self] index in
-      selectedCategory = categories[index!]
+    let bag = DisposeBag()
+    selectedCategoryIndex.observeNext { index in
+      self.selectedCategory = (self.categories.count == 0) ? nil : self.categories[index ?? 0]
+      
     }
+    .dispose(in: bag)
   }
 }
 
