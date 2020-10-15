@@ -12,6 +12,7 @@ protocol GetCategoriesType {
   func load() -> [Category]
   func createCategory(for category: String) -> Int
   func checkIfDuplicate(_ newCategory: String?) -> Bool
+  func forID(_ id: String) -> (Int, Category?)
 }
 
 class GetCategories: GetCategoriesType {
@@ -79,4 +80,16 @@ class GetCategories: GetCategoriesType {
       }
     save(categories)
   }
+
+  func forID(_ id: String) -> (Int, Category?) {
+    let categories = load()
+    let category = categories.first(where: { $0.id == id})
+    let index = Int(categories.firstIndex(of: category!) ?? 0)
+      return (index, category)
+  }
+
+//  func getIndex(for category: Category) -> Int {
+//    let categories = load()
+//    for category in categories where category.id == id
+//  }
 }

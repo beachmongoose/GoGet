@@ -6,8 +6,9 @@
 //  Copyright © 2020 Maggie Maldjian. All rights reserved.
 //
 
+import Bond
+import ReactiveKit
 import UIKit
-import Foundation
 
 class DetailViewController: UIViewController, UIPopoverPresentationControllerDelegate {
   @IBOutlet var navigation: UINavigationBar!
@@ -57,7 +58,11 @@ extension DetailViewController {
     dateTextField.reactive.text.bind(to: viewModel.dateBought)
     intervalTextField.reactive.text.bind(to: viewModel.duration)
     boughtBoolButton.reactive.selectedSegmentIndex.bind(to: viewModel.bought)
-
+    viewModel.selectedCategoryName.observeNext { value in
+      let category = (value != nil) ? value : "--Select--"
+      self.categoryButton.setTitle(category, for: .normal)
+    }
+    .dispose(in: bag)
   }
 }
 
@@ -73,6 +78,11 @@ extension DetailViewController {
 
   @objc func saveItem() {
     viewModel.saveItem()
+    confirmSave(handler: changeTab(action:))
+  }
+
+  @objc func changeTab(action: UIAlertAction) {
+    tabBarController?.selectedIndex = 0
   }
 }
 
@@ -117,19 +127,8 @@ extension DetailViewController {
   }
 }
 
-// MARK: - Category
+// MARK: - Category List
 extension DetailViewController {
-
-//  @IBAction func addCategory(_ sender: Any) {
-//    addCategory(handler: populateCategoryField)
-//  }
-
-//  func populateCategoryField(action: UIAlertAction, category: String?) {
-//    guard category != nil || category != "--Select--" else { presentError(message: "Name not entered")
-//      return }
-//    if viewModel.isDuplicate(category) { presentError(message: "Category already exists")}
-//   dropDownField.text = category
-//  }
 
   @IBAction func openCategories(_ sender: UIButton) {
     viewModel.presentPopover(sender: sender)

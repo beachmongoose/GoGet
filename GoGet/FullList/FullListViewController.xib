@@ -30,6 +30,9 @@
                     </constraints>
                     <fontDescription key="fontDescription" type="system" pointSize="20"/>
                     <state key="normal" title="Sort"/>
+                    <connections>
+                        <action selector="sortMenu:" destination="-1" eventType="touchUpInside" id="UbM-cB-iWM"/>
+                    </connections>
                 </button>
                 <navigationBar contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="b9y-Cq-yns">
                     <rect key="frame" x="0.0" y="44" width="414" height="44"/>

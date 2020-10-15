@@ -35,6 +35,7 @@ protocol DetailViewModelType {
   var dateBought: Property<String?> { get }
   var duration: Property<String?> { get }
   var bought: Property<Int?> { get }
+  var selectedCategoryName: Observable<String?> { get }
 }
 
 final class DetailViewModel: DetailViewModelType {
@@ -44,8 +45,9 @@ final class DetailViewModel: DetailViewModelType {
 
   var itemData: DetailViewItem!
 
-  let selectedCategoryIndex = Property<Int?>(nil)
+  var selectedCategoryIndex = Property<Int?>(nil)
   var selectedCategory: Category?
+  var selectedCategoryName = Observable<String?>(nil)
   var categories: [Category] = []
 
 // Data field bindings
@@ -58,6 +60,7 @@ final class DetailViewModel: DetailViewModelType {
   private let coordinator: DetailViewCoordinatorType
   private let getItems: GetItemsType
   private let getCategories: GetCategoriesType
+  private let bag = DisposeBag()
 
   init(coordinator: DetailViewCoordinatorType,
        getItems: GetItemsType = GetItems(),
@@ -70,10 +73,19 @@ final class DetailViewModel: DetailViewModelType {
     self.item = item
     self.itemData = getDetails()
     self.categories = getCategories.load()
+    observeCategoryUpdates()
     observeCategorySelection()
   }
 
+  func observeCategoryUpdates() {
+    defaults.reactive.keyPath("Categories", ofType: Data.self, context: .immediateOnMain).observeNext { _ in
+      self.categories = self.getCategories.load()
+    }
+    .dispose(in: bag)
+  }
   func getDetails() -> DetailViewItem {
+
+    let category = checkForCategory()
 
     return DetailViewItem(
       name: item?.name ?? "",
@@ -82,7 +94,7 @@ final class DetailViewModel: DetailViewModelType {
       date: convertedDate(item?.dateBought ?? Date()),
       quantity: String(item?.quantity ?? 1),
       interval: String(item?.duration ?? 7),
-      category: String(getName(for: item?.categoryID ?? ""))
+      category: category
       )
   }
 
@@ -116,6 +128,7 @@ final class DetailViewModel: DetailViewModelType {
     } else {
       replace(in: allItems, with: item)
     }
+// make tab controller change tabs to original
     coordinator.confirmSave()
   }
 
@@ -173,27 +186,29 @@ final class DetailViewModel: DetailViewModelType {
     let dateBought = calendar.startOfDay(for: item.dateBought)
     return dateBought < currentDate
   }
-
-// MARK: - Categories
-  func getName(for categoryID: String) -> String {
-    var name = ""
-    for category in categories where categoryID == category.id {
-      name = category.name
-    }
-    return name
-  }
 }
 
+// MARK: - Categories
 extension DetailViewModel {
+
+  func checkForCategory() -> String {
+    guard item?.categoryID != nil else { return "" }
+    let data = getCategories.forID((item?.categoryID)!)
+    selectedCategoryIndex.value = data.0
+    selectedCategory = data.1
+    selectedCategoryName.value = selectedCategory?.name
+    return selectedCategoryName.value ?? ""
+  }
+
   func presentPopover(sender: UIButton) {
-    coordinator.presentPopover(sender: sender, dataSource: categories, selectedIndex: selectedCategoryIndex)
+    coordinator.presentPopover(sender: sender, selectedIndex: selectedCategoryIndex)
   }
 
   func observeCategorySelection() {
-    let bag = DisposeBag()
     selectedCategoryIndex.observeNext { index in
-      self.selectedCategory = (self.categories.count == 0) ? nil : self.categories[index ?? 0]
-      
+      let category = (self.categories.count == 0) ? nil : self.categories[index ?? 0]
+      self.selectedCategory = category
+      self.selectedCategoryName.value = category?.name
     }
     .dispose(in: bag)
   }
@@ -229,12 +244,12 @@ extension DetailViewModel {
     guard let dateBought = dateBought.value else {
       fatalError("Failed to create item, no date bought selected")
     }
-    guard bought == 1 else { return .notBought }
+    guard bought == 0 else { return .notBought }
     let date = dateFromString(dateBought)
     return .bought(date)
     }
 
   var finalCategoryID: String? {
-    return (selectedCategory != nil) ? nil : selectedCategory?.id
+    return (selectedCategory != nil) ? selectedCategory?.id : nil
   }
 }

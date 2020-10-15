@@ -27,6 +27,7 @@ class CategoryViewController: UIViewController {
 }
 
 extension CategoryViewController: UITableViewDelegate, UIGestureRecognizerDelegate {
+
   func setupTable() {
     viewModel.tableData.bind(to: tableView) { dataSource, indexPath, tableView in
       guard let cell = tableView.dequeueReusableCell(withIdentifier: "CategoryListCell",
@@ -35,17 +36,35 @@ extension CategoryViewController: UITableViewDelegate, UIGestureRecognizerDelega
       }
       let viewModel = dataSource[indexPath.row]
       cell.viewModel = viewModel
+
+      cell.reactive.tapGesture().observeNext { [weak self] _ in
+        self?.viewModel.changeSelectedIndex(to: indexPath.row)
+        self?.dismiss(animated: true, completion: nil)
+      }
+      .dispose(in: cell.bag)
+
       return cell
     }
   }
-  func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-//    if viewModel.tableData[indexPath.row].name != "--Select--" {
-//        self.dismiss(animated: true, completion: nil)
-//    } else {
-      viewModel.changeSelectedIndex(to: indexPath.row)
-      self.dismiss(animated: true, completion: nil)
-//    }
+
+  func longPressDetector() {
+    let longPressDetector = UILongPressGestureRecognizer(target: self, action: #selector(longPress))
+    view.addGestureRecognizer(longPressDetector)
   }
+
+  @objc func longPress(longPress: UILongPressGestureRecognizer) {
+    if longPress.state == UIGestureRecognizer.State.began {
+      let touchPoint = longPress.location(in: tableView)
+      if let selectedItem = tableView.indexPathForRow(at: touchPoint) {
+        viewModel.changeSelectedIndex(to: selectedItem.row)
+      }
+    }
+  }
+
+  @objc func deletePrompt() {
+    presentDeleteAlert(handler: viewModel.deleteCategory)
+  }
+
 }
 
 extension CategoryViewController {
@@ -58,8 +77,6 @@ extension CategoryViewController {
     guard category != nil || category != "--Select--" else { presentError(message: "Name not entered.")
       return }
     if viewModel.isDuplicate(category!) { presentError(message: "Category already exists")}
-    let index = viewModel.createNewCategory(for: category!)
-    viewModel.changeSelectedIndex(to: index)
-    self.dismiss(animated: true, completion: nil)
+    viewModel.createNewCategory(for: category!)
   }
 }
