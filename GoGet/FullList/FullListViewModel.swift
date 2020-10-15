@@ -8,6 +8,7 @@
 
 import Bond
 import ReactiveKit
+import UIKit
 
 protocol FullListViewModelType {
   var tableData: MutableObservableArray2D<String, FullListViewModel.CellViewModel> { get }
@@ -22,7 +23,6 @@ protocol FullListViewModelType {
 }
 
 final class FullListViewModel: FullListViewModelType {
-
   struct CellViewModel: Equatable {
     var name: String
     var id: String?
@@ -42,6 +42,7 @@ final class FullListViewModel: FullListViewModelType {
   var tableCategories = [[CellViewModel]]()
   let tableData = MutableObservableArray2D<String, FullListViewModel.CellViewModel>(Array2D(sections: []))
   private var selectedItems = [String]()
+  private let bag = DisposeBag()
   private let coordinator: FullListCoordinatorType
   private let getItems: GetItemsType
   private let getCategories: GetCategoriesType
@@ -60,28 +61,17 @@ final class FullListViewModel: FullListViewModelType {
     self.getCategories = getCategories
     self.sortTypeInstance = sortTypeInstance
     fetchArrayData()
+    observeItemUpdates()
   }
 
 // MARK: - Organzing
 
-  func createDictionary() -> [String: [CellViewModel]] {
-    let dictionary = getItems.fetchByCategory("full")
-    let formattedDict: [String: [CellViewModel]] = dictionary.mapValues {
-      $0.map { item in
-        let isSelected = selectedItems.contains(item.id)
-        return CellViewModel(item: item, isSelected: isSelected)
-      }
+  func observeItemUpdates() {
+    let defaults = UserDefaults.standard
+    defaults.reactive.keyPath("Items", ofType: Data.self, context: .immediateOnMain).observeNext { _ in
+      self.fetchArrayData()
     }
-    return formattedDict
-  }
-
-  func fetchArrayData() {
-    let data = createDictionary().map { ($0.key, $0.value) }.sorted(by: {$0.0 < $1.0 })
-    let sortedData = reOrder(data)
-    let sections = sortedData.map { entry in
-      return Array2D.Section(metadata: entry.0, items: entry.1)
-    }
-    tableData.replace(with: Array2D(sections: sections))
+    .dispose(in: bag)
   }
 
   func clear() {
@@ -149,5 +139,28 @@ extension FullListViewModel {
     }
     selectedItems.removeAll()
     getItems.save(allItems)
+  }
+}
+
+// MARK: - Datasource Helper
+extension FullListViewModel {
+  func createDictionary() -> [String: [CellViewModel]] {
+    let dictionary = getItems.fetchByCategory(.fullList)
+    let formattedDict: [String: [CellViewModel]] = dictionary.mapValues {
+      $0.map { item in
+        let isSelected = selectedItems.contains(item.id)
+        return CellViewModel(item: item, isSelected: isSelected)
+      }
+    }
+    return formattedDict
+  }
+
+  func fetchArrayData() {
+    let data = createDictionary().map { ($0.key, $0.value) }.sorted(by: {$0.0 < $1.0 })
+    let sortedData = reOrder(data)
+    let sections = sortedData.map { entry in
+      return Array2D.Section(metadata: entry.0, items: entry.1)
+    }
+    tableData.replace(with: Array2D(sections: sections))
   }
 }

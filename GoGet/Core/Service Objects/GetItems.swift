@@ -24,7 +24,7 @@ protocol GetItemsType {
   func load() -> [Item]
   func indexNumber(for item: String, in array: [Item]) -> Int
   func fullItemInfo(for id: String) -> Item
-  func fetchByCategory(_ view: String) -> [String: [Item]]
+  func fetchByCategory(_ view: ListView) -> [String: [Item]]
   func isDuplicate(_ name: String) -> Bool
 }
 
@@ -73,9 +73,9 @@ class GetItems: GetItemsType {
     return array.firstIndex { $0.id == item } ?? 900
   }
 
-  func fetchByCategory(_ view: String) -> [String: [Item]] {
+  func fetchByCategory(_ view: ListView) -> [String: [Item]] {
     let data = load()
-    let items = (view == "buy") ? data.filter { $0.needToBuy } : data
+    let items = (view == .buyList) ? data.filter { $0.needToBuy } : data
     let categories = categoryStore.getDictionary()
 
     let tableData = items.reduce(into: [String: [Item]]()) { dict, item in

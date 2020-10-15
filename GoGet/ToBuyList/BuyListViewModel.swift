@@ -78,7 +78,7 @@ final class BuyListViewModel: BuyListViewModelType {
   }
 
   func createDictionary() -> [String: [CellViewModel]] {
-    let dictionary = getItems.fetchByCategory("buy")
+    let dictionary = getItems.fetchByCategory(.buyList)
     let formattedDict: [String: [CellViewModel]] = dictionary.mapValues {
       $0.map { item in
         let isSelected = selectedItems.contains(item.name)
@@ -117,7 +117,7 @@ final class BuyListViewModel: BuyListViewModelType {
     var allItems = getItems.load()
     for item in selectedItems {
       var currentItem = getItems.fullItemInfo(for: item)
-      let itemIndex = getItems.indexNumber(for: currentItem.name, in: allItems)
+      let itemIndex = getItems.indexNumber(for: currentItem.id, in: allItems)
       currentItem.boughtStatus = .bought(Date())
       allItems[itemIndex] = currentItem
     }

@@ -73,4 +73,10 @@ extension UIViewController {
     menu.addAction(UIAlertAction(title: "Cancel", style: .cancel))
     present(menu, animated: true)
   }
+
+  func confirmSave(handler: ((UIAlertAction) -> Void)?) {
+    let saveConfirm = UIAlertController(title: "Item Saved", message: nil, preferredStyle: .alert)
+    saveConfirm.addAction(UIAlertAction(title: "OK", style: .default, handler: handler))
+    present(saveConfirm, animated: true)
+  }
 }

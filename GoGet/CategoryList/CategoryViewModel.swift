@@ -16,6 +16,7 @@ protocol CategoryListViewModelType {
   func isDuplicate(_ input: String) -> Bool
   func changeSelectedIndex(to index: Int)
   func createNewCategory(for category: String) -> Int
+  func deleteCategory(action: UIAlertAction)
 }
 
 final class CategoryViewModel: CategoryListViewModelType {
@@ -26,22 +27,34 @@ final class CategoryViewModel: CategoryListViewModelType {
     }
   }
 
+  private let bag = DisposeBag()
   var tableData = MutableObservableArray<CategoryCell>([])
-  private var categories: [Category]
+  private var categories: [Category] = []
   var selectedIndex: Property<Int?>
   private let coordinator: CategoryViewCoordinatorType
+  private let getCategories: GetCategoriesType
 
-  init(coordinator: CategoryViewCoordinatorType, selectedIndex: Property<Int?>, categories: [Category]) {
+  init(coordinator: CategoryViewCoordinatorType,
+       getCategories: GetCategoriesType = GetCategories(),
+       selectedIndex: Property<Int?>) {
     self.coordinator = coordinator
     self.selectedIndex = selectedIndex
-    self.categories = categories
+    self.getCategories = getCategories
     fetchTableData()
+    observeCategoryUpdates()
   }
 }
 
 extension CategoryViewModel {
 
+  func observeCategoryUpdates() {
+    defaults.reactive.keyPath("Categories", ofType: Data.self, context: .immediateOnMain).observeNext { _ in
+      self.fetchTableData()
+    }
+    .dispose(in: bag)
+  }
   func fetchTableData() {
+    let categories = getCategories.load()
 //    let createNew = CellViewModel(category: Category(id: "n/a", name: "--Select--", date: Date()))
     let categoryList = (categories.isEmpty) ? ([]) : categories.map(CellViewModel.init)
 //    categoryList.insert(createNew, at: 0)
@@ -63,6 +76,10 @@ extension CategoryViewModel {
     let getCategories: GetCategoriesType = GetCategories()
     let index = getCategories.createCategory(for: category)
     return index
+  }
+
+  func deleteCategory(action: UIAlertAction) {
+    categories.remove(at: selectedIndex.value!)
   }
 
 }

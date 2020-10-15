@@ -119,7 +119,6 @@ extension FullListViewController: UIGestureRecognizerDelegate {
 
   @objc func longPress(longPressGestureRecognizer: UILongPressGestureRecognizer) {
     if longPressGestureRecognizer.state == UIGestureRecognizer.State.began {
-      print("selected")
       let touchPoint = longPressGestureRecognizer.location(in: tableView)
       if let selectedItem = tableView.indexPathForRow(at: touchPoint) {
         changeEditing(to: true)
@@ -158,9 +157,10 @@ extension FullListViewController {
 
 // MARK: - Sorting
 extension FullListViewController {
-//  @IBAction func sortButton(_ sender: Any) {
-//    presentSortOptions(handler: sortMethod(action:))
-//  }
+
+  @IBAction func sortMenu(_ sender: Any) {
+    presentSortOptions(handler: sortMethod(action:))
+  }
 
   @objc func sortMethod(action: UIAlertAction) {
     viewModel.sortBy(action.title!.lowercased())
@@ -174,10 +174,6 @@ extension FullListViewController {
   override func viewWillAppear(_ animated: Bool) {
     tableView.reloadData()
   }
-//
-//  override func viewWillDisappear(_ animated: Bool) {
-//    viewModel.goingBack()
-//  }
 
   func changeEditing(to bool: Bool) {
     inDeleteMode = bool
