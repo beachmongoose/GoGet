@@ -20,6 +20,7 @@ class CategoryViewController: UIViewController {
     fatalError("init(coder:) has not been implemented")
   }
   override func viewDidLoad() {
+    longPressDetector()
     setupTable()
     tableView.register(UINib(nibName: "CategoryListCell", bundle: nil), forCellReuseIdentifier: "CategoryListCell")
         super.viewDidLoad()
@@ -57,14 +58,10 @@ extension CategoryViewController: UITableViewDelegate, UIGestureRecognizerDelega
       let touchPoint = longPress.location(in: tableView)
       if let selectedItem = tableView.indexPathForRow(at: touchPoint) {
         viewModel.changeSelectedIndex(to: selectedItem.row)
+        presentDeleteAlert(handler: viewModel.deleteCategory(action:))
       }
     }
   }
-
-  @objc func deletePrompt() {
-    presentDeleteAlert(handler: viewModel.deleteCategory)
-  }
-
 }
 
 extension CategoryViewController {

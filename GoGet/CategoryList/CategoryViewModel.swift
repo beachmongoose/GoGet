@@ -54,7 +54,7 @@ extension CategoryViewModel {
     .dispose(in: bag)
   }
   func fetchTableData() {
-    let categories = getCategories.load()
+    categories = getCategories.load()
 //    let createNew = CellViewModel(category: Category(id: "n/a", name: "--Select--", date: Date()))
     let categoryList = (categories.isEmpty) ? ([]) : categories.map(CellViewModel.init)
 //    categoryList.insert(createNew, at: 0)
@@ -79,7 +79,8 @@ extension CategoryViewModel {
   }
 
   func deleteCategory(action: UIAlertAction) {
-    categories.remove(at: selectedIndex.value!)
+    getCategories.deleteCategory(selectedIndex.value!)
+    getCategories.save(categories)
   }
 
 }

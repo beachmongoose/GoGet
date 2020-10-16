@@ -6,7 +6,9 @@
 //  Copyright © 2020 Maggie Maldjian. All rights reserved.
 //
 
+import Bond
 import Foundation
+import ReactiveKit
 
 enum SortType: String {
   case name
@@ -32,6 +34,7 @@ class GetItems: GetItemsType {
 
   let sortTypeInstance: SortingInstanceType
   let categoryStore: CategoryStoreType
+  let bag = DisposeBag()
 
   init(sortTypeInstance: SortingInstanceType = SortingInstance.shared,
        categoryStore: CategoryStoreType = CategoryStore.shared) {
@@ -115,5 +118,28 @@ class GetItems: GetItemsType {
 
   func byAdded(_ array: [Item]) -> [Item] {
     return array.sorted(by: { $0.dateAdded ?? Date() < $1.dateAdded ?? Date()})
+  }
+
+  func removeDeletedCategoryID() {
+    defaults.reactive.keyPath("Items", ofType: Data.self, context: .immediateOnMain).observeNext { _ in
+      var items = self.load()
+      let categories = self.categoryStore.getDictionary()
+      var deletedID: String? {
+        for item in items {
+          guard item.categoryID != nil else { continue }
+          let noKey = categories[item.categoryID!] == nil
+          if noKey {
+            return item.categoryID
+          }
+        }
+        return nil
+      }
+      guard deletedID != nil else { return }
+      for index in 0..<items.count where items[index].categoryID == deletedID {
+        items[index].categoryID = nil
+      }
+      self.save(items)
+    }
+    .dispose(in: bag)
   }
 }

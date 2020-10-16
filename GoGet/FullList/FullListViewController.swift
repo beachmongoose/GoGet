@@ -26,15 +26,15 @@ class FullListViewController: UIViewController {
   }
     override func viewDidLoad() {
       longPressDetector()
-      addMenuButton()
+//      addMenuButton()
       tableView.register(UINib(nibName: "FullListCell", bundle: nil), forCellReuseIdentifier: "FullListCell")
       setupTable()
-      observeButtonEvents()
+//      observeButtonEvents()
       super.viewDidLoad()
     }
 
   func observeButtonEvents() {
-    sortButton.reactive.tap.bind(to: self) { $0.viewModel.clear() }
+//    sortButton.reactive.tap.bind(to: self) { $0.viewModel.clear() }
   }
 }
 
@@ -77,16 +77,16 @@ extension FullListViewController {
   @objc func menuPrompt() {
   }
 
-  func addMenuButton() {
+  func MenuButton() -> UIBarButtonItem {
     let menu = UIBarButtonItem(
       title: "Menu",
       style: .plain,
       target: self,
       action: #selector(menuPrompt))
-    navigationItem.rightBarButtonItem = menu
+    return menu
   }
 
-  func addConfirmAndCancelButtons() {
+  func confirmAndCancelButtons() -> [UIBarButtonItem] {
     let confirm = UIBarButtonItem(title: "Confirm",
                                   style: .plain,
                                   target: self,
@@ -97,9 +97,10 @@ extension FullListViewController {
                                  action: #selector(cancelDelete))
     navigationItem.rightBarButtonItems = [cancel]
     navigationItem.leftBarButtonItem = confirm
+    return [confirm, cancel]
   }
-
 }
+
 // MARK: - User Input
 extension FullListViewController: UIGestureRecognizerDelegate {
 
@@ -108,7 +109,6 @@ extension FullListViewController: UIGestureRecognizerDelegate {
         viewModel.editItem(indexPath)
       } else {
         viewModel.selectDeselectIndex(at: indexPath)
-      self.tableView.reloadData()
       }
     }
 
@@ -120,6 +120,7 @@ extension FullListViewController: UIGestureRecognizerDelegate {
   @objc func longPress(longPressGestureRecognizer: UILongPressGestureRecognizer) {
     if longPressGestureRecognizer.state == UIGestureRecognizer.State.began {
       let touchPoint = longPressGestureRecognizer.location(in: tableView)
+      viewModel.clearIndex()
       if let selectedItem = tableView.indexPathForRow(at: touchPoint) {
         changeEditing(to: true)
         viewModel.selectDeselectIndex(at: selectedItem)
@@ -182,9 +183,9 @@ extension FullListViewController {
     sortButton.isEnabled.toggle()
     if bool == false {
       longPressDetector()
-      addMenuButton()
+      MenuButton()
     } else {
-      addConfirmAndCancelButtons()
+      confirmAndCancelButtons()
       view.gestureRecognizers?.removeAll()
     }
   }
