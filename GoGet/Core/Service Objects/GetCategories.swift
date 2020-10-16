@@ -10,7 +10,9 @@ import Foundation
 
 protocol GetCategoriesType {
   func load() -> [Category]
+  func save(_ categories: [Category])
   func createCategory(for category: String) -> Int
+  func deleteCategory(_ index: Int)
   func checkIfDuplicate(_ newCategory: String?) -> Bool
   func forID(_ id: String) -> (Int, Category?)
 }
@@ -86,6 +88,12 @@ class GetCategories: GetCategoriesType {
     let category = categories.first(where: { $0.id == id})
     let index = Int(categories.firstIndex(of: category!) ?? 0)
       return (index, category)
+  }
+
+  func deleteCategory(_ index: Int) {
+    var categories = load()
+    categories.remove(at: index)
+    save(categories)
   }
 
 //  func getIndex(for category: Category) -> Int {

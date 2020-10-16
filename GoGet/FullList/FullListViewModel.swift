@@ -107,16 +107,15 @@ extension FullListViewModel {
     let itemID = tableData.collection.sections[indexPath.section].items[indexPath.row].id
     if selectedItems.contains(itemID!) {
       selectedItems.remove(at: selectedItems.firstIndex(of: itemID!)!)
+      fetchArrayData()
     } else {
       selectedItems.append(itemID!)
+      fetchArrayData()
     }
   }
 
   func clearIndex() {
     selectedItems.removeAll()
-  }
-
-  func deselect() {
   }
 
   func editItem(_ index: IndexPath) {
