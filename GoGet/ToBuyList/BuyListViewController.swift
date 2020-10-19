@@ -70,8 +70,7 @@ extension BuyListViewController {
   }
 
   func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-//    viewModel.presentDetail(in section: indexPath.section, for row: indexPath.row)
-    self.tableView.reloadData()
+    viewModel.presentDetail(in: indexPath.section, for: indexPath.row)
   }
 
   func changeStatePrompt() {
@@ -117,9 +116,6 @@ extension BuyListViewController {
 
 // MARK: - Data Handling
   extension BuyListViewController {
-  @objc func presentFullList() {
-    viewModel.presentFullList()
-  }
 
   override func viewWillAppear(_ animated: Bool) {
     tableView.reloadData()

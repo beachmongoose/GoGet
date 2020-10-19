@@ -9,12 +9,11 @@
 import UIKit
 
 protocol FullListCoordinatorType {
-  func presentDetail(item: Item?, completion: @escaping () -> Void)
-  func start() -> FullListViewController
+  func presentDetail(item: Item?)
+  func start() -> UINavigationController
 }
 
 class FullListCoordinator: FullListCoordinatorType {
-
   weak var viewController: FullListViewController?
 
   private let getItems: GetItemsType
@@ -23,17 +22,24 @@ class FullListCoordinator: FullListCoordinatorType {
     self.getItems = getItems
   }
 
-  func start() -> FullListViewController {
+  func start() -> UINavigationController {
     let viewModel = FullListViewModel(coordinator: self)
     let viewController = FullListViewController(viewModel: viewModel)
     viewController.title = "Full List"
     self.viewController = viewController
-    return viewController
+    return UINavigationController(rootViewController: viewController)
   }
 
-  func presentDetail(item: Item?, completion: @escaping () -> Void) {
-    guard let navigationController = viewController?.navigationController else { return }
+  func presentDetail(item: Item?) {
     let detailViewController = DetailViewCoordinator().start(item: item)
+    viewController?.tabBarController!.present(detailViewController, animated: true)
+
+    guard let navigationController = viewController?.navigationController else {
+      return
+    }
+
+    detailViewController.modalPresentationStyle = .fullScreen
     navigationController.pushViewController(detailViewController, animated: true)
+
   }
 }

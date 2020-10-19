@@ -14,7 +14,7 @@ typealias CategoryCell = CategoryViewModel.CellViewModel
 protocol CategoryListViewModelType {
   var tableData: MutableObservableArray<CategoryCell> { get }
   func isDuplicate(_ input: String) -> Bool
-  func changeSelectedIndex(to index: Int)
+  func changeSelectedIndex(to index: Int?)
   func createNewCategory(for category: String) -> Int
   func deleteCategory(action: UIAlertAction)
 }
@@ -55,7 +55,7 @@ extension CategoryViewModel {
   }
   func fetchTableData() {
     categories = getCategories.load()
-//    let createNew = CellViewModel(category: Category(id: "n/a", name: "--Select--", date: Date()))
+//    let createNew = CellViewModel(category: Category(id: "n/a", name: "None", date: Date()))
     let categoryList = (categories.isEmpty) ? ([]) : categories.map(CellViewModel.init)
 //    categoryList.insert(createNew, at: 0)
     tableData.replace(with: categoryList)
@@ -68,7 +68,7 @@ extension CategoryViewModel {
     return false
   }
 
-  func changeSelectedIndex(to index: Int) {
+  func changeSelectedIndex(to index: Int?) {
     selectedIndex.value = index
   }
 
@@ -80,7 +80,6 @@ extension CategoryViewModel {
 
   func deleteCategory(action: UIAlertAction) {
     getCategories.deleteCategory(selectedIndex.value!)
-    getCategories.save(categories)
   }
 
 }

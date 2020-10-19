@@ -23,9 +23,9 @@ class DetailViewCoordinator: DetailViewCoordinatorType {
   weak var viewController: DetailViewController?
 
   func start(item: Item?) -> DetailViewController {
-    let viewModel = DetailViewModel(coordinator: self, item: nil)
+    let viewModel = DetailViewModel(coordinator: self, item: item)
     let viewController = DetailViewController(viewModel: viewModel)
-    viewController.title = "New"
+    viewController.title = "New Item"
     self.viewController = viewController
     return viewController
   }

@@ -5,7 +5,10 @@
 //  Created by Maggie Maldjian on 9/25/20.
 //  Copyright © 2020 Maggie Maldjian. All rights reserved.
 //
+// TODO: GET RID OF EXCESS CELLS
 
+import Bond
+import ReactiveKit
 import UIKit
 
 class CategoryViewController: UIViewController {
@@ -20,16 +23,16 @@ class CategoryViewController: UIViewController {
     fatalError("init(coder:) has not been implemented")
   }
   override func viewDidLoad() {
-    longPressDetector()
     setupTable()
-    tableView.register(UINib(nibName: "CategoryListCell", bundle: nil), forCellReuseIdentifier: "CategoryListCell")
-        super.viewDidLoad()
-    }
+    super.viewDidLoad()
+  }
 }
 
 extension CategoryViewController: UITableViewDelegate, UIGestureRecognizerDelegate {
 
   func setupTable() {
+    tableView.register(UINib(nibName: "CategoryListCell", bundle: nil), forCellReuseIdentifier: "CategoryListCell")
+
     viewModel.tableData.bind(to: tableView) { dataSource, indexPath, tableView in
       guard let cell = tableView.dequeueReusableCell(withIdentifier: "CategoryListCell",
                                                      for: indexPath) as? CategoryListCell else {
@@ -42,16 +45,20 @@ extension CategoryViewController: UITableViewDelegate, UIGestureRecognizerDelega
         self?.viewModel.changeSelectedIndex(to: indexPath.row)
         self?.dismiss(animated: true, completion: nil)
       }
+      
+      cell.reactive.longPressGesture().observeNext { _ in
+        //
+      }
       .dispose(in: cell.bag)
 
       return cell
     }
   }
 
-  func longPressDetector() {
-    let longPressDetector = UILongPressGestureRecognizer(target: self, action: #selector(longPress))
-    view.addGestureRecognizer(longPressDetector)
-  }
+//  func longPressDetector() {
+//    let longPressDetector = UILongPressGestureRecognizer(target: self, action: #selector(longPress))
+//    view.addGestureRecognizer(longPressDetector)
+//  }
 
   @objc func longPress(longPress: UILongPressGestureRecognizer) {
     if longPress.state == UIGestureRecognizer.State.began {
@@ -71,9 +78,14 @@ extension CategoryViewController {
   }
 
   func checkName(action: UIAlertAction, category: String?) {
-    guard category != nil || category != "--Select--" else { presentError(message: "Name not entered.")
+    guard category != nil || category != "None" else { presentError(message: "Name not entered.")
       return }
     if viewModel.isDuplicate(category!) { presentError(message: "Category already exists")}
     viewModel.createNewCategory(for: category!)
+  }
+
+  @IBAction func clearCategory(_ sender: Any) {
+    viewModel.changeSelectedIndex(to: nil)
+    dismiss(animated: true, completion: nil)
   }
 }

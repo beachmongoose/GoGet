@@ -11,93 +11,97 @@ import ReactiveKit
 import UIKit
 
 class FullListViewController: UIViewController {
+  var sortButton: UIBarButtonItem
+  var confirmButton: UIBarButtonItem
+  var cancelButton: UIBarButtonItem
   @IBOutlet var tableView: UITableView!
-  @IBOutlet var sortButton: UIButton!
-  @IBOutlet var navigation: UINavigationBar!
   private let viewModel: FullListViewModelType
-  var inDeleteMode = false
 
   init(viewModel: FullListViewModelType) {
     self.viewModel = viewModel
+
     super.init(nibName: nil, bundle: nil)
   }
   required init?(coder: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }
     override func viewDidLoad() {
-      longPressDetector()
-//      addMenuButton()
-      tableView.register(UINib(nibName: "FullListCell", bundle: nil), forCellReuseIdentifier: "FullListCell")
       setupTable()
-//      observeButtonEvents()
+      setupNavigationBar()
+      observeEditModeUpdates()
       super.viewDidLoad()
     }
-
-  func observeButtonEvents() {
-//    sortButton.reactive.tap.bind(to: self) { $0.viewModel.clear() }
-  }
 }
 
-// MARK: - Populate Table
+// MARK: - View Setup
 extension FullListViewController: UITableViewDelegate {
   func setupTable() {
+    tableView.register(UINib(nibName: "FullListCell", bundle: nil), forCellReuseIdentifier: "FullListCell")
     let dataSource =
       SectionedTableViewBinderDataSource<FullListViewModel.CellViewModel>(createCell: createCell)
     viewModel.tableData.bind(to: tableView, using: dataSource)
     tableView.delegate = self
   }
-}
 
-private func createCell(dataSource: Array2D<String, FullListViewModel.CellViewModel>,
+  func observeEditModeUpdates() {
+    viewModel.inDeleteMode.observeNext { [self] _ in
+      let deleteMode = viewModel.inDeleteMode.value
+      viewModel.clearIndex()
+      tableView.allowsMultipleSelection = deleteMode
+      sortButton.isEnabled.toggle()
+      if !deleteMode {
+//        menuButton()
+      } else {
+        confirmAndCancelButtons()
+      }
+    }
+    .dispose(in: bag)
+  }
+
+  private func createCell(dataSource: Array2D<String, FullListViewModel.CellViewModel>,
                         indexPath: IndexPath,
                         tableView: UITableView) -> UITableViewCell {
-  guard let cell = tableView.dequeueReusableCell(withIdentifier: "FullListCell",
-                                                 for: indexPath) as? FullListCell else {
-                                                 fatalError("Unable to Dequeue") }
-        let cellViewModel = dataSource[childAt: indexPath].item
-        cell.viewModel = cellViewModel
-        return cell
+    guard let cell = tableView.dequeueReusableCell(
+      withIdentifier: "FullListCell",
+      for: indexPath
+    ) as? FullListCell else {
+          fatalError("Unable to Dequeue")
+    }
+    let cellViewModel = dataSource[childAt: indexPath].item
+    cell.viewModel = cellViewModel
+    cell.reactive.longPressGesture().observeNext { _ in
+      self.viewModel.inDeleteMode.value.toggle()
+    }
+    .dispose(in: bag)
+    return cell
+  }
 }
-
 // MARK: - Navigation
 extension FullListViewController {
-  override func viewWillLayoutSubviews() {
-    let navigationBar = self.navigation
-    self.view.addSubview(navigation)
 
-    let navigationItem = UINavigationItem(title: "All Items")
-    let menuButton = UIBarButtonItem(title: "Menu",
-                                     style: .plain,
-                                     target: self,
-                                     action: #selector(menuPrompt))
-    navigationItem.rightBarButtonItem = menuButton
-    navigationBar!.setItems([navigationItem], animated: false)
-  }
-
-  @objc func menuPrompt() {
-  }
-
-  func MenuButton() -> UIBarButtonItem {
-    let menu = UIBarButtonItem(
-      title: "Menu",
-      style: .plain,
-      target: self,
-      action: #selector(menuPrompt))
-    return menu
-  }
-
-  func confirmAndCancelButtons() -> [UIBarButtonItem] {
-    let confirm = UIBarButtonItem(title: "Confirm",
+  func setupNavigationBar() {
+    sortButton = UIBarButtonItem(title: "Sort",
+                                 style: .plain,
+                                 target: nil,
+                                 action: #selector(sortMenu))
+    confirmButton = UIBarButtonItem(title: "Confirm",
                                   style: .plain,
                                   target: self,
                                   action: #selector(confirmDelete))
-    let cancel = UIBarButtonItem(title: "Cancel",
+    cancelButton = UIBarButtonItem(title: "Cancel",
                                  style: .plain,
                                  target: self,
                                  action: #selector(cancelDelete))
-    navigationItem.rightBarButtonItems = [cancel]
-    navigationItem.leftBarButtonItem = confirm
-    return [confirm, cancel]
+    navigationItem.rightBarButtonItem = sortButton
+  }
+
+  func confirmAndCancelButtons() {
+    navigationItem.rightBarButtonItem = cancelButton
+    navigationItem.leftBarButtonItem = confirmButton
+  }
+  func menuButton() {
+    navigationItem.rightBarButtonItem = sortButton
+    navigationItem.leftBarButtonItem = nil
   }
 }
 
@@ -105,24 +109,19 @@ extension FullListViewController {
 extension FullListViewController: UIGestureRecognizerDelegate {
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-      if !inDeleteMode {
+      if !viewModel.inDeleteMode.value {
         viewModel.editItem(indexPath)
       } else {
         viewModel.selectDeselectIndex(at: indexPath)
       }
     }
 
-  func longPressDetector() {
-  let longPressDetector = UILongPressGestureRecognizer(target: self, action: #selector(longPress))
-  view.addGestureRecognizer(longPressDetector)
-  }
-
   @objc func longPress(longPressGestureRecognizer: UILongPressGestureRecognizer) {
     if longPressGestureRecognizer.state == UIGestureRecognizer.State.began {
       let touchPoint = longPressGestureRecognizer.location(in: tableView)
       viewModel.clearIndex()
       if let selectedItem = tableView.indexPathForRow(at: touchPoint) {
-        changeEditing(to: true)
+        viewModel.changeEditing()
         viewModel.selectDeselectIndex(at: selectedItem)
       }
     }
@@ -136,7 +135,7 @@ extension FullListViewController {
   }
 
   @objc func massDeleteMode() {
-    changeEditing(to: true)
+    viewModel.changeEditing()
   }
 
   @objc func confirmDelete() {
@@ -145,14 +144,14 @@ extension FullListViewController {
 
   @objc func removeItems(action: UIAlertAction) {
     viewModel.removeItems()
-    changeEditing(to: false)
+    viewModel.changeEditing()
     tableView.reloadData()
   }
 
   @objc func cancelDelete() {
     viewModel.clearIndex()
-    changeEditing(to: false)
-    self.tableView.reloadData()
+    viewModel.changeEditing()
+    tableView.reloadData()
   }
 }
 
@@ -174,19 +173,5 @@ extension FullListViewController {
 
   override func viewWillAppear(_ animated: Bool) {
     tableView.reloadData()
-  }
-
-  func changeEditing(to bool: Bool) {
-    inDeleteMode = bool
-    viewModel.clearIndex()
-    tableView.allowsMultipleSelection = bool
-    sortButton.isEnabled.toggle()
-    if bool == false {
-      longPressDetector()
-      MenuButton()
-    } else {
-      confirmAndCancelButtons()
-      view.gestureRecognizers?.removeAll()
-    }
   }
 }
