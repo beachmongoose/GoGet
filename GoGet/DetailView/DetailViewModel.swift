@@ -41,8 +41,6 @@ protocol DetailViewModelType {
 final class DetailViewModel: DetailViewModelType {
 
   var item: Item?
-// ^ may not need anymore
-
   var itemData: DetailViewItem!
 
   var selectedCategoryIndex = Property<Int?>(nil)
@@ -128,8 +126,9 @@ final class DetailViewModel: DetailViewModelType {
     } else {
       replace(in: allItems, with: item)
     }
-// make tab controller change tabs to original
+// TODO: MAKE TAB CONTROLLER GO BACK TO PREVIOUS TAB
     coordinator.confirmSave()
+    itemData = nil
   }
 
   func replace(in array: [Item], with item: Item) {
@@ -140,6 +139,7 @@ final class DetailViewModel: DetailViewModelType {
     getItems.save(allItems)
   }
 
+// TODO: MAKE USER UNABLE TO SAVE UNLESS VALID
   func validate(_ item: Item) {
 
     switch item {
@@ -206,9 +206,9 @@ extension DetailViewModel {
 
   func observeCategorySelection() {
     selectedCategoryIndex.observeNext { index in
-      let category = (self.categories.count == 0) ? nil : self.categories[index ?? 0]
+      let category = (self.categories.count == 0 || index == nil) ? nil : self.categories[index ?? 0]
       self.selectedCategory = category
-      self.selectedCategoryName.value = category?.name
+      self.selectedCategoryName.value = category?.name ?? nil
     }
     .dispose(in: bag)
   }

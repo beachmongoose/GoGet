@@ -32,7 +32,6 @@ class DetailViewController: UIViewController, UIPopoverPresentationControllerDel
 
   override func viewDidLoad() {
       textFieldBindings()
-      populateTextFields()
       addDatePicker()
       addSaveButton()
       super.viewDidLoad()
@@ -41,15 +40,15 @@ class DetailViewController: UIViewController, UIPopoverPresentationControllerDel
 
 // MARK: - Parse Data
 extension DetailViewController {
-  func populateTextFields() {
-    guard let item = viewModel.itemData else { return }
-    let category = (item.category != "") ? item.category : "--Select--"
-    itemTextField.text = item.name
-    quantityTextField.text = item.quantity
-    dateTextField.text = item.date
-    intervalTextField.text = item.interval
-    boughtBoolButton.selectedSegmentIndex = item.boughtBool ? 0 : 1
-    categoryButton.setTitle(category, for: .normal)
+  override func viewWillAppear(_ animated: Bool) {
+    let item = viewModel.itemData
+    itemTextField.text = item?.name ?? ""
+    quantityTextField.text = item?.quantity ?? "1"
+    dateTextField.text = item?.date ?? viewModel.convertedDate(Date())
+    intervalTextField.text = item?.interval ?? "7"
+    boughtBoolButton.selectedSegmentIndex = (item != nil) ? (item!.boughtBool ? 0 : 1): 0
+    categoryButton.setTitle("None", for: .normal)
+    super.viewWillAppear(animated)
   }
 
   func textFieldBindings() {
@@ -59,7 +58,7 @@ extension DetailViewController {
     intervalTextField.reactive.text.bind(to: viewModel.duration)
     boughtBoolButton.reactive.selectedSegmentIndex.bind(to: viewModel.bought)
     viewModel.selectedCategoryName.observeNext { value in
-      let category = (value != nil) ? value : "--Select--"
+      let category = (value != nil) ? value : "None"
       self.categoryButton.setTitle(category, for: .normal)
     }
     .dispose(in: bag)

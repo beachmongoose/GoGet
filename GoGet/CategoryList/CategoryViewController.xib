@@ -26,19 +26,29 @@
                     <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                 </tableView>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MfE-RV-Qkx">
-                    <rect key="frame" x="163" y="54" width="103" height="36"/>
+                    <rect key="frame" x="291" y="54" width="103" height="36"/>
                     <fontDescription key="fontDescription" type="system" pointSize="20"/>
                     <state key="normal" title="Create New"/>
                     <connections>
                         <action selector="createNew:" destination="-1" eventType="touchUpInside" id="ZMg-p0-pvV"/>
                     </connections>
                 </button>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qvS-s1-pNP">
+                    <rect key="frame" x="20" y="54" width="47" height="36"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                    <state key="normal" title="None"/>
+                    <connections>
+                        <action selector="clearCategory:" destination="-1" eventType="touchUpInside" id="ddV-LY-abv"/>
+                    </connections>
+                </button>
             </subviews>
             <viewLayoutGuide key="safeArea" id="fnl-2z-Ty3"/>
             <color key="backgroundColor" systemColor="systemBackgroundColor"/>
             <constraints>
-                <constraint firstItem="fnl-2z-Ty3" firstAttribute="trailing" secondItem="MfE-RV-Qkx" secondAttribute="trailing" constant="148" id="TjV-JV-bYN"/>
+                <constraint firstItem="fnl-2z-Ty3" firstAttribute="trailing" secondItem="MfE-RV-Qkx" secondAttribute="trailing" constant="20" id="TjV-JV-bYN"/>
+                <constraint firstItem="qvS-s1-pNP" firstAttribute="top" secondItem="fnl-2z-Ty3" secondAttribute="top" constant="10" id="XKg-Fd-CTi"/>
                 <constraint firstItem="MfE-RV-Qkx" firstAttribute="top" secondItem="fnl-2z-Ty3" secondAttribute="top" constant="10" id="tiw-s0-hWT"/>
+                <constraint firstItem="qvS-s1-pNP" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" constant="20" id="tjB-sb-3Sz"/>
             </constraints>
             <point key="canvasLocation" x="140.57971014492756" y="135.9375"/>
         </view>

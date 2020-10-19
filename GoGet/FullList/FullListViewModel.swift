@@ -11,8 +11,10 @@ import ReactiveKit
 import UIKit
 
 protocol FullListViewModelType {
+  var inDeleteMode: Property<Bool> { get }
   var tableData: MutableObservableArray2D<String, FullListViewModel.CellViewModel> { get }
   var tableCategories: [[FullListViewModel.CellViewModel]] { get }
+  func changeEditing()
   func presentDetail(for item: Item?)
   func editItem(_ index: IndexPath)
   func selectDeselectIndex(at indexPath: IndexPath)
@@ -23,6 +25,7 @@ protocol FullListViewModelType {
 }
 
 final class FullListViewModel: FullListViewModelType {
+  
   struct CellViewModel: Equatable {
     var name: String
     var id: String?
@@ -38,7 +41,8 @@ final class FullListViewModel: FullListViewModelType {
       self.isSelected = isSelected
     }
   }
-
+  var inDeleteMode = Property<Bool>(false)
+  var dictionary: [String: [Item]] = [: ]
   var tableCategories = [[CellViewModel]]()
   let tableData = MutableObservableArray2D<String, FullListViewModel.CellViewModel>(Array2D(sections: []))
   private var selectedItems = [String]()
@@ -93,11 +97,6 @@ final class FullListViewModel: FullListViewModelType {
     sortTypeInstance.changeSortType(to: SortType(rawValue: method)!)
     fetchArrayData()
   }
-
-  func getItemInfo(in section: Int, for row: Int) -> Item {
-    let item = tableData.collection.sections[section].items[row]
-    return getItems.fullItemInfo(for: item.name.lowercased())
-  }
 }
 
 // MARK: - Item Handling
@@ -114,20 +113,24 @@ extension FullListViewModel {
     }
   }
 
+  func changeEditing(){
+    inDeleteMode.value.toggle()
+  }
+
   func clearIndex() {
     selectedItems.removeAll()
+    fetchArrayData()
   }
 
   func editItem(_ index: IndexPath) {
-    let item = tableData.collection.sections[index.section].items[index.row].id
-    let details = getItems.fullItemInfo(for: item!)
-    presentDetail(for: details)
+    let category = tableData.collection.sections[index.section].metadata
+    let itemCategory = dictionary[category]
+    let item = itemCategory?[index.row]
+    presentDetail(for: item)
   }
 
   func presentDetail(for item: Item?) {
-    coordinator.presentDetail(item: item, completion: {
-      self.fetchArrayData()
-    })
+    coordinator.presentDetail(item: item)
   }
 
   func removeItems() {
@@ -144,7 +147,7 @@ extension FullListViewModel {
 // MARK: - Datasource Helper
 extension FullListViewModel {
   func createDictionary() -> [String: [CellViewModel]] {
-    let dictionary = getItems.fetchByCategory(.fullList)
+    dictionary = getItems.fetchByCategory(.fullList)
     let formattedDict: [String: [CellViewModel]] = dictionary.mapValues {
       $0.map { item in
         let isSelected = selectedItems.contains(item.id)

@@ -25,7 +25,6 @@ protocol GetItemsType {
   func save(_ items: [Item])
   func load() -> [Item]
   func indexNumber(for item: String, in array: [Item]) -> Int
-  func fullItemInfo(for id: String) -> Item
   func fetchByCategory(_ view: ListView) -> [String: [Item]]
   func isDuplicate(_ name: String) -> Bool
 }
@@ -40,6 +39,7 @@ class GetItems: GetItemsType {
        categoryStore: CategoryStoreType = CategoryStore.shared) {
     self.sortTypeInstance = sortTypeInstance
     self.categoryStore = categoryStore
+    removeDeletedCategoryID()
   }
 
   func save(_ items: [Item]) {
@@ -73,7 +73,8 @@ class GetItems: GetItemsType {
   }
 
   func indexNumber(for item: String, in array: [Item]) -> Int {
-    return array.firstIndex { $0.id == item } ?? 900
+    guard let index = (array.firstIndex { $0.id == item }) else { fatalError("Item index not found")}
+    return index
   }
 
   func fetchByCategory(_ view: ListView) -> [String: [Item]] {
@@ -89,12 +90,6 @@ class GetItems: GetItemsType {
       dict[keyName, default: []].append(item)
     }
     return tableData
-  }
-
-  func fullItemInfo(for id: String) -> Item {
-    let allItems = load()
-    let index = indexNumber(for: id, in: allItems)
-    return allItems[index]
   }
 
   func isDuplicate(_ name: String) -> Bool {
@@ -121,7 +116,7 @@ class GetItems: GetItemsType {
   }
 
   func removeDeletedCategoryID() {
-    defaults.reactive.keyPath("Items", ofType: Data.self, context: .immediateOnMain).observeNext { _ in
+    defaults.reactive.keyPath("Categories", ofType: Data.self, context: .immediateOnMain).observeNext { _ in
       var items = self.load()
       let categories = self.categoryStore.getDictionary()
       var deletedID: String? {

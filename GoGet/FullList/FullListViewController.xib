@@ -11,8 +11,6 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="FullListViewController" customModule="GoGet" customModuleProvider="target">
             <connections>
-                <outlet property="navigation" destination="b9y-Cq-yns" id="mlQ-gj-zAx"/>
-                <outlet property="sortButton" destination="Mji-2C-481" id="Kcz-HZ-kgp"/>
                 <outlet property="tableView" destination="caA-fD-6Gx" id="eiW-dw-OkN"/>
                 <outlet property="view" destination="0Zb-Oa-cBS" id="GN9-Td-9ZJ"/>
             </connections>
@@ -22,27 +20,11 @@
             <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Mji-2C-481">
-                    <rect key="frame" x="132" y="815" width="150" height="36"/>
-                    <constraints>
-                        <constraint firstAttribute="width" constant="150" id="dJk-ar-oRk"/>
-                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="150" id="n0f-uA-Gck"/>
-                    </constraints>
-                    <fontDescription key="fontDescription" type="system" pointSize="20"/>
-                    <state key="normal" title="Sort"/>
-                    <connections>
-                        <action selector="sortMenu:" destination="-1" eventType="touchUpInside" id="UbM-cB-iWM"/>
-                    </connections>
-                </button>
-                <navigationBar contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="b9y-Cq-yns">
+                <navigationBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="b9y-Cq-yns">
                     <rect key="frame" x="0.0" y="44" width="414" height="44"/>
-                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
-                    <items>
-                        <navigationItem title="All Items" id="m8j-o4-Vsr"/>
-                    </items>
                 </navigationBar>
                 <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="caA-fD-6Gx">
-                    <rect key="frame" x="0.0" y="88" width="414" height="719"/>
+                    <rect key="frame" x="0.0" y="44" width="414" height="818"/>
                     <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                     <connections>
                         <outlet property="dataSource" destination="-1" id="H74-le-JcG"/>
@@ -53,13 +35,13 @@
             <viewLayoutGuide key="safeArea" id="Z4V-ag-TzR"/>
             <color key="backgroundColor" systemColor="systemBackgroundColor"/>
             <constraints>
-                <constraint firstItem="caA-fD-6Gx" firstAttribute="leading" secondItem="Z4V-ag-TzR" secondAttribute="leading" id="7FP-hu-92c"/>
-                <constraint firstItem="caA-fD-6Gx" firstAttribute="trailing" secondItem="Z4V-ag-TzR" secondAttribute="trailing" id="CbA-9D-unW"/>
-                <constraint firstItem="Mji-2C-481" firstAttribute="leading" secondItem="Z4V-ag-TzR" secondAttribute="leading" constant="132" id="I9C-MF-HS1"/>
-                <constraint firstItem="Z4V-ag-TzR" firstAttribute="bottom" secondItem="Mji-2C-481" secondAttribute="bottom" constant="11" id="PGe-Vo-Poh"/>
-                <constraint firstItem="Z4V-ag-TzR" firstAttribute="trailing" secondItem="Mji-2C-481" secondAttribute="trailing" constant="132" id="VT4-dp-yzI"/>
-                <constraint firstItem="Mji-2C-481" firstAttribute="top" secondItem="caA-fD-6Gx" secondAttribute="bottom" constant="8" id="ahh-QG-TKG"/>
-                <constraint firstItem="caA-fD-6Gx" firstAttribute="top" secondItem="Z4V-ag-TzR" secondAttribute="top" constant="44" id="zWz-qs-1hp"/>
+                <constraint firstItem="caA-fD-6Gx" firstAttribute="trailing" secondItem="b9y-Cq-yns" secondAttribute="trailing" id="Dp5-TQ-UrS"/>
+                <constraint firstItem="caA-fD-6Gx" firstAttribute="top" secondItem="b9y-Cq-yns" secondAttribute="top" id="EWP-nJ-ACK"/>
+                <constraint firstItem="caA-fD-6Gx" firstAttribute="leading" secondItem="b9y-Cq-yns" secondAttribute="leading" id="EdO-Dl-qW2"/>
+                <constraint firstItem="caA-fD-6Gx" firstAttribute="centerX" secondItem="0Zb-Oa-cBS" secondAttribute="centerX" id="I8E-Nh-aVl"/>
+                <constraint firstItem="caA-fD-6Gx" firstAttribute="bottom" secondItem="Z4V-ag-TzR" secondAttribute="bottom" id="Nzq-OQ-FEF"/>
+                <constraint firstItem="caA-fD-6Gx" firstAttribute="leading" secondItem="Z4V-ag-TzR" secondAttribute="leading" id="bI0-aa-jBG"/>
+                <constraint firstItem="caA-fD-6Gx" firstAttribute="top" secondItem="Z4V-ag-TzR" secondAttribute="top" id="hY7-Yq-0K1"/>
             </constraints>
             <point key="canvasLocation" x="331.8840579710145" y="131.91964285714286"/>
         </view>

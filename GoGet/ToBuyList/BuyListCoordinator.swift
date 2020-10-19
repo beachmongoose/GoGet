@@ -10,8 +10,7 @@ import UIKit
 
 protocol BuyListCoordinatorType {
   func start() -> BuyListViewController
-  func presentFullList(completion: @escaping () -> Void)
-  func presentDetail(_ item: Item, completion: @escaping () -> Void)
+  func presentDetail(_ item: Item)
 }
 
 class BuyListCoordinator: BuyListCoordinatorType {
@@ -27,15 +26,8 @@ class BuyListCoordinator: BuyListCoordinatorType {
     return viewController
   }
 
-  func presentFullList(completion: @escaping () -> Void) {
-    guard let navigationController = viewController?.navigationController else { return }
-    let fullListViewController = FullListCoordinator().start()
-    navigationController.pushViewController(fullListViewController, animated: true)
-  }
-
-  func presentDetail(_ item: Item, completion: @escaping () -> Void) {
-  guard let navigationController = viewController?.navigationController else { return }
-    let detailViewController = DetailViewCoordinator().start(item: item)
-  navigationController.pushViewController(detailViewController, animated: true)
+  func presentDetail(_ item: Item) {
+    let detailController = DetailViewCoordinator().start(item: item)
+    viewController?.tabBarController!.present(detailController, animated: true)
   }
 }

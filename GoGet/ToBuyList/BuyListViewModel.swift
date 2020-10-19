@@ -11,7 +11,6 @@ import ReactiveKit
 
 protocol BuyListViewModelType {
   var tableData: MutableObservableArray2D<String, BuyListViewModel.CellViewModel> { get }
-  func presentFullList()
   func presentDetail(in section: Int, for row: Int)
   func markAsBought()
   func sortBy(_ element: String?)
@@ -33,9 +32,9 @@ final class BuyListViewModel: BuyListViewModelType {
       self.isSelected = isSelected
     }
   }
-
+  var dictionary: [String: [Item]] = [: ]
+  let bag = DisposeBag()
   let tableData = MutableObservableArray2D<String, BuyListViewModel.CellViewModel>(Array2D(sections: []))
-  private var itemIndexes: [IndexPath] = []
   private var selectedItems = (Set<String>())
   private let coordinator: BuyListCoordinatorType
   private let getItems: GetItemsType
@@ -55,9 +54,19 @@ final class BuyListViewModel: BuyListViewModelType {
     self.getCategories = getCategories
     self.sortTypeInstance = sortTypeInstance
     fetchTableData()
+    observeItemUpdates()
   }
 
 // MARK: - Fetch Data
+
+  func observeItemUpdates() {
+    let defaults = UserDefaults.standard
+    defaults.reactive.keyPath("Items", ofType: Data.self, context: .immediateOnMain).observeNext { _ in
+      self.fetchTableData()
+    }
+    .dispose(in: bag)
+  }
+
   func fetchTableData() {
     let data = createDictionary().map { ($0.key, $0.value) }.sorted(by: { $0.0 < $1.0 })
     let sortedData = reOrder(data)
@@ -78,10 +87,10 @@ final class BuyListViewModel: BuyListViewModelType {
   }
 
   func createDictionary() -> [String: [CellViewModel]] {
-    let dictionary = getItems.fetchByCategory(.buyList)
+    dictionary = getItems.fetchByCategory(.buyList)
     let formattedDict: [String: [CellViewModel]] = dictionary.mapValues {
       $0.map { item in
-        let isSelected = selectedItems.contains(item.name)
+        let isSelected = selectedItems.contains(item.id)
         return CellViewModel(item: item, isSelected: isSelected)
       }
     }
@@ -95,34 +104,33 @@ final class BuyListViewModel: BuyListViewModelType {
   }
 
 // MARK: - Change View
-  func presentFullList() {
-    coordinator.presentFullList(completion: {
-      self.fetchTableData()
-    })
-  }
-
   func presentDetail(in section: Int, for row: Int) {
-    let data = tableData.collection.sections[section].items[row]
-    let item = getItems.fullItemInfo(for: data.name)
-    coordinator.presentDetail(item, completion: {
-      self.fetchTableData()
-    })
+    let item = findItem(in: section, at: row)
+    coordinator.presentDetail(item)
   }
 
   func selectDeselectIndex(_ index: IndexPath) {
-    itemIndexes.append(index)
+    let item = findItem(in: index.section, at: index.row)
+    selectedItems.insert(item.id)
+  }
+
+  func findItem(in section: Int, at row: Int) -> Item {
+    let category = tableData.collection.sections[section].metadata
+    let itemCategory = dictionary[category]
+    guard itemCategory?[row] != nil else { fatalError("Item not found in category") }
+    return (itemCategory?[row])!
   }
 
   func markAsBought() {
     var allItems = getItems.load()
-    for item in selectedItems {
-      var currentItem = getItems.fullItemInfo(for: item)
-      let itemIndex = getItems.indexNumber(for: currentItem.id, in: allItems)
-      currentItem.boughtStatus = .bought(Date())
-      allItems[itemIndex] = currentItem
+    for id in selectedItems {
+      let index = getItems.indexNumber(for: id, in: allItems)
+      var item = allItems[index]
+      item.boughtStatus = .bought(Date())
+      allItems[index] = item
     }
     getItems.save(allItems)
-    fetchTableData()
+
   }
 
 }
