@@ -27,7 +27,13 @@ class BuyListCoordinator: BuyListCoordinatorType {
   }
 
   func presentDetail(_ item: Item) {
-    let detailController = DetailViewCoordinator().start(item: item)
-    viewController?.tabBarController!.present(detailController, animated: true)
+    let detailViewController = DetailViewCoordinator().start(item: item)
+
+    guard let navigationController = viewController?.navigationController else {
+      return
+    }
+
+    detailViewController.modalPresentationStyle = .fullScreen
+    navigationController.pushViewController(detailViewController, animated: true)
   }
 }
