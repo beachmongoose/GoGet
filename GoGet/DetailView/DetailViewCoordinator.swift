@@ -11,9 +11,9 @@ import ReactiveKit
 import UIKit
 
 protocol DetailViewCoordinatorType {
-  func start(item: Item?) -> DetailViewController
+  func start(item: Item?) -> UINavigationController
   func errorMessage(_ message: String)
-  func confirmSave()
+  func confirmSave(_ item: Bool)
   func dismissDetail(action: UIAlertAction)
   func presentPopover(sender: UIButton, selectedIndex: Property<Int?>)
 }
@@ -22,16 +22,20 @@ class DetailViewCoordinator: DetailViewCoordinatorType {
 
   weak var viewController: DetailViewController?
 
-  func start(item: Item?) -> DetailViewController {
+  func start(item: Item?) -> UINavigationController {
     let viewModel = DetailViewModel(coordinator: self, item: item)
     let viewController = DetailViewController(viewModel: viewModel)
     viewController.title = "New Item"
     self.viewController = viewController
-    return viewController
+    return UINavigationController(rootViewController: viewController)}
+
+  func dismissDetail(action: UIAlertAction) {
+    viewController?.tabBarController?.selectedIndex = 0
   }
 
-func dismissDetail(action: UIAlertAction) {
-  viewController?.tabBarController?.selectedIndex = 0
+  func popController(action: UIAlertAction) {
+    guard let viewController = viewController else { return }
+    viewController.dismiss(animated: true)
   }
 
   func presentPopover(sender: UIButton, selectedIndex: Property<Int?>) {
@@ -57,9 +61,10 @@ extension DetailViewCoordinator {
     viewController?.present(errorAlert, animated: true)
     }
 
-  func confirmSave() {
+  func confirmSave(_ item: Bool) {
+    let handler = (item) ? dismissDetail(action:) : popController(action:)
     let saveConfirm = UIAlertController(title: "Item Saved", message: nil, preferredStyle: .alert)
-    saveConfirm.addAction(UIAlertAction(title: "OK", style: .default, handler: dismissDetail))
+    saveConfirm.addAction(UIAlertAction(title: "OK", style: .default, handler: handler))
     viewController?.present(saveConfirm, animated: true)
   }
 }

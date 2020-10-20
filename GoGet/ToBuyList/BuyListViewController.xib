@@ -11,7 +11,6 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="BuyListViewController" customModule="GoGet" customModuleProvider="target">
             <connections>
-                <outlet property="navigation" destination="xFp-yI-GpO" id="f37-Gg-NNx"/>
                 <outlet property="tableView" destination="NyQ-XD-6wd" id="Dh8-6v-pzz"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
@@ -22,7 +21,7 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="NyQ-XD-6wd">
-                    <rect key="frame" x="0.0" y="88" width="414" height="719"/>
+                    <rect key="frame" x="0.0" y="44" width="414" height="763"/>
                     <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                     <connections>
                         <outlet property="dataSource" destination="-1" id="BZ4-c9-TOE"/>
@@ -43,9 +42,6 @@
                 <navigationBar contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="xFp-yI-GpO">
                     <rect key="frame" x="0.0" y="44" width="414" height="44"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
-                    <items>
-                        <navigationItem title="Title" id="w7E-bf-Cab"/>
-                    </items>
                 </navigationBar>
             </subviews>
             <viewLayoutGuide key="safeArea" id="fnl-2z-Ty3"/>
@@ -56,7 +52,7 @@
                 <constraint firstItem="ugl-G8-e8o" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" constant="132" id="Sxr-4h-vm5"/>
                 <constraint firstItem="fnl-2z-Ty3" firstAttribute="trailing" secondItem="ugl-G8-e8o" secondAttribute="trailing" constant="132" id="Ycc-qb-paJ"/>
                 <constraint firstItem="ugl-G8-e8o" firstAttribute="top" secondItem="NyQ-XD-6wd" secondAttribute="bottom" constant="8" id="ap9-Mp-Ffq"/>
-                <constraint firstItem="NyQ-XD-6wd" firstAttribute="top" secondItem="fnl-2z-Ty3" secondAttribute="top" constant="44" id="bS8-t8-Jfn"/>
+                <constraint firstItem="NyQ-XD-6wd" firstAttribute="top" secondItem="fnl-2z-Ty3" secondAttribute="top" id="bS8-t8-Jfn"/>
                 <constraint firstItem="NyQ-XD-6wd" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" id="gqM-vN-qkG"/>
             </constraints>
             <point key="canvasLocation" x="131.8840579710145" y="153.34821428571428"/>

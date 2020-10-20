@@ -11,7 +11,7 @@ import Foundation
 protocol GetCategoriesType {
   func load() -> [Category]
   func save(_ categories: [Category])
-  func createCategory(for category: String) -> Int
+  func createCategory(for category: String)
   func deleteCategory(_ index: Int)
   func checkIfDuplicate(_ newCategory: String?) -> Bool
   func forID(_ id: String) -> (Int, Category?)
@@ -61,12 +61,11 @@ class GetCategories: GetCategoriesType {
 //    return categories.sorted(by: { $0.date < $1.date })
 //  }
 
-  func createCategory(for category: String) -> Int {
+  func createCategory(for category: String) {
     let newCategory = Category(name: category, date: Date())
     var categoryList = load()
     categoryList.append(newCategory)
     save(categoryList)
-    return categoryList.count
   }
 
   func checkIfDuplicate(_ newCategory: String?) -> Bool {

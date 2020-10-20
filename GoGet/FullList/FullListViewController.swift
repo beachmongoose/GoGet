@@ -11,9 +11,9 @@ import ReactiveKit
 import UIKit
 
 class FullListViewController: UIViewController {
-  var sortButton: UIBarButtonItem
-  var confirmButton: UIBarButtonItem
-  var cancelButton: UIBarButtonItem
+  var sortButton: UIBarButtonItem!
+  var confirmButton: UIBarButtonItem!
+  var cancelButton: UIBarButtonItem!
   @IBOutlet var tableView: UITableView!
   private let viewModel: FullListViewModelType
 
@@ -43,24 +43,9 @@ extension FullListViewController: UITableViewDelegate {
     tableView.delegate = self
   }
 
-  func observeEditModeUpdates() {
-    viewModel.inDeleteMode.observeNext { [self] _ in
-      let deleteMode = viewModel.inDeleteMode.value
-      viewModel.clearIndex()
-      tableView.allowsMultipleSelection = deleteMode
-      sortButton.isEnabled.toggle()
-      if !deleteMode {
-//        menuButton()
-      } else {
-        confirmAndCancelButtons()
-      }
-    }
-    .dispose(in: bag)
-  }
-
   private func createCell(dataSource: Array2D<String, FullListViewModel.CellViewModel>,
-                        indexPath: IndexPath,
-                        tableView: UITableView) -> UITableViewCell {
+                          indexPath: IndexPath,
+                          tableView: UITableView) -> UITableViewCell {
     guard let cell = tableView.dequeueReusableCell(
       withIdentifier: "FullListCell",
       for: indexPath
@@ -69,11 +54,26 @@ extension FullListViewController: UITableViewDelegate {
     }
     let cellViewModel = dataSource[childAt: indexPath].item
     cell.viewModel = cellViewModel
-    cell.reactive.longPressGesture().observeNext { _ in
+    cell.reactive.longPressGesture().removeDuplicates().observeNext { _ in
+      self.viewModel.selectDeselectIndex(at: indexPath)
       self.viewModel.inDeleteMode.value.toggle()
     }
-    .dispose(in: bag)
+    .dispose(in: cell.bag)
     return cell
+  }
+
+  func observeEditModeUpdates() {
+    viewModel.inDeleteMode.observeNext { [self] _ in
+      let deleteMode = viewModel.inDeleteMode.value
+      tableView.allowsMultipleSelection = deleteMode
+      if deleteMode == false {
+        viewModel.clearSelectedItems()
+        addSortButton()
+      } else {
+        confirmAndCancelButtons()
+      }
+    }
+    .dispose(in: bag)
   }
 }
 // MARK: - Navigation
@@ -99,7 +99,7 @@ extension FullListViewController {
     navigationItem.rightBarButtonItem = cancelButton
     navigationItem.leftBarButtonItem = confirmButton
   }
-  func menuButton() {
+  func addSortButton() {
     navigationItem.rightBarButtonItem = sortButton
     navigationItem.leftBarButtonItem = nil
   }
@@ -108,22 +108,11 @@ extension FullListViewController {
 // MARK: - User Input
 extension FullListViewController: UIGestureRecognizerDelegate {
 
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-      if !viewModel.inDeleteMode.value {
-        viewModel.editItem(indexPath)
-      } else {
-        viewModel.selectDeselectIndex(at: indexPath)
-      }
-    }
-
-  @objc func longPress(longPressGestureRecognizer: UILongPressGestureRecognizer) {
-    if longPressGestureRecognizer.state == UIGestureRecognizer.State.began {
-      let touchPoint = longPressGestureRecognizer.location(in: tableView)
-      viewModel.clearIndex()
-      if let selectedItem = tableView.indexPathForRow(at: touchPoint) {
-        viewModel.changeEditing()
-        viewModel.selectDeselectIndex(at: selectedItem)
-      }
+  func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    if viewModel.inDeleteMode.value == false {
+      viewModel.editItem(indexPath)
+    } else {
+      viewModel.selectDeselectIndex(at: indexPath)
     }
   }
 }
@@ -134,10 +123,6 @@ extension FullListViewController {
     presentDeleteAlert(handler: removeItems)
   }
 
-  @objc func massDeleteMode() {
-    viewModel.changeEditing()
-  }
-
   @objc func confirmDelete() {
     presentConfirmRequest(handler: removeItems(action:))
   }
@@ -145,33 +130,23 @@ extension FullListViewController {
   @objc func removeItems(action: UIAlertAction) {
     viewModel.removeItems()
     viewModel.changeEditing()
-    tableView.reloadData()
   }
 
   @objc func cancelDelete() {
-    viewModel.clearIndex()
+    viewModel.clearSelectedItems()
     viewModel.changeEditing()
-    tableView.reloadData()
   }
 }
 
 // MARK: - Sorting
 extension FullListViewController {
 
-  @IBAction func sortMenu(_ sender: Any) {
+  @objc func sortMenu() {
     presentSortOptions(handler: sortMethod(action:))
   }
 
   @objc func sortMethod(action: UIAlertAction) {
     viewModel.sortBy(action.title!.lowercased())
-    tableView.reloadData()
-  }
-}
-
-// MARK: - Data Handling
-extension FullListViewController {
-
-  override func viewWillAppear(_ animated: Bool) {
     tableView.reloadData()
   }
 }

@@ -7,7 +7,6 @@ target 'GoGet' do
 
   # Pods for GoGet
   pod 'Bond'
-  pod 'iOSDropDown'
   pod 'ReactiveKit'
   pod 'SwiftLint'
 end

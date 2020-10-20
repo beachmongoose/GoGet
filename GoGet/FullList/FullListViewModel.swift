@@ -15,17 +15,15 @@ protocol FullListViewModelType {
   var tableData: MutableObservableArray2D<String, FullListViewModel.CellViewModel> { get }
   var tableCategories: [[FullListViewModel.CellViewModel]] { get }
   func changeEditing()
-  func presentDetail(for item: Item?)
   func editItem(_ index: IndexPath)
   func selectDeselectIndex(at indexPath: IndexPath)
-  func clearIndex()
+  func clearSelectedItems()
   func removeItems()
   func sortBy(_ element: String?)
-  func clear()
 }
 
 final class FullListViewModel: FullListViewModelType {
-  
+
   struct CellViewModel: Equatable {
     var name: String
     var id: String?
@@ -45,7 +43,7 @@ final class FullListViewModel: FullListViewModelType {
   var dictionary: [String: [Item]] = [: ]
   var tableCategories = [[CellViewModel]]()
   let tableData = MutableObservableArray2D<String, FullListViewModel.CellViewModel>(Array2D(sections: []))
-  private var selectedItems = [String]()
+  private var selectedItems = MutableObservableArray<String>([])
   private let bag = DisposeBag()
   private let coordinator: FullListCoordinatorType
   private let getItems: GetItemsType
@@ -66,22 +64,10 @@ final class FullListViewModel: FullListViewModelType {
     self.sortTypeInstance = sortTypeInstance
     fetchArrayData()
     observeItemUpdates()
+    observeSelectedItems()
   }
 
 // MARK: - Organzing
-
-  func observeItemUpdates() {
-    let defaults = UserDefaults.standard
-    defaults.reactive.keyPath("Items", ofType: Data.self, context: .immediateOnMain).observeNext { _ in
-      self.fetchArrayData()
-    }
-    .dispose(in: bag)
-  }
-
-  func clear() {
-    tableData.removeAll()
-  }
-
   func reOrder(_ array: [(String, [CellViewModel])]) -> [(String, [CellViewModel])] {
     var data = array
     guard data.contains(where: {$0.0 == "Uncategorized"}) else { return data }
@@ -102,60 +88,45 @@ final class FullListViewModel: FullListViewModelType {
 // MARK: - Item Handling
 extension FullListViewModel {
 
-  func selectDeselectIndex(at indexPath: IndexPath) {
-    let itemID = tableData.collection.sections[indexPath.section].items[indexPath.row].id
-    if selectedItems.contains(itemID!) {
-      selectedItems.remove(at: selectedItems.firstIndex(of: itemID!)!)
-      fetchArrayData()
-    } else {
-      selectedItems.append(itemID!)
-      fetchArrayData()
-    }
-  }
-
-  func changeEditing(){
-    inDeleteMode.value.toggle()
-  }
-
-  func clearIndex() {
-    selectedItems.removeAll()
-    fetchArrayData()
-  }
-
   func editItem(_ index: IndexPath) {
     let category = tableData.collection.sections[index.section].metadata
     let itemCategory = dictionary[category]
     let item = itemCategory?[index.row]
-    presentDetail(for: item)
+    coordinator.presentDetail(item: item)
   }
 
-  func presentDetail(for item: Item?) {
-    coordinator.presentDetail(item: item)
+  func changeEditing() {
+    inDeleteMode.value.toggle()
+  }
+
+  func selectDeselectIndex(at indexPath: IndexPath) {
+    let itemID = tableData.collection.sections[indexPath.section].items[indexPath.row].id
+    var array = selectedItems.array
+    if array.contains(itemID!) {
+      array.remove(at: array.firstIndex(of: itemID!)!)
+      selectedItems.replace(with: array)
+    } else {
+      selectedItems.append(itemID!)
+    }
   }
 
   func removeItems() {
     var allItems = getItems.load()
-    for id in selectedItems {
+    for id in selectedItems.array {
       let index = getItems.indexNumber(for: id, in: allItems)
       allItems.remove(at: index)
     }
     selectedItems.removeAll()
     getItems.save(allItems)
   }
+
+  func clearSelectedItems() {
+    selectedItems.removeAll()
+  }
 }
 
 // MARK: - Datasource Helper
 extension FullListViewModel {
-  func createDictionary() -> [String: [CellViewModel]] {
-    dictionary = getItems.fetchByCategory(.fullList)
-    let formattedDict: [String: [CellViewModel]] = dictionary.mapValues {
-      $0.map { item in
-        let isSelected = selectedItems.contains(item.id)
-        return CellViewModel(item: item, isSelected: isSelected)
-      }
-    }
-    return formattedDict
-  }
 
   func fetchArrayData() {
     let data = createDictionary().map { ($0.key, $0.value) }.sorted(by: {$0.0 < $1.0 })
@@ -164,5 +135,34 @@ extension FullListViewModel {
       return Array2D.Section(metadata: entry.0, items: entry.1)
     }
     tableData.replace(with: Array2D(sections: sections))
+  }
+
+  func createDictionary() -> [String: [CellViewModel]] {
+    dictionary = getItems.fetchByCategory(.fullList)
+    let formattedDict: [String: [CellViewModel]] = dictionary.mapValues {
+      $0.map { item in
+        let isSelected = selectedItems.array.contains(item.id)
+        return CellViewModel(item: item, isSelected: isSelected)
+      }
+    }
+    return formattedDict
+  }
+}
+
+// MARK: - Data Observation
+extension FullListViewModel {
+  func observeItemUpdates() {
+    let defaults = UserDefaults.standard
+    defaults.reactive.keyPath("Items", ofType: Data.self, context: .immediateOnMain).observeNext { _ in
+      self.fetchArrayData()
+    }
+    .dispose(in: bag)
+  }
+
+  func observeSelectedItems() {
+    selectedItems.observeNext { _ in
+      self.fetchArrayData()
+    }
+    .dispose(in: bag)
   }
 }

@@ -32,7 +32,6 @@ class FullListCoordinator: FullListCoordinatorType {
 
   func presentDetail(item: Item?) {
     let detailViewController = DetailViewCoordinator().start(item: item)
-    viewController?.tabBarController!.present(detailViewController, animated: true)
 
     guard let navigationController = viewController?.navigationController else {
       return

@@ -163,8 +163,4 @@ extension DetailViewController: UITabBarControllerDelegate {
     navigationItem.rightBarButtonItem = saveButton
     navigationBar!.setItems([navigationItem], animated: false)
   }
-
-  func dismiss() {
-    self.tabBarController!.selectedIndex = 0
-  }
 }

@@ -24,9 +24,7 @@ protocol DetailViewModelType {
   func convertPickerDate(_ picked: UIDatePicker) -> String
   func saveItem()
   func presentPopover(sender: UIButton)
-
   var item: Item? { get }
-// ^ may not need anymore
 
 // Data field bindings
   var itemData: DetailViewItem! { get }
@@ -42,6 +40,9 @@ final class DetailViewModel: DetailViewModelType {
 
   var item: Item?
   var itemData: DetailViewItem!
+  var newItemStatus: Bool {
+    return item == nil
+  }
 
   var selectedCategoryIndex = Property<Int?>(nil)
   var selectedCategory: Category?
@@ -127,8 +128,8 @@ final class DetailViewModel: DetailViewModelType {
       replace(in: allItems, with: item)
     }
 // TODO: MAKE TAB CONTROLLER GO BACK TO PREVIOUS TAB
-    coordinator.confirmSave()
-    itemData = nil
+      coordinator.confirmSave(newItemStatus)
+      itemData = nil
   }
 
   func replace(in array: [Item], with item: Item) {

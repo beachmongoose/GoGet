@@ -45,20 +45,16 @@ extension CategoryViewController: UITableViewDelegate, UIGestureRecognizerDelega
         self?.viewModel.changeSelectedIndex(to: indexPath.row)
         self?.dismiss(animated: true, completion: nil)
       }
-      
+      .dispose(in: self.bag)
       cell.reactive.longPressGesture().observeNext { _ in
-        //
+        self.viewModel.changeSelectedIndex(to: indexPath.row)
+        self.presentDeleteAlert(handler: self.viewModel.deleteCategory(action:))
       }
       .dispose(in: cell.bag)
 
       return cell
     }
   }
-
-//  func longPressDetector() {
-//    let longPressDetector = UILongPressGestureRecognizer(target: self, action: #selector(longPress))
-//    view.addGestureRecognizer(longPressDetector)
-//  }
 
   @objc func longPress(longPress: UILongPressGestureRecognizer) {
     if longPress.state == UIGestureRecognizer.State.began {
