@@ -41,6 +41,7 @@
 		9F97E45625097E3B00823393 /* Item+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F97E45525097E3B00823393 /* Item+Extensions.swift */; };
 		9FA4E78C251E417600328981 /* CategoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FA4E78A251E417600328981 /* CategoryViewController.swift */; };
 		9FA4E78D251E417600328981 /* CategoryViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9FA4E78B251E417600328981 /* CategoryViewController.xib */; };
+		9FAA7EAB2540D316004396AA /* BuyListCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FAA7EAA2540D316004396AA /* BuyListCellViewModel.swift */; };
 		9FAF69B62522793100E10B41 /* SectionTableViewBinder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FAF69B52522793100E10B41 /* SectionTableViewBinder.swift */; };
 		9FC28C25251D26A5004A58DF /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FC28C23251D26A5004A58DF /* TabBarController.swift */; };
 		9FC28C26251D26A5004A58DF /* TabBarController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9FC28C24251D26A5004A58DF /* TabBarController.xib */; };
@@ -89,6 +90,7 @@
 		9F97E45525097E3B00823393 /* Item+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Item+Extensions.swift"; sourceTree = "<group>"; };
 		9FA4E78A251E417600328981 /* CategoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryViewController.swift; sourceTree = "<group>"; };
 		9FA4E78B251E417600328981 /* CategoryViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CategoryViewController.xib; sourceTree = "<group>"; };
+		9FAA7EAA2540D316004396AA /* BuyListCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuyListCellViewModel.swift; sourceTree = "<group>"; };
 		9FAF69B52522793100E10B41 /* SectionTableViewBinder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SectionTableViewBinder.swift; sourceTree = "<group>"; };
 		9FC28C23251D26A5004A58DF /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
 		9FC28C24251D26A5004A58DF /* TabBarController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TabBarController.xib; sourceTree = "<group>"; };
@@ -130,6 +132,7 @@
 			children = (
 				9F03404B250298F100B27BF3 /* BuyListCell.swift */,
 				9F03404C250298F100B27BF3 /* BuyListCell.xib */,
+				9FAA7EAA2540D316004396AA /* BuyListCellViewModel.swift */,
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -475,6 +478,7 @@
 				9F62A3942512B43300F5AF63 /* GetCategories.swift in Sources */,
 				9F085BBD250C17DF00682D05 /* SortTypeSharedInstance.swift in Sources */,
 				9F34059024FED6580035A385 /* DetailViewController.swift in Sources */,
+				9FAA7EAB2540D316004396AA /* BuyListCellViewModel.swift in Sources */,
 				9F2BCACF25252B5600E760D1 /* CategoryListCell.swift in Sources */,
 				9F0340542502CDD400B27BF3 /* DetailViewModel.swift in Sources */,
 				9F6C705B2515197500C6A3C3 /* CategorySharedInstance.swift in Sources */,

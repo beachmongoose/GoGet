@@ -26,7 +26,7 @@ final class FullListViewModel: FullListViewModelType {
 
   struct CellViewModel: Equatable {
     var name: String
-    var id: String?
+    var id: String
     var quantity: String
     var buyData: String
     var isSelected: Bool
@@ -102,11 +102,11 @@ extension FullListViewModel {
   func selectDeselectIndex(at indexPath: IndexPath) {
     let itemID = tableData.collection.sections[indexPath.section].items[indexPath.row].id
     var array = selectedItems.array
-    if array.contains(itemID!) {
-      array.remove(at: array.firstIndex(of: itemID!)!)
+    if array.contains(itemID) {
+      array.remove(at: array.firstIndex(of: itemID)!)
       selectedItems.replace(with: array)
     } else {
-      selectedItems.append(itemID!)
+      selectedItems.append(itemID)
     }
   }
 

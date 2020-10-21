@@ -12,6 +12,7 @@ import UIKit
 
 class BuyListViewController: UIViewController {
   var sortButton: UIBarButtonItem!
+  var confirmButton: UIBarButtonItem!
   @IBOutlet var tableView: UITableView!
   private let viewModel: BuyListViewModelType
 
@@ -26,7 +27,7 @@ class BuyListViewController: UIViewController {
   }
 
   override func viewDidLoad() {
-    addSortButton()
+    addNavigationButtons()
     setupTable()
     tableView.register(UINib(nibName: "BuyListCell", bundle: nil), forCellReuseIdentifier: "BuyListCell")
     super.viewDidLoad()
@@ -36,13 +37,13 @@ class BuyListViewController: UIViewController {
 // MARK: - Table Data
 extension BuyListViewController: UITableViewDelegate {
   func setupTable() {
-    let dataSource = SectionedTableViewBinderDataSource<BuyListViewModel.CellViewModel>(createCell: createCell)
+    let dataSource = SectionedTableViewBinderDataSource<BuyListCellViewModel>(createCell: createCell)
     viewModel.tableData.bind(to: tableView, using: dataSource)
     tableView.delegate = self
   }
 
   // TODO: REPLACE LONG PRESS WITH CHECKBOX METHOD
-  private func createCell(dataSource: Array2D<String, BuyListViewModel.CellViewModel>,
+  private func createCell(dataSource: Array2D<String, BuyListCellViewModel>,
                           indexPath: IndexPath,
                           tableView: UITableView) -> UITableViewCell {
     guard let cell = tableView.dequeueReusableCell(withIdentifier: "BuyListCell",
@@ -50,16 +51,10 @@ extension BuyListViewController: UITableViewDelegate {
                                                    fatalError("Unable to dequeue") }
     let cellViewModel = dataSource[childAt: indexPath].item
     cell.viewModel = cellViewModel
-    cell.reactive.longPressGesture().removeDuplicates().observeNext { _ in
-      self.viewModel.selectDeselectIndex(indexPath)
-      self.presentBoughtAlert(handler: self.markAsBought(action:))
+    cell.onTapped = { [weak self] in
+      self?.viewModel.selectDeselectIndex(indexPath)
     }
-    .dispose(in: cell.bag)
     return cell
-  }
-
-  @objc func markAsBought(action: UIAlertAction) {
-    self.viewModel.markAsBought()
   }
 
   func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -67,22 +62,36 @@ extension BuyListViewController: UITableViewDelegate {
   }
 }
 
-// MARK: - Sorting
+// MARK: - Navigation
 extension BuyListViewController {
 
-  func addSortButton() {
+  func addNavigationButtons() {
     sortButton = UIBarButtonItem(title: "Sort",
                                  style: .plain,
                                  target: nil,
-                                 action: #selector(sortMenu))
-    navigationItem.rightBarButtonItem = sortButton
-  }
+                                 action: nil)
+    sortButton.reactive.tap.observeNext { _ in
+      self.presentSortOptions(handler: self.sortMethod(action:))
+    }
+    .dispose(in: bag)
 
-  @objc func sortMenu(sender: UIBarButtonItem) {
-    presentSortOptions(handler: sortMethod(action:))
+    confirmButton = UIBarButtonItem(title: "Move",
+                                    style: .plain,
+                                    target: nil,
+                                    action: nil)
+    confirmButton.reactive.tap.observeNext { _ in
+      self.presentBoughtAlert(handler: self.markAsBought(action:))
+    }
+    .dispose(in: bag)
+    navigationItem.rightBarButtonItem = sortButton
+    navigationItem.leftBarButtonItem = confirmButton
   }
 
   @objc func sortMethod(action: UIAlertAction) {
     viewModel.sortBy(action.title!.lowercased())
+  }
+
+  @objc func markAsBought(action: UIAlertAction) {
+    self.viewModel.markAsBought()
   }
 }
