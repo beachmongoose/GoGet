@@ -55,9 +55,7 @@ extension CategoryViewModel {
   }
   func fetchTableData() {
     categories = getCategories.load()
-//    let createNew = CellViewModel(category: Category(id: "n/a", name: "None", date: Date()))
     let categoryList = (categories.isEmpty) ? ([]) : categories.map(CellViewModel.init)
-//    categoryList.insert(createNew, at: 0)
     tableData.replace(with: categoryList)
   }
 

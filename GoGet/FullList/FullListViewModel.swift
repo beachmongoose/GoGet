@@ -91,7 +91,7 @@ extension FullListViewModel {
   func editItem(_ index: IndexPath) {
     let category = tableData.collection.sections[index.section].metadata
     let itemCategory = dictionary[category]
-    let item = itemCategory?[index.row]
+    guard let item = itemCategory?[index.row] else { fatalError("Unable to edit Item, out of range")}
     coordinator.presentDetail(item: item)
   }
 

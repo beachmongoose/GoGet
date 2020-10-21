@@ -24,6 +24,7 @@ protocol DetailViewModelType {
   func convertPickerDate(_ picked: UIDatePicker) -> String
   func saveItem()
   func presentPopover(sender: UIButton)
+  func prePopulate()
   var item: Item? { get }
 
 // Data field bindings
@@ -86,15 +87,26 @@ final class DetailViewModel: DetailViewModelType {
 
     let category = checkForCategory()
 
+    // TODO: REMOVE UNUSED CATEGORY BEFORE DETAIL SCREEN REAPPEARS
     return DetailViewItem(
       name: item?.name ?? "",
       id: item?.id ?? nil,
-      boughtBool: (item != nil || item?.boughtStatus != .notBought) ? true : false,
+      boughtBool: (item != nil && item?.boughtStatus != .notBought) ? true : false,
       date: convertedDate(item?.dateBought ?? Date()),
       quantity: String(item?.quantity ?? 1),
       interval: String(item?.duration ?? 7),
       category: category
       )
+  }
+
+  func prePopulate() {
+    guard item != nil else { return }
+    guard let item = itemData else { return }
+    itemName.value = item.name
+    itemQuantity.value = item.quantity
+    dateBought.value = item.date
+    duration.value = item.interval
+    bought.value = (item.boughtBool) ? 0 : 1
   }
 
   func saveItem() {
@@ -134,10 +146,10 @@ final class DetailViewModel: DetailViewModelType {
 
   func replace(in array: [Item], with item: Item) {
     guard let originalItem = self.item else { return }
+    let index = getItems.indexNumber(for: originalItem.id, in: array)
     var allItems = array
-    let index = getItems.indexNumber(for: originalItem.name, in: array)
     allItems[index] = item
-    getItems.save(allItems)
+    getItems.save(array)
   }
 
 // TODO: MAKE USER UNABLE TO SAVE UNLESS VALID
@@ -193,12 +205,12 @@ final class DetailViewModel: DetailViewModelType {
 extension DetailViewModel {
 
   func checkForCategory() -> String {
-    guard item?.categoryID != nil else { return "" }
+    guard item?.categoryID != nil else { return "None" }
     let data = getCategories.forID((item?.categoryID)!)
     selectedCategoryIndex.value = data.0
     selectedCategory = data.1
     selectedCategoryName.value = selectedCategory?.name
-    return selectedCategoryName.value ?? ""
+    return selectedCategoryName.value ?? "None"
   }
 
   func presentPopover(sender: UIButton) {

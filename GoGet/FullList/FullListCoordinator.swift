@@ -9,7 +9,7 @@
 import UIKit
 
 protocol FullListCoordinatorType {
-  func presentDetail(item: Item?)
+  func presentDetail(item: Item)
   func start() -> UINavigationController
 }
 
@@ -30,8 +30,8 @@ class FullListCoordinator: FullListCoordinatorType {
     return UINavigationController(rootViewController: viewController)
   }
 
-  func presentDetail(item: Item?) {
-    let detailViewController = DetailViewCoordinator().start(item: item)
+  func presentDetail(item: Item) {
+    let detailViewController = DetailViewCoordinator().start(with: item)
 
     guard let navigationController = viewController?.navigationController else {
       return

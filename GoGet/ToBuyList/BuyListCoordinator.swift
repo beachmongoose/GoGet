@@ -9,7 +9,7 @@
 import UIKit
 
 protocol BuyListCoordinatorType {
-  func start() -> BuyListViewController
+  func start() -> UINavigationController
   func presentDetail(_ item: Item)
 }
 
@@ -18,16 +18,16 @@ class BuyListCoordinator: BuyListCoordinatorType {
   weak var viewController: BuyListViewController?
   var delete = false
 
-  func start() -> BuyListViewController {
+  func start() -> UINavigationController {
     let viewModel = BuyListViewModel(coordinator: self)
     let viewController = BuyListViewController(viewModel: viewModel)
     viewController.title = "Buy List"
     self.viewController = viewController
-    return viewController
+    return UINavigationController(rootViewController: viewController)
   }
 
   func presentDetail(_ item: Item) {
-    let detailViewController = DetailViewCoordinator().start(item: item)
+    let detailViewController = DetailViewCoordinator().start(with: item)
 
     guard let navigationController = viewController?.navigationController else {
       return

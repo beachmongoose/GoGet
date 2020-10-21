@@ -61,20 +61,6 @@ extension FullListViewController: UITableViewDelegate {
     .dispose(in: cell.bag)
     return cell
   }
-
-  func observeEditModeUpdates() {
-    viewModel.inDeleteMode.observeNext { [self] _ in
-      let deleteMode = viewModel.inDeleteMode.value
-      tableView.allowsMultipleSelection = deleteMode
-      if deleteMode == false {
-        viewModel.clearSelectedItems()
-        addSortButton()
-      } else {
-        confirmAndCancelButtons()
-      }
-    }
-    .dispose(in: bag)
-  }
 }
 // MARK: - Navigation
 extension FullListViewController {
@@ -102,6 +88,20 @@ extension FullListViewController {
   func addSortButton() {
     navigationItem.rightBarButtonItem = sortButton
     navigationItem.leftBarButtonItem = nil
+  }
+
+  func observeEditModeUpdates() {
+    viewModel.inDeleteMode.observeNext { [self] _ in
+      let deleteMode = viewModel.inDeleteMode.value
+      tableView.allowsMultipleSelection = deleteMode
+      if deleteMode == false {
+        viewModel.clearSelectedItems()
+        addSortButton()
+      } else {
+        confirmAndCancelButtons()
+      }
+    }
+    .dispose(in: bag)
   }
 }
 
