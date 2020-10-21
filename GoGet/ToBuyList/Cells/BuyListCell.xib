@@ -49,6 +49,7 @@
             </tableViewCellContentView>
             <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
             <connections>
+                <outlet property="checkButton" destination="jTD-E6-u3x" id="y8l-3E-ac2"/>
                 <outlet property="dateBought" destination="nY4-eD-ohQ" id="Y8N-rs-QOh"/>
                 <outlet property="item" destination="qpE-do-Cai" id="xH8-EO-MIp"/>
             </connections>

@@ -42,6 +42,7 @@ class DetailViewCoordinator: DetailViewCoordinatorType {
     viewController?.tabBarController?.selectedIndex = 0
   }
 
+  // TODO: DISMISS DETAIL VIEW CONTROLLER AFTER EDITING ITEM
   func popController(action: UIAlertAction) {
     guard let viewController = viewController else { return }
     viewController.dismiss(animated: true)

@@ -10,7 +10,7 @@ import Bond
 import ReactiveKit
 
 protocol BuyListViewModelType {
-  var tableData: MutableObservableArray2D<String, BuyListViewModel.CellViewModel> { get }
+  var tableData: MutableObservableArray2D<String, BuyListCellViewModel> { get }
   func presentDetail(in section: Int, for row: Int)
   func markAsBought()
   func sortBy(_ element: String?)
@@ -18,24 +18,10 @@ protocol BuyListViewModelType {
 }
 
 final class BuyListViewModel: BuyListViewModelType {
-
-  struct CellViewModel {
-    var name: String
-    var quantity: String
-    var buyData: String
-    var isSelected: Bool
-
-    init(item: Item, isSelected: Bool) {
-      self.name = item.name
-      self.quantity = String(item.quantity)
-      self.buyData = item.buyData
-      self.isSelected = isSelected
-    }
-  }
   var dictionary: [String: [Item]] = [: ]
   let bag = DisposeBag()
-  let tableData = MutableObservableArray2D<String, BuyListViewModel.CellViewModel>(Array2D(sections: []))
-  private var selectedItems = (Set<String>())
+  let tableData = MutableObservableArray2D<String, BuyListCellViewModel>(Array2D(sections: []))
+  private var selectedItems = MutableObservableArray<String>([])
   private let coordinator: BuyListCoordinatorType
   private let getItems: GetItemsType
   private let getCategories: GetCategoriesType
@@ -67,6 +53,13 @@ final class BuyListViewModel: BuyListViewModelType {
     .dispose(in: bag)
   }
 
+  func observeSelectedItems() {
+    selectedItems.observeNext { _ in
+      self.fetchTableData()
+    }
+    .dispose(in: bag)
+  }
+
   func fetchTableData() {
     let data = createDictionary().map { ($0.key, $0.value) }.sorted(by: { $0.0 < $1.0 })
     let sortedData = reOrder(data)
@@ -76,7 +69,7 @@ final class BuyListViewModel: BuyListViewModelType {
     tableData.replace(with: Array2D(sections: sections))
   }
 
-  func reOrder(_ array: [(String, [CellViewModel])]) -> [(String, [CellViewModel])] {
+  func reOrder(_ array: [(String, [BuyListCellViewModel])]) -> [(String, [BuyListCellViewModel])] {
     var data = array
     guard data.contains(where: {$0.0 == "Uncategorized"}) else { return data }
     let index = data.firstIndex(where: { $0.0 == "Uncategorized" })
@@ -86,12 +79,12 @@ final class BuyListViewModel: BuyListViewModelType {
     return data
   }
 
-  func createDictionary() -> [String: [CellViewModel]] {
+  func createDictionary() -> [String: [BuyListCellViewModel]] {
     dictionary = getItems.fetchByCategory(.buyList)
-    let formattedDict: [String: [CellViewModel]] = dictionary.mapValues {
+    let formattedDict: [String: [BuyListCellViewModel]] = dictionary.mapValues {
       $0.map { item in
-        let isSelected = selectedItems.contains(item.id)
-        return CellViewModel(item: item, isSelected: isSelected)
+        let isSelected = selectedItems.array.contains(item.id)
+        return BuyListCellViewModel(item: item, isSelected: isSelected)
       }
     }
     return formattedDict
@@ -110,8 +103,14 @@ final class BuyListViewModel: BuyListViewModelType {
   }
 
   func selectDeselectIndex(_ index: IndexPath) {
-    let item = findItem(in: index.section, at: index.row)
-    selectedItems.insert(item.id)
+    let itemID = tableData.collection.sections[index.section].items[index.row].id
+    var array = selectedItems.array
+    if array.contains(itemID) {
+      array.remove(at: array.firstIndex(of: itemID)!)
+      selectedItems.replace(with: array)
+    } else {
+      selectedItems.append(itemID)
+    }
   }
 
   func findItem(in section: Int, at row: Int) -> Item {
@@ -123,7 +122,7 @@ final class BuyListViewModel: BuyListViewModelType {
 
   func markAsBought() {
     var allItems = getItems.load()
-    for id in selectedItems {
+    for id in selectedItems.array {
       let index = getItems.indexNumber(for: id, in: allItems)
       var item = allItems[index]
       item.boughtStatus = .bought(Date())
