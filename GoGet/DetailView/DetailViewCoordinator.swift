@@ -11,7 +11,8 @@ import ReactiveKit
 import UIKit
 
 protocol DetailViewCoordinatorType {
-  func start(item: Item?) -> UINavigationController
+  func start() -> UINavigationController
+  func start(with item: Item) -> UIViewController
   func errorMessage(_ message: String)
   func confirmSave(_ item: Bool)
   func dismissDetail(action: UIAlertAction)
@@ -19,15 +20,23 @@ protocol DetailViewCoordinatorType {
 }
 
 class DetailViewCoordinator: DetailViewCoordinatorType {
-
   weak var viewController: DetailViewController?
 
-  func start(item: Item?) -> UINavigationController {
-    let viewModel = DetailViewModel(coordinator: self, item: item)
+  func start() -> UINavigationController {
+    let viewModel = DetailViewModel(coordinator: self, item: nil)
     let viewController = DetailViewController(viewModel: viewModel)
     viewController.title = "New Item"
     self.viewController = viewController
-    return UINavigationController(rootViewController: viewController)}
+    return UINavigationController(rootViewController: viewController)
+  }
+
+  func start(with item: Item) -> UIViewController {
+    let viewModel = DetailViewModel(coordinator: self, item: item)
+    let viewController = DetailViewController(viewModel: viewModel)
+    viewController.title = "Edit Item"
+    self.viewController = viewController
+    return viewController
+  }
 
   func dismissDetail(action: UIAlertAction) {
     viewController?.tabBarController?.selectedIndex = 0

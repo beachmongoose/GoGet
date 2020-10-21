@@ -23,6 +23,7 @@ class CategoryViewController: UIViewController {
     fatalError("init(coder:) has not been implemented")
   }
   override func viewDidLoad() {
+    tableView.tableFooterView = UIView()
     setupTable()
     super.viewDidLoad()
   }
@@ -68,7 +69,6 @@ extension CategoryViewController: UITableViewDelegate, UIGestureRecognizerDelega
 }
 
 extension CategoryViewController {
-
   @IBAction func createNew(_ sender: Any) {
     addCategory(handler: checkName)
   }
@@ -80,6 +80,7 @@ extension CategoryViewController {
     viewModel.createNewCategory(for: category!)
   }
 
+  // TODO: PUT "NONE" OPTION IN UNIQUE CELL, ADD TO VIEWCONTROLLER
   @IBAction func clearCategory(_ sender: Any) {
     viewModel.changeSelectedIndex(to: nil)
     dismiss(animated: true, completion: nil)

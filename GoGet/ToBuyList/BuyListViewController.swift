@@ -11,6 +11,7 @@ import ReactiveKit
 import UIKit
 
 class BuyListViewController: UIViewController {
+  var sortButton: UIBarButtonItem!
   @IBOutlet var tableView: UITableView!
   private let viewModel: BuyListViewModelType
 
@@ -40,6 +41,7 @@ extension BuyListViewController: UITableViewDelegate {
     tableView.delegate = self
   }
 
+  // TODO: REPLACE LONG PRESS WITH CHECKBOX METHOD
   private func createCell(dataSource: Array2D<String, BuyListViewModel.CellViewModel>,
                           indexPath: IndexPath,
                           tableView: UITableView) -> UITableViewCell {
@@ -69,13 +71,14 @@ extension BuyListViewController: UITableViewDelegate {
 extension BuyListViewController {
 
   func addSortButton() {
-    navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Sort",
+    sortButton = UIBarButtonItem(title: "Sort",
                                  style: .plain,
                                  target: nil,
                                  action: #selector(sortMenu))
+    navigationItem.rightBarButtonItem = sortButton
   }
 
-  @objc func sortMenu(_ sender: Any) {
+  @objc func sortMenu(sender: UIBarButtonItem) {
     presentSortOptions(handler: sortMethod(action:))
   }
 

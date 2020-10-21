@@ -25,7 +25,7 @@ extension TabViewController {
 
     viewControllers = [
       buyView.start(),
-      detailView.start(item: nil),
+      detailView.start(),
       fullView.start()
     ]
   }

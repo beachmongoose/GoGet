@@ -41,13 +41,15 @@ class DetailViewController: UIViewController, UIPopoverPresentationControllerDel
 // MARK: - Parse Data
 extension DetailViewController {
   override func viewWillAppear(_ animated: Bool) {
-    let item = viewModel.itemData
-    itemTextField.text = item?.name ?? ""
-    quantityTextField.text = item?.quantity ?? "1"
-    dateTextField.text = item?.date ?? viewModel.convertedDate(Date())
-    intervalTextField.text = item?.interval ?? "7"
-    boughtBoolButton.selectedSegmentIndex = (item != nil) ? (item!.boughtBool ? 0 : 1): 0
-    categoryButton.setTitle("None", for: .normal)
+    guard let item = viewModel.itemData else { return }
+    itemTextField.text = item.name
+    quantityTextField.text = item.quantity
+    dateTextField.text = item.date
+    intervalTextField.text = item.interval
+    boughtBoolButton.selectedSegmentIndex = (item.boughtBool) ? 0 : 1
+    let bool = (item.boughtBool) ? true : false
+    updateBoughtField(enabled: bool)
+    categoryButton.setTitle(item.category, for: .normal)
     super.viewWillAppear(animated)
   }
 
@@ -62,6 +64,7 @@ extension DetailViewController {
       self.categoryButton.setTitle(category, for: .normal)
     }
     .dispose(in: bag)
+    viewModel.prePopulate()
   }
 }
 
@@ -77,7 +80,6 @@ extension DetailViewController {
 
   @objc func saveItem() {
     viewModel.saveItem()
-    confirmSave(handler: changeTab(action:))
   }
 
   @objc func changeTab(action: UIAlertAction) {
@@ -87,22 +89,22 @@ extension DetailViewController {
 
 // MARK: - Bought Buttons
 extension DetailViewController {
+
+  func updateField() {
+  }
   @IBAction func buttonChanged(_ sender: Any) {
     switch boughtBoolButton.selectedSegmentIndex {
     case 0:
-      updateBoughtField(enabled: true,
-                    textColor: UIColor.black)
+      updateBoughtField(enabled: true)
     case 1:
-      updateBoughtField(enabled: false,
-                    textColor: UIColor.gray)
+      updateBoughtField(enabled: false)
     default:
       break
     }
   }
-  func updateBoughtField(enabled bool: Bool,
-                         textColor color: UIColor) {
+  func updateBoughtField(enabled bool: Bool) {
     dateTextField.isUserInteractionEnabled = bool
-    dateTextField.textColor = color
+    dateTextField.textColor = (bool) ? UIColor.black : UIColor.gray
   }
 }
 
@@ -146,21 +148,4 @@ extension DetailViewController {
   return true
   }
 
-}
-
-// MARK: - Navigation
-
-extension DetailViewController: UITabBarControllerDelegate {
-  override func viewWillLayoutSubviews() {
-    let title: String = (viewModel.item == nil) ? "New Item" : "Item Details"
-    let navigationBar = self.navigation
-    self.view.addSubview(navigation)
-    let navigationItem = UINavigationItem(title: title)
-    let saveButton = UIBarButtonItem(title: "Save",
-                                     style: .plain,
-                                     target: self,
-                                     action: #selector(saveItem))
-    navigationItem.rightBarButtonItem = saveButton
-    navigationBar!.setItems([navigationItem], animated: false)
-  }
 }
