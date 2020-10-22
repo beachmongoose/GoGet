@@ -11,6 +11,7 @@ import ReactiveKit
 import UIKit
 
 class DetailViewController: UIViewController, UIPopoverPresentationControllerDelegate {
+  var saveButton: UIBarButtonItem!
   @IBOutlet var navigation: UINavigationBar!
   @IBOutlet var itemTextField: UITextField!
   @IBOutlet var quantityTextField: UITextField!
@@ -71,10 +72,11 @@ extension DetailViewController {
 // MARK: - Saving
 extension DetailViewController {
   func addSaveButton() {
-    let saveButton = UIBarButtonItem(title: "Save",
+    saveButton = UIBarButtonItem(title: "Save",
                                      style: .plain,
                                      target: self,
                                      action: #selector(saveItem))
+    viewModel.isValid!.bind(to: saveButton.reactive.isEnabled)
     navigationItem.rightBarButtonItem = saveButton
   }
 
@@ -147,5 +149,4 @@ extension DetailViewController {
     _ popoverPresentationController: UIPopoverPresentationController) -> Bool {
   return true
   }
-
 }

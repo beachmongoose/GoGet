@@ -48,7 +48,7 @@ final class CategoryViewModel: CategoryListViewModelType {
 extension CategoryViewModel {
 
   func observeCategoryUpdates() {
-    defaults.reactive.keyPath("Categories", ofType: Data.self, context: .immediateOnMain).observeNext { _ in
+    defaults.reactive.keyPath("Categories", ofType: Data?.self, context: .immediateOnMain).ignoreNils().observeNext { _ in
       self.fetchTableData()
     }
     .dispose(in: bag)

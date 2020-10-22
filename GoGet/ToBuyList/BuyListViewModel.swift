@@ -47,14 +47,7 @@ final class BuyListViewModel: BuyListViewModelType {
 
   func observeItemUpdates() {
     let defaults = UserDefaults.standard
-    defaults.reactive.keyPath("Items", ofType: Data.self, context: .immediateOnMain).observeNext { _ in
-      self.fetchTableData()
-    }
-    .dispose(in: bag)
-  }
-
-  func observeSelectedItems() {
-    selectedItems.observeNext { _ in
+    defaults.reactive.keyPath("Items", ofType: Data?.self, context: .immediateOnMain).ignoreNils().observeNext { _ in
       self.fetchTableData()
     }
     .dispose(in: bag)
