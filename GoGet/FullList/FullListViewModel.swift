@@ -64,7 +64,7 @@ final class FullListViewModel: FullListViewModelType {
     self.sortTypeInstance = sortTypeInstance
     fetchArrayData()
     observeItemUpdates()
-    observeSelectedItems()
+//    observeSelectedItems()
   }
 
 // MARK: - Organzing
@@ -153,7 +153,7 @@ extension FullListViewModel {
 extension FullListViewModel {
   func observeItemUpdates() {
     let defaults = UserDefaults.standard
-    defaults.reactive.keyPath("Items", ofType: Data.self, context: .immediateOnMain).observeNext { _ in
+    defaults.reactive.keyPath("Items", ofType: Data?.self, context: .immediateOnMain).ignoreNils().observeNext { _ in
       self.fetchArrayData()
     }
     .dispose(in: bag)

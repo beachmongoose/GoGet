@@ -8,7 +8,6 @@
 
 import Bond
 import ReactiveKit
-import UIKit
 
 class BuyListCell: UITableViewCell {
   @IBOutlet var item: UILabel!
@@ -25,7 +24,7 @@ class BuyListCell: UITableViewCell {
   override func awakeFromNib() {
     super.awakeFromNib()
     observeCheckbox()
-//    observeSelectedState()
+    observeSelectedState()
   }
 }
 
@@ -46,8 +45,8 @@ extension BuyListCell {
   }
 
   func observeSelectedState() {
-    viewModel?.isSelected.observeNext { isSelected in
-      let imageName = (isSelected) ? "circle.fill" : "circle"
+    viewModel?.isSelected.observeNext { isChecked in
+      let imageName = (isChecked) ? "circle.fill" : "circle"
       self.checkButton.setImage(UIImage(systemName: imageName), for: .normal)
     }
     .dispose(in: bag)

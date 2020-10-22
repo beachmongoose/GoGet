@@ -35,6 +35,7 @@ protocol DetailViewModelType {
   var duration: Property<String?> { get }
   var bought: Property<Int?> { get }
   var selectedCategoryName: Observable<String?> { get }
+  var isValid: Signal<Bool, Never>? { get }
 }
 
 final class DetailViewModel: DetailViewModelType {
@@ -61,6 +62,7 @@ final class DetailViewModel: DetailViewModelType {
   private let getItems: GetItemsType
   private let getCategories: GetCategoriesType
   private let bag = DisposeBag()
+  var isValid: Signal<Bool, Never>?
 
   init(coordinator: DetailViewCoordinatorType,
        getItems: GetItemsType = GetItems(),
@@ -73,12 +75,13 @@ final class DetailViewModel: DetailViewModelType {
     self.item = item
     self.itemData = getDetails()
     self.categories = getCategories.load()
+    self.isValid = validBind()
     observeCategoryUpdates()
     observeCategorySelection()
   }
 
   func observeCategoryUpdates() {
-    defaults.reactive.keyPath("Categories", ofType: Data.self, context: .immediateOnMain).observeNext { _ in
+    defaults.reactive.keyPath("Categories", ofType: Data?.self, context: .immediateOnMain).ignoreNils().observeNext { _ in
       self.categories = self.getCategories.load()
     }
     .dispose(in: bag)
@@ -100,13 +103,14 @@ final class DetailViewModel: DetailViewModelType {
   }
 
   func prePopulate() {
-    guard item != nil else { return }
-    guard let item = itemData else { return }
-    itemName.value = item.name
-    itemQuantity.value = item.quantity
-    dateBought.value = item.date
-    duration.value = item.interval
-    bought.value = (item.boughtBool) ? 0 : 1
+//    guard item != nil else { return }
+//    guard let item = itemData else { return }
+    let item = itemData
+    itemName.value = item?.name ?? ""
+    itemQuantity.value = item?.quantity ?? "1"
+    dateBought.value = item?.date ?? convertedDate(Date())
+    duration.value = item?.interval ?? "7"
+    bought.value = ((item?.boughtBool) != nil) ? 0 : 1
   }
 
   func saveItem() {
@@ -123,7 +127,8 @@ final class DetailViewModel: DetailViewModelType {
       dateAdded: item?.dateAdded ?? Date(),
       categoryID: finalCategoryID
     )
-    validate(adjustedItem)
+//    validate(adjustedItem)
+    upSert(adjustedItem)
   }
 
   func newID() -> String {
@@ -152,27 +157,14 @@ final class DetailViewModel: DetailViewModelType {
     getItems.save(array)
   }
 
-// TODO: MAKE USER UNABLE TO SAVE UNLESS VALID
-  func validate(_ item: Item) {
-
-    switch item {
-    case (let item) where item.quantity == 0:
-      return coordinator.errorMessage("No quantity entered.")
-    case (let item) where item.duration == 0:
-      return coordinator.errorMessage("No duration entered.")
-    case ( _) where item.dateBought > Date():
-      return coordinator.errorMessage("Future date selected.")
-    case (let item) where item.name == "":
-      return coordinator.errorMessage("No name entered.")
-    case (let item) where getItems.isDuplicate(item.name):
-      if self.item != nil {
-        break
-      } else {
-        return coordinator.errorMessage("Item already exists.") }
-    default:
-      break
+  func validBind() -> Signal<Bool, Never> {
+    return combineLatest(itemName, itemQuantity, dateBought, duration) { [self] name, quantity, _, duration in
+      guard name != nil && quantity != nil && duration != nil else { return false }
+      return name != "" && finalName != "" &&
+        quantity!.isInt && finalQuantity != 0 &&
+        self.dateFromString(dateBought.value) <= Date() &&
+        duration!.isInt && finalDuration != 0
     }
-    upSert(item)
   }
 
   // MARK: - Date Info
@@ -187,7 +179,8 @@ final class DetailViewModel: DetailViewModelType {
     return convertedDate(picked.date)
   }
 
-  func dateFromString(_ stringDate: String) -> Date {
+  func dateFromString(_ stringDate: String?) -> Date {
+    guard let stringDate = stringDate else { return Date() }
     let format = DateFormatter()
     format.dateFormat = "MM/dd/yy"
     return format.date(from: stringDate) ?? Date()

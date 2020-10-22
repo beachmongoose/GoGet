@@ -5,7 +5,7 @@
 //  Created by Maggie Maldjian on 9/25/20.
 //  Copyright © 2020 Maggie Maldjian. All rights reserved.
 //
-// TODO: GET RID OF EXCESS CELLS
+// TODO: GET RID OF EXCESS SPACE
 
 import Bond
 import ReactiveKit

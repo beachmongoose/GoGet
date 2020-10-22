@@ -39,7 +39,7 @@ class GetItems: GetItemsType {
        categoryStore: CategoryStoreType = CategoryStore.shared) {
     self.sortTypeInstance = sortTypeInstance
     self.categoryStore = categoryStore
-    removeDeletedCategoryID()
+//    removeDeletedCategoryID()
   }
 
   func save(_ items: [Item]) {
@@ -116,7 +116,7 @@ class GetItems: GetItemsType {
   }
 
   func removeDeletedCategoryID() {
-    defaults.reactive.keyPath("Categories", ofType: Data.self, context: .immediateOnMain).observeNext { _ in
+    defaults.reactive.keyPath("Categories", ofType: Data?.self, context: .immediateOnMain).ignoreNils().observeNext { _ in
       var items = self.load()
       let categories = self.categoryStore.getDictionary()
       var deletedID: String? {
