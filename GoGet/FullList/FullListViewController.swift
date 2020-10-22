@@ -110,7 +110,7 @@ extension FullListViewController: UIGestureRecognizerDelegate {
 
   func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
     if viewModel.inDeleteMode.value == false {
-      viewModel.editItem(indexPath)
+      viewModel.presentDetail(indexPath)
     } else {
       viewModel.selectDeselectIndex(at: indexPath)
     }

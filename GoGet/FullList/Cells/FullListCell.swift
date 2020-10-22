@@ -23,16 +23,6 @@ extension FullListCell {
     item.text = "\(viewModel.name) (\(viewModel.quantity))"
     dateBought.text = viewModel.buyData
 
-    if viewModel.isSelected {
-      changeCellFormat(bg: UIColor.blue, item: UIColor.white, date: UIColor.white)
-    } else {
-      changeCellFormat(bg: UIColor.systemBackground, item: UIColor.black, date: UIColor.darkGray)
-    }
+    backgroundColor = (viewModel.isSelected) ? UIColor.lightGray : UIColor.white
   }
-
-    func changeCellFormat(bg bgColor: UIColor, item itemColor: UIColor, date dateColor: UIColor) {
-      backgroundColor = bgColor
-      item.textColor = itemColor
-      dateBought.textColor = dateColor
-    }
 }

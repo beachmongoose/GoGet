@@ -103,14 +103,12 @@ final class DetailViewModel: DetailViewModelType {
   }
 
   func prePopulate() {
-//    guard item != nil else { return }
-//    guard let item = itemData else { return }
     let item = itemData
     itemName.value = item?.name ?? ""
     itemQuantity.value = item?.quantity ?? "1"
     dateBought.value = item?.date ?? convertedDate(Date())
     duration.value = item?.interval ?? "7"
-    bought.value = ((item?.boughtBool) != nil) ? 0 : 1
+    bought.value = item?.boughtBool ?? false ? 0 : 1
   }
 
   func saveItem() {
