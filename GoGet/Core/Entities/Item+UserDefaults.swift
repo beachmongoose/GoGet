@@ -10,7 +10,7 @@ import Foundation
 
 // MARK: - Mutation
 extension Array where Element == GoGet.Item {
-  var persistenceData: (Data, String)? {
+  var persistenceData: SaveData? {
     guard let data = try? jsonEncoder.encode(self) else {
       return nil
     }
@@ -24,5 +24,14 @@ extension Array where Element == Category {
       return nil
     }
     return (data, "Categories")
+  }
+}
+
+extension Array where Element == String {
+  var persistenceData: SaveData? {
+    guard let data = try? jsonEncoder.encode(self) else {
+      return nil
+    }
+    return (data, "checkList")
   }
 }

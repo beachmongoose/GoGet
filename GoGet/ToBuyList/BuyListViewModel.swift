@@ -21,7 +21,7 @@ final class BuyListViewModel: BuyListViewModelType {
   var dictionary: [String: [Item]] = [: ]
   let bag = DisposeBag()
   let tableData = MutableObservableArray2D<String, BuyListCellViewModel>(Array2D(sections: []))
-  private var selectedItems = MutableObservableArray<String>([])
+  private var selectedItems = Property<Set<String>>(Set())
   private let coordinator: BuyListCoordinatorType
   private let getItems: GetItemsType
   private let getCategories: GetCategoriesType
@@ -39,19 +39,13 @@ final class BuyListViewModel: BuyListViewModelType {
     self.getItems = getItems
     self.getCategories = getCategories
     self.sortTypeInstance = sortTypeInstance
-    fetchTableData()
     observeItemUpdates()
+    observeSelectedItems()
   }
+}
 
-// MARK: - Fetch Data
-
-  func observeItemUpdates() {
-    let defaults = UserDefaults.standard
-    defaults.reactive.keyPath("Items", ofType: Data?.self, context: .immediateOnMain).ignoreNils().observeNext { _ in
-      self.fetchTableData()
-    }
-    .dispose(in: bag)
-  }
+// MARK: - Datasource Helper
+extension BuyListViewModel {
 
   func fetchTableData() {
     let data = createDictionary().map { ($0.key, $0.value) }.sorted(by: { $0.0 < $1.0 })
@@ -62,6 +56,18 @@ final class BuyListViewModel: BuyListViewModelType {
     tableData.replace(with: Array2D(sections: sections))
   }
 
+  func createDictionary() -> [String: [BuyListCellViewModel]] {
+    dictionary = getItems.fetchByCategory(.buyList)
+    let formattedDict: [String: [BuyListCellViewModel]] = dictionary.mapValues {
+      $0.map { item in
+        let isSelected = selectedItems.value.contains(item.id)
+        return BuyListCellViewModel(item: item, isSelected: isSelected)
+      }
+    }
+    return formattedDict
+  }
+
+// MARK: - Organizing
   func reOrder(_ array: [(String, [BuyListCellViewModel])]) -> [(String, [BuyListCellViewModel])] {
     var data = array
     guard data.contains(where: {$0.0 == "Uncategorized"}) else { return data }
@@ -72,57 +78,59 @@ final class BuyListViewModel: BuyListViewModelType {
     return data
   }
 
-  func createDictionary() -> [String: [BuyListCellViewModel]] {
-    dictionary = getItems.fetchByCategory(.buyList)
-    let formattedDict: [String: [BuyListCellViewModel]] = dictionary.mapValues {
-      $0.map { item in
-        let isSelected = selectedItems.array.contains(item.id)
-        return BuyListCellViewModel(item: item, isSelected: isSelected)
-      }
-    }
-    return formattedDict
-  }
-
   func sortBy(_ element: String?) {
     let method = String((element?.components(separatedBy: " ")[0])!)
     sortTypeInstance.changeSortType(to: SortType(rawValue: method)!)
     fetchTableData()
   }
 
-// MARK: - Change View
+// MARK: - Item Handling
+
   func presentDetail(in section: Int, for row: Int) {
-    let item = findItem(in: section, at: row)
+    let category = tableData.collection.sections[section].metadata
+    let itemCategory = dictionary[category]
+    guard let item = itemCategory?[row] else { fatalError("Unable to edit item, out fo range.")}
     coordinator.presentDetail(item)
   }
 
   func selectDeselectIndex(_ index: IndexPath) {
     let itemID = tableData.collection.sections[index.section].items[index.row].id
-    var array = selectedItems.array
-    if array.contains(itemID) {
-      array.remove(at: array.firstIndex(of: itemID)!)
-      selectedItems.replace(with: array)
+    if selectedItems.value.contains(itemID) {
+      selectedItems.value.remove(itemID)
     } else {
-      selectedItems.append(itemID)
+      selectedItems.value.insert(itemID)
     }
-  }
-
-  func findItem(in section: Int, at row: Int) -> Item {
-    let category = tableData.collection.sections[section].metadata
-    let itemCategory = dictionary[category]
-    guard itemCategory?[row] != nil else { fatalError("Item not found in category") }
-    return (itemCategory?[row])!
   }
 
   func markAsBought() {
     var allItems = getItems.load()
-    for id in selectedItems.array {
+    for id in selectedItems.value {
       let index = getItems.indexNumber(for: id, in: allItems)
       var item = allItems[index]
       item.boughtStatus = .bought(Date())
       allItems[index] = item
     }
+    selectedItems.value = (Set())
     getItems.save(allItems)
 
   }
 
+}
+// MARK: - Data Observation
+extension BuyListViewModel {
+  func observeItemUpdates() {
+    let defaults = UserDefaults.standard
+    defaults.reactive.keyPath("Items", ofType: Data?.self, context: .immediateOnMain).ignoreNils().observeNext { _ in
+      self.fetchTableData()
+    }
+    .dispose(in: bag)
+  }
+
+  func observeSelectedItems() {
+    selectedItems.observeNext { [weak self] _ in
+      self?.fetchTableData()
+    }
+    .dispose(in: bag)
+
+  }
 }

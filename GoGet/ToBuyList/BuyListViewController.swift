@@ -42,7 +42,6 @@ extension BuyListViewController: UITableViewDelegate {
     tableView.delegate = self
   }
 
-  // TODO: REPLACE LONG PRESS WITH CHECKBOX METHOD
   private func createCell(dataSource: Array2D<String, BuyListCellViewModel>,
                           indexPath: IndexPath,
                           tableView: UITableView) -> UITableViewCell {
@@ -51,9 +50,10 @@ extension BuyListViewController: UITableViewDelegate {
                                                    fatalError("Unable to dequeue") }
     let cellViewModel = dataSource[childAt: indexPath].item
     cell.viewModel = cellViewModel
-    cell.onTapped = { [weak self] in
+    cell.checkButton.reactive.tapGesture().removeDuplicates().observeNext { [weak self] _ in
       self?.viewModel.selectDeselectIndex(indexPath)
     }
+    .dispose(in: bag)
     return cell
   }
 

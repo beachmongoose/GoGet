@@ -8,20 +8,19 @@
 
 import Bond
 import ReactiveKit
-import Foundation
 
 struct BuyListCellViewModel {
   var name: String
   var id: String
   var quantity: String
   var buyData: String
-  var isSelected: Property<Bool>
+  var isSelected: Bool
 
   init(item: Item, isSelected: Bool) {
     self.name = item.name
     self.id = item.id
     self.quantity = String(item.quantity)
     self.buyData = item.buyData
-    self.isSelected = Property<Bool>(isSelected)
+    self.isSelected = isSelected
   }
 }

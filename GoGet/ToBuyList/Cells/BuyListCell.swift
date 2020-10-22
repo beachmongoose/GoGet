@@ -20,12 +20,6 @@ class BuyListCell: UITableViewCell {
       setupCell()
     }
   }
-
-  override func awakeFromNib() {
-    super.awakeFromNib()
-    observeCheckbox()
-    observeSelectedState()
-  }
 }
 
 extension BuyListCell {
@@ -34,21 +28,8 @@ extension BuyListCell {
     selectionStyle = .none
     item.text = "\(viewModel.name) (\(viewModel.quantity))"
     dateBought.text = viewModel.buyData
-  }
 
-  func observeCheckbox() {
-    checkButton.reactive.tap.observeNext { _ in
-      self.viewModel?.isSelected.value.toggle()
-      self.onTapped?()
-    }
-    .dispose(in: bag)
-  }
-
-  func observeSelectedState() {
-    viewModel?.isSelected.observeNext { isChecked in
-      let imageName = (isChecked) ? "circle.fill" : "circle"
-      self.checkButton.setImage(UIImage(systemName: imageName), for: .normal)
-    }
-    .dispose(in: bag)
+    let imageName = (viewModel.isSelected) ? "circle.fill" : "circle"
+    checkButton.setImage(UIImage(systemName: imageName), for: .normal)
   }
 }
