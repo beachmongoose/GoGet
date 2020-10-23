@@ -9,6 +9,7 @@
 import Foundation
 import ReactiveKit
 import Bond
+import UIKit
 
 extension ReactiveExtensions where Base: UIButton {
         var Title: Bond<String?> {
@@ -21,6 +22,7 @@ extension ReactiveExtensions where Base: UIButton {
 
 extension String {
   var isInt: Bool {
-    return Int(self) != nil
+    guard let number = Int(self) else { return false }
+    return (number > 0) ? true : false
   }
 }

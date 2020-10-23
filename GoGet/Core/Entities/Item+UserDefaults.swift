@@ -26,12 +26,3 @@ extension Array where Element == Category {
     return (data, "Categories")
   }
 }
-
-extension Array where Element == String {
-  var persistenceData: SaveData? {
-    guard let data = try? jsonEncoder.encode(self) else {
-      return nil
-    }
-    return (data, "checkList")
-  }
-}

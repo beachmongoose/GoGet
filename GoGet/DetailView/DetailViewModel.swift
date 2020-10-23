@@ -9,25 +9,14 @@ import Bond
 import ReactiveKit
 import UIKit
 
-struct DetailViewItem {
-  var name: String
-  var id: String?
-  var boughtBool: Bool
-  var date: String
-  var quantity: String
-  var interval: String
-  var category: String
-}
-
 protocol DetailViewModelType {
   func convertedDate(_ date: Date) -> String
-  func prePopulate()
   func presentPopover(sender: UIButton)
   func saveItem()
+  func getDetails()
   var item: Item? { get }
 
 // Data field bindings
-  var itemData: DetailViewItem! { get }
   var itemName: Property<String?> { get }
   var itemQuantity: Property<String?> { get }
   var dateBought: Property<String?> { get }
@@ -35,13 +24,12 @@ protocol DetailViewModelType {
   var bought: Property<Int?> { get }
 //
   var selectedCategoryName: Observable<String?> { get }
-  var isValid: Signal<Bool, Never>? { get }
+  var isValid: Property<Bool> { get }
 }
 
 final class DetailViewModel: DetailViewModelType {
 
   var item: Item?
-  var itemData: DetailViewItem!
   var newItemStatus: Bool {
     return item == nil
   }
@@ -57,14 +45,15 @@ final class DetailViewModel: DetailViewModelType {
 //
 
   var selectedCategory: Category?
-  var selectedCategoryIndex = Property<Int?>(nil)
-  var selectedCategoryName = Observable<String?>(nil)
+  let selectedCategoryIndex = Property<Int?>(nil)
+  let selectedCategoryName = Observable<String?>(nil)
+
+  let isValid = Property<Bool>(false)
 
   private let coordinator: DetailViewCoordinatorType
   private let getCategories: GetCategoriesType
   private let getItems: GetItemsType
   private let bag = DisposeBag()
-  var isValid: Signal<Bool, Never>?
 
   init(coordinator: DetailViewCoordinatorType,
        getCategories: GetCategoriesType = GetCategories(),
@@ -75,36 +64,21 @@ final class DetailViewModel: DetailViewModelType {
     self.getCategories = getCategories
     self.getItems = getItems
     self.item = item
-
-    self.itemData = getDetails()
     self.categories = getCategories.load()
-    self.isValid = validBind()
+    getDetails()
+    observeInput()
     observeCategoryUpdates()
     observeCategorySelection()
   }
 
   // TODO: REMOVE UNUSED CATEGORY BEFORE DETAIL SCREEN REAPPEARS
-  func getDetails() -> DetailViewItem {
-
-    let category = checkForCategory()
-    return DetailViewItem(
-      name: item?.name ?? "",
-      id: item?.id ?? nil,
-      boughtBool: (item != nil && item?.boughtStatus != .notBought) ? true : false,
-      date: convertedDate(item?.dateBought ?? Date()),
-      quantity: String(item?.quantity ?? 1),
-      interval: String(item?.duration ?? 7),
-      category: category
-      )
-  }
-
-  func prePopulate() {
-    let item = itemData
+  func getDetails() {
     itemName.value = item?.name ?? ""
-    itemQuantity.value = item?.quantity ?? "1"
-    dateBought.value = item?.date ?? convertedDate(Date())
-    duration.value = item?.interval ?? "7"
-    bought.value = item?.boughtBool ?? false ? 0 : 1
+    itemQuantity.value = String(item?.quantity ?? 1)
+    dateBought.value = convertedDate(item?.dateBought ?? Date())
+    duration.value = String(item?.duration ?? 7)
+    bought.value = (item != nil && item?.boughtStatus != .notBought) ? 0 : 1
+    checkForCategory()
   }
 
   func saveItem() {
@@ -133,10 +107,9 @@ final class DetailViewModel: DetailViewModelType {
     } else {
       replace(in: allItems, with: item)
     }
-// TODO: MAKE TAB CONTROLLER GO BACK TO PREVIOUS TAB AND CLEAR ITEM DETAILS
-      coordinator.confirmSave(newItemStatus)
-      itemData = nil
-      prePopulate()
+// TODO: MAKE TAB CONTROLLER GO BACK TO PREVIOUS TAB
+    coordinator.confirmSave(newItemStatus)
+    getDetails()
   }
 
   func replace(in array: [Item], with item: Item) {
@@ -147,27 +120,35 @@ final class DetailViewModel: DetailViewModelType {
     getItems.save(array)
   }
 
-  func validBind() -> Signal<Bool, Never> {
-    return combineLatest(itemName, itemQuantity, dateBought, duration) { [self] name, quantity, _, duration in
-      guard name != nil && quantity != nil && duration != nil else { return false }
-      return name != "" && finalName != "" &&
-        quantity!.isInt && finalQuantity != 0 &&
-        self.dateFromString(dateBought.value) <= Date() &&
-        duration!.isInt && finalDuration != 0
+  func observeInput() {
+    let checkFields = merge(itemName, itemQuantity, dateBought, duration)
+
+    checkFields.observeNext { [weak self] _ in
+      guard let name = self?.itemName.value,
+            let quantity = self?.itemQuantity.value,
+            let date = self?.dateFromString(self?.dateBought.value),
+            let duration = self?.duration.value else { return }
+
+      self?.isValid.value =
+      name != "" &&
+      quantity.isInt &&
+      date <= Date() &&
+      duration.isInt
     }
+    .dispose(in: bag)
   }
 }
 
 // MARK: - Categories
 extension DetailViewModel {
 
-  func checkForCategory() -> String {
-    guard item?.categoryID != nil else { return "None" }
+  func checkForCategory() {
+    guard item?.categoryID != nil else { selectedCategoryName.value = "None"
+      return }
     let data = getCategories.forID((item?.categoryID)!)
     selectedCategoryIndex.value = data.0
     selectedCategory = data.1
     selectedCategoryName.value = selectedCategory?.name
-    return selectedCategoryName.value ?? "None"
   }
 
   func presentPopover(sender: UIButton) {

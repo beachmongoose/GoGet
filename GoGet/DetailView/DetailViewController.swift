@@ -32,6 +32,7 @@ class DetailViewController: UIViewController, UIPopoverPresentationControllerDel
   }
 
   override func viewDidLoad() {
+      populateTextFields()
       textFieldBindings()
       addDatePicker()
       addSaveButton()
@@ -42,16 +43,20 @@ class DetailViewController: UIViewController, UIPopoverPresentationControllerDel
 
 // MARK: - Populate Fields
 extension DetailViewController {
+
   override func viewWillAppear(_ animated: Bool) {
-    guard let item = viewModel.itemData else { return }
-    itemTextField.text = item.name
-    quantityTextField.text = item.quantity
-    dateTextField.text = item.date
-    intervalTextField.text = item.interval
-    boughtBoolButton.selectedSegmentIndex = (item.boughtBool) ? 0 : 1
-    boughtFieldEnable(item.boughtBool)
-    categoryButton.setTitle(item.category, for: .normal)
-    super.viewWillAppear(animated)
+    viewModel.getDetails()
+    populateTextFields()
+  }
+
+  func populateTextFields() {
+    itemTextField.text = viewModel.itemName.value
+    quantityTextField.text = viewModel.itemQuantity.value
+    dateTextField.text = viewModel.dateBought.value
+    intervalTextField.text = viewModel.duration.value
+    boughtBoolButton.selectedSegmentIndex = viewModel.bought.value ?? 1
+    boughtFieldEnable((viewModel.bought.value == 0) ? true : false)
+    categoryButton.setTitle(viewModel.selectedCategoryName.value, for: .normal)
   }
 
   func textFieldBindings() {
@@ -65,7 +70,8 @@ extension DetailViewController {
       self.categoryButton.setTitle(category, for: .normal)
     }
     .dispose(in: bag)
-    viewModel.prePopulate()
+    quantityTextField.keyboardType = .numberPad
+    intervalTextField.keyboardType = .numberPad
   }
 }
 
@@ -77,7 +83,7 @@ extension DetailViewController {
                                      target: self,
                                      action: nil)
     saveButton.reactive.tap.bind(to: self) { $0.viewModel.saveItem() }
-    viewModel.isValid!.bind(to: saveButton.reactive.isEnabled)
+    viewModel.isValid.bind(to: saveButton.reactive.isEnabled)
     navigationItem.rightBarButtonItem = saveButton
   }
 }
@@ -108,6 +114,7 @@ extension DetailViewController {
 extension DetailViewController {
   func addDatePicker() {
     let datePicker = UIDatePicker()
+    datePicker.preferredDatePickerStyle = .wheels
     datePicker.datePickerMode = UIDatePicker.Mode.date
 
     datePicker.addTarget(self, action: #selector(DetailViewController.datePicked(sender:)),
