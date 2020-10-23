@@ -71,7 +71,6 @@ final class DetailViewModel: DetailViewModelType {
     observeCategorySelection()
   }
 
-  // TODO: REMOVE UNUSED CATEGORY BEFORE DETAIL SCREEN REAPPEARS
   func getDetails() {
     itemName.value = item?.name ?? ""
     itemQuantity.value = String(item?.quantity ?? 1)
@@ -109,6 +108,7 @@ final class DetailViewModel: DetailViewModelType {
     }
 // TODO: MAKE TAB CONTROLLER GO BACK TO PREVIOUS TAB
     coordinator.confirmSave(newItemStatus)
+    self.item = nil
     getDetails()
   }
 
@@ -117,7 +117,7 @@ final class DetailViewModel: DetailViewModelType {
     let index = getItems.indexNumber(for: originalItem.id, in: array)
     var allItems = array
     allItems[index] = item
-    getItems.save(array)
+    getItems.save(allItems)
   }
 
   func observeInput() {
