@@ -70,19 +70,15 @@ extension BuyListViewController {
                                  style: .plain,
                                  target: nil,
                                  action: nil)
-    sortButton.reactive.tap.observeNext { _ in
-      self.presentSortOptions(handler: self.sortMethod(action:))
-    }
-    .dispose(in: bag)
-
+    sortButton.reactive.tap.bind(to: self) { $0.presentSortOptions(handler: self.sortMethod(action:))}
     confirmButton = UIBarButtonItem(title: "Move",
                                     style: .plain,
                                     target: nil,
                                     action: nil)
-    confirmButton.reactive.tap.observeNext { _ in
-      self.presentBoughtAlert(handler: self.markAsBought(action:))
-    }
-    .dispose(in: bag)
+    confirmButton.reactive.tap.bind(to: self) { guard $0.viewModel.itemsAreChecked else {
+      $0.presentError(message: "No items selected.")
+      return }
+      self.presentBoughtAlert(handler: self.markAsBought(action:)) }
     navigationItem.rightBarButtonItem = sortButton
     navigationItem.leftBarButtonItem = confirmButton
   }

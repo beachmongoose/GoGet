@@ -11,6 +11,7 @@ import ReactiveKit
 
 protocol BuyListViewModelType {
   var tableData: MutableObservableArray2D<String, BuyListCellViewModel> { get }
+  var itemsAreChecked: Bool { get }
   func presentDetail(in section: Int, for row: Int)
   func markAsBought()
   func sortBy(_ element: String?)
@@ -21,7 +22,11 @@ final class BuyListViewModel: BuyListViewModelType {
   var dictionary: [String: [Item]] = [: ]
   let bag = DisposeBag()
   let tableData = MutableObservableArray2D<String, BuyListCellViewModel>(Array2D(sections: []))
+  var itemsAreChecked: Bool {
+    return !selectedItems.value.isEmpty
+  }
   private var selectedItems = Property<Set<String>>(Set())
+
   private let coordinator: BuyListCoordinatorType
   private let getItems: GetItemsType
   private let getCategories: GetCategoriesType
@@ -89,7 +94,7 @@ extension BuyListViewModel {
   func presentDetail(in section: Int, for row: Int) {
     let category = tableData.collection.sections[section].metadata
     let itemCategory = dictionary[category]
-    guard let item = itemCategory?[row] else { fatalError("Unable to edit item, out fo range.")}
+    guard let item = itemCategory?[row] else { fatalError("Unable to edit item, out of range.")}
     coordinator.presentDetail(item)
   }
 

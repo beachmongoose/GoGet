@@ -64,9 +64,6 @@
                                 <segment title="Yes"/>
                                 <segment title="No"/>
                             </segments>
-                            <connections>
-                                <action selector="buttonChanged:" destination="-1" eventType="valueChanged" id="Iji-3E-TCd"/>
-                            </connections>
                         </segmentedControl>
                     </subviews>
                     <color key="backgroundColor" systemColor="systemBackgroundColor"/>
