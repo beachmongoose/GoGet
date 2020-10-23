@@ -35,11 +35,12 @@ class DetailViewController: UIViewController, UIPopoverPresentationControllerDel
       textFieldBindings()
       addDatePicker()
       addSaveButton()
+      boughtToggle()
       super.viewDidLoad()
     }
 }
 
-// MARK: - Parse Data
+// MARK: - Populate Fields
 extension DetailViewController {
   override func viewWillAppear(_ animated: Bool) {
     guard let item = viewModel.itemData else { return }
@@ -48,8 +49,7 @@ extension DetailViewController {
     dateTextField.text = item.date
     intervalTextField.text = item.interval
     boughtBoolButton.selectedSegmentIndex = (item.boughtBool) ? 0 : 1
-    let bool = (item.boughtBool) ? true : false
-    updateBoughtField(enabled: bool)
+    boughtFieldEnable(item.boughtBool)
     categoryButton.setTitle(item.category, for: .normal)
     super.viewWillAppear(animated)
   }
@@ -75,36 +75,30 @@ extension DetailViewController {
     saveButton = UIBarButtonItem(title: "Save",
                                      style: .plain,
                                      target: self,
-                                     action: #selector(saveItem))
+                                     action: nil)
+    saveButton.reactive.tap.bind(to: self) { $0.viewModel.saveItem() }
     viewModel.isValid!.bind(to: saveButton.reactive.isEnabled)
     navigationItem.rightBarButtonItem = saveButton
   }
-
-  @objc func saveItem() {
-    viewModel.saveItem()
-  }
-
-  @objc func changeTab(action: UIAlertAction) {
-    tabBarController?.selectedIndex = 0
-  }
 }
 
-// MARK: - Bought Buttons
+// MARK: - Bought Button
 extension DetailViewController {
 
-  func updateField() {
-  }
-  @IBAction func buttonChanged(_ sender: Any) {
-    switch boughtBoolButton.selectedSegmentIndex {
-    case 0:
-      updateBoughtField(enabled: true)
-    case 1:
-      updateBoughtField(enabled: false)
-    default:
+  func boughtToggle() {
+    boughtBoolButton.reactive.selectedSegmentIndex.observeNext { [weak self] _ in
+      switch self?.boughtBoolButton.selectedSegmentIndex {
+      case 0:
+      self?.boughtFieldEnable(true)
+      case 1:
+      self?.boughtFieldEnable(false)
+      default:
       break
+      }
     }
+    .dispose(in: bag)
   }
-  func updateBoughtField(enabled bool: Bool) {
+  func boughtFieldEnable(_ bool: Bool) {
     dateTextField.isUserInteractionEnabled = bool
     dateTextField.textColor = (bool) ? UIColor.black : UIColor.gray
   }
@@ -122,7 +116,7 @@ extension DetailViewController {
   }
 
   @objc func datePicked(sender: UIDatePicker) {
-    dateTextField.text = viewModel.convertPickerDate(sender)
+    dateTextField.text = viewModel.convertedDate(sender.date)
   }
 
   override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {

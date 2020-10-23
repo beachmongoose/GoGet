@@ -69,15 +69,19 @@ extension FullListViewController {
     sortButton = UIBarButtonItem(title: "Sort",
                                  style: .plain,
                                  target: nil,
-                                 action: #selector(sortMenu))
+                                 action: nil)
+    sortButton.reactive.tap.bind(to: self) { $0.presentSortOptions(handler: $0.sortMethod(action:)) }
     confirmButton = UIBarButtonItem(title: "Confirm",
                                   style: .plain,
                                   target: self,
-                                  action: #selector(confirmDelete))
+                                  action: nil)
+    confirmButton.reactive.tap.bind(to: self) { $0.presentConfirmRequest(handler: $0.removeItems(action:))}
     cancelButton = UIBarButtonItem(title: "Cancel",
                                  style: .plain,
                                  target: self,
-                                 action: #selector(cancelDelete))
+                                 action: nil)
+    cancelButton.reactive.tap.bind(to: self) { $0.viewModel.clearSelectedItems()
+      $0.viewModel.changeEditing() }
     navigationItem.rightBarButtonItem = sortButton
   }
 
@@ -115,34 +119,10 @@ extension FullListViewController: UIGestureRecognizerDelegate {
       viewModel.selectDeselectIndex(at: indexPath)
     }
   }
-}
-
-  // MARK: - Removing Items
-extension FullListViewController {
-  func deletePrompt(_ itemIndex: Int) {
-    presentDeleteAlert(handler: removeItems)
-  }
-
-  @objc func confirmDelete() {
-    presentConfirmRequest(handler: removeItems(action:))
-  }
 
   @objc func removeItems(action: UIAlertAction) {
     viewModel.removeItems()
     viewModel.changeEditing()
-  }
-
-  @objc func cancelDelete() {
-    viewModel.clearSelectedItems()
-    viewModel.changeEditing()
-  }
-}
-
-// MARK: - Sorting
-extension FullListViewController {
-
-  @objc func sortMenu() {
-    presentSortOptions(handler: sortMethod(action:))
   }
 
   @objc func sortMethod(action: UIAlertAction) {

@@ -21,10 +21,9 @@ struct DetailViewItem {
 
 protocol DetailViewModelType {
   func convertedDate(_ date: Date) -> String
-  func convertPickerDate(_ picked: UIDatePicker) -> String
-  func saveItem()
-  func presentPopover(sender: UIButton)
   func prePopulate()
+  func presentPopover(sender: UIButton)
+  func saveItem()
   var item: Item? { get }
 
 // Data field bindings
@@ -34,6 +33,7 @@ protocol DetailViewModelType {
   var dateBought: Property<String?> { get }
   var duration: Property<String?> { get }
   var bought: Property<Int?> { get }
+//
   var selectedCategoryName: Observable<String?> { get }
   var isValid: Signal<Bool, Never>? { get }
 }
@@ -46,9 +46,6 @@ final class DetailViewModel: DetailViewModelType {
     return item == nil
   }
 
-  var selectedCategoryIndex = Property<Int?>(nil)
-  var selectedCategory: Category?
-  var selectedCategoryName = Observable<String?>(nil)
   var categories: [Category] = []
 
 // Data field bindings
@@ -57,22 +54,28 @@ final class DetailViewModel: DetailViewModelType {
   let dateBought = Property<String?>(nil)
   let duration = Property<String?>(nil)
   let bought = Property<Int?>(nil)
+//
+
+  var selectedCategory: Category?
+  var selectedCategoryIndex = Property<Int?>(nil)
+  var selectedCategoryName = Observable<String?>(nil)
 
   private let coordinator: DetailViewCoordinatorType
-  private let getItems: GetItemsType
   private let getCategories: GetCategoriesType
+  private let getItems: GetItemsType
   private let bag = DisposeBag()
   var isValid: Signal<Bool, Never>?
 
   init(coordinator: DetailViewCoordinatorType,
-       getItems: GetItemsType = GetItems(),
        getCategories: GetCategoriesType = GetCategories(),
+       getItems: GetItemsType = GetItems(),
        item: Item?
        ) {
     self.coordinator = coordinator
-    self.getItems = getItems
     self.getCategories = getCategories
+    self.getItems = getItems
     self.item = item
+
     self.itemData = getDetails()
     self.categories = getCategories.load()
     self.isValid = validBind()
@@ -80,17 +83,10 @@ final class DetailViewModel: DetailViewModelType {
     observeCategorySelection()
   }
 
-  func observeCategoryUpdates() {
-    defaults.reactive.keyPath("Categories", ofType: Data?.self, context: .immediateOnMain).ignoreNils().observeNext { _ in
-      self.categories = self.getCategories.load()
-    }
-    .dispose(in: bag)
-  }
+  // TODO: REMOVE UNUSED CATEGORY BEFORE DETAIL SCREEN REAPPEARS
   func getDetails() -> DetailViewItem {
 
     let category = checkForCategory()
-
-    // TODO: REMOVE UNUSED CATEGORY BEFORE DETAIL SCREEN REAPPEARS
     return DetailViewItem(
       name: item?.name ?? "",
       id: item?.id ?? nil,
@@ -113,7 +109,7 @@ final class DetailViewModel: DetailViewModelType {
 
   func saveItem() {
     var idString: String {
-      return (self.item == nil) ? newID() : item!.id
+      return (self.item == nil) ? UUID().uuidString : item!.id
     }
 
     let adjustedItem = Item(
@@ -125,12 +121,7 @@ final class DetailViewModel: DetailViewModelType {
       dateAdded: item?.dateAdded ?? Date(),
       categoryID: finalCategoryID
     )
-//    validate(adjustedItem)
     upSert(adjustedItem)
-  }
-
-  func newID() -> String {
-    return UUID().uuidString
   }
 
   func upSert(_ item: Item) {
@@ -142,9 +133,10 @@ final class DetailViewModel: DetailViewModelType {
     } else {
       replace(in: allItems, with: item)
     }
-// TODO: MAKE TAB CONTROLLER GO BACK TO PREVIOUS TAB
+// TODO: MAKE TAB CONTROLLER GO BACK TO PREVIOUS TAB AND CLEAR ITEM DETAILS
       coordinator.confirmSave(newItemStatus)
       itemData = nil
+      prePopulate()
   }
 
   func replace(in array: [Item], with item: Item) {
@@ -164,32 +156,6 @@ final class DetailViewModel: DetailViewModelType {
         duration!.isInt && finalDuration != 0
     }
   }
-
-  // MARK: - Date Info
-  func convertedDate(_ date: Date) -> String {
-    let formatter = DateFormatter()
-    formatter.dateStyle = DateFormatter.Style.short
-    formatter.timeStyle = DateFormatter.Style.none
-    return formatter.string(from: date)
-  }
-
-  func convertPickerDate(_ picked: UIDatePicker) -> String {
-    return convertedDate(picked.date)
-  }
-
-  func dateFromString(_ stringDate: String?) -> Date {
-    guard let stringDate = stringDate else { return Date() }
-    let format = DateFormatter()
-    format.dateFormat = "MM/dd/yy"
-    return format.date(from: stringDate) ?? Date()
-  }
-
-  func futureDateCheck(_ item: Item) -> Bool {
-    let calendar = Calendar.autoupdatingCurrent
-    let currentDate = calendar.startOfDay(for: Date())
-    let dateBought = calendar.startOfDay(for: item.dateBought)
-    return dateBought < currentDate
-  }
 }
 
 // MARK: - Categories
@@ -208,6 +174,13 @@ extension DetailViewModel {
     coordinator.presentPopover(sender: sender, selectedIndex: selectedCategoryIndex)
   }
 
+  func observeCategoryUpdates() {
+    defaults.reactive.keyPath("Categories", ofType: Data?.self, context: .immediateOnMain).ignoreNils().observeNext { _ in
+      self.categories = self.getCategories.load()
+    }
+    .dispose(in: bag)
+  }
+
   func observeCategorySelection() {
     selectedCategoryIndex.observeNext { index in
       let category = (self.categories.count == 0 || index == nil) ? nil : self.categories[index ?? 0]
@@ -215,6 +188,23 @@ extension DetailViewModel {
       self.selectedCategoryName.value = category?.name ?? nil
     }
     .dispose(in: bag)
+  }
+}
+
+// MARK: - Date Info
+extension DetailViewModel {
+  func convertedDate(_ date: Date) -> String {
+    let formatter = DateFormatter()
+    formatter.dateStyle = DateFormatter.Style.short
+    formatter.timeStyle = DateFormatter.Style.none
+    return formatter.string(from: date)
+  }
+
+  func dateFromString(_ stringDate: String?) -> Date {
+    guard let stringDate = stringDate else { return Date() }
+    let format = DateFormatter()
+    format.dateFormat = "MM/dd/yy"
+    return format.date(from: stringDate) ?? Date()
   }
 }
 
