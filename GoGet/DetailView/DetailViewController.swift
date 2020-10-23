@@ -12,6 +12,7 @@ import UIKit
 
 class DetailViewController: UIViewController, UIPopoverPresentationControllerDelegate {
   var saveButton: UIBarButtonItem!
+  var clearButton: UIBarButtonItem!
   @IBOutlet var navigation: UINavigationBar!
   @IBOutlet var itemTextField: UITextField!
   @IBOutlet var quantityTextField: UITextField!
@@ -35,7 +36,7 @@ class DetailViewController: UIViewController, UIPopoverPresentationControllerDel
       populateTextFields()
       textFieldBindings()
       addDatePicker()
-      addSaveButton()
+      addNavigationButtons()
       boughtToggle()
       super.viewDidLoad()
     }
@@ -43,12 +44,6 @@ class DetailViewController: UIViewController, UIPopoverPresentationControllerDel
 
 // MARK: - Populate Fields
 extension DetailViewController {
-
-  override func viewWillAppear(_ animated: Bool) {
-    viewModel.getDetails()
-    populateTextFields()
-  }
-
   func populateTextFields() {
     itemTextField.text = viewModel.itemName.value
     quantityTextField.text = viewModel.itemQuantity.value
@@ -77,14 +72,22 @@ extension DetailViewController {
 
 // MARK: - Saving
 extension DetailViewController {
-  func addSaveButton() {
+  func addNavigationButtons() {
     saveButton = UIBarButtonItem(title: "Save",
                                      style: .plain,
                                      target: self,
                                      action: nil)
     saveButton.reactive.tap.bind(to: self) { $0.viewModel.saveItem() }
     viewModel.isValid.bind(to: saveButton.reactive.isEnabled)
+    clearButton = UIBarButtonItem(title: "Clear",
+                                  style: .plain,
+                                  target: self,
+                                  action: nil)
+    clearButton.reactive.tap.bind(to: self) { $0.clearInput() }
     navigationItem.rightBarButtonItem = saveButton
+    if viewModel.item == nil {
+      navigationItem.leftBarButtonItem = clearButton
+    }
   }
 }
 
@@ -149,5 +152,10 @@ extension DetailViewController {
   func popoverPresentationControllerShouldDismissPopover(
     _ popoverPresentationController: UIPopoverPresentationController) -> Bool {
   return true
+  }
+
+  func clearInput() {
+    viewModel.getDetails()
+    populateTextFields()
   }
 }

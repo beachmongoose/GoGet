@@ -39,7 +39,7 @@ class GetItems: GetItemsType {
        categoryStore: CategoryStoreType = CategoryStore.shared) {
     self.sortTypeInstance = sortTypeInstance
     self.categoryStore = categoryStore
-//    removeDeletedCategoryID()
+    removeDeletedCategoryID()
   }
 
   func save(_ items: [Item]) {

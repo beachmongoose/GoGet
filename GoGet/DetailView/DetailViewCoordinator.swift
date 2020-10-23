@@ -39,6 +39,7 @@ class DetailViewCoordinator: DetailViewCoordinatorType {
   }
 
   func dismissDetail(action: UIAlertAction) {
+    viewController?.clearInput()
     viewController?.tabBarController?.selectedIndex = 0
   }
 
@@ -52,6 +53,8 @@ class DetailViewCoordinator: DetailViewCoordinatorType {
     guard let viewController = viewController else { return }
 
     let categoryController = CategoryViewCoordinator().start(selectedIndex: selectedIndex)
+    let height = 200
+    categoryController.preferredContentSize = CGSize(width: 300, height: height)
     categoryController.modalPresentationStyle = .popover
     if let presentationController = categoryController.popoverPresentationController {
       presentationController.sourceView = sender
@@ -72,9 +75,9 @@ extension DetailViewCoordinator {
     }
 
   func confirmSave(_ item: Bool) {
-    let handler = (item) ? dismissDetail(action:) : popController(action:)
+//    let handler = (item) ? dismissDetail(action:) : popController(action:)
     let saveConfirm = UIAlertController(title: "Item Saved", message: nil, preferredStyle: .alert)
-    saveConfirm.addAction(UIAlertAction(title: "OK", style: .default, handler: handler))
+    saveConfirm.addAction(UIAlertAction(title: "OK", style: .default, handler: dismissDetail))
     viewController?.present(saveConfirm, animated: true)
   }
 }
