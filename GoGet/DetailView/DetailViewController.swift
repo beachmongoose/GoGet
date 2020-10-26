@@ -37,6 +37,7 @@ class DetailViewController: UIViewController, UIPopoverPresentationControllerDel
       textFieldBindings()
       addDatePicker()
       addNavigationButtons()
+      formatCategoryButton()
       boughtToggle()
       super.viewDidLoad()
     }
@@ -107,6 +108,7 @@ extension DetailViewController {
     }
     .dispose(in: bag)
   }
+
   func boughtFieldEnable(_ bool: Bool) {
     dateTextField.isUserInteractionEnabled = bool
     dateTextField.textColor = (bool) ? UIColor.black : UIColor.gray
@@ -157,5 +159,12 @@ extension DetailViewController {
   func clearInput() {
     viewModel.getDetails()
     populateTextFields()
+  }
+
+  func formatCategoryButton() {
+    categoryButton.backgroundColor = .clear
+    categoryButton.layer.cornerRadius = 5
+    categoryButton.layer.borderWidth = 0.25
+    categoryButton.layer.borderColor = UIColor.lightGray.cgColor
   }
 }

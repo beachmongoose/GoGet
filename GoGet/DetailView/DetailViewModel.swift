@@ -27,8 +27,14 @@ protocol DetailViewModelType {
   var isValid: Property<Bool> { get }
 }
 
+//TODO: FORMAT AS TABLE
 final class DetailViewModel: DetailViewModelType {
-
+//  enum CellViewModel {
+//    case textInputCell(TextInputCellViewModel)
+//    case numberInputCell(TextInputCellViewModel)
+//    case textInput(TextInputCellViewModel)
+//    case textInput(TextInputCellViewModel)
+//  }
   var item: Item?
   var newItemStatus: Bool {
     return item == nil
@@ -97,6 +103,7 @@ final class DetailViewModel: DetailViewModelType {
     upSert(adjustedItem)
   }
 
+  //TODO: Promise
   func upSert(_ item: Item) {
     var allItems = getItems.load()
 
@@ -106,7 +113,6 @@ final class DetailViewModel: DetailViewModelType {
     } else {
       replace(in: allItems, with: item)
     }
-// TODO: MAKE TAB CONTROLLER GO BACK TO PREVIOUS TAB
     coordinator.confirmSave(newItemStatus)
     self.item = nil
     getDetails()
