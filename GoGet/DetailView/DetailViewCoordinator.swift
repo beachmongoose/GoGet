@@ -40,21 +40,21 @@ class DetailViewCoordinator: DetailViewCoordinatorType {
 
   func dismissDetail(action: UIAlertAction) {
     viewController?.clearInput()
-    viewController?.tabBarController?.selectedIndex = 0
+    viewController?.tabBarController?.selectedIndex = 2
   }
 
-  // TODO: DISMISS DETAIL VIEW CONTROLLER AFTER EDITING ITEM
   func popController(action: UIAlertAction) {
-    guard let viewController = viewController else { return }
-    viewController.dismiss(animated: true)
+    guard let navigationController = viewController?.navigationController else {
+      return
+    }
+    navigationController.popViewController(animated: true)
   }
 
   func presentPopover(sender: UIButton, selectedIndex: Property<Int?>) {
     guard let viewController = viewController else { return }
 
     let categoryController = CategoryViewCoordinator().start(selectedIndex: selectedIndex)
-    let height = 200
-    categoryController.preferredContentSize = CGSize(width: 300, height: height)
+    categoryController.preferredContentSize = CGSize(width: 300, height: 250)
     categoryController.modalPresentationStyle = .popover
     if let presentationController = categoryController.popoverPresentationController {
       presentationController.sourceView = sender
@@ -75,9 +75,9 @@ extension DetailViewCoordinator {
     }
 
   func confirmSave(_ item: Bool) {
-//    let handler = (item) ? dismissDetail(action:) : popController(action:)
+    let handler = (item) ? dismissDetail(action:) : popController(action:)
     let saveConfirm = UIAlertController(title: "Item Saved", message: nil, preferredStyle: .alert)
-    saveConfirm.addAction(UIAlertAction(title: "OK", style: .default, handler: dismissDetail))
+    saveConfirm.addAction(UIAlertAction(title: "OK", style: .default, handler: handler))
     viewController?.present(saveConfirm, animated: true)
   }
 }

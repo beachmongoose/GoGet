@@ -20,13 +20,12 @@
             <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="UrQ-my-LkW">
-                    <rect key="frame" x="0.0" y="98" width="414" height="764"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="UrQ-my-LkW">
+                    <rect key="frame" x="0.0" y="79" width="414" height="783"/>
                     <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                 </tableView>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MfE-RV-Qkx">
-                    <rect key="frame" x="291" y="54" width="103" height="36"/>
+                    <rect key="frame" x="291" y="48" width="103" height="36"/>
                     <fontDescription key="fontDescription" type="system" pointSize="20"/>
                     <state key="normal" title="Create New"/>
                     <connections>
@@ -34,7 +33,7 @@
                     </connections>
                 </button>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qvS-s1-pNP">
-                    <rect key="frame" x="20" y="54" width="47" height="36"/>
+                    <rect key="frame" x="20" y="48" width="47" height="36"/>
                     <fontDescription key="fontDescription" type="system" pointSize="20"/>
                     <state key="normal" title="None"/>
                     <connections>
@@ -45,10 +44,14 @@
             <viewLayoutGuide key="safeArea" id="fnl-2z-Ty3"/>
             <color key="backgroundColor" systemColor="systemBackgroundColor"/>
             <constraints>
-                <constraint firstItem="fnl-2z-Ty3" firstAttribute="trailing" secondItem="MfE-RV-Qkx" secondAttribute="trailing" constant="20" id="TjV-JV-bYN"/>
-                <constraint firstItem="qvS-s1-pNP" firstAttribute="top" secondItem="fnl-2z-Ty3" secondAttribute="top" constant="10" id="XKg-Fd-CTi"/>
-                <constraint firstItem="MfE-RV-Qkx" firstAttribute="top" secondItem="fnl-2z-Ty3" secondAttribute="top" constant="10" id="tiw-s0-hWT"/>
-                <constraint firstItem="qvS-s1-pNP" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" constant="20" id="tjB-sb-3Sz"/>
+                <constraint firstItem="qvS-s1-pNP" firstAttribute="baseline" secondItem="MfE-RV-Qkx" secondAttribute="baseline" id="3CZ-KJ-hxI"/>
+                <constraint firstAttribute="trailing" secondItem="UrQ-my-LkW" secondAttribute="trailing" id="Vgy-0Y-2gu"/>
+                <constraint firstItem="MfE-RV-Qkx" firstAttribute="trailing" secondItem="i5M-Pr-FkT" secondAttribute="trailingMargin" id="YIv-6E-Lm1"/>
+                <constraint firstItem="MfE-RV-Qkx" firstAttribute="top" secondItem="fnl-2z-Ty3" secondAttribute="top" constant="4" id="cpp-K4-xVz"/>
+                <constraint firstItem="qvS-s1-pNP" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leadingMargin" id="dMv-t2-F8x"/>
+                <constraint firstItem="UrQ-my-LkW" firstAttribute="bottom" secondItem="fnl-2z-Ty3" secondAttribute="bottom" id="gzb-Rt-5v6"/>
+                <constraint firstItem="UrQ-my-LkW" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="m6O-Ow-ahB"/>
+                <constraint firstItem="UrQ-my-LkW" firstAttribute="top" secondItem="fnl-2z-Ty3" secondAttribute="top" constant="35" id="wqy-SX-afj"/>
             </constraints>
             <point key="canvasLocation" x="140.57971014492756" y="135.9375"/>
         </view>
