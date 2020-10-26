@@ -45,6 +45,20 @@
 		9FA4E78D251E417600328981 /* CategoryViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9FA4E78B251E417600328981 /* CategoryViewController.xib */; };
 		9FAA7EAB2540D316004396AA /* BuyListCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FAA7EAA2540D316004396AA /* BuyListCellViewModel.swift */; };
 		9FAF69B62522793100E10B41 /* SectionTableViewBinder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FAF69B52522793100E10B41 /* SectionTableViewBinder.swift */; };
+		9FBB7EB725476175002026F3 /* TitleCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FBB7EB525476175002026F3 /* TitleCell.swift */; };
+		9FBB7EB825476175002026F3 /* TitleCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9FBB7EB625476175002026F3 /* TitleCell.xib */; };
+		9FBB7EBC254762A0002026F3 /* BoughtStatusCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FBB7EBA254762A0002026F3 /* BoughtStatusCell.swift */; };
+		9FBB7EBD254762A0002026F3 /* BoughtStatusCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9FBB7EBB254762A0002026F3 /* BoughtStatusCell.xib */; };
+		9FBB7ECC25476602002026F3 /* DateCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FBB7ECA25476602002026F3 /* DateCell.swift */; };
+		9FBB7ECD25476602002026F3 /* DateCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9FBB7ECB25476602002026F3 /* DateCell.xib */; };
+		9FBB7ED12547664B002026F3 /* QuantityCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FBB7ECF2547664B002026F3 /* QuantityCell.swift */; };
+		9FBB7ED22547664B002026F3 /* QuantityCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9FBB7ED02547664B002026F3 /* QuantityCell.xib */; };
+		9FBB7ED6254767C1002026F3 /* DurationCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FBB7ED4254767C1002026F3 /* DurationCell.swift */; };
+		9FBB7ED7254767C1002026F3 /* DurationCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9FBB7ED5254767C1002026F3 /* DurationCell.xib */; };
+		9FBB7EDC25476806002026F3 /* CategoryInputCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FBB7EDA25476806002026F3 /* CategoryInputCell.swift */; };
+		9FBB7EDD25476806002026F3 /* CategoryInputCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9FBB7EDB25476806002026F3 /* CategoryInputCell.xib */; };
+		9FBB7EE0254768EF002026F3 /* UIView+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FBB7EDF254768EF002026F3 /* UIView+Extensions.swift */; };
+		9FBB7EE325476BDA002026F3 /* UITableView+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FBB7EE225476BDA002026F3 /* UITableView+Extensions.swift */; };
 		9FC28C25251D26A5004A58DF /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FC28C23251D26A5004A58DF /* TabBarController.swift */; };
 		9FC28C26251D26A5004A58DF /* TabBarController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9FC28C24251D26A5004A58DF /* TabBarController.xib */; };
 		9FE4BA16250FD77000960506 /* UIViewController+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FE4BA15250FD77000960506 /* UIViewController+Extensions.swift */; };
@@ -96,6 +110,20 @@
 		9FA4E78B251E417600328981 /* CategoryViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CategoryViewController.xib; sourceTree = "<group>"; };
 		9FAA7EAA2540D316004396AA /* BuyListCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuyListCellViewModel.swift; sourceTree = "<group>"; };
 		9FAF69B52522793100E10B41 /* SectionTableViewBinder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SectionTableViewBinder.swift; sourceTree = "<group>"; };
+		9FBB7EB525476175002026F3 /* TitleCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TitleCell.swift; sourceTree = "<group>"; };
+		9FBB7EB625476175002026F3 /* TitleCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TitleCell.xib; sourceTree = "<group>"; };
+		9FBB7EBA254762A0002026F3 /* BoughtStatusCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoughtStatusCell.swift; sourceTree = "<group>"; };
+		9FBB7EBB254762A0002026F3 /* BoughtStatusCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = BoughtStatusCell.xib; sourceTree = "<group>"; };
+		9FBB7ECA25476602002026F3 /* DateCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateCell.swift; sourceTree = "<group>"; };
+		9FBB7ECB25476602002026F3 /* DateCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = DateCell.xib; sourceTree = "<group>"; };
+		9FBB7ECF2547664B002026F3 /* QuantityCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuantityCell.swift; sourceTree = "<group>"; };
+		9FBB7ED02547664B002026F3 /* QuantityCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = QuantityCell.xib; sourceTree = "<group>"; };
+		9FBB7ED4254767C1002026F3 /* DurationCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DurationCell.swift; sourceTree = "<group>"; };
+		9FBB7ED5254767C1002026F3 /* DurationCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = DurationCell.xib; sourceTree = "<group>"; };
+		9FBB7EDA25476806002026F3 /* CategoryInputCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryInputCell.swift; sourceTree = "<group>"; };
+		9FBB7EDB25476806002026F3 /* CategoryInputCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CategoryInputCell.xib; sourceTree = "<group>"; };
+		9FBB7EDF254768EF002026F3 /* UIView+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Extensions.swift"; sourceTree = "<group>"; };
+		9FBB7EE225476BDA002026F3 /* UITableView+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITableView+Extensions.swift"; sourceTree = "<group>"; };
 		9FC28C23251D26A5004A58DF /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
 		9FC28C24251D26A5004A58DF /* TabBarController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TabBarController.xib; sourceTree = "<group>"; };
 		9FE4BA15250FD77000960506 /* UIViewController+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Extensions.swift"; sourceTree = "<group>"; };
@@ -166,6 +194,8 @@
 			children = (
 				9FE4BA15250FD77000960506 /* UIViewController+Extensions.swift */,
 				9FF9124D253635CF0007B5D1 /* ReactiveKit+Extensions.swift */,
+				9FBB7EDF254768EF002026F3 /* UIView+Extensions.swift */,
+				9FBB7EE225476BDA002026F3 /* UITableView+Extensions.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -218,6 +248,7 @@
 		9F34058D24FED6470035A385 /* DetailView */ = {
 			isa = PBXGroup;
 			children = (
+				9FBB7EB42547613C002026F3 /* Cells */,
 				9F34058E24FED6580035A385 /* DetailViewController.swift */,
 				9F34058F24FED6580035A385 /* DetailViewController.xib */,
 				9F888C40250195F4003810D4 /* DetailViewCoordinator.swift */,
@@ -318,6 +349,25 @@
 			path = Binders;
 			sourceTree = "<group>";
 		};
+		9FBB7EB42547613C002026F3 /* Cells */ = {
+			isa = PBXGroup;
+			children = (
+				9FBB7EB525476175002026F3 /* TitleCell.swift */,
+				9FBB7EB625476175002026F3 /* TitleCell.xib */,
+				9FBB7EBA254762A0002026F3 /* BoughtStatusCell.swift */,
+				9FBB7EBB254762A0002026F3 /* BoughtStatusCell.xib */,
+				9FBB7ECA25476602002026F3 /* DateCell.swift */,
+				9FBB7ECB25476602002026F3 /* DateCell.xib */,
+				9FBB7ECF2547664B002026F3 /* QuantityCell.swift */,
+				9FBB7ED02547664B002026F3 /* QuantityCell.xib */,
+				9FBB7ED4254767C1002026F3 /* DurationCell.swift */,
+				9FBB7ED5254767C1002026F3 /* DurationCell.xib */,
+				9FBB7EDA25476806002026F3 /* CategoryInputCell.swift */,
+				9FBB7EDB25476806002026F3 /* CategoryInputCell.xib */,
+			);
+			path = Cells;
+			sourceTree = "<group>";
+		};
 		9FC28C1C251D2638004A58DF /* Tab Bar */ = {
 			isa = PBXGroup;
 			children = (
@@ -395,7 +445,13 @@
 				9F930BFF24FEC55F0034C8F7 /* Assets.xcassets in Resources */,
 				9FA4E78D251E417600328981 /* CategoryViewController.xib in Resources */,
 				9F34058224FED5CF0035A385 /* BuyListViewController.xib in Resources */,
+				9FBB7ED7254767C1002026F3 /* DurationCell.xib in Resources */,
+				9FBB7ECD25476602002026F3 /* DateCell.xib in Resources */,
+				9FBB7EBD254762A0002026F3 /* BoughtStatusCell.xib in Resources */,
+				9FBB7ED22547664B002026F3 /* QuantityCell.xib in Resources */,
+				9FBB7EDD25476806002026F3 /* CategoryInputCell.xib in Resources */,
 				9F03404E250298F100B27BF3 /* BuyListCell.xib in Resources */,
+				9FBB7EB825476175002026F3 /* TitleCell.xib in Resources */,
 				9F888C4B2501A14A003810D4 /* FullListCell.xib in Resources */,
 				9F24D7742541D7CC00164F72 /* NoneCell.xib in Resources */,
 				9F34058C24FED63E0035A385 /* FullListViewController.xib in Resources */,
@@ -475,18 +531,26 @@
 				9F34057A24FED00C0035A385 /* Item.swift in Sources */,
 				9F888C41250195F4003810D4 /* DetailViewCoordinator.swift in Sources */,
 				9FA4E78C251E417600328981 /* CategoryViewController.swift in Sources */,
+				9FBB7ECC25476602002026F3 /* DateCell.swift in Sources */,
 				9FE4BA16250FD77000960506 /* UIViewController+Extensions.swift in Sources */,
 				9FC28C25251D26A5004A58DF /* TabBarController.swift in Sources */,
 				9F888C3925014EF8003810D4 /* GetItems.swift in Sources */,
 				9F62A3962512B4EF00F5AF63 /* Data.swift in Sources */,
+				9FBB7EE0254768EF002026F3 /* UIView+Extensions.swift in Sources */,
 				9F888C4A2501A14A003810D4 /* FullListCell.swift in Sources */,
+				9FBB7ED12547664B002026F3 /* QuantityCell.swift in Sources */,
+				9FBB7EB725476175002026F3 /* TitleCell.swift in Sources */,
+				9FBB7ED6254767C1002026F3 /* DurationCell.swift in Sources */,
 				9F03404D250298F100B27BF3 /* BuyListCell.swift in Sources */,
 				9F34058124FED5CF0035A385 /* BuyListViewController.swift in Sources */,
 				9F24D7732541D7CC00164F72 /* NoneCell.swift in Sources */,
 				9F62A3942512B43300F5AF63 /* GetCategories.swift in Sources */,
+				9FBB7EE325476BDA002026F3 /* UITableView+Extensions.swift in Sources */,
 				9F085BBD250C17DF00682D05 /* SortTypeSharedInstance.swift in Sources */,
 				9F34059024FED6580035A385 /* DetailViewController.swift in Sources */,
 				9FAA7EAB2540D316004396AA /* BuyListCellViewModel.swift in Sources */,
+				9FBB7EDC25476806002026F3 /* CategoryInputCell.swift in Sources */,
+				9FBB7EBC254762A0002026F3 /* BoughtStatusCell.swift in Sources */,
 				9F2BCACF25252B5600E760D1 /* CategoryListCell.swift in Sources */,
 				9F0340542502CDD400B27BF3 /* DetailViewModel.swift in Sources */,
 				9F6C705B2515197500C6A3C3 /* CategorySharedInstance.swift in Sources */,

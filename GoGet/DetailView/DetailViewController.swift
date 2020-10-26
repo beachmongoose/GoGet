@@ -22,7 +22,8 @@ class DetailViewController: UIViewController, UIPopoverPresentationControllerDel
   @IBOutlet var categoryButton: UIButton!
   private let getItems: GetItemsType = GetItems()
   private let viewModel: DetailViewModelType
-
+  @IBOutlet var tableView: UITableView!
+  
   init(viewModel: DetailViewModelType) {
     self.viewModel = viewModel
     super.init(nibName: nil, bundle: nil)
@@ -41,6 +42,35 @@ class DetailViewController: UIViewController, UIPopoverPresentationControllerDel
       boughtToggle()
       super.viewDidLoad()
     }
+}
+
+extension DetailViewController: UITableViewDelegate {
+  public func registerCellsForReuse(_ views: [UIView.Type]) {
+      views.forEach { register($0.nib(bundle: Bundle(for: $0)), forCellReuseIdentifier: $0.reuseIdentifier) }
+  }
+  func setUpTable() {
+    let inputCell = inputCells[indexPath.row]
+    switch inputCell.type {
+    case .title:
+      //details here
+    return cell
+    case .boughtStatus
+    // details here
+    return cell
+    case .date
+    //details here
+    return cell
+    case .quantity
+    //details here
+    return cell
+    case .duration
+    // details here
+    return cell
+    case .category
+    //details here
+    return cell
+    }
+  }
 }
 
 // MARK: - Populate Fields

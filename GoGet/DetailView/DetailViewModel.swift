@@ -29,12 +29,14 @@ protocol DetailViewModelType {
 
 //TODO: FORMAT AS TABLE
 final class DetailViewModel: DetailViewModelType {
-//  enum CellViewModel {
-//    case textInputCell(TextInputCellViewModel)
-//    case numberInputCell(TextInputCellViewModel)
-//    case textInput(TextInputCellViewModel)
-//    case textInput(TextInputCellViewModel)
-//  }
+  enum CellViewModel {
+    case title(TextInputCellViewModel)
+    case boughtStatus(TextInputCellViewModel)
+    case date(TextInputCellViewModel)
+    case quantity(TextInputCellViewModel)
+    case duration(TextInputCellViewModel)
+    case category(TextInputCellViewModel)
+  }
   var item: Item?
   var newItemStatus: Bool {
     return item == nil
