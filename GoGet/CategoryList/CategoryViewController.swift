@@ -5,7 +5,6 @@
 //  Created by Maggie Maldjian on 9/25/20.
 //  Copyright © 2020 Maggie Maldjian. All rights reserved.
 //
-// TODO: GET RID OF EXCESS SPACE
 
 import Bond
 import ReactiveKit
@@ -80,7 +79,6 @@ extension CategoryViewController {
     viewModel.createNewCategory(for: category!)
   }
 
-  // TODO: PUT "NONE" OPTION IN UNIQUE CELL, ADD TO VIEWCONTROLLER
   @IBAction func clearCategory(_ sender: Any) {
     viewModel.changeSelectedIndex(to: nil)
     dismiss(animated: true, completion: nil)

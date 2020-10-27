@@ -13,17 +13,15 @@ import UIKit
 class DetailViewController: UIViewController, UIPopoverPresentationControllerDelegate {
   var saveButton: UIBarButtonItem!
   var clearButton: UIBarButtonItem!
-  @IBOutlet var navigation: UINavigationBar!
   @IBOutlet var itemTextField: UITextField!
   @IBOutlet var quantityTextField: UITextField!
   @IBOutlet var dateTextField: UITextField!
   @IBOutlet var intervalTextField: UITextField!
   @IBOutlet var boughtBoolButton: UISegmentedControl!
   @IBOutlet var categoryButton: UIButton!
-  private let getItems: GetItemsType = GetItems()
   private let viewModel: DetailViewModelType
   @IBOutlet var tableView: UITableView!
-  
+
   init(viewModel: DetailViewModelType) {
     self.viewModel = viewModel
     super.init(nibName: nil, bundle: nil)
@@ -34,71 +32,81 @@ class DetailViewController: UIViewController, UIPopoverPresentationControllerDel
   }
 
   override func viewDidLoad() {
-      populateTextFields()
-      textFieldBindings()
-      addDatePicker()
-      addNavigationButtons()
-      formatCategoryButton()
-      boughtToggle()
+//      populateTextFields()
+//      textFieldBindings()
+//    addDatePicker()
+    tableSetUp()
+//    addNavigationButtons()
+//      boughtToggle()
       super.viewDidLoad()
     }
 }
 
-extension DetailViewController: UITableViewDelegate {
-  public func registerCellsForReuse(_ views: [UIView.Type]) {
-      views.forEach { register($0.nib(bundle: Bundle(for: $0)), forCellReuseIdentifier: $0.reuseIdentifier) }
-  }
-  func setUpTable() {
-    let inputCell = inputCells[indexPath.row]
-    switch inputCell.type {
-    case .title:
-      //details here
-    return cell
-    case .boughtStatus
-    // details here
-    return cell
-    case .date
-    //details here
-    return cell
-    case .quantity
-    //details here
-    return cell
-    case .duration
-    // details here
-    return cell
-    case .category
-    //details here
-    return cell
-    }
+extension DetailViewController {
+  func tableSetUp() {
+    tableView.registerCellsForReuse([TitleCell.self, BoughtStatusCell.self,
+                                     DateCell.self, NumberInputCell.self, CategoryInputCell.self])
+//    let tableViewBinder = TableViewBinderDataSource<DetailViewModel.CellType>(createCell: createCell)
+//    viewModel.tableData.bind(to: tableView, using: tableViewBinder)
+
+        viewModel.tableData.bind(to: tableView) { dataSource, indexPath, tableView in
+            let viewModel = dataSource[indexPath.row]
+            switch  viewModel {
+            case let .numberInput(viewModel):
+                let cell = tableView.dequeueReusableCell(NumberInputCell.self, for: indexPath)
+                cell.viewModel = viewModel
+                return cell
+        }
+
+//    tableView.delegate = self
   }
 }
 
 // MARK: - Populate Fields
-extension DetailViewController {
-  func populateTextFields() {
-    itemTextField.text = viewModel.itemName.value
-    quantityTextField.text = viewModel.itemQuantity.value
-    dateTextField.text = viewModel.dateBought.value
-    intervalTextField.text = viewModel.duration.value
-    boughtBoolButton.selectedSegmentIndex = viewModel.bought.value ?? 1
-    boughtFieldEnable((viewModel.bought.value == 0) ? true : false)
-    categoryButton.setTitle(viewModel.selectedCategoryName.value, for: .normal)
-  }
+//extension DetailViewController {
+//  func populateTextFields() {
+//    itemTextField.text = viewModel.itemName.value
+//    quantityTextField.text = viewModel.itemQuantity.value
+//    dateTextField.text = viewModel.dateBought.value
+//    intervalTextField.text = viewModel.duration.value
+//    boughtBoolButton.selectedSegmentIndex = viewModel.bought.value ?? 1
+//    boughtFieldEnable((viewModel.bought.value == 0) ? true : false)
+//    categoryButton.setTitle(viewModel.selectedCategoryName.value, for: .normal)
+//  }
+//
+//  func textFieldBindings() {
+//    itemTextField.reactive.text.bind(to: viewModel.itemName)
+//    quantityTextField.reactive.text.bind(to: viewModel.itemQuantity)
+//    dateTextField.reactive.text.bind(to: viewModel.dateBought)
+//    intervalTextField.reactive.text.bind(to: viewModel.duration)
+//    boughtBoolButton.reactive.selectedSegmentIndex.bind(to: viewModel.bought)
+//    viewModel.selectedCategoryName.observeNext { value in
+//      let category = (value != nil) ? value : "None"
+//      self.categoryButton.setTitle(category, for: .normal)
+//    }
+//    .dispose(in: bag)
+//  }
+//}
 
-  func textFieldBindings() {
-    itemTextField.reactive.text.bind(to: viewModel.itemName)
-    quantityTextField.reactive.text.bind(to: viewModel.itemQuantity)
-    dateTextField.reactive.text.bind(to: viewModel.dateBought)
-    intervalTextField.reactive.text.bind(to: viewModel.duration)
-    boughtBoolButton.reactive.selectedSegmentIndex.bind(to: viewModel.bought)
-    viewModel.selectedCategoryName.observeNext { value in
-      let category = (value != nil) ? value : "None"
-      self.categoryButton.setTitle(category, for: .normal)
+    private func createCell(dataSource: Array2D<String, DetailViewModel.CellType>,
+                            indexPath: IndexPath,
+                            tableView: UITableView) -> UITableViewCell {
+
+        let viewModel = dataSource[childAt: indexPath].item
+        switch  viewModel {
+        case let .numberInput(viewModel):
+            let cell = tableView.dequeueReusableCell(NumberInputCell.self, for: indexPath)
+            cell.viewModel = viewModel
+            return cell
+        default:
+            return UITableViewCell()
+    //dequeue number cell
+    // give it the viewModel
+  // seup bindings if needed
+  //return
+        }
+
     }
-    .dispose(in: bag)
-    quantityTextField.keyboardType = .numberPad
-    intervalTextField.keyboardType = .numberPad
-  }
 }
 
 // MARK: - Saving
@@ -120,81 +128,74 @@ extension DetailViewController {
       navigationItem.leftBarButtonItem = clearButton
     }
   }
-}
-
-// MARK: - Bought Button
-extension DetailViewController {
-
-  func boughtToggle() {
-    boughtBoolButton.reactive.selectedSegmentIndex.observeNext { [weak self] _ in
-      switch self?.boughtBoolButton.selectedSegmentIndex {
-      case 0:
-      self?.boughtFieldEnable(true)
-      case 1:
-      self?.boughtFieldEnable(false)
-      default:
-      break
-      }
-    }
-    .dispose(in: bag)
-  }
-
-  func boughtFieldEnable(_ bool: Bool) {
-    dateTextField.isUserInteractionEnabled = bool
-    dateTextField.textColor = (bool) ? UIColor.black : UIColor.gray
-  }
-}
-
-// MARK: - Date Info
-extension DetailViewController {
-  func addDatePicker() {
-    let datePicker = UIDatePicker()
-    datePicker.preferredDatePickerStyle = .wheels
-    datePicker.datePickerMode = UIDatePicker.Mode.date
-
-    datePicker.addTarget(self, action: #selector(DetailViewController.datePicked(sender:)),
-                         for: UIControl.Event.valueChanged)
-    dateTextField.inputView = datePicker
-  }
-
-  @objc func datePicked(sender: UIDatePicker) {
-    dateTextField.text = viewModel.convertedDate(sender.date)
-  }
-
-  override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-    view.endEditing(true)
-  }
-}
-
-// MARK: - Category List
-extension DetailViewController {
-
-  @IBAction func openCategories(_ sender: UIButton) {
-    viewModel.presentPopover(sender: sender)
-  }
-
-  func adaptivePresentationStyle(for controller: UIPresentationController) -> UIModalPresentationStyle {
-  return .none
-  }
-
-  func popoverPresentationControllerDidDismissPopover(
-    _ popoverPresentationController: UIPopoverPresentationController) {
-  }
-
-  func popoverPresentationControllerShouldDismissPopover(
-    _ popoverPresentationController: UIPopoverPresentationController) -> Bool {
-  return true
-  }
 
   func clearInput() {
     viewModel.getDetails()
-    populateTextFields()
-  }
-
-  func formatCategoryButton() {
-    categoryButton.backgroundColor = .clear
-    categoryButton.layer.cornerRadius = 5
-    categoryButton.layer.borderWidth = 0.25
-    categoryButton.layer.borderColor = UIColor.lightGray.cgColor
+//    populateTextFields()
   }
 }
+// MARK: - Bought Button
+//extension DetailViewController {
+//
+//  func boughtToggle() {
+//    boughtBoolButton.reactive.selectedSegmentIndex.observeNext { [weak self] _ in
+//      switch self?.boughtBoolButton.selectedSegmentIndex {
+//      case 0:
+//      self?.boughtFieldEnable(true)
+//      case 1:
+//      self?.boughtFieldEnable(false)
+//      default:
+//      break
+//      }
+//    }
+//    .dispose(in: bag)
+//  }
+//
+//  func boughtFieldEnable(_ bool: Bool) {
+//    dateTextField.isUserInteractionEnabled = bool
+//    dateTextField.textColor = (bool) ? UIColor.black : UIColor.gray
+//  }
+//}
+
+// MARK: - Date Info
+//extension DetailViewController {
+//  func addDatePicker() {
+//    let datePicker = UIDatePicker()
+//    datePicker.preferredDatePickerStyle = .wheels
+//    datePicker.datePickerMode = UIDatePicker.Mode.date
+//
+//    datePicker.addTarget(self, action: #selector(DetailViewController.datePicked(sender:)),
+//                         for: UIControl.Event.valueChanged)
+//    dateTextField.inputView = datePicker
+//  }
+//
+//  @objc func datePicked(sender: UIDatePicker) {
+//    dateTextField.text = viewModel.convertedDate(sender.date)
+//  }
+//
+//  override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+//    view.endEditing(true)
+//  }
+//}
+
+// MARK: - Category List
+//extension DetailViewController {
+//
+//  @IBAction func openCategories(_ sender: UIButton) {
+//    viewModel.presentPopover(sender: sender)
+//  }
+//
+//  func adaptivePresentationStyle(for controller: UIPresentationController) -> UIModalPresentationStyle {
+//  return .none
+//  }
+//
+//  func popoverPresentationControllerDidDismissPopover(
+//    _ popoverPresentationController: UIPopoverPresentationController) {
+//  }
+//
+//  func popoverPresentationControllerShouldDismissPopover(
+//    _ popoverPresentationController: UIPopoverPresentationController) -> Bool {
+//  return true
+//  }
+//
+//}

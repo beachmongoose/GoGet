@@ -10,5 +10,16 @@ import UIKit
 
 class TitleCell: UITableViewCell {
   @IBOutlet var titleInput: UITextField!
-  
+  var viewModel: DetailViewModel? {
+  didSet { setupCell() }
+  }
+}
+
+extension TitleCell {
+  func setupCell() {
+    guard let viewModel = viewModel else { return }
+    selectionStyle = .none
+    titleInput.text = viewModel.itemName.value
+    titleInput.reactive.text.bind(to: viewModel.itemName)
+  }
 }
