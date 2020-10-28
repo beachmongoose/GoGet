@@ -10,21 +10,21 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
-        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="BoughtStatusCell" rowHeight="64" id="KGk-i7-Jjw" customClass="BoughtStatusCell" customModule="GoGet" customModuleProvider="target">
+        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="SegmentedControlCell" rowHeight="64" id="KGk-i7-Jjw" customClass="SegmentedControlCell">
             <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
                 <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dRG-Il-e28">
-                        <rect key="frame" x="10" y="7" width="66" height="30"/>
-                        <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="25"/>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Bought" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dRG-Il-e28">
+                        <rect key="frame" x="35" y="7" width="80" height="30"/>
+                        <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="23"/>
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
                     </label>
                     <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="VO1-Ri-72D">
-                        <rect key="frame" x="146" y="6" width="157" height="32"/>
+                        <rect key="frame" x="83" y="6" width="157" height="32"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="157" id="MZe-JR-UhZ"/>
                         </constraints>
@@ -39,8 +39,8 @@
                     <constraint firstItem="VO1-Ri-72D" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="6" id="O5D-jJ-Wov"/>
                     <constraint firstAttribute="bottom" secondItem="VO1-Ri-72D" secondAttribute="bottom" constant="7" id="T06-UX-pNy"/>
                     <constraint firstAttribute="bottom" secondItem="dRG-Il-e28" secondAttribute="bottom" constant="7" id="gA0-vI-R5t"/>
-                    <constraint firstItem="dRG-Il-e28" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="10" id="lSa-1W-baP"/>
-                    <constraint firstAttribute="trailing" secondItem="VO1-Ri-72D" secondAttribute="trailing" constant="17" id="xi4-t9-w1h"/>
+                    <constraint firstItem="dRG-Il-e28" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="35" id="lSa-1W-baP"/>
+                    <constraint firstAttribute="trailing" secondItem="VO1-Ri-72D" secondAttribute="trailing" constant="80" id="xi4-t9-w1h"/>
                 </constraints>
             </tableViewCellContentView>
             <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>

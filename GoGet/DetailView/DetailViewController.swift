@@ -43,24 +43,43 @@ class DetailViewController: UIViewController, UIPopoverPresentationControllerDel
 }
 
 extension DetailViewController {
-  func tableSetUp() {
-    tableView.registerCellsForReuse([TitleCell.self, BoughtStatusCell.self,
-                                     DateCell.self, NumberInputCell.self, CategoryInputCell.self])
-//    let tableViewBinder = TableViewBinderDataSource<DetailViewModel.CellType>(createCell: createCell)
-//    viewModel.tableData.bind(to: tableView, using: tableViewBinder)
-
+    func tableSetUp() {
+    tableView.isScrollEnabled = false
+    tableView.separatorStyle = .none
+    tableView.registerCellsForReuse([TextInputCell.self, SegmentedControllCell.self,
+                                        DateCell.self, NumberInputCell.self, CategoryInputCell.self])
         viewModel.tableData.bind(to: tableView) { dataSource, indexPath, tableView in
             let viewModel = dataSource[indexPath.row]
             switch  viewModel {
+            case let .nameInput(viewModel):
+                let cell = tableView.dequeueReusableCell(TextInputCell.self, for: indexPath)
+                cell.viewModel = viewModel
+                return cell
+
+            case let .boughtStatusInput(viewModel):
+                let cell = tableView.dequeueReusableCell(SegmentedControllCell.self, for: indexPath)
+                cell.viewModel = viewModel
+                return cell
+
+            case let .dateInput(viewModel):
+                let cell = tableView.dequeueReusableCell(DateCell.self, for: indexPath)
+                cell.viewModel = viewModel
+                return cell
+
             case let .numberInput(viewModel):
                 let cell = tableView.dequeueReusableCell(NumberInputCell.self, for: indexPath)
                 cell.viewModel = viewModel
                 return cell
+
+            case let .categoryInput(viewModel):
+                let cell = tableView.dequeueReusableCell(CategoryInputCell.self, for: indexPath)
+                cell.viewModel = viewModel
+                return cell
         }
 
-//    tableView.delegate = self
-  }
-}
+//     tableView.delegate = self
+        }
+    }
 
 // MARK: - Populate Fields
 //extension DetailViewController {
@@ -88,25 +107,25 @@ extension DetailViewController {
 //  }
 //}
 
-    private func createCell(dataSource: Array2D<String, DetailViewModel.CellType>,
-                            indexPath: IndexPath,
-                            tableView: UITableView) -> UITableViewCell {
-
-        let viewModel = dataSource[childAt: indexPath].item
-        switch  viewModel {
-        case let .numberInput(viewModel):
-            let cell = tableView.dequeueReusableCell(NumberInputCell.self, for: indexPath)
-            cell.viewModel = viewModel
-            return cell
-        default:
-            return UITableViewCell()
+//    private func createCell(dataSource: Array2D<String, DetailViewModel.CellType>,
+//                            indexPath: IndexPath,
+//                            tableView: UITableView) -> UITableViewCell {
+//
+//        let viewModel = dataSource[childAt: indexPath].item
+//        switch  viewModel {
+//        case let .numberInput(viewModel):
+//            let cell = tableView.dequeueReusableCell(NumberInputCell.self, for: indexPath)
+//            cell.viewModel = viewModel
+//            return cell
+//        default:
+//            return UITableViewCell()
     //dequeue number cell
     // give it the viewModel
   // seup bindings if needed
   //return
-        }
-
-    }
+//        }
+//
+//    }
 }
 
 // MARK: - Saving

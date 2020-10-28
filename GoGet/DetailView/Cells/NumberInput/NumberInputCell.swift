@@ -5,7 +5,8 @@
 //  Created by Maggie Maldjian on 10/27/20.
 //  Copyright © 2020 Maggie Maldjian. All rights reserved.
 //
-
+import Bond
+import ReactiveKit
 import UIKit
 
 class NumberInputCell: UITableViewCell {
@@ -19,11 +20,12 @@ class NumberInputCell: UITableViewCell {
 
 extension NumberInputCell {
     func setupCell() {
-            selectionStyle = .none
-        label.text = viewModel?.title
-        label2.text = viewModel?.title2
-//            numberInputField.keyboardType = .numberPad
-        //    durationInput.text = viewModel.duration.value
-        //    durationInput.reactive.text.bind(to: viewModel.duration)
+        guard let viewModel = viewModel else { return }
+        numberInputField.text = viewModel.initialValue
+        label.text = viewModel.title
+        label2.text = viewModel.title2
+        selectionStyle = .none
+        numberInputField.keyboardType = .numberPad
+        numberInputField.reactive.text.bind(to: viewModel.updatedValue)
     }
 }

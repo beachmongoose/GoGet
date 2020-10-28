@@ -10,19 +10,19 @@ import Bond
 import ReactiveKit
 import UIKit
 
-class BoughtStatusCell: UITableViewCell {
+class SegmentedControllCell: UITableViewCell {
   @IBOutlet var boughtStatus: UISegmentedControl!
 
-  var viewModel: DetailViewModel? {
+  var viewModel: SegmentedControlCellViewModelType? {
   didSet { setupCell() }
   }
 }
 
-extension BoughtStatusCell {
+extension SegmentedControllCell {
   func setupCell() {
-    guard let viewModel = viewModel else { return }
     selectionStyle = .none
-    boughtStatus.selectedSegmentIndex = viewModel.bought.value ?? 1
-    boughtStatus.reactive.selectedSegmentIndex.bind(to: viewModel.bought)
+    guard let viewModel = viewModel else { return }
+    boughtStatus.selectedSegmentIndex = viewModel.initialValue
+    boughtStatus.reactive.selectedSegmentIndex.bind(to: viewModel.updatedValue)
   }
 }

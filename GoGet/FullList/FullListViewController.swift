@@ -19,7 +19,6 @@ class FullListViewController: UIViewController {
 
   init(viewModel: FullListViewModelType) {
     self.viewModel = viewModel
-
     super.init(nibName: nil, bundle: nil)
   }
   required init?(coder: NSCoder) {
@@ -29,6 +28,7 @@ class FullListViewController: UIViewController {
       setupTable()
       setupNavigationBar()
       observeEditModeUpdates()
+
       super.viewDidLoad()
     }
 }
@@ -36,6 +36,7 @@ class FullListViewController: UIViewController {
 // MARK: - View Setup
 extension FullListViewController: UITableViewDelegate {
   func setupTable() {
+    tableView.tableFooterView = UIView()
     tableView.register(UINib(nibName: "FullListCell", bundle: nil), forCellReuseIdentifier: "FullListCell")
     let dataSource =
       SectionedTableViewBinderDataSource<FullListViewModel.CellViewModel>(createCell: createCell)

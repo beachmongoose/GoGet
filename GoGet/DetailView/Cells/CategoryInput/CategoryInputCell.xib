@@ -19,15 +19,18 @@
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Category" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="VTQ-SY-Y5Y">
-                        <rect key="frame" x="4" y="7" width="110" height="30"/>
-                        <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="25"/>
+                        <rect key="frame" x="35" y="7" width="101" height="30"/>
+                        <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="23"/>
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vkr-qU-S80">
-                        <rect key="frame" x="138" y="1" width="60" height="42"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="25"/>
+                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vkr-qU-S80">
+                        <rect key="frame" x="60" y="3" width="235" height="39"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="235" id="5Ce-Em-exP"/>
+                            <constraint firstAttribute="height" constant="39" id="sGd-uM-Boh"/>
+                        </constraints>
+                        <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="23"/>
                         <state key="normal" title="None">
                             <color key="titleColor" systemColor="labelColor"/>
                         </state>
@@ -38,13 +41,16 @@
                 </subviews>
                 <constraints>
                     <constraint firstAttribute="bottom" secondItem="VTQ-SY-Y5Y" secondAttribute="bottom" constant="7" id="Hrh-uv-qjX"/>
-                    <constraint firstItem="VTQ-SY-Y5Y" firstAttribute="leading" secondItem="W8e-p5-Wq0" secondAttribute="leading" constant="4" id="JdA-Ai-jhv"/>
+                    <constraint firstItem="VTQ-SY-Y5Y" firstAttribute="leading" secondItem="W8e-p5-Wq0" secondAttribute="leading" constant="35" id="JdA-Ai-jhv"/>
                     <constraint firstItem="VTQ-SY-Y5Y" firstAttribute="top" secondItem="W8e-p5-Wq0" secondAttribute="top" constant="7" id="Kgn-oT-0k3"/>
+                    <constraint firstAttribute="trailing" secondItem="vkr-qU-S80" secondAttribute="trailing" constant="25" id="Yob-zh-Yzd"/>
+                    <constraint firstAttribute="bottom" secondItem="vkr-qU-S80" secondAttribute="bottom" constant="2" id="d8e-7x-uoD"/>
+                    <constraint firstItem="vkr-qU-S80" firstAttribute="top" secondItem="W8e-p5-Wq0" secondAttribute="top" constant="3" id="ijl-03-rwA"/>
                 </constraints>
             </tableViewCellContentView>
             <viewLayoutGuide key="safeArea" id="Gzv-rJ-1kG"/>
             <connections>
-                <outlet property="categoryInput" destination="vkr-qU-S80" id="zfP-qH-bwD"/>
+                <outlet property="inputButton" destination="vkr-qU-S80" id="zfP-qH-bwD"/>
             </connections>
             <point key="canvasLocation" x="140.57971014492756" y="116.51785714285714"/>
         </tableViewCell>
