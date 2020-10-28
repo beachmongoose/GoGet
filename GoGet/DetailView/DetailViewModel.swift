@@ -10,7 +10,6 @@ import ReactiveKit
 
 //TODO: CREATE DIFFERENT VIEW MODELS FOR NEW ITEM AND EDIT ITEM
 protocol DetailViewModelType {
-    func convertedDate(_ date: Date) -> String
     func presentPopover(sender: UIButton)
     func saveItem()
     func getDetails()
@@ -20,7 +19,7 @@ protocol DetailViewModelType {
     var itemName: Property<String?> { get }
     var itemQuantity: Property<String?> { get }
     var dateBought: Property<String?> { get }
-    var duration: Property<String?> { get }
+    var itemDuration: Property<String?> { get }
     var bought: Property<Int?> { get }
 
     var tableData: MutableObservableArray<DetailViewModel.CellType> { get }
@@ -32,7 +31,11 @@ protocol DetailViewModelType {
 //TODO: FORMAT AS TABLE
 final class DetailViewModel: DetailViewModelType {
     enum CellType {
+        case nameInput(TextInputCellViewModelType)
+        case boughtStatusInput(SegmentedControlCellViewModelType)
+        case dateInput(DateCellViewModelType)
         case numberInput(NumberInputCellViewModelType)
+        case categoryInput(CategoryInputCellViewModelType)
     }
 
     var item: Item?
@@ -46,7 +49,7 @@ final class DetailViewModel: DetailViewModelType {
     let itemName = Property<String?>(nil)
     let itemQuantity = Property<String?>(nil)
     let dateBought = Property<String?>(nil)
-    let duration = Property<String?>(nil)
+    let itemDuration = Property<String?>(nil)
     let bought = Property<Int?>(nil)
 
     var tableData = MutableObservableArray<CellType>([])
@@ -79,19 +82,40 @@ final class DetailViewModel: DetailViewModelType {
   }
 
     func buildCellViewModels() {
-        let quantityCellViewModel = NumberInputCellViewModel(title: "Quantity", title2: "")
+        let titleCellViewModel = TextInputCellViewModel(title: "Item", initialValue: item?.name ?? "")
+        titleCellViewModel.updatedValue.bind(to: itemName)
+        let titleCell: CellType = .nameInput(titleCellViewModel)
+
+//        let boughtBool = (item != nil && item?.boughtStatus != .notBought) ? 0 : 1
+//        let boughtCellViewModel = SegmentedControlCellViewModel(title: "Bought", initialValue: boughtBool)
+//        let boughtCell: CellType = .boughtStatusInput(boughtCellViewModel)
+
+        let date = (item?.dateBought ?? Date()).convertedToString()
+        let dateCellViewModel = DateCellViewModel(title: "Date", initialValue: date)
+        dateCellViewModel.updatedValue.bind(to: dateBought)
+        let dateCell: CellType = .dateInput(dateCellViewModel)
+
+        let quantity = String(item?.quantity ?? 1)
+        let quantityCellViewModel = NumberInputCellViewModel(title: "Quantity", title2: "", initialValue: quantity)
+        quantityCellViewModel.updatedValue.bind(to: itemQuantity)
         let quantityCell: CellType = .numberInput(quantityCellViewModel)
 
-        let durationCellViewModel = NumberInputCellViewModel(title: "Buy every", title2: "days")
+        let duration = String(item?.duration ?? 7)
+        let durationCellViewModel = NumberInputCellViewModel(title: "Buy every", title2: "days", initialValue: duration)
+        durationCellViewModel.updatedValue.bind(to: itemDuration)
         let durationCell: CellType = .numberInput(durationCellViewModel)
-        tableData.replace(with: [quantityCell, durationCell])
+
+        let categoryInputCellViewModel = CategoryInputCellViewModel()
+        let categoryInputCell: CellType = .categoryInput(categoryInputCellViewModel)
+
+        tableData.replace(with: [titleCell, dateCell, quantityCell, durationCell, categoryInputCell])
     }
 
     func getDetails() {
         itemName.value = item?.name ?? ""
         itemQuantity.value = String(item?.quantity ?? 1)
-        dateBought.value = convertedDate(item?.dateBought ?? Date())
-        duration.value = String(item?.duration ?? 7)
+        dateBought.value = (item?.dateBought ?? Date()).convertedToString()
+        itemDuration.value = String(item?.duration ?? 7)
         bought.value = (item != nil && item?.boughtStatus != .notBought) ? 0 : 1
         checkForCategory()
     }
@@ -137,13 +161,13 @@ final class DetailViewModel: DetailViewModelType {
     }
 
     func observeInput() {
-        let checkFields = merge(itemName, itemQuantity, dateBought, duration)
+        let checkFields = merge(itemName, itemQuantity, dateBought, itemDuration)
 
         checkFields.observeNext { [weak self] _ in
             guard let name = self?.itemName.value,
                   let quantity = self?.itemQuantity.value,
                   let date = self?.dateFromString(self?.dateBought.value),
-                  let duration = self?.duration.value else { return }
+                  let duration = self?.itemDuration.value else { return }
 
             self?.isValid.value =
                 name != "" &&
@@ -222,7 +246,7 @@ extension DetailViewModel {
     }
 
     var finalDuration: Int {
-        guard let duration = duration.value else {
+        guard let duration = itemDuration.value else {
             fatalError("Failed to create item, duration was nil")
         }
         return Int(duration) ?? 7

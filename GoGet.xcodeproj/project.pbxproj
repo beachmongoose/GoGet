@@ -13,12 +13,14 @@
 		9F0340522502BF7100B27BF3 /* FullListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F0340512502BF7100B27BF3 /* FullListViewModel.swift */; };
 		9F0340542502CDD400B27BF3 /* DetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F0340532502CDD400B27BF3 /* DetailViewModel.swift */; };
 		9F085BBD250C17DF00682D05 /* SortTypeSharedInstance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F085BBC250C17DF00682D05 /* SortTypeSharedInstance.swift */; };
-		9F24D7732541D7CC00164F72 /* NoneCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F24D7712541D7CC00164F72 /* NoneCell.swift */; };
-		9F24D7742541D7CC00164F72 /* NoneCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9F24D7722541D7CC00164F72 /* NoneCell.xib */; };
 		9F2BCAC72525272300E760D1 /* CategoryViewCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F2BCAC62525272300E760D1 /* CategoryViewCoordinator.swift */; };
 		9F2BCACA2525272D00E760D1 /* CategoryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F2BCAC92525272D00E760D1 /* CategoryViewModel.swift */; };
 		9F2BCACF25252B5600E760D1 /* CategoryListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F2BCACD25252B5600E760D1 /* CategoryListCell.swift */; };
 		9F2BCAD025252B5600E760D1 /* CategoryListCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9F2BCACE25252B5600E760D1 /* CategoryListCell.xib */; };
+		9F2CA3DA2549F08C00DE3F48 /* TextInputCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F2CA3D92549F08C00DE3F48 /* TextInputCellViewModel.swift */; };
+		9F2CA3DD2549F25C00DE3F48 /* SegmentedControlCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F2CA3DC2549F25C00DE3F48 /* SegmentedControlCellViewModel.swift */; };
+		9F2CA3E42549F29E00DE3F48 /* DateCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F2CA3E32549F29E00DE3F48 /* DateCellViewModel.swift */; };
+		9F2CA3E72549F2D200DE3F48 /* CategoryInputCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F2CA3E62549F2D200DE3F48 /* CategoryInputCellViewModel.swift */; };
 		9F34057A24FED00C0035A385 /* Item.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F34057924FED00C0035A385 /* Item.swift */; };
 		9F34058124FED5CF0035A385 /* BuyListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F34057F24FED5CF0035A385 /* BuyListViewController.swift */; };
 		9F34058224FED5CF0035A385 /* BuyListViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9F34058024FED5CF0035A385 /* BuyListViewController.xib */; };
@@ -45,10 +47,10 @@
 		9FA4E78D251E417600328981 /* CategoryViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9FA4E78B251E417600328981 /* CategoryViewController.xib */; };
 		9FAA7EAB2540D316004396AA /* BuyListCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FAA7EAA2540D316004396AA /* BuyListCellViewModel.swift */; };
 		9FAF69B62522793100E10B41 /* SectionTableViewBinder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FAF69B52522793100E10B41 /* SectionTableViewBinder.swift */; };
-		9FBB7EB725476175002026F3 /* TitleCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FBB7EB525476175002026F3 /* TitleCell.swift */; };
-		9FBB7EB825476175002026F3 /* TitleCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9FBB7EB625476175002026F3 /* TitleCell.xib */; };
-		9FBB7EBC254762A0002026F3 /* BoughtStatusCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FBB7EBA254762A0002026F3 /* BoughtStatusCell.swift */; };
-		9FBB7EBD254762A0002026F3 /* BoughtStatusCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9FBB7EBB254762A0002026F3 /* BoughtStatusCell.xib */; };
+		9FBB7EB725476175002026F3 /* TextInputCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FBB7EB525476175002026F3 /* TextInputCell.swift */; };
+		9FBB7EB825476175002026F3 /* TextInputCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9FBB7EB625476175002026F3 /* TextInputCell.xib */; };
+		9FBB7EBC254762A0002026F3 /* SegmentedControllCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FBB7EBA254762A0002026F3 /* SegmentedControllCell.swift */; };
+		9FBB7EBD254762A0002026F3 /* SegmentedControllCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9FBB7EBB254762A0002026F3 /* SegmentedControllCell.xib */; };
 		9FBB7ECC25476602002026F3 /* DateCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FBB7ECA25476602002026F3 /* DateCell.swift */; };
 		9FBB7ECD25476602002026F3 /* DateCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9FBB7ECB25476602002026F3 /* DateCell.xib */; };
 		9FBB7EDC25476806002026F3 /* CategoryInputCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FBB7EDA25476806002026F3 /* CategoryInputCell.swift */; };
@@ -60,6 +62,7 @@
 		9FBF0A8F2548C103000D4D1C /* NumberInputCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9FBF0A8D2548C103000D4D1C /* NumberInputCell.xib */; };
 		9FC28C25251D26A5004A58DF /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FC28C23251D26A5004A58DF /* TabBarController.swift */; };
 		9FC28C26251D26A5004A58DF /* TabBarController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9FC28C24251D26A5004A58DF /* TabBarController.xib */; };
+		9FC8CB482549FCF900C90A6E /* Date+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FC8CB472549FCF900C90A6E /* Date+Extensions.swift */; };
 		9FE4BA16250FD77000960506 /* UIViewController+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FE4BA15250FD77000960506 /* UIViewController+Extensions.swift */; };
 		9FF9124E253635CF0007B5D1 /* ReactiveKit+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FF9124D253635CF0007B5D1 /* ReactiveKit+Extensions.swift */; };
 		C6FE7913255BBF8F81AF4624 /* Pods_GoGet.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 259A21156006B2C8B1F243DE /* Pods_GoGet.framework */; };
@@ -75,12 +78,14 @@
 		9F0340512502BF7100B27BF3 /* FullListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FullListViewModel.swift; sourceTree = "<group>"; };
 		9F0340532502CDD400B27BF3 /* DetailViewModel.swift */ = {isa = PBXFileReference; indentWidth = 4; lastKnownFileType = sourcecode.swift; path = DetailViewModel.swift; sourceTree = "<group>"; tabWidth = 4; };
 		9F085BBC250C17DF00682D05 /* SortTypeSharedInstance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SortTypeSharedInstance.swift; sourceTree = "<group>"; };
-		9F24D7712541D7CC00164F72 /* NoneCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoneCell.swift; sourceTree = "<group>"; };
-		9F24D7722541D7CC00164F72 /* NoneCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = NoneCell.xib; sourceTree = "<group>"; };
 		9F2BCAC62525272300E760D1 /* CategoryViewCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryViewCoordinator.swift; sourceTree = "<group>"; };
 		9F2BCAC92525272D00E760D1 /* CategoryViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryViewModel.swift; sourceTree = "<group>"; };
 		9F2BCACD25252B5600E760D1 /* CategoryListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryListCell.swift; sourceTree = "<group>"; };
 		9F2BCACE25252B5600E760D1 /* CategoryListCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CategoryListCell.xib; sourceTree = "<group>"; };
+		9F2CA3D92549F08C00DE3F48 /* TextInputCellViewModel.swift */ = {isa = PBXFileReference; indentWidth = 4; lastKnownFileType = sourcecode.swift; path = TextInputCellViewModel.swift; sourceTree = "<group>"; tabWidth = 4; };
+		9F2CA3DC2549F25C00DE3F48 /* SegmentedControlCellViewModel.swift */ = {isa = PBXFileReference; indentWidth = 4; lastKnownFileType = sourcecode.swift; path = SegmentedControlCellViewModel.swift; sourceTree = "<group>"; tabWidth = 4; };
+		9F2CA3E32549F29E00DE3F48 /* DateCellViewModel.swift */ = {isa = PBXFileReference; indentWidth = 4; lastKnownFileType = sourcecode.swift; path = DateCellViewModel.swift; sourceTree = "<group>"; tabWidth = 4; };
+		9F2CA3E62549F2D200DE3F48 /* CategoryInputCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryInputCellViewModel.swift; sourceTree = "<group>"; };
 		9F34057924FED00C0035A385 /* Item.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Item.swift; sourceTree = "<group>"; };
 		9F34057F24FED5CF0035A385 /* BuyListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuyListViewController.swift; sourceTree = "<group>"; };
 		9F34058024FED5CF0035A385 /* BuyListViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = BuyListViewController.xib; sourceTree = "<group>"; };
@@ -109,10 +114,10 @@
 		9FA4E78B251E417600328981 /* CategoryViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CategoryViewController.xib; sourceTree = "<group>"; };
 		9FAA7EAA2540D316004396AA /* BuyListCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuyListCellViewModel.swift; sourceTree = "<group>"; };
 		9FAF69B52522793100E10B41 /* SectionTableViewBinder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SectionTableViewBinder.swift; sourceTree = "<group>"; };
-		9FBB7EB525476175002026F3 /* TitleCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TitleCell.swift; sourceTree = "<group>"; };
-		9FBB7EB625476175002026F3 /* TitleCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TitleCell.xib; sourceTree = "<group>"; };
-		9FBB7EBA254762A0002026F3 /* BoughtStatusCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoughtStatusCell.swift; sourceTree = "<group>"; };
-		9FBB7EBB254762A0002026F3 /* BoughtStatusCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = BoughtStatusCell.xib; sourceTree = "<group>"; };
+		9FBB7EB525476175002026F3 /* TextInputCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextInputCell.swift; sourceTree = "<group>"; };
+		9FBB7EB625476175002026F3 /* TextInputCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TextInputCell.xib; sourceTree = "<group>"; };
+		9FBB7EBA254762A0002026F3 /* SegmentedControllCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SegmentedControllCell.swift; sourceTree = "<group>"; };
+		9FBB7EBB254762A0002026F3 /* SegmentedControllCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SegmentedControllCell.xib; sourceTree = "<group>"; };
 		9FBB7ECA25476602002026F3 /* DateCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateCell.swift; sourceTree = "<group>"; };
 		9FBB7ECB25476602002026F3 /* DateCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = DateCell.xib; sourceTree = "<group>"; };
 		9FBB7EDA25476806002026F3 /* CategoryInputCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryInputCell.swift; sourceTree = "<group>"; };
@@ -124,6 +129,7 @@
 		9FBF0A8D2548C103000D4D1C /* NumberInputCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = NumberInputCell.xib; sourceTree = "<group>"; };
 		9FC28C23251D26A5004A58DF /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
 		9FC28C24251D26A5004A58DF /* TabBarController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TabBarController.xib; sourceTree = "<group>"; };
+		9FC8CB472549FCF900C90A6E /* Date+Extensions.swift */ = {isa = PBXFileReference; indentWidth = 4; lastKnownFileType = sourcecode.swift; path = "Date+Extensions.swift"; sourceTree = "<group>"; tabWidth = 4; };
 		9FE4BA15250FD77000960506 /* UIViewController+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Extensions.swift"; sourceTree = "<group>"; };
 		9FF9124D253635CF0007B5D1 /* ReactiveKit+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ReactiveKit+Extensions.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -194,6 +200,7 @@
 				9FF9124D253635CF0007B5D1 /* ReactiveKit+Extensions.swift */,
 				9FBB7EDF254768EF002026F3 /* UIView+Extensions.swift */,
 				9FBB7EE225476BDA002026F3 /* UITableView+Extensions.swift */,
+				9FC8CB472549FCF900C90A6E /* Date+Extensions.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -203,10 +210,48 @@
 			children = (
 				9F2BCACD25252B5600E760D1 /* CategoryListCell.swift */,
 				9F2BCACE25252B5600E760D1 /* CategoryListCell.xib */,
-				9F24D7712541D7CC00164F72 /* NoneCell.swift */,
-				9F24D7722541D7CC00164F72 /* NoneCell.xib */,
 			);
 			path = Cells;
+			sourceTree = "<group>";
+		};
+		9F2CA3D52549EFD600DE3F48 /* TitleInput */ = {
+			isa = PBXGroup;
+			children = (
+				9FBB7EB525476175002026F3 /* TextInputCell.swift */,
+				9FBB7EB625476175002026F3 /* TextInputCell.xib */,
+				9F2CA3D92549F08C00DE3F48 /* TextInputCellViewModel.swift */,
+			);
+			path = TitleInput;
+			sourceTree = "<group>";
+		};
+		9F2CA3D62549EFDF00DE3F48 /* BoughtStatusInput */ = {
+			isa = PBXGroup;
+			children = (
+				9FBB7EBA254762A0002026F3 /* SegmentedControllCell.swift */,
+				9FBB7EBB254762A0002026F3 /* SegmentedControllCell.xib */,
+				9F2CA3DC2549F25C00DE3F48 /* SegmentedControlCellViewModel.swift */,
+			);
+			path = BoughtStatusInput;
+			sourceTree = "<group>";
+		};
+		9F2CA3D72549EFEB00DE3F48 /* DateInput */ = {
+			isa = PBXGroup;
+			children = (
+				9FBB7ECA25476602002026F3 /* DateCell.swift */,
+				9FBB7ECB25476602002026F3 /* DateCell.xib */,
+				9F2CA3E32549F29E00DE3F48 /* DateCellViewModel.swift */,
+			);
+			path = DateInput;
+			sourceTree = "<group>";
+		};
+		9F2CA3D82549EFFA00DE3F48 /* CategoryInput */ = {
+			isa = PBXGroup;
+			children = (
+				9FBB7EDA25476806002026F3 /* CategoryInputCell.swift */,
+				9FBB7EDB25476806002026F3 /* CategoryInputCell.xib */,
+				9F2CA3E62549F2D200DE3F48 /* CategoryInputCellViewModel.swift */,
+			);
+			path = CategoryInput;
 			sourceTree = "<group>";
 		};
 		9F34057B24FED3A60035A385 /* Models */ = {
@@ -350,15 +395,11 @@
 		9FBB7EB42547613C002026F3 /* Cells */ = {
 			isa = PBXGroup;
 			children = (
+				9F2CA3D52549EFD600DE3F48 /* TitleInput */,
+				9F2CA3D62549EFDF00DE3F48 /* BoughtStatusInput */,
+				9F2CA3D72549EFEB00DE3F48 /* DateInput */,
 				9FBF0A7625489F59000D4D1C /* NumberInput */,
-				9FBB7EB525476175002026F3 /* TitleCell.swift */,
-				9FBB7EB625476175002026F3 /* TitleCell.xib */,
-				9FBB7EBA254762A0002026F3 /* BoughtStatusCell.swift */,
-				9FBB7EBB254762A0002026F3 /* BoughtStatusCell.xib */,
-				9FBB7ECA25476602002026F3 /* DateCell.swift */,
-				9FBB7ECB25476602002026F3 /* DateCell.xib */,
-				9FBB7EDA25476806002026F3 /* CategoryInputCell.swift */,
-				9FBB7EDB25476806002026F3 /* CategoryInputCell.xib */,
+				9F2CA3D82549EFFA00DE3F48 /* CategoryInput */,
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -451,13 +492,12 @@
 				9FA4E78D251E417600328981 /* CategoryViewController.xib in Resources */,
 				9F34058224FED5CF0035A385 /* BuyListViewController.xib in Resources */,
 				9FBB7ECD25476602002026F3 /* DateCell.xib in Resources */,
-				9FBB7EBD254762A0002026F3 /* BoughtStatusCell.xib in Resources */,
+				9FBB7EBD254762A0002026F3 /* SegmentedControllCell.xib in Resources */,
 				9FBB7EDD25476806002026F3 /* CategoryInputCell.xib in Resources */,
 				9F03404E250298F100B27BF3 /* BuyListCell.xib in Resources */,
-				9FBB7EB825476175002026F3 /* TitleCell.xib in Resources */,
+				9FBB7EB825476175002026F3 /* TextInputCell.xib in Resources */,
 				9F888C4B2501A14A003810D4 /* FullListCell.xib in Resources */,
 				9FBF0A8F2548C103000D4D1C /* NumberInputCell.xib in Resources */,
-				9F24D7742541D7CC00164F72 /* NoneCell.xib in Resources */,
 				9F34058C24FED63E0035A385 /* FullListViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -530,6 +570,7 @@
 			files = (
 				9F2BCAC72525272300E760D1 /* CategoryViewCoordinator.swift in Sources */,
 				9F930BF624FEC55E0034C8F7 /* AppDelegate.swift in Sources */,
+				9F2CA3E72549F2D200DE3F48 /* CategoryInputCellViewModel.swift in Sources */,
 				9F0340502502A90F00B27BF3 /* BuyListViewModel.swift in Sources */,
 				9F62A38E2512A92800F5AF63 /* Category.swift in Sources */,
 				9F34057A24FED00C0035A385 /* Item.swift in Sources */,
@@ -538,27 +579,30 @@
 				9FBB7ECC25476602002026F3 /* DateCell.swift in Sources */,
 				9FE4BA16250FD77000960506 /* UIViewController+Extensions.swift in Sources */,
 				9FC28C25251D26A5004A58DF /* TabBarController.swift in Sources */,
+				9F2CA3E42549F29E00DE3F48 /* DateCellViewModel.swift in Sources */,
 				9F888C3925014EF8003810D4 /* GetItems.swift in Sources */,
 				9F62A3962512B4EF00F5AF63 /* Data.swift in Sources */,
 				9FBB7EE0254768EF002026F3 /* UIView+Extensions.swift in Sources */,
 				9FBF0A8E2548C103000D4D1C /* NumberInputCell.swift in Sources */,
 				9F888C4A2501A14A003810D4 /* FullListCell.swift in Sources */,
-				9FBB7EB725476175002026F3 /* TitleCell.swift in Sources */,
+				9FBB7EB725476175002026F3 /* TextInputCell.swift in Sources */,
 				9F03404D250298F100B27BF3 /* BuyListCell.swift in Sources */,
+				9F2CA3DA2549F08C00DE3F48 /* TextInputCellViewModel.swift in Sources */,
 				9F34058124FED5CF0035A385 /* BuyListViewController.swift in Sources */,
-				9F24D7732541D7CC00164F72 /* NoneCell.swift in Sources */,
+				9F2CA3DD2549F25C00DE3F48 /* SegmentedControlCellViewModel.swift in Sources */,
 				9F62A3942512B43300F5AF63 /* GetCategories.swift in Sources */,
 				9FBB7EE325476BDA002026F3 /* UITableView+Extensions.swift in Sources */,
 				9F085BBD250C17DF00682D05 /* SortTypeSharedInstance.swift in Sources */,
 				9F34059024FED6580035A385 /* DetailViewController.swift in Sources */,
 				9FAA7EAB2540D316004396AA /* BuyListCellViewModel.swift in Sources */,
 				9FBB7EDC25476806002026F3 /* CategoryInputCell.swift in Sources */,
-				9FBB7EBC254762A0002026F3 /* BoughtStatusCell.swift in Sources */,
+				9FBB7EBC254762A0002026F3 /* SegmentedControllCell.swift in Sources */,
 				9F2BCACF25252B5600E760D1 /* CategoryListCell.swift in Sources */,
 				9F0340542502CDD400B27BF3 /* DetailViewModel.swift in Sources */,
 				9F6C705B2515197500C6A3C3 /* CategorySharedInstance.swift in Sources */,
 				9FBF0A7825489F73000D4D1C /* NumberInputCellViewModel.swift in Sources */,
 				9FF9124E253635CF0007B5D1 /* ReactiveKit+Extensions.swift in Sources */,
+				9FC8CB482549FCF900C90A6E /* Date+Extensions.swift in Sources */,
 				9FAF69B62522793100E10B41 /* SectionTableViewBinder.swift in Sources */,
 				9F888C3F250190EB003810D4 /* FullListCoordinator.swift in Sources */,
 				9F97E45625097E3B00823393 /* Item+Extensions.swift in Sources */,

@@ -1,30 +1,27 @@
 //
-//  NumberInputCellViewModel.swift
+//  DateCellViewModel.swift
 //  GoGet
 //
-//  Created by Maggie Maldjian on 10/27/20.
+//  Created by Maggie Maldjian on 10/28/20.
 //  Copyright © 2020 Maggie Maldjian. All rights reserved.
 //
+
 import Bond
-import Foundation
 import ReactiveKit
 
-protocol NumberInputCellViewModelType {
+protocol DateCellViewModelType {
     var title: String { get }
-    var title2: String? { get }
     var initialValue: String { get }
     var updatedValue: Property<String?> { get }
 }
 
-final class NumberInputCellViewModel: NumberInputCellViewModelType {
+final class DateCellViewModel: DateCellViewModelType {
     var title: String
-    var title2: String?
     var initialValue: String
     var updatedValue = Property<String?>(nil)
 
-    init(title: String, title2: String, initialValue: String) {
+    init(title: String, initialValue: String) {
         self.title = title
-        self.title2 = title2
         self.initialValue = initialValue
   }
 }

@@ -18,15 +18,16 @@
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Date" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6w6-Ie-P2v">
-                        <rect key="frame" x="4" y="7" width="57" height="30"/>
-                        <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="25"/>
+                        <rect key="frame" x="35" y="7" width="52" height="30"/>
+                        <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="23"/>
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
                     </label>
                     <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="DDa-gv-IGF">
-                        <rect key="frame" x="77" y="3" width="235" height="39"/>
+                        <rect key="frame" x="60" y="3" width="235" height="39"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="235" id="795-ox-Rdz"/>
+                            <constraint firstAttribute="height" constant="39" id="ea3-HM-wes"/>
                         </constraints>
                         <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="25"/>
                         <textInputTraits key="textInputTraits"/>
@@ -35,16 +36,15 @@
                 <constraints>
                     <constraint firstAttribute="bottom" secondItem="DDa-gv-IGF" secondAttribute="bottom" constant="2" id="2UC-EV-LXP"/>
                     <constraint firstItem="DDa-gv-IGF" firstAttribute="top" secondItem="zxD-Zq-8BG" secondAttribute="top" constant="3" id="2qB-bf-8lz"/>
-                    <constraint firstAttribute="trailing" secondItem="DDa-gv-IGF" secondAttribute="trailing" constant="8" id="2zS-Qj-qsy"/>
+                    <constraint firstAttribute="trailing" secondItem="DDa-gv-IGF" secondAttribute="trailing" constant="25" id="2zS-Qj-qsy"/>
                     <constraint firstItem="6w6-Ie-P2v" firstAttribute="top" secondItem="zxD-Zq-8BG" secondAttribute="top" constant="7" id="Fbp-oZ-G3k"/>
-                    <constraint firstItem="6w6-Ie-P2v" firstAttribute="leading" secondItem="zxD-Zq-8BG" secondAttribute="leading" constant="4" id="HtO-yn-CJD"/>
+                    <constraint firstItem="6w6-Ie-P2v" firstAttribute="leading" secondItem="zxD-Zq-8BG" secondAttribute="leading" constant="35" id="HtO-yn-CJD"/>
                     <constraint firstAttribute="bottom" secondItem="6w6-Ie-P2v" secondAttribute="bottom" constant="7" id="I71-6t-5eE"/>
                 </constraints>
             </tableViewCellContentView>
             <viewLayoutGuide key="safeArea" id="i6d-6Z-aRa"/>
             <connections>
                 <outlet property="dateInput" destination="DDa-gv-IGF" id="iw1-QC-Shv"/>
-                <outlet property="titleInput" destination="DDa-gv-IGF" id="wWb-dr-EmM"/>
             </connections>
             <point key="canvasLocation" x="141" y="117"/>
         </tableViewCell>
