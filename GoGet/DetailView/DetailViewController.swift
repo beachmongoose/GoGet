@@ -13,12 +13,6 @@ import UIKit
 class DetailViewController: UIViewController, UIPopoverPresentationControllerDelegate {
   var saveButton: UIBarButtonItem!
   var clearButton: UIBarButtonItem!
-  @IBOutlet var itemTextField: UITextField!
-  @IBOutlet var quantityTextField: UITextField!
-  @IBOutlet var dateTextField: UITextField!
-  @IBOutlet var intervalTextField: UITextField!
-  @IBOutlet var boughtBoolButton: UISegmentedControl!
-  @IBOutlet var categoryButton: UIButton!
   private let viewModel: DetailViewModelType
   @IBOutlet var tableView: UITableView!
 
@@ -32,12 +26,8 @@ class DetailViewController: UIViewController, UIPopoverPresentationControllerDel
   }
 
   override func viewDidLoad() {
-//      populateTextFields()
-//      textFieldBindings()
-//    addDatePicker()
     tableSetUp()
-//    addNavigationButtons()
-//      boughtToggle()
+    addNavigationButtons()
       super.viewDidLoad()
     }
 }
@@ -46,7 +36,7 @@ extension DetailViewController {
     func tableSetUp() {
     tableView.isScrollEnabled = false
     tableView.separatorStyle = .none
-    tableView.registerCellsForReuse([TextInputCell.self, SegmentedControllCell.self,
+    tableView.registerCellsForReuse([TextInputCell.self, SegmentedControlCell.self,
                                         DateCell.self, NumberInputCell.self, CategoryInputCell.self])
         viewModel.tableData.bind(to: tableView) { dataSource, indexPath, tableView in
             let viewModel = dataSource[indexPath.row]
@@ -57,7 +47,7 @@ extension DetailViewController {
                 return cell
 
             case let .boughtStatusInput(viewModel):
-                let cell = tableView.dequeueReusableCell(SegmentedControllCell.self, for: indexPath)
+                let cell = tableView.dequeueReusableCell(SegmentedControlCell.self, for: indexPath)
                 cell.viewModel = viewModel
                 return cell
 
@@ -80,6 +70,32 @@ extension DetailViewController {
 //     tableView.delegate = self
         }
     }
+}
+
+// MARK: - Saving
+extension DetailViewController {
+  func addNavigationButtons() {
+    saveButton = UIBarButtonItem(title: "Save",
+                                     style: .plain,
+                                     target: self,
+                                     action: nil)
+    saveButton.reactive.tap.bind(to: self) { $0.viewModel.saveItem() }
+    viewModel.isValid.bind(to: saveButton.reactive.isEnabled)
+    clearButton = UIBarButtonItem(title: "Clear",
+                                  style: .plain,
+                                  target: self,
+                                  action: nil)
+    clearButton.reactive.tap.bind(to: self) { $0.clearInput() }
+    navigationItem.rightBarButtonItem = saveButton
+    if viewModel.item == nil {
+      navigationItem.leftBarButtonItem = clearButton
+    }
+  }
+
+  func clearInput() {
+    viewModel.clearDetails()
+  }
+}
 
 // MARK: - Populate Fields
 //extension DetailViewController {
@@ -126,33 +142,8 @@ extension DetailViewController {
 //        }
 //
 //    }
-}
+//}
 
-// MARK: - Saving
-extension DetailViewController {
-  func addNavigationButtons() {
-    saveButton = UIBarButtonItem(title: "Save",
-                                     style: .plain,
-                                     target: self,
-                                     action: nil)
-    saveButton.reactive.tap.bind(to: self) { $0.viewModel.saveItem() }
-    viewModel.isValid.bind(to: saveButton.reactive.isEnabled)
-    clearButton = UIBarButtonItem(title: "Clear",
-                                  style: .plain,
-                                  target: self,
-                                  action: nil)
-    clearButton.reactive.tap.bind(to: self) { $0.clearInput() }
-    navigationItem.rightBarButtonItem = saveButton
-    if viewModel.item == nil {
-      navigationItem.leftBarButtonItem = clearButton
-    }
-  }
-
-  func clearInput() {
-    viewModel.getDetails()
-//    populateTextFields()
-  }
-}
 // MARK: - Bought Button
 //extension DetailViewController {
 //

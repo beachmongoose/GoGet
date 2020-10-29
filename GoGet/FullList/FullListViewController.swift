@@ -28,7 +28,6 @@ class FullListViewController: UIViewController {
       setupTable()
       setupNavigationBar()
       observeEditModeUpdates()
-
       super.viewDidLoad()
     }
 }
@@ -36,12 +35,12 @@ class FullListViewController: UIViewController {
 // MARK: - View Setup
 extension FullListViewController: UITableViewDelegate {
   func setupTable() {
-    tableView.tableFooterView = UIView()
     tableView.register(UINib(nibName: "FullListCell", bundle: nil), forCellReuseIdentifier: "FullListCell")
     let dataSource =
       SectionedTableViewBinderDataSource<FullListViewModel.CellViewModel>(createCell: createCell)
     viewModel.tableData.bind(to: tableView, using: dataSource)
     tableView.delegate = self
+    tableView.tableFooterView = UIView()
   }
 
   private func createCell(dataSource: Array2D<String, FullListViewModel.CellViewModel>,
