@@ -8,20 +8,21 @@
 import Bond
 import ReactiveKit
 
-protocol TextInputCellViewModelType {
+protocol TextInputCellViewModelType: InputCellViewModelType {
     var title: String { get }
-    var initialValue: String? { get }
+    var initialValue: String { get }
     var updatedValue: Property<String?> { get }
     var isValid: Property<Bool> { get }
 }
 
 final class TextInputCellViewModel: TextInputCellViewModelType {
+    
     let title: String
-    let initialValue: String?
+    let initialValue: String
     var updatedValue = Property<String?>(nil)
     let isValid = Property<Bool>(false)
 
-    init(title: String, initialValue: String? = nil) {
+    init(title: String, initialValue: String) {
         self.title = title
         self.initialValue = initialValue
         observeValueUpdates()

@@ -12,19 +12,11 @@ import ReactiveKit
 protocol DetailViewModelType {
     func presentPopover(sender: UIButton)
     func saveItem()
-    func getDetails()
+    func clearDetails()
     var item: Item? { get }
-
-//    Data field bindings
-    var itemName: Property<String?> { get }
-    var itemQuantity: Property<String?> { get }
-    var dateBought: Property<String?> { get }
-    var itemDuration: Property<String?> { get }
-    var bought: Property<Int?> { get }
 
     var tableData: MutableObservableArray<DetailViewModel.CellType> { get }
 
-    var selectedCategoryName: Observable<String?> { get }
     var isValid: Property<Bool> { get }
 }
 
@@ -50,16 +42,13 @@ final class DetailViewModel: DetailViewModelType {
     let itemQuantity = Property<String?>(nil)
     let dateBought = Property<String?>(nil)
     let itemDuration = Property<String?>(nil)
-    let bought = Property<Int?>(nil)
+    let bought = Property<Bool>(false)
 
     var tableData = MutableObservableArray<CellType>([])
 
-    var selectedCategory: Category?
-    let selectedCategoryIndex = Property<Int?>(nil)
-    let selectedCategoryName = Observable<String?>(nil)
-
     let isValid = Property<Bool>(false)
 
+    private var cellViewModels = MutableObservableArray<InputCellViewModelType>([])
     private let coordinator: DetailViewCoordinatorType
     private let getCategories: GetCategoriesType
     private let getItems: GetItemsType
@@ -75,49 +64,56 @@ final class DetailViewModel: DetailViewModelType {
     self.item = item
     self.categories = getCategories.load()
     buildCellViewModels()
-    getDetails()
+    clearDetails()
     observeInput()
-    observeCategoryUpdates()
-    observeCategorySelection()
   }
 
     func buildCellViewModels() {
         let titleCellViewModel = TextInputCellViewModel(title: "Item", initialValue: item?.name ?? "")
-        titleCellViewModel.updatedValue.bind(to: itemName)
         let titleCell: CellType = .nameInput(titleCellViewModel)
 
-//        let boughtBool = (item != nil && item?.boughtStatus != .notBought) ? 0 : 1
-//        let boughtCellViewModel = SegmentedControlCellViewModel(title: "Bought", initialValue: boughtBool)
-//        let boughtCell: CellType = .boughtStatusInput(boughtCellViewModel)
+        let boughtCellViewModel = SegmentedControlCellViewModel(title: "Bought",
+                                                                initialValue: bought.value,
+                                                                updatedValue: bought)
+        let boughtCell: CellType = .boughtStatusInput(boughtCellViewModel)
 
         let date = (item?.dateBought ?? Date()).convertedToString()
-        let dateCellViewModel = DateCellViewModel(title: "Date", initialValue: date)
-        dateCellViewModel.updatedValue.bind(to: dateBought)
+        let dateCellViewModel = DateCellViewModel(title: "Date",
+                                                  initialValue: date,
+                                                  isEnabled: bought.value)
         let dateCell: CellType = .dateInput(dateCellViewModel)
 
         let quantity = String(item?.quantity ?? 1)
-        let quantityCellViewModel = NumberInputCellViewModel(title: "Quantity", title2: "", initialValue: quantity)
-        quantityCellViewModel.updatedValue.bind(to: itemQuantity)
+        let quantityCellViewModel = NumberInputCellViewModel(title: "Quantity",
+                                                             title2: "",
+                                                             initialValue: quantity)
         let quantityCell: CellType = .numberInput(quantityCellViewModel)
 
         let duration = String(item?.duration ?? 7)
-        let durationCellViewModel = NumberInputCellViewModel(title: "Buy every", title2: "days", initialValue: duration)
-        durationCellViewModel.updatedValue.bind(to: itemDuration)
+        let durationCellViewModel = NumberInputCellViewModel(title: "Buy every",
+                                                             title2: "days",
+                                                             initialValue: duration)
         let durationCell: CellType = .numberInput(durationCellViewModel)
 
-        let categoryInputCellViewModel = CategoryInputCellViewModel()
+        let categoryID = item?.categoryID ?? "None"
+        let categoryInputCellViewModel = CategoryInputCellViewModel(title: "Category",
+                                                                    initialValue: categoryID)
         let categoryInputCell: CellType = .categoryInput(categoryInputCellViewModel)
 
-        tableData.replace(with: [titleCell, dateCell, quantityCell, durationCell, categoryInputCell])
+        let array = [titleCell, boughtCell, dateCell,
+                     quantityCell, durationCell, categoryInputCell]
+        let modelArray: [InputCellViewModelType] = [titleCellViewModel, dateCellViewModel,
+                                                    quantityCellViewModel, durationCellViewModel,
+                                                    categoryInputCellViewModel]
+        cellViewModels.replace(with: modelArray)
+        tableData.replace(with: array)
     }
 
-    func getDetails() {
-        itemName.value = item?.name ?? ""
-        itemQuantity.value = String(item?.quantity ?? 1)
-        dateBought.value = (item?.dateBought ?? Date()).convertedToString()
-        itemDuration.value = String(item?.duration ?? 7)
-        bought.value = (item != nil && item?.boughtStatus != .notBought) ? 0 : 1
-        checkForCategory()
+    func observeBoughtSignal() {
+        bought.observeNext { _ in
+            self.buildCellViewModels()
+        }
+        .dispose()
     }
 
     func saveItem() {
@@ -149,7 +145,16 @@ final class DetailViewModel: DetailViewModelType {
         }
         coordinator.confirmSave(newItemStatus)
         self.item = nil
-        getDetails()
+        clearDetails()
+    }
+
+    func clearDetails() {
+        itemName.value = item?.name ?? ""
+        itemQuantity.value = String(item?.quantity ?? 1)
+        dateBought.value = (item?.dateBought ?? Date()).convertedToString()
+        itemDuration.value = String(item?.duration ?? 7)
+        bought.value = (item != nil && item?.boughtStatus != .notBought) ? false : true
+        buildCellViewModels()
     }
 
     func replace(in array: [Item], with item: Item) {
@@ -181,46 +186,13 @@ final class DetailViewModel: DetailViewModelType {
 
 // MARK: - Categories
 extension DetailViewModel {
-
-    func checkForCategory() {
-    guard item?.categoryID != nil else { selectedCategoryName.value = "None"
-        return }
-    let data = getCategories.forID((item?.categoryID)!)
-    selectedCategoryIndex.value = data.0
-    selectedCategory = data.1
-    selectedCategoryName.value = selectedCategory?.name
-    }
-
     func presentPopover(sender: UIButton) {
     coordinator.presentPopover(sender: sender, selectedIndex: selectedCategoryIndex)
-    }
-
-    func observeCategoryUpdates() {
-        defaults.reactive.keyPath("Categories", ofType: Data?.self, context: .immediateOnMain).ignoreNils().observeNext { _ in
-        self.categories = self.getCategories.load()
-    }
-    .dispose(in: bag)
-    }
-
-    func observeCategorySelection() {
-    selectedCategoryIndex.observeNext { index in
-        let category = (self.categories.count == 0 || index == nil) ? nil : self.categories[index ?? 0]
-        self.selectedCategory = category
-        self.selectedCategoryName.value = category?.name ?? nil
-    }
-    .dispose(in: bag)
     }
 }
 
 // MARK: - Date Info
 extension DetailViewModel {
-    func convertedDate(_ date: Date) -> String {
-        let formatter = DateFormatter()
-        formatter.dateStyle = DateFormatter.Style.short
-        formatter.timeStyle = DateFormatter.Style.none
-        return formatter.string(from: date)
-    }
-
     func dateFromString(_ stringDate: String?) -> Date {
         guard let stringDate = stringDate else { return Date() }
         let format = DateFormatter()
@@ -259,7 +231,7 @@ extension DetailViewModel {
         guard let dateBought = dateBought.value else {
             fatalError("Failed to create item, no date bought selected")
         }
-        guard bought == 0 else { return .notBought }
+        guard bought == true else { return .notBought }
         let date = dateFromString(dateBought)
         return .bought(date)
     }

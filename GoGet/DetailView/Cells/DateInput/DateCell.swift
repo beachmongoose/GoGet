@@ -11,9 +11,10 @@ import ReactiveKit
 import UIKit
 
 class DateCell: UITableViewCell {
-  @IBOutlet var dateInput: UITextField!
+  @IBOutlet var dateLabel: UILabel!
+  @IBOutlet var dateField: UITextField!
 
-  var boughtStatusCell: SegmentedControllCell?
+  var boughtStatusCell: SegmentedControlCell?
   var viewModel: DateCellViewModelType? {
     didSet { setupCell() }
   }
@@ -22,33 +23,13 @@ class DateCell: UITableViewCell {
 extension DateCell {
   func setupCell() {
     guard let viewModel = viewModel else { return }
-    dateInput.text = viewModel.initialValue
-    dateInput.reactive.text.bind(to: viewModel.updatedValue)
-    boughtToggle()
+    dateField.isUserInteractionEnabled = viewModel.isEnabled
+    dateField.textColor = (viewModel.isEnabled) ? UIColor.black : UIColor.gray
+    dateLabel.text = viewModel.title
+    dateField.text = viewModel.initialValue
+    dateField.reactive.text.bind(to: viewModel.updatedValue)
+    addDatePicker()
     selectionStyle = .none
-  }
-}
-
-// Toggle access
-extension DateCell {
-  func boughtToggle() {
-    boughtStatusCell?.boughtStatus.reactive.selectedSegmentIndex.observeNext { [weak self] _ in
-      switch self?.boughtStatusCell?.boughtStatus.selectedSegmentIndex {
-      case 0:
-      self?.boughtFieldEnable(true)
-      case 1:
-      self?.boughtFieldEnable(false)
-      default:
-      break
-      }
-    }
-    .dispose(in: bag)
-  }
-
-  func boughtFieldEnable(_ bool: Bool) {
-    dateInput.isUserInteractionEnabled = bool
-    dateInput.textColor = (bool) ? UIColor.black : UIColor.gray
-    print("toggled")
   }
 }
 
@@ -61,11 +42,11 @@ extension DateCell {
 
     datePicker.addTarget(self, action: #selector(datePicked(sender:)),
                          for: UIControl.Event.valueChanged)
-    dateInput.inputView = datePicker
+    dateField.inputView = datePicker
   }
 
   @objc func datePicked(sender: UIDatePicker) {
-    dateInput.text = sender.date.convertedToString()
+    dateField.text = sender.date.convertedToString()
   }
 
   override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {

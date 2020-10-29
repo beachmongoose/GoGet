@@ -40,6 +40,7 @@ extension BuyListViewController: UITableViewDelegate {
     let dataSource = SectionedTableViewBinderDataSource<BuyListCellViewModel>(createCell: createCell)
     viewModel.tableData.bind(to: tableView, using: dataSource)
     tableView.delegate = self
+    tableView.tableFooterView = UIView()
   }
 
   private func createCell(dataSource: Array2D<String, BuyListCellViewModel>,

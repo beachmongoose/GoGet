@@ -44,7 +44,8 @@
             </tableViewCellContentView>
             <viewLayoutGuide key="safeArea" id="i6d-6Z-aRa"/>
             <connections>
-                <outlet property="dateInput" destination="DDa-gv-IGF" id="iw1-QC-Shv"/>
+                <outlet property="dateField" destination="DDa-gv-IGF" id="iw1-QC-Shv"/>
+                <outlet property="dateLabel" destination="6w6-Ie-P2v" id="JkX-E6-qRq"/>
             </connections>
             <point key="canvasLocation" x="141" y="117"/>
         </tableViewCell>
