@@ -122,7 +122,7 @@
 		9FBB7EB625476175002026F3 /* TextInputCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TextInputCell.xib; sourceTree = "<group>"; };
 		9FBB7ECA25476602002026F3 /* DateCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateCell.swift; sourceTree = "<group>"; };
 		9FBB7ECB25476602002026F3 /* DateCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = DateCell.xib; sourceTree = "<group>"; };
-		9FBB7EDA25476806002026F3 /* CategoryInputCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryInputCell.swift; sourceTree = "<group>"; };
+		9FBB7EDA25476806002026F3 /* CategoryInputCell.swift */ = {isa = PBXFileReference; indentWidth = 4; lastKnownFileType = sourcecode.swift; path = CategoryInputCell.swift; sourceTree = "<group>"; tabWidth = 4; };
 		9FBB7EDB25476806002026F3 /* CategoryInputCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CategoryInputCell.xib; sourceTree = "<group>"; };
 		9FBB7EDF254768EF002026F3 /* UIView+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Extensions.swift"; sourceTree = "<group>"; };
 		9FBB7EE225476BDA002026F3 /* UITableView+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITableView+Extensions.swift"; sourceTree = "<group>"; };

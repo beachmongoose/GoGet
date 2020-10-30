@@ -35,36 +35,26 @@ final class DetailViewModel: DetailViewModelType {
         return item == nil
   }
 
-    var categories: [Category] = []
-
 // Data field bindings
-    let itemName = Property<String?>(nil)
-    let itemQuantity = Property<String?>(nil)
-    let dateBought = Property<String?>(nil)
-    let itemDuration = Property<String?>(nil)
     let bought = Property<Bool>(false)
+    let isValid = Property<Bool>(false)
+    let categoryID = Property<String?>(nil)
 
     var tableData = MutableObservableArray<CellType>([])
 
-    let isValid = Property<Bool>(false)
-
     private var cellViewModels = MutableObservableArray<InputCellViewModelType>([])
     private let coordinator: DetailViewCoordinatorType
-    private let getCategories: GetCategoriesType
     private let getItems: GetItemsType
     private let bag = DisposeBag()
 
     init(coordinator: DetailViewCoordinatorType,
-         getCategories: GetCategoriesType = GetCategories(),
          getItems: GetItemsType = GetItems(),
          item: Item? ) {
     self.coordinator = coordinator
-    self.getCategories = getCategories
     self.getItems = getItems
     self.item = item
-    self.categories = getCategories.load()
     buildCellViewModels()
-    clearDetails()
+    observeBoughtSignal()
     observeInput()
   }
 
@@ -95,9 +85,10 @@ final class DetailViewModel: DetailViewModelType {
                                                              initialValue: duration)
         let durationCell: CellType = .numberInput(durationCellViewModel)
 
-        let categoryID = item?.categoryID ?? "None"
+        let id = item?.categoryID ?? "None"
         let categoryInputCellViewModel = CategoryInputCellViewModel(title: "Category",
-                                                                    initialValue: categoryID)
+                                                                    initialValue: id,
+                                                                    updatedValue: categoryID)
         let categoryInputCell: CellType = .categoryInput(categoryInputCellViewModel)
 
         let array = [titleCell, boughtCell, dateCell,
@@ -116,19 +107,35 @@ final class DetailViewModel: DetailViewModelType {
         .dispose()
     }
 
+    func observeInput() {
+//        let validChecks = cellViewModels.collection.map { $0.isValid }
+//        let name = validChecks[0]
+//        let date = validChecks[1]
+//        let quantity = validChecks[2]
+//        let duration = validChecks[3]
+//        let category = validChecks[4]
+//        let checkFields = merge(name, date, quantity, duration, category)
+//        checkFields.observeNext { [weak self] _ in
+//            self?.isValid.value = validChecks.allSatisfy({$0.value == true})
+//        }
+//        .dispose()
+    }
+
     func saveItem() {
         var idString: String {
             return (self.item == nil) ? UUID().uuidString : item!.id
         }
 
+        let updatedValues = cellViewModels.collection.map { return ($0.updatedValue.value == nil) ? $0.initialValue : $0.updatedValue.value }
+
         let adjustedItem = Item(
-            name: finalName,
+            name: updatedValues[0] ?? "",
             id: idString,
-            quantity: finalQuantity,
-            duration: finalDuration,
-            boughtStatus: finalBoughtStatus,
+            quantity: finalInt(updatedValues[2]),
+            duration: finalInt(updatedValues[3]),
+            boughtStatus: finalBoughtStatus(updatedValues[1]),
             dateAdded: item?.dateAdded ?? Date(),
-            categoryID: finalCategoryID
+            categoryID: finalCategoryID(updatedValues[4])
         )
         upSert(adjustedItem)
     }
@@ -149,11 +156,7 @@ final class DetailViewModel: DetailViewModelType {
     }
 
     func clearDetails() {
-        itemName.value = item?.name ?? ""
-        itemQuantity.value = String(item?.quantity ?? 1)
-        dateBought.value = (item?.dateBought ?? Date()).convertedToString()
-        itemDuration.value = String(item?.duration ?? 7)
-        bought.value = (item != nil && item?.boughtStatus != .notBought) ? false : true
+        item = nil
         buildCellViewModels()
     }
 
@@ -164,24 +167,6 @@ final class DetailViewModel: DetailViewModelType {
         allItems[index] = item
         getItems.save(allItems)
     }
-
-    func observeInput() {
-        let checkFields = merge(itemName, itemQuantity, dateBought, itemDuration)
-
-        checkFields.observeNext { [weak self] _ in
-            guard let name = self?.itemName.value,
-                  let quantity = self?.itemQuantity.value,
-                  let date = self?.dateFromString(self?.dateBought.value),
-                  let duration = self?.itemDuration.value else { return }
-
-            self?.isValid.value =
-                name != "" &&
-                quantity.isInt &&
-                date <= Date() &&
-                duration.isInt
-        }
-        .dispose(in: bag)
-    }
 }
 
 // MARK: - Categories
@@ -191,52 +176,26 @@ extension DetailViewModel {
     }
 }
 
-// MARK: - Date Info
+// MARK: - Format Values
 extension DetailViewModel {
-    func dateFromString(_ stringDate: String?) -> Date {
-        guard let stringDate = stringDate else { return Date() }
-        let format = DateFormatter()
-        format.dateFormat = "MM/dd/yy"
-        return format.date(from: stringDate) ?? Date()
-    }
-}
-
-// MARK: - Unwrapped Binds
-extension DetailViewModel {
-    var finalName: String {
-        guard let itemName = itemName.value else {
-            fatalError("Failed to create item, name was nil")
-        }
-        return itemName
-    }
-
-    var finalQuantity: Int {
-        guard let itemQuantity = itemQuantity.value else {
+    func finalInt(_ string: String?) -> Int {
+        guard let int = string else {
             fatalError("Failed to create item, quantity was nil")
         }
-        return Int(itemQuantity) ?? 1
+        return Int(int) ?? 1
     }
 
-    var finalDuration: Int {
-        guard let duration = itemDuration.value else {
-            fatalError("Failed to create item, duration was nil")
-        }
-        return Int(duration) ?? 7
-    }
-
-    var finalBoughtStatus: BoughtStatus {
-        guard let bought = bought.value else {
-            fatalError("Failed to create item, no bought status.")
-        }
-        guard let dateBought = dateBought.value else {
+    func finalBoughtStatus(_ input: String?) -> BoughtStatus {
+        guard let string = input else {
             fatalError("Failed to create item, no date bought selected")
         }
-        guard bought == true else { return .notBought }
-        let date = dateFromString(dateBought)
+        guard bought.value == true else { return .notBought }
+        let date = string.dateFromString()
         return .bought(date)
     }
 
-    var finalCategoryID: String? {
-        return (selectedCategory != nil) ? selectedCategory?.id : nil
+    func finalCategoryID(_ string: String?) -> String? {
+        guard let idString = string else { return nil }
+        return idString
     }
 }

@@ -14,7 +14,7 @@ protocol GetCategoriesType {
   func createCategory(for category: String)
   func deleteCategory(_ index: Int)
   func checkIfDuplicate(_ newCategory: String?) -> Bool
-  func forID(_ id: String) -> (Int, Category?)
+  func forID(_ id: String) -> (Int, String)
 }
 
 class GetCategories: GetCategoriesType {
@@ -82,11 +82,11 @@ class GetCategories: GetCategoriesType {
     save(categories)
   }
 
-  func forID(_ id: String) -> (Int, Category?) {
+  func forID(_ id: String) -> (Int, String) {
     let categories = load()
     let category = categories.first(where: { $0.id == id})
     let index = Int(categories.firstIndex(of: category!) ?? 0)
-      return (index, category)
+    return (index, category!.name)
   }
 
   func deleteCategory(_ index: Int) {

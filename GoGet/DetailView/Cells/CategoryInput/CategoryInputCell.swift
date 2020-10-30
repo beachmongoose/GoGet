@@ -22,10 +22,9 @@ extension CategoryInputCell {
   func setupCell() {
     guard let viewModel = viewModel else { return }
     categoryLabel.text = viewModel.title
-    inputButton.setTitle(viewModel.initialValue, for: .normal)
-    viewModel.updatedValue.observeNext { value in
-      let category = (value != nil) ? value : "None"
-      self.inputButton.setTitle(category, for: .normal)
+    inputButton.setTitle(viewModel.selectedCategoryName.value, for: .normal)
+    viewModel.selectedCategoryName.observeNext { category in
+        self.inputButton.setTitle(category, for: .normal)
     }
     .dispose()
 

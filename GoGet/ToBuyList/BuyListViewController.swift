@@ -65,7 +65,7 @@ extension BuyListViewController: UITableViewDelegate {
 
 // MARK: - Navigation
 extension BuyListViewController {
-
+//TODO: MAKE SELECT ALL BUTTON
   func addNavigationButtons() {
     sortButton = UIBarButtonItem(title: "Sort",
                                  style: .plain,

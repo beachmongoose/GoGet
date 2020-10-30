@@ -16,7 +16,6 @@ protocol TextInputCellViewModelType: InputCellViewModelType {
 }
 
 final class TextInputCellViewModel: TextInputCellViewModelType {
-    
     let title: String
     let initialValue: String
     var updatedValue = Property<String?>(nil)
@@ -34,4 +33,5 @@ final class TextInputCellViewModel: TextInputCellViewModelType {
         }
         .dispose()
     }
+
 }
