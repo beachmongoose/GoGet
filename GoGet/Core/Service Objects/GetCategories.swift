@@ -12,7 +12,7 @@ protocol GetCategoriesType {
   func load() -> [Category]
   func save(_ categories: [Category])
   func createCategory(for category: String)
-  func deleteCategory(_ index: Int)
+  func deleteCategory(_ id: String)
   func checkIfDuplicate(_ newCategory: String?) -> Bool
   func forID(_ id: String) -> (Int, String)
 }
@@ -89,9 +89,10 @@ class GetCategories: GetCategoriesType {
     return (index, category!.name)
   }
 
-  func deleteCategory(_ index: Int) {
+  func deleteCategory(_ id: String) {
     var categories = load()
-    categories.remove(at: index)
+    let index = forID(id)
+    categories.remove(at: index.0)
     save(categories)
   }
 

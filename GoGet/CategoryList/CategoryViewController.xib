@@ -11,6 +11,8 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="CategoryViewController" customModule="GoGet" customModuleProvider="target">
             <connections>
+                <outlet property="createNewButton" destination="MfE-RV-Qkx" id="keG-hJ-Hah"/>
+                <outlet property="noneButton" destination="qvS-s1-pNP" id="7Ln-KX-2Tt"/>
                 <outlet property="tableView" destination="UrQ-my-LkW" id="x2V-a0-qND"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
@@ -28,17 +30,11 @@
                     <rect key="frame" x="291" y="48" width="103" height="36"/>
                     <fontDescription key="fontDescription" type="system" pointSize="20"/>
                     <state key="normal" title="Create New"/>
-                    <connections>
-                        <action selector="createNew:" destination="-1" eventType="touchUpInside" id="ZMg-p0-pvV"/>
-                    </connections>
                 </button>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qvS-s1-pNP">
                     <rect key="frame" x="20" y="48" width="47" height="36"/>
                     <fontDescription key="fontDescription" type="system" pointSize="20"/>
                     <state key="normal" title="None"/>
-                    <connections>
-                        <action selector="clearCategory:" destination="-1" eventType="touchUpInside" id="ddV-LY-abv"/>
-                    </connections>
                 </button>
             </subviews>
             <viewLayoutGuide key="safeArea" id="fnl-2z-Ty3"/>

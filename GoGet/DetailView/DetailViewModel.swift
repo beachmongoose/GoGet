@@ -10,7 +10,7 @@ import ReactiveKit
 
 //TODO: CREATE DIFFERENT VIEW MODELS FOR NEW ITEM AND EDIT ITEM
 protocol DetailViewModelType {
-    func presentPopover(sender: UIButton)
+    func presentPopover(sender: UIButton, id: Property<String?>)
     func saveItem()
     func clearDetails()
     var item: Item? { get }
@@ -153,8 +153,8 @@ final class DetailViewModel: DetailViewModelType {
 
 // MARK: - Categories
 extension DetailViewModel {
-    func presentPopover(sender: UIButton) {
-//    coordinator.presentPopover(sender: sender, selectedIndex: selectedCategoryIndex)
+    func presentPopover(sender: UIButton, id: Property<String?>) {
+    coordinator.presentPopover(sender: sender, selectedID: id)
     }
 }
 

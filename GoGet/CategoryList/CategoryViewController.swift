@@ -11,6 +11,8 @@ import ReactiveKit
 import UIKit
 
 class CategoryViewController: UIViewController {
+  @IBOutlet var createNewButton: UIButton!
+  @IBOutlet var noneButton: UIButton!
   @IBOutlet var tableView: UITableView!
   private var viewModel: CategoryListViewModelType
 
@@ -24,6 +26,8 @@ class CategoryViewController: UIViewController {
   override func viewDidLoad() {
     tableView.tableFooterView = UIView()
     setupTable()
+    createNewCategory()
+    clearCategory()
     super.viewDidLoad()
   }
 }
@@ -43,6 +47,7 @@ extension CategoryViewController: UITableViewDelegate, UIGestureRecognizerDelega
 
       cell.reactive.tapGesture().observeNext { [weak self] _ in
         self?.viewModel.changeSelectedIndex(to: indexPath.row)
+        self?.viewModel.changeSelectedCategory(for: indexPath.row)
         self?.dismiss(animated: true, completion: nil)
       }
       .dispose(in: self.bag)
@@ -68,8 +73,20 @@ extension CategoryViewController: UITableViewDelegate, UIGestureRecognizerDelega
 }
 
 extension CategoryViewController {
-  @IBAction func createNew(_ sender: Any) {
-    addCategory(handler: checkName)
+  func createNewCategory() {
+    createNewButton.reactive.tapGesture().observeNext { [weak self] _ in
+      self?.addCategory(handler: self?.checkName)
+    }
+    .dispose(in: bag)
+  }
+
+  func clearCategory() {
+    noneButton.reactive.tapGesture().observeNext { [weak self ] _ in
+      self?.viewModel.changeSelectedIndex(to: nil)
+      self?.viewModel.changeSelectedCategory(for: nil)
+      self?.dismiss(animated: true, completion: nil)
+    }
+    .dispose(in: bag)
   }
 
   func checkName(action: UIAlertAction, category: String?) {
@@ -77,10 +94,5 @@ extension CategoryViewController {
       return }
     if viewModel.isDuplicate(category!) { presentError(message: "Category already exists")}
     viewModel.createNewCategory(for: category!)
-  }
-
-  @IBAction func clearCategory(_ sender: Any) {
-    viewModel.changeSelectedIndex(to: nil)
-    dismiss(animated: true, completion: nil)
   }
 }
