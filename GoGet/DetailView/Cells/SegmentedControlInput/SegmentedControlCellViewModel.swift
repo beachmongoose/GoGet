@@ -19,6 +19,7 @@ final class SegmentedControlCellViewModel: SegmentedControlCellViewModelType {
     var title: String
     var initialValue: Bool
     var updatedValue: Property<Bool>
+    var validationSignal = SafePassthroughSubject<Void>()
 
     init(title: String, initialValue: Bool, updatedValue: Property<Bool>) {
         self.title = title

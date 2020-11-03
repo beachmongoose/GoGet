@@ -13,6 +13,7 @@ protocol TextInputCellViewModelType: InputCellViewModelType {
     var initialValue: String { get }
     var updatedValue: Property<String?> { get }
     var isValid: Property<Bool> { get }
+    var validationSignal: SafePassthroughSubject<Void> { get }
 }
 
 final class TextInputCellViewModel: TextInputCellViewModelType {
@@ -20,18 +21,28 @@ final class TextInputCellViewModel: TextInputCellViewModelType {
     let initialValue: String
     var updatedValue = Property<String?>(nil)
     let isValid = Property<Bool>(false)
+    let bag = DisposeBag()
+    let validationSignal = SafePassthroughSubject<Void>()
 
     init(title: String, initialValue: String) {
         self.title = title
         self.initialValue = initialValue
         observeValueUpdates()
+        observeValidUpdates()
   }
 
     func observeValueUpdates() {
         updatedValue.observeNext { value in
             self.isValid.value = (value != "")
         }
-        .dispose()
+        .dispose(in: bag)
+    }
+
+    func observeValidUpdates() {
+        isValid.removeDuplicates().observeNext { _ in
+            self.validationSignal.send()
+        }
+        .dispose(in: bag)
     }
 
 }

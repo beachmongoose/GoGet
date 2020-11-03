@@ -21,8 +21,21 @@ class SegmentedControlCell: UITableViewCell {
 extension SegmentedControlCell {
     func setupCell() {
         selectionStyle = .none
-        guard let viewModel = viewModel else { return }
-        let int = (viewModel.initialValue) ? 0 : 1
-        boughtSegment.selectedSegmentIndex = (int)
+        initialValue()
+        observeBoughtUpdate()
+    }
+
+  func initialValue() {
+    guard let viewModel = viewModel else { return }
+    let int = (viewModel.initialValue) ? 0 : 1
+    boughtSegment.selectedSegmentIndex = (int)
+    }
+
+    func observeBoughtUpdate() {
+        boughtSegment.reactive.selectedSegmentIndex.observeNext { [ weak self ] value in
+            let bool = (self?.boughtSegment.selectedSegmentIndex == 0)
+            self?.viewModel?.updatedValue.value = bool
+        }
+        .dispose(in: bag)
     }
 }

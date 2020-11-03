@@ -24,6 +24,7 @@ final class CategoryInputCellViewModel: CategoryInputCellViewModelType {
     var selectedCategoryName = Property<String>("None")
     var selectedCategoryIndex = Observable<Int?>(nil)
     var isValid = Property<Bool>(true)
+    let bag = DisposeBag()
 
     var categories: [Category] = []
     private let getCategories: GetCategoriesType
@@ -57,7 +58,7 @@ extension CategoryInputCellViewModel {
             }
             self.fetchCategory()
         }
-        .dispose()
+        .dispose(in: bag)
     }
     func checkForCategory(_ id: String?) {
         guard let id = id else { updatedValue.value = "None"
