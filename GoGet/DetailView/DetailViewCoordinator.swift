@@ -16,7 +16,7 @@ protocol DetailViewCoordinatorType {
   func errorMessage(_ message: String)
   func confirmSave(_ item: Bool)
   func dismissDetail(action: UIAlertAction)
-  func presentPopover(sender: UIButton, selectedIndex: Property<Int?>)
+  func presentPopover(sender: UIButton, selectedID: Property<String?>)
 }
 
 class DetailViewCoordinator: DetailViewCoordinatorType {
@@ -50,10 +50,10 @@ class DetailViewCoordinator: DetailViewCoordinatorType {
     navigationController.popViewController(animated: true)
   }
 
-  func presentPopover(sender: UIButton, selectedIndex: Property<Int?>) {
+  func presentPopover(sender: UIButton, selectedID: Property<String?>) {
     guard let viewController = viewController else { return }
 
-    let categoryController = CategoryViewCoordinator().start(selectedIndex: selectedIndex)
+    let categoryController = CategoryViewCoordinator().start(selectedID: selectedID)
     categoryController.preferredContentSize = CGSize(width: 300, height: 250)
     categoryController.modalPresentationStyle = .popover
     if let presentationController = categoryController.popoverPresentationController {

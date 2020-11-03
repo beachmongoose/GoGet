@@ -14,12 +14,14 @@ typealias CategoryCell = CategoryViewModel.CellViewModel
 protocol CategoryListViewModelType {
   var tableData: MutableObservableArray<CategoryCell> { get }
   func isDuplicate(_ input: String) -> Bool
-  func changeSelectedIndex(to index: Int?)
+  func changeSelectedCategory(for index: Int?)
   func createNewCategory(for category: String)
   func deleteCategory(action: UIAlertAction)
+  func changeSelectedIndex(to index: Int?)
 }
 
 final class CategoryViewModel: CategoryListViewModelType {
+
   struct CellViewModel {
     var name: String
     init(category: Category) {
@@ -30,15 +32,16 @@ final class CategoryViewModel: CategoryListViewModelType {
   private let bag = DisposeBag()
   var tableData = MutableObservableArray<CategoryCell>([])
   private var categories: [Category] = []
-  var selectedIndex: Property<Int?>
+  var selectedID: Property<String?>
+  var selectedIndex: Int?
   private let coordinator: CategoryViewCoordinatorType
   private let getCategories: GetCategoriesType
 
   init(coordinator: CategoryViewCoordinatorType,
        getCategories: GetCategoriesType = GetCategories(),
-       selectedIndex: Property<Int?>) {
+       selectedID: Property<String?>) {
     self.coordinator = coordinator
-    self.selectedIndex = selectedIndex
+    self.selectedID = selectedID
     self.getCategories = getCategories
     fetchTableData()
     observeCategoryUpdates()
@@ -66,8 +69,16 @@ extension CategoryViewModel {
     return false
   }
 
+  func changeSelectedCategory(for index: Int?) {
+    guard let index = index else { selectedID.value = nil
+      return
+    }
+    let category = getCategories.load()[index]
+    selectedID.value = category.id
+  }
+
   func changeSelectedIndex(to index: Int?) {
-    selectedIndex.value = index
+    selectedIndex = index
   }
 
   func createNewCategory(for category: String) {
@@ -76,7 +87,8 @@ extension CategoryViewModel {
   }
 
   func deleteCategory(action: UIAlertAction) {
-    getCategories.deleteCategory(selectedIndex.value!)
+    guard let selectedID = selectedID.value else { return }
+    getCategories.deleteCategory(selectedID)
   }
 
 }

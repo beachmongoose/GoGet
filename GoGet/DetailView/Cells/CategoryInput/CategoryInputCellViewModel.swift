@@ -14,7 +14,7 @@ protocol CategoryInputCellViewModelType: InputCellViewModelType {
     var initialValue: String { get }
     var updatedValue: Property<String?> { get }
     var selectedCategoryName: Property<String> { get }
-    var selectedCategoryIndex: Observable<Int?> { get }
+    var selectedCategoryIndex: Int? { get }
 }
 
 final class CategoryInputCellViewModel: CategoryInputCellViewModelType {
@@ -22,7 +22,7 @@ final class CategoryInputCellViewModel: CategoryInputCellViewModelType {
     var initialValue: String
     var updatedValue = Property<String?>(nil)
     var selectedCategoryName = Property<String>("None")
-    var selectedCategoryIndex = Observable<Int?>(nil)
+    var selectedCategoryIndex = Int? (nil)
     var isValid = Property<Bool>(true)
     let bag = DisposeBag()
 
@@ -47,7 +47,7 @@ extension CategoryInputCellViewModel {
         guard data != "None" else { selectedCategoryName.value = data
             return }
         let category = getCategories.forID(data)
-        selectedCategoryIndex.value = category.0
+        selectedCategoryIndex = category.0
         selectedCategoryName.value = category.1
     }
 
@@ -65,11 +65,7 @@ extension CategoryInputCellViewModel {
             return
         }
     let data = getCategories.forID(id)
-    selectedCategoryIndex.value = data.0
-        selectedCategoryName.value = data.1
+    selectedCategoryIndex = data.0
+    selectedCategoryName.value = data.1
     }
-
-//    func presentPopover(sender: UIButton) {
-//    coordinator.presentPopover(sender: sender, selectedIndex: selectedCategoryIndex)
-//    }
 }
