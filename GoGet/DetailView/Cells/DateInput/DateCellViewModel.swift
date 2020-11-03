@@ -13,30 +13,43 @@ protocol DateCellViewModelType: InputCellViewModelType {
     var title: String { get }
     var initialValue: String { get }
     var updatedValue: Property<String?> { get }
-    var isEnabled: Bool { get }
+    var isEnabled: Property<Bool> { get }
     var isValid: Property<Bool> { get }
+    var validationSignal: SafePassthroughSubject<Void> { get }
 }
 
 final class DateCellViewModel: DateCellViewModelType {
     var title: String
     var initialValue: String
     let updatedValue = Property<String?>(nil)
-    var isEnabled: Bool
-    var isValid: Property<Bool> {
-        guard updatedValue.value != nil else { return Property<Bool>(true) }
-        return Property<Bool>(dateFromString(updatedValue.value) <= Date())
-    }
+    var isEnabled: Property<Bool>
+    var isValid = Property<Bool>(false)
+    var validationSignal = SafePassthroughSubject<Void>()
+    let bag = DisposeBag()
 
-    init(title: String, initialValue: String, isEnabled: Bool) {
+    init(title: String, initialValue: String, isEnabled: Property<Bool>) {
         self.title = title
         self.initialValue = initialValue
         self.isEnabled = isEnabled
+        observeValueUpdates()
+        observeValidUpdates()
   }
 
-    func dateFromString(_ stringDate: String?) -> Date {
-        guard let stringDate = stringDate else { return Date() }
-        let format = DateFormatter()
-        format.dateFormat = "MM/dd/yy"
-        return format.date(from: stringDate) ?? Date()
+    func observeValueUpdates() {
+        updatedValue.observeNext { value in
+            guard value != nil else { self.isValid.value = true
+            return
+            }
+            guard let value = value else { return }
+            self.isValid.value = (value.dateFromString() <= Date())
+        }
+        .dispose(in: bag)
+    }
+
+    func observeValidUpdates() {
+        isValid.removeDuplicates().observeNext { _ in
+            self.validationSignal.send()
+        }
+        .dispose(in: bag)
     }
 }

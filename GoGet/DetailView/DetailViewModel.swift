@@ -14,6 +14,7 @@ protocol DetailViewModelType {
     func saveItem()
     func clearDetails()
     var item: Item? { get }
+    func observeValidationUpdates()
 
     var tableData: MutableObservableArray<DetailViewModel.CellType> { get }
 
@@ -42,7 +43,7 @@ final class DetailViewModel: DetailViewModelType {
 
     var tableData = MutableObservableArray<CellType>([])
 
-    private var cellViewModels = MutableObservableArray<InputCellViewModelType>([])
+    private var cellViewModels = Property<[InputCellViewModelType]>([])
     private let coordinator: DetailViewCoordinatorType
     private let getItems: GetItemsType
     private let bag = DisposeBag()
@@ -54,8 +55,6 @@ final class DetailViewModel: DetailViewModelType {
     self.getItems = getItems
     self.item = item
     buildCellViewModels()
-    observeBoughtSignal()
-    observeInput()
   }
 
     func buildCellViewModels() {
@@ -70,7 +69,7 @@ final class DetailViewModel: DetailViewModelType {
         let date = (item?.dateBought ?? Date()).convertedToString()
         let dateCellViewModel = DateCellViewModel(title: "Date",
                                                   initialValue: date,
-                                                  isEnabled: bought.value)
+                                                  isEnabled: bought)
         let dateCell: CellType = .dateInput(dateCellViewModel)
 
         let quantity = String(item?.quantity ?? 1)
@@ -93,32 +92,15 @@ final class DetailViewModel: DetailViewModelType {
 
         let array = [titleCell, boughtCell, dateCell,
                      quantityCell, durationCell, categoryInputCell]
-        let modelArray: [InputCellViewModelType] = [titleCellViewModel, dateCellViewModel,
+        let cellViewModels: [InputCellViewModelType] = [titleCellViewModel, dateCellViewModel,
                                                     quantityCellViewModel, durationCellViewModel,
                                                     categoryInputCellViewModel]
-        cellViewModels.replace(with: modelArray)
+        self.cellViewModels.value = cellViewModels
         tableData.replace(with: array)
     }
 
-    func observeBoughtSignal() {
-        bought.observeNext { _ in
-            self.buildCellViewModels()
-        }
-        .dispose()
-    }
-
-    func observeInput() {
-//        let validChecks = cellViewModels.collection.map { $0.isValid }
-//        let name = validChecks[0]
-//        let date = validChecks[1]
-//        let quantity = validChecks[2]
-//        let duration = validChecks[3]
-//        let category = validChecks[4]
-//        let checkFields = merge(name, date, quantity, duration, category)
-//        checkFields.observeNext { [weak self] _ in
-//            self?.isValid.value = validChecks.allSatisfy({$0.value == true})
-//        }
-//        .dispose()
+    func observeValidationUpdates() {
+        isValid.value = (cellViewModels.value.filter { $0.isValid.value == false}).isEmpty
     }
 
     func saveItem() {
@@ -126,7 +108,7 @@ final class DetailViewModel: DetailViewModelType {
             return (self.item == nil) ? UUID().uuidString : item!.id
         }
 
-        let updatedValues = cellViewModels.collection.map { return ($0.updatedValue.value == nil) ? $0.initialValue : $0.updatedValue.value }
+        let updatedValues = cellViewModels.value.map { return ($0.updatedValue.value == nil) ? $0.initialValue : $0.updatedValue.value }
 
         let adjustedItem = Item(
             name: updatedValues[0] ?? "",
@@ -172,7 +154,7 @@ final class DetailViewModel: DetailViewModelType {
 // MARK: - Categories
 extension DetailViewModel {
     func presentPopover(sender: UIButton) {
-    coordinator.presentPopover(sender: sender, selectedIndex: selectedCategoryIndex)
+//    coordinator.presentPopover(sender: sender, selectedIndex: selectedCategoryIndex)
     }
 }
 

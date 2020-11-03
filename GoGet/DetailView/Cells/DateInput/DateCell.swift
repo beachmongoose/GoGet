@@ -23,13 +23,26 @@ class DateCell: UITableViewCell {
 extension DateCell {
   func setupCell() {
     guard let viewModel = viewModel else { return }
-    dateField.isUserInteractionEnabled = viewModel.isEnabled
-    dateField.textColor = (viewModel.isEnabled) ? UIColor.black : UIColor.gray
+    dateToggle()
+    observeEnabled()
     dateLabel.text = viewModel.title
     dateField.text = viewModel.initialValue
     dateField.reactive.text.bind(to: viewModel.updatedValue)
     addDatePicker()
     selectionStyle = .none
+  }
+
+  func dateToggle() {
+    guard let viewModel = viewModel else { return }
+    dateField.isUserInteractionEnabled = viewModel.isEnabled.value
+    dateField.textColor = (viewModel.isEnabled.value) ? UIColor.black : UIColor.gray
+  }
+
+  func observeEnabled() {
+    viewModel?.isEnabled.observeNext { [ weak self] _ in
+      self?.dateToggle()
+    }
+    .dispose(in: bag)
   }
 }
 

@@ -10,9 +10,12 @@ import Bond
 import Foundation
 import ReactiveKit
 
+public typealias SafePassthroughSubject<Element> = PassthroughSubject<Element, Never>
+
 protocol InputCellViewModelType {
     var title: String { get }
     var initialValue: String { get }
     var updatedValue: Property<String?> { get }
     var isValid: Property<Bool> { get }
+//    var validationSignal: SafePassthroughSubject<Void> { get }
 }

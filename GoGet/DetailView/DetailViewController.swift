@@ -40,10 +40,14 @@ extension DetailViewController {
                                         DateCell.self, NumberInputCell.self, CategoryInputCell.self])
         viewModel.tableData.bind(to: tableView) { dataSource, indexPath, tableView in
             let viewModel = dataSource[indexPath.row]
-            switch  viewModel {
+            switch viewModel {
             case let .nameInput(viewModel):
                 let cell = tableView.dequeueReusableCell(TextInputCell.self, for: indexPath)
                 cell.viewModel = viewModel
+                viewModel.validationSignal.observeNext { [weak self ] _ in
+                    self?.viewModel.observeValidationUpdates()
+                }
+                .dispose(in: self.bag)
                 return cell
 
             case let .boughtStatusInput(viewModel):
@@ -54,11 +58,19 @@ extension DetailViewController {
             case let .dateInput(viewModel):
                 let cell = tableView.dequeueReusableCell(DateCell.self, for: indexPath)
                 cell.viewModel = viewModel
+                viewModel.validationSignal.observeNext { [weak self ] _ in
+                    self?.viewModel.observeValidationUpdates()
+                }
+                .dispose(in: self.bag)
                 return cell
 
             case let .numberInput(viewModel):
                 let cell = tableView.dequeueReusableCell(NumberInputCell.self, for: indexPath)
                 cell.viewModel = viewModel
+                viewModel.validationSignal.observeNext { [weak self ] _ in
+                    self?.viewModel.observeValidationUpdates()
+                }
+                .dispose(in: self.bag)
                 return cell
 
             case let .categoryInput(viewModel):

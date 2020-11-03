@@ -15,6 +15,7 @@ protocol NumberInputCellViewModelType: InputCellViewModelType {
     var initialValue: String { get }
     var updatedValue: Property<String?> { get }
     var isValid: Property<Bool> { get }
+    var validationSignal: SafePassthroughSubject<Void> { get }
 }
 
 final class NumberInputCellViewModel: NumberInputCellViewModelType {
@@ -22,15 +23,33 @@ final class NumberInputCellViewModel: NumberInputCellViewModelType {
     var title2: String?
     var initialValue: String
     var updatedValue = Property<String?>(nil)
-    var isValid: Property<Bool> {
-        guard updatedValue.value != nil else { return Property<Bool>(true) }
-        guard let updatedValue = updatedValue.value else { return Property<Bool>(true) }
-        return Property<Bool>(updatedValue.isInt)
-    }
+    var isValid = Property<Bool>(false)
+    var validationSignal = SafePassthroughSubject<Void>()
+    let bag = DisposeBag()
 
     init(title: String, title2: String, initialValue: String) {
         self.title = title
         self.title2 = title2
         self.initialValue = initialValue
+        observeValueUpdates()
+        observeValidationUpdates()
   }
+
+    func observeValueUpdates() {
+        updatedValue.observeNext { value in
+            guard value != nil else { self.isValid.value = true
+            return
+            }
+            guard let value = value else { return }
+            self.isValid.value = value.isInt
+        }
+        .dispose(in: bag)
+    }
+
+    func observeValidationUpdates() {
+        isValid.removeDuplicates().observeNext { _ in
+            self.validationSignal.send()
+        }
+        .dispose(in: bag)
+    }
 }

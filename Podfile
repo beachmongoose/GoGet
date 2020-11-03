@@ -9,6 +9,7 @@ target 'GoGet' do
   pod 'Bond'
   pod 'ReactiveKit'
   pod 'SwiftLint'
+  pod 'PromiseKit', '~> 6.8'
 end
 
 post_install do |pi|
