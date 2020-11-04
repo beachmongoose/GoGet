@@ -28,6 +28,7 @@ extension CategoryInputCell {
         }
         .dispose(in: bag)
         inputButton.backgroundColor = .clear
+        inputButton.contentEdgeInsets = UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)
         inputButton.layer.cornerRadius = 5
         inputButton.layer.borderWidth = 0.25
         inputButton.layer.borderColor = UIColor.lightGray.cgColor

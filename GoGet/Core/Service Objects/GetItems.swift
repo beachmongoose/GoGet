@@ -8,6 +8,7 @@
 
 import Bond
 import Foundation
+import PromiseKit
 import ReactiveKit
 
 enum SortType: String {
@@ -27,10 +28,13 @@ protocol GetItemsType {
   func indexNumber(for item: String, in array: [Item]) -> Int
   func fetchByCategory(_ view: ListView) -> [String: [Item]]
   func isDuplicate(_ name: String) -> Bool
+  func update(_ item: Item) -> Promise<Void>
 }
 
 class GetItems: GetItemsType {
-
+  public enum Errors: Error {
+    case itemNotFound
+  }
   let sortTypeInstance: SortingInstanceType
   let categoryStore: CategoryStoreType
   let bag = DisposeBag()
@@ -42,99 +46,161 @@ class GetItems: GetItemsType {
     removeDeletedCategoryID()
   }
 
-  func save(_ items: [Item]) {
-    guard let persistenceData = items.persistenceData else { print("Error")
-      return
+  func update(_ item: Item) -> Promise<Void> {
+    Promise<Void> { seal in
+    firstly {
+        loadPromise()
+    }.then { array in
+        self.replaceItem(in: array, with: item)
+    }.then { allItems in
+        self.savePromise(allItems)
+    }.done {
+        seal.fulfill(())
+    }.catch { _ in
+        fatalError("Item not found")
+    }
+    }
+  }
+
+    func savePromise(_ items: [Item]) -> Promise<Void> {
+        Promise<Void> { seal in
+        guard let persistenceData = items.persistenceData else { print("Error")
+        return
+    }
+    saveData(persistenceData)
+    seal.fulfill(())
+    }
+  }
+
+    func replaceItem(in array: [Item], with item: Item) -> Promise<[Item]> {
+        return Promise<[Item]> {seal in
+        let index = indexNumber(for: item.id, in: array)
+        var allItems = array
+        allItems[index] = item
+        seal.fulfill(allItems)
+        }
+    }
+
+    func loadPromise() -> Promise<[Item]> {
+        return Promise<[Item]> { seal in
+            let sortType = sortTypeInstance.sortType
+            let sortAscending = sortTypeInstance.sortAscending
+            var loadedItems = [Item]()
+            var finalItemData = [Item]()
+            let data = loadData(for: "Items")
+            if data == nil { let array: [Item] = []
+                seal.fulfill(array) }
+
+            do {
+                let item = try jsonDecoder.decode([Item].self, from: data!)
+                loadedItems = item
+            } catch {
+                print("Error when loading Items. Failed to Load.")
+            }
+
+            switch sortType {
+            case .name: finalItemData = byName(loadedItems)
+            case .date: finalItemData = byDate(loadedItems)
+            case .added: finalItemData = byAdded(loadedItems)
+            }
+            let array = (sortAscending == true) ? finalItemData : finalItemData.reversed()
+            seal.fulfill(array)
+        }
+    }
+
+    func save(_ items: [Item]) {
+        guard let persistenceData = items.persistenceData else { print("Error")
+        return
     }
     saveData(persistenceData)
   }
 
-  func load() -> [Item] {
-    let sortType = sortTypeInstance.sortType
-    let sortAscending = sortTypeInstance.sortAscending
-    var loadedItems = [Item]()
-    var finalItemData = [Item]()
-    let data = loadData(for: "Items")
-    guard data != nil else { return [] }
+    func load() -> [Item] {
+        let sortType = sortTypeInstance.sortType
+        let sortAscending = sortTypeInstance.sortAscending
+        var loadedItems = [Item]()
+        var finalItemData = [Item]()
+        let data = loadData(for: "Items")
+        guard data != nil else { return [] }
 
-      do {
-        let item = try jsonDecoder.decode([Item].self, from: data!)
-        loadedItems = item
-      } catch {
-        print("Error when loading Items. Failed to Load.")
-      }
+        do {
+            let item = try jsonDecoder.decode([Item].self, from: data!)
+            loadedItems = item
+        } catch {
+            print("Error when loading Items. Failed to Load.")
+        }
 
-    switch sortType {
-    case .name: finalItemData = byName(loadedItems)
-    case .date: finalItemData = byDate(loadedItems)
-    case .added: finalItemData = byAdded(loadedItems)
+        switch sortType {
+        case .name: finalItemData = byName(loadedItems)
+        case .date: finalItemData = byDate(loadedItems)
+        case .added: finalItemData = byAdded(loadedItems)
+        }
+        return (sortAscending == true) ? finalItemData : finalItemData.reversed()
     }
-    return (sortAscending == true) ? finalItemData : finalItemData.reversed()
-  }
 
-  func indexNumber(for item: String, in array: [Item]) -> Int {
-    guard let index = (array.firstIndex { $0.id == item }) else { fatalError("Item index not found")}
-    return index
-  }
-
-  func fetchByCategory(_ view: ListView) -> [String: [Item]] {
-    let data = load()
-    let items = (view == .buyList) ? data.filter { $0.needToBuy } : data
-    let categories = categoryStore.getDictionary()
-
-    let tableData = items.reduce(into: [String: [Item]]()) { dict, item in
-      var keyName = "Uncategorized"
-      for category in categories where category.key == item.categoryID {
-          keyName = category.value.name
-      }
-      dict[keyName, default: []].append(item)
+    func indexNumber(for item: String, in array: [Item]) -> Int {
+        guard let index = (array.firstIndex { $0.id == item }) else { fatalError("Item index not found")}
+        return index
     }
-    return tableData
-  }
 
-  func isDuplicate(_ name: String) -> Bool {
-    let items = load()
-    return (items.map {$0.name.lowercased() == name.lowercased()}).contains(true)
-  }
+    func fetchByCategory(_ view: ListView) -> [String: [Item]] {
+        let data = load()
+        let items = (view == .buyList) ? data.filter { $0.needToBuy } : data
+        let categories = categoryStore.getDictionary()
+
+        let tableData = items.reduce(into: [String: [Item]]()) { dict, item in
+            var keyName = "Uncategorized"
+            for category in categories where category.key == item.categoryID {
+                keyName = category.value.name
+            }
+            dict[keyName, default: []].append(item)
+        }
+        return tableData
+    }
+
+    func isDuplicate(_ name: String) -> Bool {
+        let items = load()
+        return (items.map {$0.name.lowercased() == name.lowercased()}).contains(true)
+    }
 
 // MARK: - Sorting
-  func byName(_ array: [Item]) -> [Item] {
-    return array.sorted(by: { $0.name < $1.name })
-  }
-
-  func byDate(_ array: [Item]) -> [Item] {
-    let boughtItems = array.filter { $0.boughtStatus != .notBought}
-    let unboughtItems = array.filter {$0.boughtStatus == .notBought}
-    var sortedList = boughtItems.sorted(by: { $0.dateBought < $1.dateBought })
-    for item in unboughtItems {
-      sortedList.insert(item, at: 0)}
-    return sortedList
-  }
-
-  func byAdded(_ array: [Item]) -> [Item] {
-    return array.sorted(by: { $0.dateAdded ?? Date() < $1.dateAdded ?? Date()})
-  }
-
-  func removeDeletedCategoryID() {
-    defaults.reactive.keyPath("Categories", ofType: Data?.self, context: .immediateOnMain).ignoreNils().observeNext { _ in
-      var items = self.load()
-      let categories = self.categoryStore.getDictionary()
-      var deletedID: String? {
-        for item in items {
-          guard item.categoryID != nil else { continue }
-          let noKey = categories[item.categoryID!] == nil
-          if noKey {
-            return item.categoryID
-          }
-        }
-        return nil
-      }
-      guard deletedID != nil else { return }
-      for index in 0..<items.count where items[index].categoryID == deletedID {
-        items[index].categoryID = nil
-      }
-      self.save(items)
+    func byName(_ array: [Item]) -> [Item] {
+        return array.sorted(by: { $0.name < $1.name })
     }
-    .dispose(in: bag)
-  }
+
+    func byDate(_ array: [Item]) -> [Item] {
+        let boughtItems = array.filter { $0.boughtStatus != .notBought}
+        let unboughtItems = array.filter {$0.boughtStatus == .notBought}
+        var sortedList = boughtItems.sorted(by: { $0.dateBought < $1.dateBought })
+        for item in unboughtItems {
+            sortedList.insert(item, at: 0)}
+        return sortedList
+    }
+
+    func byAdded(_ array: [Item]) -> [Item] {
+        return array.sorted(by: { $0.dateAdded ?? Date() < $1.dateAdded ?? Date()})
+    }
+
+    func removeDeletedCategoryID() {
+        defaults.reactive.keyPath("Categories", ofType: Data?.self, context: .immediateOnMain).ignoreNils().observeNext { _ in
+            var items = self.load()
+            let categories = self.categoryStore.getDictionary()
+            var deletedID: String? {
+                for item in items {
+                    guard item.categoryID != nil else { continue }
+                    let noKey = categories[item.categoryID!] == nil
+                    if noKey {
+                        return item.categoryID
+                    }
+                }
+                return nil
+            }
+            guard deletedID != nil else { return }
+            for index in 0..<items.count where items[index].categoryID == deletedID {
+                items[index].categoryID = nil
+            }
+            self.save(items)
+        }
+        .dispose(in: bag)
+    }
 }

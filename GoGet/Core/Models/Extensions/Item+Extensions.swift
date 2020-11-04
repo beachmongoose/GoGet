@@ -6,7 +6,7 @@
 //  Copyright © 2020 Maggie Maldjian. All rights reserved.
 //
 
-import Foundation
+import UIKit
 
 extension Item {
   var needToBuy: Bool {
@@ -41,5 +41,11 @@ extension Item {
         return "1 day ago"
       }
     }
+  }
+}
+
+extension Item: Hashable {
+  func hash(into hasher: inout Hasher) {
+    hasher.combine(id)
   }
 }

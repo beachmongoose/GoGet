@@ -20,8 +20,8 @@ protocol BuyListViewModelType {
 }
 
 final class BuyListViewModel: BuyListViewModelType {
-  var dictionary: [String: [Item]] = [: ]
   let bag = DisposeBag()
+  var dictionary: [String: [Item]] = [: ]
   let tableData = MutableObservableArray2D<String, BuyListCellViewModel>(Array2D(sections: []))
   var itemsAreChecked: Property<Bool> {
     return Property<Bool>(!selectedItems.value.isEmpty)

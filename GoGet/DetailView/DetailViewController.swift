@@ -34,7 +34,7 @@ class DetailViewController: UIViewController, UIPopoverPresentationControllerDel
 
 extension DetailViewController {
     func tableSetUp() {
-    tableView.isScrollEnabled = false
+    tableView.isScrollEnabled = true
     tableView.separatorStyle = .none
     tableView.registerCellsForReuse([TextInputCell.self, SegmentedControlCell.self,
                                         DateCell.self, NumberInputCell.self, CategoryInputCell.self])
@@ -47,7 +47,7 @@ extension DetailViewController {
                 viewModel.validationSignal.observeNext { [weak self ] _ in
                     self?.viewModel.observeValidationUpdates()
                 }
-                .dispose(in: self.bag)
+                .dispose(in: cell.bag)
                 return cell
 
             case let .boughtStatusInput(viewModel):
@@ -61,7 +61,7 @@ extension DetailViewController {
                 viewModel.validationSignal.observeNext { [weak self ] _ in
                     self?.viewModel.observeValidationUpdates()
                 }
-                .dispose(in: self.bag)
+                .dispose(in: cell.bag)
                 return cell
 
             case let .numberInput(viewModel):
@@ -70,20 +70,27 @@ extension DetailViewController {
                 viewModel.validationSignal.observeNext { [weak self ] _ in
                     self?.viewModel.observeValidationUpdates()
                 }
-                .dispose(in: self.bag)
+                .dispose(in: cell.bag)
                 return cell
 
             case let .categoryInput(viewModel):
-                let cell = tableView.dequeueReusableCell(CategoryInputCell.self, for: indexPath)
-                cell.viewModel = viewModel
-                cell.inputButton.reactive.tapGesture().observeNext { _ in
-                    self.viewModel.presentPopover(sender: cell.inputButton, id: viewModel.updatedValue)
-                }
-                .dispose(in: self.bag)
-                return cell
+                return self.categoryInputCell(with: viewModel, at: indexPath)
         }
 //     tableView.delegate = self
         }
+    }
+}
+
+// MARK: - Cell Helper
+extension DetailViewController {
+    func categoryInputCell(with viewModel: CategoryInputCellViewModelType, at indexPath: IndexPath) -> CategoryInputCell {
+        let cell = tableView.dequeueReusableCell(CategoryInputCell.self, for: indexPath)
+        cell.viewModel = viewModel
+        cell.inputButton.reactive.tapGesture().observeNext { _ in
+            self.viewModel.presentPopover(sender: cell.inputButton, id: viewModel.updatedValue)
+        }
+        .dispose(in: cell.bag)
+        return cell
     }
 }
 
