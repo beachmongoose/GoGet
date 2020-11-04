@@ -102,7 +102,7 @@ extension DetailViewController {
                                   action: nil)
     clearButton.reactive.tap.bind(to: self) { $0.clearInput() }
     navigationItem.rightBarButtonItem = saveButton
-    if viewModel.item == nil {
+    if viewModel.newItem == true {
       navigationItem.leftBarButtonItem = clearButton
     }
   }

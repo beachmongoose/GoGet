@@ -10,12 +10,18 @@ import Bond
 import ReactiveKit
 import UIKit
 
+enum ItemStatus {
+  case newItem
+  case editItem
+}
+
 protocol DetailViewCoordinatorType {
   func start() -> UINavigationController
   func start(with item: Item) -> UIViewController
   func errorMessage(_ message: String)
-  func confirmSave(_ item: Bool)
-  func dismissDetail(action: UIAlertAction)
+  func confirmSaveEdit()
+  func confirmSaveNew()
+  func dismissFromNew(action: UIAlertAction)
   func presentPopover(sender: UIButton, selectedID: Property<String?>)
 }
 
@@ -23,7 +29,7 @@ class DetailViewCoordinator: DetailViewCoordinatorType {
   weak var viewController: DetailViewController?
 
   func start() -> UINavigationController {
-    let viewModel = DetailViewModel(coordinator: self, item: nil)
+    let viewModel = NewDetailViewModel(coordinator: self)
     let viewController = DetailViewController(viewModel: viewModel)
     viewController.title = "New Item"
     self.viewController = viewController
@@ -38,12 +44,12 @@ class DetailViewCoordinator: DetailViewCoordinatorType {
     return viewController
   }
 
-  func dismissDetail(action: UIAlertAction) {
+  func dismissFromNew(action: UIAlertAction) {
     viewController?.clearInput()
     viewController?.tabBarController?.selectedIndex = 2
   }
 
-  func popController(action: UIAlertAction) {
+  func dismissFromEdit(action: UIAlertAction) {
     guard let navigationController = viewController?.navigationController else {
       return
     }
@@ -74,10 +80,20 @@ extension DetailViewCoordinator {
     viewController?.present(errorAlert, animated: true)
     }
 
-  func confirmSave(_ item: Bool) {
-    let handler = (item) ? dismissDetail(action:) : popController(action:)
+  func confirmSaveNew() {
+    let saveConfirm = confirmAlert(for: .newItem)
+    viewController?.present(saveConfirm, animated: true)
+  }
+
+  func confirmSaveEdit() {
+    let saveConfirm = confirmAlert(for: .editItem)
+    viewController?.present(saveConfirm, animated: true)
+  }
+
+  func confirmAlert(for item: ItemStatus) -> UIAlertController {
+    let handler = (item == .newItem) ? dismissFromNew : dismissFromEdit
     let saveConfirm = UIAlertController(title: "Item Saved", message: nil, preferredStyle: .alert)
     saveConfirm.addAction(UIAlertAction(title: "OK", style: .default, handler: handler))
-    viewController?.present(saveConfirm, animated: true)
+    return saveConfirm
   }
 }

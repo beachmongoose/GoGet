@@ -22,7 +22,7 @@ final class CategoryInputCellViewModel: CategoryInputCellViewModelType {
     var initialValue: String
     var updatedValue = Property<String?>(nil)
     var selectedCategoryName = Property<String>("None")
-    var selectedCategoryIndex = Int? (nil)
+    var selectedCategoryIndex = Int?(nil)
     var isValid = Property<Bool>(true)
     let bag = DisposeBag()
 

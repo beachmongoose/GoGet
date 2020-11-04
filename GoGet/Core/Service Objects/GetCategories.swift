@@ -8,6 +8,7 @@
 
 import Foundation
 
+// TODO: SORT CATEGORIES OPTION
 protocol GetCategoriesType {
   func load() -> [Category]
   func save(_ categories: [Category])
@@ -95,9 +96,4 @@ class GetCategories: GetCategoriesType {
     categories.remove(at: index.0)
     save(categories)
   }
-
-//  func getIndex(for category: Category) -> Int {
-//    let categories = load()
-//    for category in categories where category.id == id
-//  }
 }
