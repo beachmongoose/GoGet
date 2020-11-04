@@ -11,6 +11,7 @@ import ReactiveKit
 import UIKit
 
 class BuyListViewController: UIViewController {
+  var selectAllButton: UIBarButtonItem!
   var sortButton: UIBarButtonItem!
   var confirmButton: UIBarButtonItem!
   @IBOutlet var tableView: UITableView!
@@ -29,6 +30,7 @@ class BuyListViewController: UIViewController {
   override func viewDidLoad() {
     addNavigationButtons()
     setupTable()
+//    observeLeftButton()
     tableView.register(UINib(nibName: "BuyListCell", bundle: nil), forCellReuseIdentifier: "BuyListCell")
     super.viewDidLoad()
     }
@@ -67,6 +69,11 @@ extension BuyListViewController: UITableViewDelegate {
 extension BuyListViewController {
 //TODO: MAKE SELECT ALL BUTTON
   func addNavigationButtons() {
+    selectAllButton = UIBarButtonItem(title: "Select All",
+                                      style: .plain,
+                                      target: nil,
+                                      action: nil)
+    selectAllButton.reactive.tap.bind(to: self) { $0.addAllToSelected() }
     sortButton = UIBarButtonItem(title: "Sort",
                                  style: .plain,
                                  target: nil,
@@ -76,7 +83,7 @@ extension BuyListViewController {
                                     style: .plain,
                                     target: nil,
                                     action: nil)
-    confirmButton.reactive.tap.bind(to: self) { guard $0.viewModel.itemsAreChecked else {
+    confirmButton.reactive.tap.bind(to: self) { guard $0.viewModel.itemsAreChecked.value else {
       $0.presentError(message: "No items selected.")
       return }
       self.presentBoughtAlert(handler: self.markAsBought(action:)) }
@@ -84,11 +91,23 @@ extension BuyListViewController {
     navigationItem.leftBarButtonItem = confirmButton
   }
 
+//  func observeLeftButton() {
+//    viewModel.itemsAreChecked.observeNext { bool in
+//      let button = (bool) ? self.confirmButton : self.selectAllButton
+//      self.navigationItem.leftBarButtonItem = button
+//    }
+//    .dispose(in: bag)
+//  }
+
   @objc func sortMethod(action: UIAlertAction) {
     viewModel.sortBy(action.title!.lowercased())
   }
 
   @objc func markAsBought(action: UIAlertAction) {
     self.viewModel.markAsBought()
+  }
+
+  func addAllToSelected() {
+    viewModel.selectAll()
   }
 }

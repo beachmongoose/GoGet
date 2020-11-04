@@ -65,6 +65,7 @@
 		9FC28C26251D26A5004A58DF /* TabBarController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9FC28C24251D26A5004A58DF /* TabBarController.xib */; };
 		9FC8CB482549FCF900C90A6E /* Date+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FC8CB472549FCF900C90A6E /* Date+Extensions.swift */; };
 		9FE4BA16250FD77000960506 /* UIViewController+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FE4BA15250FD77000960506 /* UIViewController+Extensions.swift */; };
+		9FEFE9332553135900512C9F /* NewDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FEFE9322553135900512C9F /* NewDetailViewModel.swift */; };
 		9FF9124E253635CF0007B5D1 /* ReactiveKit+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FF9124D253635CF0007B5D1 /* ReactiveKit+Extensions.swift */; };
 		C6FE7913255BBF8F81AF4624 /* Pods_GoGet.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 259A21156006B2C8B1F243DE /* Pods_GoGet.framework */; };
 /* End PBXBuildFile section */
@@ -133,6 +134,7 @@
 		9FC28C24251D26A5004A58DF /* TabBarController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TabBarController.xib; sourceTree = "<group>"; };
 		9FC8CB472549FCF900C90A6E /* Date+Extensions.swift */ = {isa = PBXFileReference; indentWidth = 4; lastKnownFileType = sourcecode.swift; path = "Date+Extensions.swift"; sourceTree = "<group>"; tabWidth = 4; };
 		9FE4BA15250FD77000960506 /* UIViewController+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Extensions.swift"; sourceTree = "<group>"; };
+		9FEFE9322553135900512C9F /* NewDetailViewModel.swift */ = {isa = PBXFileReference; indentWidth = 4; lastKnownFileType = sourcecode.swift; path = NewDetailViewModel.swift; sourceTree = "<group>"; tabWidth = 4; };
 		9FF9124D253635CF0007B5D1 /* ReactiveKit+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ReactiveKit+Extensions.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -288,6 +290,7 @@
 				9F34058F24FED6580035A385 /* DetailViewController.xib */,
 				9F888C40250195F4003810D4 /* DetailViewCoordinator.swift */,
 				9F0340532502CDD400B27BF3 /* DetailViewModel.swift */,
+				9FEFE9322553135900512C9F /* NewDetailViewModel.swift */,
 			);
 			path = DetailView;
 			sourceTree = "<group>";
@@ -592,6 +595,7 @@
 				9FBB7EB725476175002026F3 /* TextInputCell.swift in Sources */,
 				9F03404D250298F100B27BF3 /* BuyListCell.swift in Sources */,
 				9F2CA3DA2549F08C00DE3F48 /* TextInputCellViewModel.swift in Sources */,
+				9FEFE9332553135900512C9F /* NewDetailViewModel.swift in Sources */,
 				9F34058124FED5CF0035A385 /* BuyListViewController.swift in Sources */,
 				9F62A3942512B43300F5AF63 /* GetCategories.swift in Sources */,
 				9FBB7EE325476BDA002026F3 /* UITableView+Extensions.swift in Sources */,

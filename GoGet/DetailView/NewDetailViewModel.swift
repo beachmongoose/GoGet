@@ -1,38 +1,15 @@
 //
-//  DetailViewModel.swift
+//  NewDetailViewModel.swift
 //  GoGet
 //
-//  Created by Maggie Maldjian on 9/4/20.
+//  Created by Maggie Maldjian on 11/4/20.
 //  Copyright © 2020 Maggie Maldjian. All rights reserved.
 //
+
 import Bond
 import ReactiveKit
 
-//TODO: CREATE DIFFERENT VIEW MODELS FOR NEW ITEM AND EDIT ITEM
-
-enum CellType {
-    case nameInput(TextInputCellViewModelType)
-    case boughtStatusInput(SegmentedControlCellViewModelType)
-    case dateInput(DateCellViewModelType)
-    case numberInput(NumberInputCellViewModelType)
-    case categoryInput(CategoryInputCellViewModelType)
-}
-
-protocol DetailViewModelType {
-    func presentPopover(sender: UIButton, id: Property<String?>)
-    func saveItem()
-    func clearDetails()
-    func observeValidationUpdates()
-
-    var tableData: MutableObservableArray<CellType> { get }
-
-    var isValid: Property<Bool> { get }
-    var newItem: Bool { get }
-}
-
-final class DetailViewModel: DetailViewModelType {
-    var item: Item
-    var newItem = false
+final class NewDetailViewModel: DetailViewModelType {
 
 // Data field bindings
     let bought = Property<Bool>(false)
@@ -40,6 +17,7 @@ final class DetailViewModel: DetailViewModelType {
     let categoryID = Property<String?>(nil)
 
     var tableData = MutableObservableArray<CellType>([])
+    var newItem = true
 
     private var cellViewModels = Property<[InputCellViewModelType]>([])
     private let coordinator: DetailViewCoordinatorType
@@ -47,16 +25,14 @@ final class DetailViewModel: DetailViewModelType {
     private let bag = DisposeBag()
 
     init(coordinator: DetailViewCoordinatorType,
-         getItems: GetItemsType = GetItems(),
-         item: Item ) {
+         getItems: GetItemsType = GetItems()) {
     self.coordinator = coordinator
     self.getItems = getItems
-    self.item = item
     buildCellViewModels()
   }
 
     func buildCellViewModels() {
-        let titleCellViewModel = TextInputCellViewModel(title: "Item", initialValue: item.name)
+        let titleCellViewModel = TextInputCellViewModel(title: "Item", initialValue: "")
         let titleCell: CellType = .nameInput(titleCellViewModel)
 
         let boughtCellViewModel = SegmentedControlCellViewModel(title: "Bought",
@@ -64,27 +40,23 @@ final class DetailViewModel: DetailViewModelType {
                                                                 updatedValue: bought)
         let boughtCell: CellType = .boughtStatusInput(boughtCellViewModel)
 
-        let date = item.dateBought.convertedToString()
         let dateCellViewModel = DateCellViewModel(title: "Date",
-                                                  initialValue: date,
+                                                  initialValue: Date().convertedToString(),
                                                   isEnabled: bought)
         let dateCell: CellType = .dateInput(dateCellViewModel)
 
-        let quantity = String(item.quantity)
         let quantityCellViewModel = NumberInputCellViewModel(title: "Quantity",
                                                              title2: "",
-                                                             initialValue: quantity)
+                                                             initialValue: "1")
         let quantityCell: CellType = .numberInput(quantityCellViewModel)
 
-        let duration = String(item.duration)
         let durationCellViewModel = NumberInputCellViewModel(title: "Buy every",
                                                              title2: "days",
-                                                             initialValue: duration)
+                                                             initialValue: "7")
         let durationCell: CellType = .numberInput(durationCellViewModel)
 
-        let id = item.categoryID ?? "None"
         let categoryInputCellViewModel = CategoryInputCellViewModel(title: "Category",
-                                                                    initialValue: id,
+                                                                    initialValue: "None",
                                                                     updatedValue: categoryID)
         let categoryInputCell: CellType = .categoryInput(categoryInputCellViewModel)
 
@@ -102,26 +74,29 @@ final class DetailViewModel: DetailViewModelType {
     }
 
     func saveItem() {
-
-        let updatedValues = cellViewModels.value.map { return ($0.updatedValue.value == nil) ? $0.initialValue : $0.updatedValue.value }
+      let updatedValues = cellViewModels.value.map { return $0.updatedValue.value }
 
         let adjustedItem = Item(
             name: updatedValues[0] ?? "",
-            id: item.id,
+            id: UUID().uuidString,
             quantity: finalInt(updatedValues[2]),
             duration: finalInt(updatedValues[3]),
             boughtStatus: finalBoughtStatus(updatedValues[1]),
-            dateAdded: item.dateAdded,
+            dateAdded: Date(),
             categoryID: finalCategoryID(updatedValues[4])
         )
         upSert(adjustedItem)
     }
 
+    //TODO: PROMISE
     func upSert(_ item: Item) {
         var allItems = getItems.load()
-        let index = getItems.indexNumber(for: item.id, in: allItems)
-        allItems[index] = item
+
+        allItems.append(item)
         getItems.save(allItems)
+
+        coordinator.confirmSaveNew()
+        buildCellViewModels()
     }
 
     func clearDetails() {
@@ -130,14 +105,14 @@ final class DetailViewModel: DetailViewModelType {
 }
 
 // MARK: - Categories
-extension DetailViewModel {
+extension NewDetailViewModel {
     func presentPopover(sender: UIButton, id: Property<String?>) {
     coordinator.presentPopover(sender: sender, selectedID: id)
     }
 }
 
 // MARK: - Format Values
-extension DetailViewModel {
+extension NewDetailViewModel {
     func finalInt(_ string: String?) -> Int {
         guard let int = string else {
             fatalError("Failed to create item, quantity was nil")

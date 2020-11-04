@@ -71,7 +71,7 @@ extension FullListViewController {
                                  target: nil,
                                  action: nil)
     sortButton.reactive.tap.bind(to: self) { $0.presentSortOptions(handler: $0.sortMethod(action:)) }
-    confirmButton = UIBarButtonItem(title: "Confirm",
+    confirmButton = UIBarButtonItem(title: "Delete",
                                   style: .plain,
                                   target: self,
                                   action: nil)

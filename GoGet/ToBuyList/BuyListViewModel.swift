@@ -11,19 +11,20 @@ import ReactiveKit
 
 protocol BuyListViewModelType {
   var tableData: MutableObservableArray2D<String, BuyListCellViewModel> { get }
-  var itemsAreChecked: Bool { get }
+  var itemsAreChecked: Property<Bool> { get }
   func presentDetail(in section: Int, for row: Int)
   func markAsBought()
   func sortBy(_ element: String?)
   func selectDeselectIndex(_ index: IndexPath)
+  func selectAll()
 }
 
 final class BuyListViewModel: BuyListViewModelType {
   var dictionary: [String: [Item]] = [: ]
   let bag = DisposeBag()
   let tableData = MutableObservableArray2D<String, BuyListCellViewModel>(Array2D(sections: []))
-  var itemsAreChecked: Bool {
-    return !selectedItems.value.isEmpty
+  var itemsAreChecked: Property<Bool> {
+    return Property<Bool>(!selectedItems.value.isEmpty)
   }
   private var selectedItems = Property<Set<String>>(Set())
 
@@ -104,6 +105,14 @@ extension BuyListViewModel {
       selectedItems.value.remove(itemID)
     } else {
       selectedItems.value.insert(itemID)
+    }
+  }
+
+  func selectAll() {
+    _ = dictionary.mapValues {
+      $0.map { item in
+        selectedItems.value.insert(item.id)
+      }
     }
   }
 
