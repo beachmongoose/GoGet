@@ -28,6 +28,7 @@ protocol DetailViewCoordinatorType {
 class DetailViewCoordinator: DetailViewCoordinatorType {
   weak var viewController: DetailViewController?
 
+// New Item
   func start() -> UINavigationController {
     let viewModel = NewDetailViewModel(coordinator: self)
     let viewController = DetailViewController(viewModel: viewModel)
@@ -36,6 +37,7 @@ class DetailViewCoordinator: DetailViewCoordinatorType {
     return UINavigationController(rootViewController: viewController)
   }
 
+// Edit Item
   func start(with item: Item) -> UIViewController {
     let viewModel = DetailViewModel(coordinator: self, item: item)
     let viewController = DetailViewController(viewModel: viewModel)
@@ -44,6 +46,7 @@ class DetailViewCoordinator: DetailViewCoordinatorType {
     return viewController
   }
 
+// MARK: - Dismissal
   func dismissFromNew(action: UIAlertAction) {
     viewController?.clearInput()
     viewController?.tabBarController?.selectedIndex = 2
@@ -56,6 +59,7 @@ class DetailViewCoordinator: DetailViewCoordinatorType {
     navigationController.popViewController(animated: true)
   }
 
+// MARK: - Category List
   func presentPopover(sender: UIButton, selectedID: Property<String?>) {
     guard let viewController = viewController else { return }
 
