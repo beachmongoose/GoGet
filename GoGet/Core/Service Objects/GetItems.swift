@@ -12,102 +12,42 @@ import PromiseKit
 import ReactiveKit
 
 enum SortType: String {
-  case name
-  case date
-  case added
+    case name
+    case date
+    case added
 }
 
 enum ListView: String {
-  case buyList
-  case fullList
+    case buyList
+    case fullList
 }
 
 protocol GetItemsType {
-  func save(_ items: [Item])
-  func load() -> [Item]
-  func indexNumber(for item: String, in array: [Item]) -> Int
-  func fetchByCategory(_ view: ListView) -> [String: [Item]]
-  func isDuplicate(_ name: String) -> Bool
-  func update(_ item: Item) -> Promise<Void>
+    func save(_ items: [Item])
+    func load() -> [Item]
+    func indexNumber(for item: String, in array: [Item]) -> Int
+    func fetchByCategory(_ view: ListView) -> [String: [Item]]
+    func isDuplicate(_ name: String) -> Bool
+    func update(_ item: Item) -> Promise<Void>
+    func upSert(_ item: Item) -> Promise<Void>
 }
 
 class GetItems: GetItemsType {
-  public enum Errors: Error {
-    case itemNotFound
-  }
-  let sortTypeInstance: SortingInstanceType
-  let categoryStore: CategoryStoreType
-  let bag = DisposeBag()
-
-  init(sortTypeInstance: SortingInstanceType = SortingInstance.shared,
-       categoryStore: CategoryStoreType = CategoryStore.shared) {
-    self.sortTypeInstance = sortTypeInstance
-    self.categoryStore = categoryStore
-    removeDeletedCategoryID()
-  }
-
-  func update(_ item: Item) -> Promise<Void> {
-    Promise<Void> { seal in
-    firstly {
-        loadPromise()
-    }.then { array in
-        self.replaceItem(in: array, with: item)
-    }.then { allItems in
-        self.savePromise(allItems)
-    }.done {
-        seal.fulfill(())
-    }.catch { _ in
-        fatalError("Item not found")
+    public enum Errors: Error {
+        case itemNotFound
     }
-    }
+    let sortTypeInstance: SortingInstanceType
+    let categoryStore: CategoryStoreType
+    let bag = DisposeBag()
+
+    init(sortTypeInstance: SortingInstanceType = SortingInstance.shared,
+         categoryStore: CategoryStoreType = CategoryStore.shared) {
+        self.sortTypeInstance = sortTypeInstance
+        self.categoryStore = categoryStore
+        removeDeletedCategoryID()
   }
 
-    func savePromise(_ items: [Item]) -> Promise<Void> {
-        Promise<Void> { seal in
-        guard let persistenceData = items.persistenceData else { print("Error")
-        return
-    }
-    saveData(persistenceData)
-    seal.fulfill(())
-    }
-  }
-
-    func replaceItem(in array: [Item], with item: Item) -> Promise<[Item]> {
-        return Promise<[Item]> {seal in
-        let index = indexNumber(for: item.id, in: array)
-        var allItems = array
-        allItems[index] = item
-        seal.fulfill(allItems)
-        }
-    }
-
-    func loadPromise() -> Promise<[Item]> {
-        return Promise<[Item]> { seal in
-            let sortType = sortTypeInstance.sortType
-            let sortAscending = sortTypeInstance.sortAscending
-            var loadedItems = [Item]()
-            var finalItemData = [Item]()
-            let data = loadData(for: "Items")
-            if data == nil { let array: [Item] = []
-                seal.fulfill(array) }
-
-            do {
-                let item = try jsonDecoder.decode([Item].self, from: data!)
-                loadedItems = item
-            } catch {
-                print("Error when loading Items. Failed to Load.")
-            }
-
-            switch sortType {
-            case .name: finalItemData = byName(loadedItems)
-            case .date: finalItemData = byDate(loadedItems)
-            case .added: finalItemData = byAdded(loadedItems)
-            }
-            let array = (sortAscending == true) ? finalItemData : finalItemData.reversed()
-            seal.fulfill(array)
-        }
-    }
-
+// MARK: - Data Handling
     func save(_ items: [Item]) {
         guard let persistenceData = items.persistenceData else { print("Error")
         return
@@ -161,6 +101,73 @@ class GetItems: GetItemsType {
     func isDuplicate(_ name: String) -> Bool {
         let items = load()
         return (items.map {$0.name.lowercased() == name.lowercased()}).contains(true)
+    }
+
+// MARK: - Saving
+
+    func update(_ item: Item) -> Promise<Void> {
+        Promise<Void> { seal in
+            firstly {
+                loadPromise()
+            }.then { array in
+                self.replaceItem(in: array, with: item)
+            }.then { allItems in
+                self.savePromise(allItems)
+            }.done {
+                seal.fulfill(())
+            }.catch { _ in
+                fatalError("Item not found")
+            }
+        }
+  }
+
+    func upSert(_ item: Item) -> Promise<Void> {
+        Promise<Void> { seal in
+            firstly {
+                loadPromise()
+            }.then { array in
+                self.appendItem(item, to: array)
+            }.then { allItems in
+                self.savePromise(allItems)
+            }.done {
+                seal.fulfill(())
+            }.catch { _ in
+                fatalError("Unable to save Item")
+            }
+        }
+    }
+
+    func loadPromise() -> Promise<[Item]> {
+        return Promise<[Item]> { seal in
+            let array = load()
+            seal.fulfill(array)
+        }
+    }
+
+    func appendItem(_ item: Item, to array: [Item]) -> Promise<[Item]> {
+        return Promise<[Item]> { seal in
+            var allItems = array
+            allItems.append(item)
+            seal.fulfill(allItems)
+        }
+    }
+
+    func replaceItem(in array: [Item], with item: Item) -> Promise<[Item]> {
+        return Promise<[Item]> {seal in
+        let index = indexNumber(for: item.id, in: array)
+        var allItems = array
+        allItems[index] = item
+        seal.fulfill(allItems)
+        }
+    }
+
+    func savePromise(_ items: [Item]) -> Promise<Void> {
+        Promise<Void> { seal in
+            guard let persistenceData = items.persistenceData else { print("Error")
+                return }
+            saveData(persistenceData)
+            seal.fulfill(())
+        }
     }
 
 // MARK: - Sorting

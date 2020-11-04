@@ -120,45 +120,9 @@ final class DetailViewModel: DetailViewModelType {
             }
     }
 
-//    func upSert(_ item: Item) {
-//        // Update an item
-//
-//        // start
-//        var allItems: Set<Item> = getItems.load()
-//        //then
-//        let index = getItems.indexNumber(for: item.id, in: allItems)
-//        allItems[index] = item
-//        getItems.save(allItems)
-//        //done
-//        coordinator.confirmSaveEdit()
-//        //catch
-//    }
-
     func clearDetails() {
         buildCellViewModels()
     }
-
-//    func loadItems() -> Promise<[Item]> {
-//        return Promise<[Item]> { seal in
-//            seal.fulfill(getItems.load())
-//        }
-//    }
-//
-//    func findIndex(for id: String, in array: [Item]) -> Promise<[Item]> {
-//        return Promise<[Item]> { seal in
-//            var allItems = array
-//            let index = getItems.indexNumber(for: id, in: array)
-//            allItems[index] = item
-//            seal.fulfill(allItems)
-//        }
-//    }
-//
-//    func save(_ items: [Item]) -> Promise<Bool> {
-//        getItems.save(items)
-//        return Promise<Bool> { seal in
-//            seal.fulfill(true)
-//        }
-//    }
 }
 
 // MARK: - Categories

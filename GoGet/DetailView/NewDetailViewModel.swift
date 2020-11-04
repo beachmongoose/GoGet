@@ -85,18 +85,11 @@ final class NewDetailViewModel: DetailViewModelType {
             dateAdded: Date(),
             categoryID: finalCategoryID(updatedValues[4])
         )
-        upSert(adjustedItem)
-    }
-
-    //TODO: PROMISE
-    func upSert(_ item: Item) {
-        var allItems = getItems.load()
-
-        allItems.append(item)
-        getItems.save(allItems)
-
-        coordinator.confirmSaveNew()
-        buildCellViewModels()
+        getItems.upSert(adjustedItem)
+            .done(coordinator.confirmSaveNew)
+            .catch { _ in
+                print("Unable to save")
+            }
     }
 
     func clearDetails() {
