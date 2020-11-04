@@ -13,7 +13,7 @@ enum BoughtStatus: Equatable {
   case notBought
 }
 
-struct Item: Codable {
+struct Item: Codable, Equatable {
   var name: String
   var id: String
   var quantity: Int

@@ -6,9 +6,8 @@
 //  Copyright © 2020 Maggie Maldjian. All rights reserved.
 //
 import Bond
+import PromiseKit
 import ReactiveKit
-
-//TODO: CREATE DIFFERENT VIEW MODELS FOR NEW ITEM AND EDIT ITEM
 
 enum CellType {
     case nameInput(TextInputCellViewModelType)
@@ -36,7 +35,7 @@ final class DetailViewModel: DetailViewModelType {
 
 // Data field bindings
     let bought = Property<Bool>(false)
-    let isValid = Property<Bool>(false)
+    let isValid = Property<Bool>(true)
     let categoryID = Property<String?>(nil)
 
     var tableData = MutableObservableArray<CellType>([])
@@ -114,19 +113,52 @@ final class DetailViewModel: DetailViewModelType {
             dateAdded: item.dateAdded,
             categoryID: finalCategoryID(updatedValues[4])
         )
-        upSert(adjustedItem)
+        getItems.update(adjustedItem)
+            .done(coordinator.confirmSaveEdit)
+            .catch { _ in
+                print("Unable to save")
+            }
     }
 
-    func upSert(_ item: Item) {
-        var allItems = getItems.load()
-        let index = getItems.indexNumber(for: item.id, in: allItems)
-        allItems[index] = item
-        getItems.save(allItems)
-    }
+//    func upSert(_ item: Item) {
+//        // Update an item
+//
+//        // start
+//        var allItems: Set<Item> = getItems.load()
+//        //then
+//        let index = getItems.indexNumber(for: item.id, in: allItems)
+//        allItems[index] = item
+//        getItems.save(allItems)
+//        //done
+//        coordinator.confirmSaveEdit()
+//        //catch
+//    }
 
     func clearDetails() {
         buildCellViewModels()
     }
+
+//    func loadItems() -> Promise<[Item]> {
+//        return Promise<[Item]> { seal in
+//            seal.fulfill(getItems.load())
+//        }
+//    }
+//
+//    func findIndex(for id: String, in array: [Item]) -> Promise<[Item]> {
+//        return Promise<[Item]> { seal in
+//            var allItems = array
+//            let index = getItems.indexNumber(for: id, in: array)
+//            allItems[index] = item
+//            seal.fulfill(allItems)
+//        }
+//    }
+//
+//    func save(_ items: [Item]) -> Promise<Bool> {
+//        getItems.save(items)
+//        return Promise<Bool> { seal in
+//            seal.fulfill(true)
+//        }
+//    }
 }
 
 // MARK: - Categories

@@ -30,7 +30,6 @@ class BuyListViewController: UIViewController {
   override func viewDidLoad() {
     addNavigationButtons()
     setupTable()
-//    observeLeftButton()
     tableView.register(UINib(nibName: "BuyListCell", bundle: nil), forCellReuseIdentifier: "BuyListCell")
     super.viewDidLoad()
     }
@@ -67,7 +66,7 @@ extension BuyListViewController: UITableViewDelegate {
 
 // MARK: - Navigation
 extension BuyListViewController {
-//TODO: MAKE SELECT ALL BUTTON
+//TODO: ADJUST UI FOR SELECT ALL BUTTON
   func addNavigationButtons() {
     selectAllButton = UIBarButtonItem(title: "Select All",
                                       style: .plain,

@@ -18,10 +18,10 @@ enum ItemStatus {
 protocol DetailViewCoordinatorType {
   func start() -> UINavigationController
   func start(with item: Item) -> UIViewController
-  func errorMessage(_ message: String)
   func confirmSaveEdit()
   func confirmSaveNew()
   func dismissFromNew(action: UIAlertAction)
+  func dismissFromEdit(action: UIAlertAction)
   func presentPopover(sender: UIButton, selectedID: Property<String?>)
 }
 
@@ -74,12 +74,6 @@ class DetailViewCoordinator: DetailViewCoordinatorType {
 
 // MARK: - Alerts
 extension DetailViewCoordinator {
-  func errorMessage(_ message: String) {
-      let errorAlert = UIAlertController(title: "Error", message: "\(message)", preferredStyle: .alert)
-    errorAlert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
-    viewController?.present(errorAlert, animated: true)
-    }
-
   func confirmSaveNew() {
     let saveConfirm = confirmAlert(for: .newItem)
     viewController?.present(saveConfirm, animated: true)
