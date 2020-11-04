@@ -37,60 +37,26 @@ extension DetailViewController {
     tableView.isScrollEnabled = true
     tableView.separatorStyle = .none
     tableView.registerCellsForReuse([TextInputCell.self, SegmentedControlCell.self,
-                                        DateCell.self, NumberInputCell.self, CategoryInputCell.self])
+                                     DateCell.self, NumberInputCell.self, CategoryInputCell.self])
         viewModel.tableData.bind(to: tableView) { dataSource, indexPath, tableView in
             let viewModel = dataSource[indexPath.row]
             switch viewModel {
             case let .nameInput(viewModel):
-                let cell = tableView.dequeueReusableCell(TextInputCell.self, for: indexPath)
-                cell.viewModel = viewModel
-                viewModel.validationSignal.observeNext { [weak self ] _ in
-                    self?.viewModel.observeValidationUpdates()
-                }
-                .dispose(in: cell.bag)
-                return cell
+                return self.textInputCell(with: viewModel, at: indexPath)
 
             case let .boughtStatusInput(viewModel):
-                let cell = tableView.dequeueReusableCell(SegmentedControlCell.self, for: indexPath)
-                cell.viewModel = viewModel
-                return cell
+                return self.segmentedControlCell(with: viewModel, at: indexPath)
 
             case let .dateInput(viewModel):
-                let cell = tableView.dequeueReusableCell(DateCell.self, for: indexPath)
-                cell.viewModel = viewModel
-                viewModel.validationSignal.observeNext { [weak self ] _ in
-                    self?.viewModel.observeValidationUpdates()
-                }
-                .dispose(in: cell.bag)
-                return cell
+                return self.dateInputCell(with: viewModel, at: indexPath)
 
             case let .numberInput(viewModel):
-                let cell = tableView.dequeueReusableCell(NumberInputCell.self, for: indexPath)
-                cell.viewModel = viewModel
-                viewModel.validationSignal.observeNext { [weak self ] _ in
-                    self?.viewModel.observeValidationUpdates()
-                }
-                .dispose(in: cell.bag)
-                return cell
+                return self.numberInputCell(with: viewModel, at: indexPath)
 
             case let .categoryInput(viewModel):
                 return self.categoryInputCell(with: viewModel, at: indexPath)
+            }
         }
-//     tableView.delegate = self
-        }
-    }
-}
-
-// MARK: - Cell Helper
-extension DetailViewController {
-    func categoryInputCell(with viewModel: CategoryInputCellViewModelType, at indexPath: IndexPath) -> CategoryInputCell {
-        let cell = tableView.dequeueReusableCell(CategoryInputCell.self, for: indexPath)
-        cell.viewModel = viewModel
-        cell.inputButton.reactive.tapGesture().observeNext { _ in
-            self.viewModel.presentPopover(sender: cell.inputButton, id: viewModel.updatedValue)
-        }
-        .dispose(in: cell.bag)
-        return cell
     }
 }
 
@@ -117,4 +83,53 @@ extension DetailViewController {
   func clearInput() {
     viewModel.clearDetails()
   }
+}
+
+// MARK: - Cell Helper
+extension DetailViewController {
+    func textInputCell(with viewModel: TextInputCellViewModelType, at indexPath: IndexPath) -> TextInputCell {
+        let cell = tableView.dequeueReusableCell(TextInputCell.self, for: indexPath)
+        cell.viewModel = viewModel
+        viewModel.validationSignal.observeNext { [weak self ] _ in
+            self?.viewModel.observeValidationUpdates()
+        }
+        .dispose(in: cell.bag)
+        return cell
+    }
+
+    func segmentedControlCell(with viewModel: SegmentedControlCellViewModelType, at indexPath: IndexPath) -> SegmentedControlCell {
+        let cell = tableView.dequeueReusableCell(SegmentedControlCell.self, for: indexPath)
+        cell.viewModel = viewModel
+        return cell
+    }
+
+    func dateInputCell(with viewModel: DateCellViewModelType, at indexPath: IndexPath) -> DateCell {
+        let cell = tableView.dequeueReusableCell(DateCell.self, for: indexPath)
+        cell.viewModel = viewModel
+        viewModel.validationSignal.observeNext { [weak self ] _ in
+            self?.viewModel.observeValidationUpdates()
+        }
+        .dispose(in: cell.bag)
+        return cell
+    }
+
+    func numberInputCell(with viewModel: NumberInputCellViewModelType, at indexPath: IndexPath) -> NumberInputCell {
+        let cell = tableView.dequeueReusableCell(NumberInputCell.self, for: indexPath)
+        cell.viewModel = viewModel
+        viewModel.validationSignal.observeNext { [weak self ] _ in
+            self?.viewModel.observeValidationUpdates()
+        }
+        .dispose(in: cell.bag)
+        return cell
+    }
+
+    func categoryInputCell(with viewModel: CategoryInputCellViewModelType, at indexPath: IndexPath) -> CategoryInputCell {
+        let cell = tableView.dequeueReusableCell(CategoryInputCell.self, for: indexPath)
+        cell.viewModel = viewModel
+        cell.inputButton.reactive.tapGesture().observeNext { _ in
+            self.viewModel.presentPopover(sender: cell.inputButton, id: viewModel.updatedValue)
+        }
+        .dispose(in: cell.bag)
+        return cell
+    }
 }
