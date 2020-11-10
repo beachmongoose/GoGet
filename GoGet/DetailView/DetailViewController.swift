@@ -38,7 +38,7 @@ extension DetailViewController {
     tableView.separatorStyle = .none
     tableView.registerCellsForReuse([TextInputCell.self, SegmentedControlCell.self,
                                      DateCell.self, NumberInputCell.self, CategoryInputCell.self])
-        viewModel.tableData.bind(to: tableView) { dataSource, indexPath, tableView in
+        viewModel.tableData.bind(to: tableView) { dataSource, indexPath, _ in
             let viewModel = dataSource[indexPath.row]
             switch viewModel {
             case let .nameInput(viewModel):
@@ -127,7 +127,12 @@ extension DetailViewController {
         let cell = tableView.dequeueReusableCell(CategoryInputCell.self, for: indexPath)
         cell.viewModel = viewModel
         cell.inputButton.reactive.tapGesture().observeNext { _ in
-            self.viewModel.presentPopover(sender: cell.inputButton, id: viewModel.updatedValue)
+            let buttonFrame = cell.inputButton.frame
+            let initialRect = cell.convert(buttonFrame, to: self.tableView)
+            let showRect = self.tableView.convert(initialRect, to: self.view)
+
+            let indexPath = self.tableView.indexPath(for: cell)
+            self.viewModel.presentPopover(indexPath: indexPath!, dimensions: showRect, selectedID: viewModel.updatedValue)
         }
         .dispose(in: cell.bag)
         return cell

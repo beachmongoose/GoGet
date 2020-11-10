@@ -9,13 +9,13 @@
 import UIKit
 
 extension UIView {
-  // Returns a string of the given UIView class
-  public static var reuseIdentifier: String {
-      String(describing: self)
-  }
+    // Returns a string of the given UIView class
+    public static var reuseIdentifier: String {
+        String(describing: self)
+    }
 
-  // Returns a nib for the given UIView class, defaults bundle to nil
-  public static func nib(bundle: Bundle? = nil) -> UINib {
-      UINib(nibName: reuseIdentifier, bundle: bundle)
-  }
+    // Returns a nib for the given UIView class, defaults bundle to nil
+    public static func nib(bundle: Bundle? = nil) -> UINib {
+        UINib(nibName: reuseIdentifier, bundle: bundle)
+    }
 }

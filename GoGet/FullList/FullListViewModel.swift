@@ -11,101 +11,101 @@ import ReactiveKit
 import UIKit
 
 protocol FullListViewModelType {
-  var inDeleteMode: Property<Bool> { get }
-  var tableData: MutableObservableArray2D<String, FullListViewModel.CellViewModel> { get }
-  var tableCategories: [[FullListViewModel.CellViewModel]] { get }
-  func changeEditing()
-  func presentDetail(_ index: IndexPath)
-  func selectDeselectIndex(at indexPath: IndexPath)
-  func clearSelectedItems()
-  func removeItems()
-  func sortBy(_ element: String?)
+    var inDeleteMode: Property<Bool> { get }
+    var tableData: MutableObservableArray2D<String, FullListViewModel.CellViewModel> { get }
+    var tableCategories: [[FullListViewModel.CellViewModel]] { get }
+    func changeEditing()
+    func presentDetail(_ index: IndexPath)
+    func selectDeselectIndex(at indexPath: IndexPath)
+    func clearSelectedItems()
+    func removeItems()
+    func sortBy(_ element: String?)
 }
 
 final class FullListViewModel: FullListViewModelType {
 
-  struct CellViewModel: Equatable {
-    var name: String
-    var id: String
-    var quantity: String
-    var buyData: String
-    var isSelected: Bool
+    struct CellViewModel: Equatable {
+        var name: String
+        var id: String
+        var quantity: String
+        var buyData: String
+        var isSelected: Bool
 
-    init(item: Item, isSelected: Bool) {
-      self.name = item.name
-      self.id = item.id
-      self.quantity = String(item.quantity)
-      self.buyData = item.buyData
-      self.isSelected = isSelected
+        init(item: Item, isSelected: Bool) {
+            self.name = item.name
+            self.id = item.id
+            self.quantity = String(item.quantity)
+            self.buyData = item.buyData
+            self.isSelected = isSelected
+        }
     }
-  }
-  var inDeleteMode = Property<Bool>(false)
-  var dictionary: [String: [Item]] = [: ]
-  var tableCategories = [[CellViewModel]]()
-  let tableData = MutableObservableArray2D<String, FullListViewModel.CellViewModel>(Array2D(sections: []))
-  private var selectedItems = MutableObservableArray<String>([])
-  private let bag = DisposeBag()
-  private let coordinator: FullListCoordinatorType
-  private let getItems: GetItemsType
-  private let getCategories: GetCategoriesType
-  private let sortTypeInstance: SortingInstanceType
-  private var sortType: SortType {
-    sortTypeInstance.sortType
-  }
+    var inDeleteMode = Property<Bool>(false)
+    var dictionary: [String: [Item]] = [: ]
+    var tableCategories = [[CellViewModel]]()
+    let tableData = MutableObservableArray2D<String, FullListViewModel.CellViewModel>(Array2D(sections: []))
+    private var selectedItems = MutableObservableArray<String>([])
+    private let bag = DisposeBag()
+    private let coordinator: FullListCoordinatorType
+    private let getItems: GetItemsType
+    private let getCategories: GetCategoriesType
+    private let sortTypeInstance: SortingInstanceType
+    private var sortType: SortType {
+        sortTypeInstance.sortType
+    }
 
-  init(coordinator: FullListCoordinatorType,
-       getItems: GetItemsType = GetItems(),
-       getCategories: GetCategoriesType = GetCategories(),
-       sortTypeInstance: SortingInstanceType = SortingInstance.shared
-      ) {
-    self.coordinator = coordinator
-    self.getItems = getItems
-    self.getCategories = getCategories
-    self.sortTypeInstance = sortTypeInstance
-    fetchTableData()
-    observeItemUpdates()
-    observeSelectedItems()
-  }
+    init(coordinator: FullListCoordinatorType,
+         getItems: GetItemsType = GetItems(),
+         getCategories: GetCategoriesType = GetCategories(),
+         sortTypeInstance: SortingInstanceType = SortingInstance.shared
+    ) {
+        self.coordinator = coordinator
+        self.getItems = getItems
+        self.getCategories = getCategories
+        self.sortTypeInstance = sortTypeInstance
+        fetchTableData()
+        observeItemUpdates()
+        observeSelectedItems()
+    }
 }
 
 // MARK: - Datasource Helper
 extension FullListViewModel {
 
-  func fetchTableData() {
-    let data = createDictionary().map { ($0.key, $0.value) }.sorted(by: {$0.0 < $1.0 })
-    let sortedData = reOrder(data)
-    let sections = sortedData.map { entry in
-      return Array2D.Section(metadata: entry.0, items: entry.1)
+    func fetchTableData() {
+        let data = createDictionary().map { ($0.key, $0.value) }.sorted(by: {$0.0 < $1.0 })
+        let sortedData = reOrder(data)
+        let sections = sortedData.map { entry in
+            return Array2D.Section(metadata: entry.0, items: entry.1)
+        }
+        tableData.replace(with: Array2D(sections: sections))
     }
-    tableData.replace(with: Array2D(sections: sections))
-  }
 
-  func createDictionary() -> [String: [CellViewModel]] {
-    dictionary = getItems.fetchByCategory(.fullList)
-    let formattedDict: [String: [CellViewModel]] = dictionary.mapValues {
-      $0.map { item in
-        let isSelected = selectedItems.array.contains(item.id)
-        return CellViewModel(item: item, isSelected: isSelected)
-      }
+    func createDictionary() -> [String: [CellViewModel]] {
+        dictionary = getItems.fetchByCategory(.fullList)
+        let formattedDict: [String: [CellViewModel]] = dictionary.mapValues {
+            $0.map { item in
+                let isSelected = selectedItems.array.contains(item.id)
+                return CellViewModel(item: item, isSelected: isSelected)
+            }
+        }
+        return formattedDict
     }
-    return formattedDict
-  }
 
   // MARK: - Organzing
     func reOrder(_ array: [(String, [CellViewModel])]) -> [(String, [CellViewModel])] {
-      var data = array
-      guard data.contains(where: {$0.0 == "Uncategorized"}) else { return data }
-      let index = data.firstIndex(where: { $0.0 == "Uncategorized" })
-      let uncategorized = data[index!]
-      data.remove(at: index!)
-      data.append(uncategorized)
-      return data
+        var data = array
+        guard data.contains(where: {$0.0 == "Uncategorized"}) else { return data }
+        let index = data.firstIndex(where: { $0.0 == "Uncategorized" })
+        let uncategorized = data[index!]
+        data.remove(at: index!)
+        data.append(uncategorized)
+        return data
     }
 
     func sortBy(_ element: String?) {
-      let method = String((element?.components(separatedBy: " ")[0])!)
-      sortTypeInstance.changeSortType(to: SortType(rawValue: method)!)
-      fetchTableData()
+        let method = String((element?.components(separatedBy: " ")[0])!)
+        sortTypeInstance.changeSortType(to: SortType(rawValue: method)!)
+        fetchTableData()
     }
 }
 

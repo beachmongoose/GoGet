@@ -9,21 +9,21 @@
 import Foundation
 
 struct Category: Codable, Equatable {
-  var id: String
-  var name: String
-  var date: Date
+    var id: String
+    var name: String
+    var date: Date
 }
 
 extension Category {
-  init(nameId: String = UUID().uuidString, name: String, date: Date) {
-    self.id = nameId
-    self.name = name
-    self.date = date
-  }
+    init(nameId: String = UUID().uuidString, name: String, date: Date) {
+        self.id = nameId
+        self.name = name
+        self.date = date
+    }
 }
 
 extension Category {
-  static func == (lhs: Category, rhs: Category) -> Bool {
-    return lhs.id == rhs.id && lhs.name == rhs.name
-  }
+    static func == (lhs: Category, rhs: Category) -> Bool {
+        return lhs.id == rhs.id && lhs.name == rhs.name
+    }
 }

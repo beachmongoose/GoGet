@@ -12,17 +12,17 @@ import Bond
 import UIKit
 
 extension ReactiveExtensions where Base: UIButton {
-        var Title: Bond<String?> {
-            return bond { button, text in
-                let attributedString = NSAttributedString(string: text!)
-              button.setAttributedTitle(attributedString, for: UIControl.State.normal)
-            }
+    var Title: Bond<String?> {
+        return bond { button, text in
+            let attributedString = NSAttributedString(string: text!)
+            button.setAttributedTitle(attributedString, for: UIControl.State.normal)
         }
     }
+}
 
 extension String {
-  var isInt: Bool {
-    guard let number = Int(self) else { return false }
-    return (number > 0) ? true : false
-  }
+    var isInt: Bool {
+        guard let number = Int(self) else { return false }
+        return (number > 0) ? true : false
+    }
 }

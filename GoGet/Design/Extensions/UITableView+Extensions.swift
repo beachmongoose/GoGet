@@ -23,5 +23,5 @@ extension UITableView {
     }
     public func registerCellsForReuse(_ views: [UIView.Type]) {
         views.forEach { register($0.nib(bundle: Bundle(for: $0)), forCellReuseIdentifier: $0.reuseIdentifier) }
-  }
+    }
 }

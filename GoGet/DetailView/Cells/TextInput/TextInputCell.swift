@@ -11,17 +11,17 @@ import ReactiveKit
 import UIKit
 
 class TextInputCell: UITableViewCell {
-  @IBOutlet var inputField: UITextField!
-  var viewModel: TextInputCellViewModelType? {
-  didSet { setupCell() }
-  }
+    @IBOutlet var inputField: UITextField!
+    var viewModel: TextInputCellViewModelType? {
+        didSet { setupCell() }
+    }
 }
 
 extension TextInputCell {
-  func setupCell() {
-    guard let viewModel = viewModel else { return }
-    inputField.text = viewModel.initialValue
-    inputField.reactive.text.bind(to: viewModel.updatedValue)
-    selectionStyle = .none
-  }
+    func setupCell() {
+        guard let viewModel = viewModel else { return }
+        inputField.text = viewModel.initialValue
+        inputField.reactive.text.bind(to: viewModel.updatedValue)
+        selectionStyle = .none
+    }
 }

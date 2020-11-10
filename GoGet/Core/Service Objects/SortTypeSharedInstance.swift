@@ -9,23 +9,23 @@
 import Foundation
 
 protocol SortingInstanceType {
-  var sortType: SortType { get }
-  var sortAscending: Bool { get }
-  func changeSortType(to method: SortType)
+    var sortType: SortType { get }
+    var sortAscending: Bool { get }
+    func changeSortType(to method: SortType)
 }
 
 class SortingInstance: SortingInstanceType {
 
-  static var shared = SortingInstance()
-  var sortType: SortType = .added
-  var sortAscending = true
+    static var shared = SortingInstance()
+    var sortType: SortType = .added
+    var sortAscending = true
 
-  func changeSortType(to method: SortType) {
-    if method == sortType {
-      sortAscending.toggle()
-    } else {
-      sortAscending = true
+    func changeSortType(to method: SortType) {
+        if method == sortType {
+            sortAscending.toggle()
+        } else {
+            sortAscending = true
+        }
+        sortType = method
     }
-    sortType = method
-  }
 }

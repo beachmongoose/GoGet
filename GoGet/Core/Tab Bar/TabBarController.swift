@@ -9,24 +9,24 @@
 import UIKit
 
 class TabViewController: UITabBarController {
-  let buyView: BuyListCoordinatorType = BuyListCoordinator()
-  let fullView: FullListCoordinatorType = FullListCoordinator()
-  let detailView: DetailViewCoordinatorType = DetailViewCoordinator()
-  weak var viewController: FullListViewController?
+    let buyView: BuyListCoordinatorType = BuyListCoordinator()
+    let fullView: FullListCoordinatorType = FullListCoordinator()
+    let detailView: DetailViewCoordinatorType = DetailViewCoordinator()
+    weak var viewController: FullListViewController?
 
     override func viewDidLoad() {
-      super.viewDidLoad()
-      setupTabs()
+        super.viewDidLoad()
+        setupTabs()
     }
 }
 
 extension TabViewController {
-  func setupTabs() {
+    func setupTabs() {
 
-    viewControllers = [
-      buyView.start(),
-      detailView.start(),
-      fullView.start()
-    ]
-  }
+        viewControllers = [
+            buyView.start(),
+            detailView.start(),
+            fullView.start()
+        ]
+    }
 }

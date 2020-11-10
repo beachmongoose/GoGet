@@ -11,24 +11,24 @@ import Foundation
 typealias CategoryID = String
 
 protocol CategoryStoreType {
-  func getDictionary() -> [String: Category]
+    func getDictionary() -> [String: Category]
 }
 
 class CategoryStore: CategoryStoreType {
-  static let shared = CategoryStore()
-  var categories: [String: Category] = [:]
-  private let getCategories: GetCategoriesType
+    static let shared = CategoryStore()
+    var categories: [String: Category] = [:]
+    private let getCategories: GetCategoriesType
 
-  init(getCategories: GetCategoriesType = GetCategories(),
-       categories: [String: Category] = [:]) {
-    self.getCategories = getCategories
-  }
-
-  func getDictionary() -> [String: Category] {
-    let categories = getCategories.load()
-    let data = categories.reduce(into: [:]) { dict, category in
-      dict[category.id] = category
+    init(getCategories: GetCategoriesType = GetCategories(),
+         categories: [String: Category] = [:]) {
+        self.getCategories = getCategories
     }
-    return data
-  }
+
+    func getDictionary() -> [String: Category] {
+        let categories = getCategories.load()
+        let data = categories.reduce(into: [:]) { dict, category in
+            dict[category.id] = category
+        }
+        return data
+    }
 }

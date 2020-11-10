@@ -10,16 +10,16 @@ import ReactiveKit
 import UIKit
 
 protocol CategoryViewCoordinatorType {
-  func start(selectedID: Property<String?>) -> CategoryViewController
+    func start(selectedID: Property<String?>) -> CategoryViewController
 }
 
 class CategoryViewCoordinator: CategoryViewCoordinatorType {
 
-  weak var viewController: CategoryViewController?
+    weak var viewController: CategoryViewController?
 
-  func start(selectedID: Property<String?>) -> CategoryViewController {
-    let viewModel = CategoryViewModel(coordinator: self, selectedID: selectedID)
-    let viewController = CategoryViewController(viewModel: viewModel)
-    return viewController
-  }
+    func start(selectedID: Property<String?>) -> CategoryViewController {
+        let viewModel = CategoryViewModel(coordinator: self, selectedID: selectedID)
+        let viewController = CategoryViewController(viewModel: viewModel)
+        return viewController
+    }
 }
