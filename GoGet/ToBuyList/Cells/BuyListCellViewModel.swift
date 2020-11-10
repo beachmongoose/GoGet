@@ -9,7 +9,15 @@
 import Bond
 import ReactiveKit
 
-struct BuyListCellViewModel {
+protocol BuyListCellViewModelType {
+    var name: String { get }
+    var id: String { get }
+    var quantity: String { get }
+    var buyData: String { get }
+    var isSelected: Bool { get }
+}
+
+struct BuyListCellViewModel: BuyListCellViewModelType {
     var name: String
     var id: String
     var quantity: String

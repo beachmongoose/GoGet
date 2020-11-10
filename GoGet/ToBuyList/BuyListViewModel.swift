@@ -10,7 +10,7 @@ import Bond
 import ReactiveKit
 
 protocol BuyListViewModelType {
-    var tableData: MutableObservableArray2D<String, BuyListCellViewModel> { get }
+    var tableData: MutableObservableArray2D<Void, BuyListViewModel.CellType> { get }
     var itemsAreChecked: Property<Bool> { get }
     func presentDetail(in section: Int, for row: Int)
     func markAsBought()
@@ -20,6 +20,11 @@ protocol BuyListViewModelType {
 }
 
 final class BuyListViewModel: BuyListViewModelType {
+    enum CellType {
+        case header(HeaderCellViewModelType)
+        case item(BuyListCellViewModelType)
+    }
+    
     let bag = DisposeBag()
     var dictionary: [String: [Item]] = [: ]
     let tableData = MutableObservableArray2D<String, BuyListCellViewModel>(Array2D(sections: []))
@@ -74,7 +79,7 @@ extension BuyListViewModel {
     }
 
 // MARK: - Organizing
-    func reOrder(_ array: [(String, [BuyListCellViewModel])]) -> [(String, [BuyListCellViewModel])] {
+    func reOrder(_ array: [(Void, [CellType])]) -> [(Void, [CellType])] {
         var data = array
         guard data.contains(where: {$0.0 == "Uncategorized"}) else { return data }
         let index = data.firstIndex(where: { $0.0 == "Uncategorized" })

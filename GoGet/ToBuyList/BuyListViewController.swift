@@ -11,37 +11,37 @@ import ReactiveKit
 import UIKit
 
 class BuyListViewController: UIViewController {
-  var selectAllButton: UIBarButtonItem!
-  var sortButton: UIBarButtonItem!
-  var confirmButton: UIBarButtonItem!
-  @IBOutlet var tableView: UITableView!
-  private let viewModel: BuyListViewModelType
+    var selectAllButton: UIBarButtonItem!
+    var sortButton: UIBarButtonItem!
+    var confirmButton: UIBarButtonItem!
+    @IBOutlet var tableView: UITableView!
+    private let viewModel: BuyListViewModelType
 
-  init(viewModel: BuyListViewModelType) {
-    self.viewModel = viewModel
+    init(viewModel: BuyListViewModelType) {
+        self.viewModel = viewModel
 
-    super.init(nibName: nil, bundle: nil)
-  }
+        super.init(nibName: nil, bundle: nil)
+    }
 
-  required init?(coder: NSCoder) {
-    fatalError("init(coder:) has not been implemented")
-  }
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 
-  override func viewDidLoad() {
-    addNavigationButtons()
-    setupTable()
-    tableView.register(UINib(nibName: "BuyListCell", bundle: nil), forCellReuseIdentifier: "BuyListCell")
-    super.viewDidLoad()
+    override func viewDidLoad() {
+        addNavigationButtons()
+        setupTable()
+        tableView.register(UINib(nibName: "BuyListCell", bundle: nil), forCellReuseIdentifier: "BuyListCell")
+        super.viewDidLoad()
     }
 }
 
 // MARK: - Table Data
 extension BuyListViewController: UITableViewDelegate {
-  func setupTable() {
-    let dataSource = SectionedTableViewBinderDataSource<BuyListCellViewModel>(createCell: createCell)
-    viewModel.tableData.bind(to: tableView, using: dataSource)
-    tableView.delegate = self
-    tableView.tableFooterView = UIView()
+    func setupTable() {
+        let dataSource = SectionedTableViewBinderDataSource<BuyListCellViewModel>(createCell: createCell)
+        viewModel.tableData.bind(to: tableView, using: dataSource)
+        tableView.delegate = self
+        tableView.tableFooterView = UIView()
   }
 
   private func createCell(dataSource: Array2D<String, BuyListCellViewModel>,
@@ -59,36 +59,45 @@ extension BuyListViewController: UITableViewDelegate {
     return cell
   }
 
-  func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-    viewModel.presentDetail(in: indexPath.section, for: indexPath.row)
-  }
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        viewModel.presentDetail(in: indexPath.section, for: indexPath.row)
+    }
+// replacing cell building
+//    func cellFormat(with viewModel: BuyListCellViewModelType, at indexPath: IndexPath) -> BuyListCell {
+//        let cell = tableView.dequeueReusableCell(BuyListCell.self, for: indexPath)
+//        cell.checkButton.reactive.tapGesture().removeDuplicates().observeNext { [weak self] _ in
+//            self?.viewModel.selectDeselectIndex(indexPath)
+//        }
+//        .dispose(in: cell.bag)
+//        return cell
+//    }
 }
 
 // MARK: - Navigation
 extension BuyListViewController {
 //TODO: ADJUST UI FOR SELECT ALL BUTTON
-  func addNavigationButtons() {
-    selectAllButton = UIBarButtonItem(title: "Select All",
-                                      style: .plain,
-                                      target: nil,
-                                      action: nil)
-    selectAllButton.reactive.tap.bind(to: self) { $0.addAllToSelected() }
-    sortButton = UIBarButtonItem(title: "Sort",
-                                 style: .plain,
-                                 target: nil,
-                                 action: nil)
-    sortButton.reactive.tap.bind(to: self) { $0.presentSortOptions(handler: self.sortMethod(action:))}
-    confirmButton = UIBarButtonItem(title: "Move",
-                                    style: .plain,
-                                    target: nil,
-                                    action: nil)
-    confirmButton.reactive.tap.bind(to: self) { guard $0.viewModel.itemsAreChecked.value else {
-      $0.presentError(message: "No items selected.")
-      return }
-      self.presentBoughtAlert(handler: self.markAsBought(action:)) }
-    navigationItem.rightBarButtonItem = sortButton
-    navigationItem.leftBarButtonItem = confirmButton
-  }
+    func addNavigationButtons() {
+        selectAllButton = UIBarButtonItem(title: "Select All",
+                                          style: .plain,
+                                          target: nil,
+                                          action: nil)
+        selectAllButton.reactive.tap.bind(to: self) { $0.addAllToSelected() }
+        sortButton = UIBarButtonItem(title: "Sort",
+                                     style: .plain,
+                                     target: nil,
+                                     action: nil)
+        sortButton.reactive.tap.bind(to: self) { $0.presentSortOptions(handler: self.sortMethod(action:))}
+        confirmButton = UIBarButtonItem(title: "Move",
+                                        style: .plain,
+                                        target: nil,
+                                        action: nil)
+        confirmButton.reactive.tap.bind(to: self) { guard $0.viewModel.itemsAreChecked.value else {
+            $0.presentError(message: "No items selected.")
+            return }
+            self.presentBoughtAlert(handler: self.markAsBought(action:)) }
+        navigationItem.rightBarButtonItem = sortButton
+        navigationItem.leftBarButtonItem = confirmButton
+    }
 
 //  func observeLeftButton() {
 //    viewModel.itemsAreChecked.observeNext { bool in
@@ -98,15 +107,15 @@ extension BuyListViewController {
 //    .dispose(in: bag)
 //  }
 
-  @objc func sortMethod(action: UIAlertAction) {
-    viewModel.sortBy(action.title!.lowercased())
-  }
+    @objc func sortMethod(action: UIAlertAction) {
+        viewModel.sortBy(action.title!.lowercased())
+    }
 
-  @objc func markAsBought(action: UIAlertAction) {
-    self.viewModel.markAsBought()
-  }
+    @objc func markAsBought(action: UIAlertAction) {
+        self.viewModel.markAsBought()
+    }
 
-  func addAllToSelected() {
-    viewModel.selectAll()
-  }
+    func addAllToSelected() {
+        viewModel.selectAll()
+    }
 }

@@ -29,7 +29,7 @@ extension BuyListCell {
         item.text = "\(viewModel.name) (\(viewModel.quantity))"
         dateBought.text = viewModel.buyData
 
-        let imageName = (viewModel.isSelected) ? "circle.fill" : "circle"
-        checkButton.setImage(UIImage(systemName: imageName), for: .normal)
+        let imageName = (viewModel.isSelected) ? "box-checked" : "box-unchecked"
+        checkButton.setImage(UIImage(named: imageName), for: .normal)
     }
 }

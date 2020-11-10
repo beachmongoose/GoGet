@@ -31,19 +31,25 @@
                         <color key="textColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <button opaque="NO" contentMode="center" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jTD-E6-u3x">
-                        <rect key="frame" x="13" y="4" width="35" height="35"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <button opaque="NO" contentMode="center" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageSizeForAccessibilityContentSizeCategory="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jTD-E6-u3x">
+                        <rect key="frame" x="16" y="5" width="35" height="35"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="35" id="hws-ak-3I1"/>
+                            <constraint firstAttribute="width" constant="35" id="mPd-tC-2kE"/>
+                        </constraints>
                         <fontDescription key="fontDescription" type="system" pointSize="25"/>
                         <state key="normal">
-                            <imageReference key="image" image="circle" catalog="system" symbolScale="large"/>
+                            <imageReference key="image" image="box-unchecked" symbolScale="large"/>
                             <preferredSymbolConfiguration key="preferredSymbolConfiguration" scale="default" weight="bold"/>
                         </state>
                     </button>
                 </subviews>
                 <constraints>
+                    <constraint firstItem="jTD-E6-u3x" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="16" id="3hr-Ha-MaQ"/>
                     <constraint firstAttribute="bottom" secondItem="nY4-eD-ohQ" secondAttribute="bottom" constant="11" id="4sG-TI-6MN"/>
+                    <constraint firstItem="jTD-E6-u3x" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="5" id="AnR-LS-HOH"/>
                     <constraint firstItem="nY4-eD-ohQ" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="12" id="cdF-7d-yR3"/>
+                    <constraint firstAttribute="bottom" secondItem="jTD-E6-u3x" secondAttribute="bottom" constant="4" id="nDS-Qx-8of"/>
                     <constraint firstAttribute="trailing" secondItem="nY4-eD-ohQ" secondAttribute="trailing" constant="16" id="s0m-7Y-hJk"/>
                 </constraints>
             </tableViewCellContentView>
@@ -57,6 +63,6 @@
         </tableViewCell>
     </objects>
     <resources>
-        <image name="circle" catalog="system" width="128" height="121"/>
+        <image name="box-unchecked" width="16.5" height="16.5"/>
     </resources>
 </document>
