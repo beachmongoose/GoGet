@@ -38,9 +38,7 @@ class GetCategories: GetCategoriesType {
     }
 
     func load() -> [Category] {
-//    let sortType = sortTypeInstance.sortType
         var loadedCategories = [Category]()
-//    var sortedCategories = [Category]()
         let data = loadData(for: "Categories")
         guard data != nil else { return [] }
         do {
@@ -50,17 +48,7 @@ class GetCategories: GetCategoriesType {
             print("Failed to load categories")
         }
         return loadedCategories
-//    switch sortType {
-//    case .name: sortedCategories = loadedCategories.sorted(by: { $0.name < $1.name })
-//    case .date: sortedCategories = sortByDate(loadedCategories)
-//    case .added: sortedCategories = sortByDate(loadedCategories)
-//    }
-//    return (sortTypeInstance.sortAscending == true) ? sortedCategories : sortedCategories.reversed()
     }
-
-//  func sortByDate(_ categories: [Category]) -> [Category] {
-//    return categories.sorted(by: { $0.date < $1.date })
-//  }
 
     func createCategory(for category: String) {
         let newCategory = Category(name: category, date: Date())

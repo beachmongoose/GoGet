@@ -22,7 +22,7 @@ protocol DetailViewCoordinatorType {
     func confirmSaveNew()
     func dismissFromNew(action: UIAlertAction)
     func dismissFromEdit(action: UIAlertAction)
-    func presentPopover(indexPath: IndexPath, dimensions: CGRect, selectedID: Property<String?>)
+    func presentPopover(selectedID: Property<String?>)
 }
 
 class DetailViewCoordinator: DetailViewCoordinatorType {
@@ -61,7 +61,7 @@ class DetailViewCoordinator: DetailViewCoordinatorType {
     }
 
 // MARK: - Category List
-    func presentPopover(indexPath: IndexPath, dimensions: CGRect, selectedID: Property<String?>) {
+    func presentPopover(selectedID: Property<String?>) {
         guard let viewController = viewController else { return }
 
         let categoryController = CategoryViewCoordinator().start(selectedID: selectedID)
@@ -69,7 +69,6 @@ class DetailViewCoordinator: DetailViewCoordinatorType {
         if let presentationController = categoryController.popoverPresentationController {
             presentationController.permittedArrowDirections = .up
             presentationController.sourceView = viewController.view
-            presentationController.sourceRect = dimensions
             presentationController.delegate = viewController.self
             viewController.present(categoryController, animated: true, completion: nil)
         }

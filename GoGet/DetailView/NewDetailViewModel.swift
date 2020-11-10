@@ -10,7 +10,6 @@ import Bond
 import ReactiveKit
 
 final class NewDetailViewModel: DetailViewModelType {
-
 // Data field bindings
     let bought = Property<Bool>(false)
     let isValid = Property<Bool>(false)
@@ -100,8 +99,8 @@ final class NewDetailViewModel: DetailViewModelType {
 
 // MARK: - Categories
 extension NewDetailViewModel {
-    func presentPopover(indexPath: IndexPath, dimensions: CGRect, selectedID: Property<String?>) {
-    coordinator.presentPopover(indexPath: indexPath, dimensions: dimensions, selectedID: selectedID)
+    func presentPopover(selectedID: Property<String?>) {
+    coordinator.presentPopover(selectedID: selectedID)
     }
 }
 
