@@ -11,58 +11,58 @@ import ReactiveKit
 import UIKit
 
 class DateCell: UITableViewCell {
-  @IBOutlet var dateLabel: UILabel!
-  @IBOutlet var dateField: UITextField!
+    @IBOutlet var dateLabel: UILabel!
+    @IBOutlet var dateField: UITextField!
 
-  var boughtStatusCell: SegmentedControlCell?
-  var viewModel: DateCellViewModelType? {
-    didSet { setupCell() }
-  }
+    var boughtStatusCell: SegmentedControlCell?
+    var viewModel: DateCellViewModelType? {
+        didSet { setupCell() }
+    }
 }
 
 extension DateCell {
-  func setupCell() {
-    guard let viewModel = viewModel else { return }
-    dateToggle()
-    observeEnabled()
-    dateLabel.text = viewModel.title
-    dateField.text = viewModel.initialValue
-    dateField.reactive.text.bind(to: viewModel.updatedValue)
-    addDatePicker()
-    selectionStyle = .none
-  }
-
-  func dateToggle() {
-    guard let viewModel = viewModel else { return }
-    dateField.isUserInteractionEnabled = viewModel.isEnabled.value
-    dateField.textColor = (viewModel.isEnabled.value) ? UIColor.black : UIColor.gray
-  }
-
-  func observeEnabled() {
-    viewModel?.isEnabled.observeNext { [ weak self] _ in
-      self?.dateToggle()
+    func setupCell() {
+        guard let viewModel = viewModel else { return }
+        dateToggle()
+        observeEnabled()
+        dateLabel.text = viewModel.title
+        dateField.text = viewModel.initialValue
+        dateField.reactive.text.bind(to: viewModel.updatedValue)
+        addDatePicker()
+        selectionStyle = .none
     }
-    .dispose(in: bag)
-  }
+
+    func dateToggle() {
+        guard let viewModel = viewModel else { return }
+        dateField.isUserInteractionEnabled = viewModel.isEnabled.value
+        dateField.textColor = (viewModel.isEnabled.value) ? UIColor.black : UIColor.gray
+    }
+
+    func observeEnabled() {
+        viewModel?.isEnabled.observeNext { [ weak self] _ in
+            self?.dateToggle()
+        }
+        .dispose(in: bag)
+    }
 }
 
 // Formatting date
 extension DateCell {
-  func addDatePicker() {
-    let datePicker = UIDatePicker()
-    datePicker.preferredDatePickerStyle = .wheels
-    datePicker.datePickerMode = UIDatePicker.Mode.date
+    func addDatePicker() {
+        let datePicker = UIDatePicker()
+        datePicker.preferredDatePickerStyle = .wheels
+        datePicker.datePickerMode = UIDatePicker.Mode.date
 
-    datePicker.addTarget(self, action: #selector(datePicked(sender:)),
-                         for: UIControl.Event.valueChanged)
-    dateField.inputView = datePicker
-  }
+        datePicker.addTarget(self, action: #selector(datePicked(sender:)),
+                             for: UIControl.Event.valueChanged)
+        dateField.inputView = datePicker
+    }
 
-  @objc func datePicked(sender: UIDatePicker) {
-    dateField.text = sender.date.convertedToString()
-  }
+    @objc func datePicked(sender: UIDatePicker) {
+        dateField.text = sender.date.convertedToString()
+    }
 
-  override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-    self.endEditing(true)
-  }
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        self.endEditing(true)
+    }
 }

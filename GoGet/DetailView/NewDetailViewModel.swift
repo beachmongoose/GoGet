@@ -93,14 +93,15 @@ final class NewDetailViewModel: DetailViewModelType {
     }
 
     func clearDetails() {
+        categoryID.value = nil
         buildCellViewModels()
     }
 }
 
 // MARK: - Categories
 extension NewDetailViewModel {
-    func presentPopover(sender: UIButton, id: Property<String?>) {
-    coordinator.presentPopover(sender: sender, selectedID: id)
+    func presentPopover(indexPath: IndexPath, dimensions: CGRect, selectedID: Property<String?>) {
+    coordinator.presentPopover(indexPath: indexPath, dimensions: dimensions, selectedID: selectedID)
     }
 }
 

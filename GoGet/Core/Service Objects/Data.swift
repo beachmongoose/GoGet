@@ -15,13 +15,13 @@ var jsonEncoder = JSONEncoder()
 var defaults = UserDefaults.standard
 
 func saveData(_ data: SaveData) {
-  defaults.set(data.data, forKey: data.key)
-  }
+    defaults.set(data.data, forKey: data.key)
+}
 
 func loadData(for key: String) -> Data? {
-  if let data = defaults.object(forKey: key) as? Data {
-    return data
-  } else {
-    return nil
+    if let data = defaults.object(forKey: key) as? Data {
+        return data
+    } else {
+        return nil
     }
-  }
+}

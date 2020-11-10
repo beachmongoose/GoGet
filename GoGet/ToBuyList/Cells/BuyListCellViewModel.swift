@@ -10,17 +10,17 @@ import Bond
 import ReactiveKit
 
 struct BuyListCellViewModel {
-  var name: String
-  var id: String
-  var quantity: String
-  var buyData: String
-  var isSelected: Bool
+    var name: String
+    var id: String
+    var quantity: String
+    var buyData: String
+    var isSelected: Bool
 
-  init(item: Item, isSelected: Bool) {
-    self.name = item.name
-    self.id = item.id
-    self.quantity = String(item.quantity)
-    self.buyData = item.buyData
-    self.isSelected = isSelected
-  }
+    init(item: Item, isSelected: Bool) {
+        self.name = item.name
+        self.id = item.id
+        self.quantity = String(item.quantity)
+        self.buyData = item.buyData
+        self.isSelected = isSelected
+    }
 }

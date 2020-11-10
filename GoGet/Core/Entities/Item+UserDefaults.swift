@@ -10,19 +10,19 @@ import Foundation
 
 // MARK: - Mutation
 extension Array where Element == GoGet.Item {
-  var persistenceData: SaveData? {
-    guard let data = try? jsonEncoder.encode(self) else {
-      return nil
+    var persistenceData: SaveData? {
+        guard let data = try? jsonEncoder.encode(self) else {
+            return nil
+        }
+        return (data, "Items")
     }
-    return (data, "Items")
-  }
 }
 
 extension Array where Element == Category {
-  var persistenceData: SaveData? {
-    guard let data = try? jsonEncoder.encode(self) else {
-      return nil
+    var persistenceData: SaveData? {
+        guard let data = try? jsonEncoder.encode(self) else {
+            return nil
+        }
+        return (data, "Categories")
     }
-    return (data, "Categories")
-  }
 }

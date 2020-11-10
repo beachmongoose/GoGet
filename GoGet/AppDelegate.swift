@@ -10,21 +10,21 @@ import UIKit
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
-  var window: UIWindow?
-  override convenience init() {
-    let window = UIWindow(frame: UIScreen.main.bounds)
-    self.init(window: window)
-  }
-  init(window: UIWindow) {
-    self.window = window
-  }
+    var window: UIWindow?
+    override convenience init() {
+        let window = UIWindow(frame: UIScreen.main.bounds)
+        self.init(window: window)
+    }
+    init(window: UIWindow) {
+        self.window = window
+    }
 
-  func application(_ application: UIApplication,
-                   didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-    window?.makeKeyAndVisible()
+    func application(_ application: UIApplication,
+                     didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+        window?.makeKeyAndVisible()
 
-    let tabViewController = TabViewController()
-    window?.rootViewController = tabViewController
-    return true
-  }
+        let tabViewController = TabViewController()
+        window?.rootViewController = tabViewController
+        return true
+    }
 }

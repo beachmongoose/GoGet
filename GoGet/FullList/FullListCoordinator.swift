@@ -9,36 +9,36 @@
 import UIKit
 
 protocol FullListCoordinatorType {
-  func presentDetail(item: Item)
-  func start() -> UINavigationController
+    func presentDetail(item: Item)
+    func start() -> UINavigationController
 }
 
 class FullListCoordinator: FullListCoordinatorType {
-  weak var viewController: FullListViewController?
+    weak var viewController: FullListViewController?
 
-  private let getItems: GetItemsType
+    private let getItems: GetItemsType
 
-  init(getItems: GetItemsType = GetItems()) {
-    self.getItems = getItems
-  }
-
-  func start() -> UINavigationController {
-    let viewModel = FullListViewModel(coordinator: self)
-    let viewController = FullListViewController(viewModel: viewModel)
-    viewController.title = "Full List"
-    self.viewController = viewController
-    return UINavigationController(rootViewController: viewController)
-  }
-
-  func presentDetail(item: Item) {
-    let detailViewController = DetailViewCoordinator().start(with: item)
-
-    guard let navigationController = viewController?.navigationController else {
-      return
+    init(getItems: GetItemsType = GetItems()) {
+        self.getItems = getItems
     }
 
-    detailViewController.modalPresentationStyle = .fullScreen
-    navigationController.pushViewController(detailViewController, animated: true)
+    func start() -> UINavigationController {
+        let viewModel = FullListViewModel(coordinator: self)
+        let viewController = FullListViewController(viewModel: viewModel)
+        viewController.title = "Full List"
+        self.viewController = viewController
+        return UINavigationController(rootViewController: viewController)
+    }
 
-  }
+    func presentDetail(item: Item) {
+        let detailViewController = DetailViewCoordinator().start(with: item)
+
+        guard let navigationController = viewController?.navigationController else {
+            return
+        }
+
+        detailViewController.modalPresentationStyle = .fullScreen
+        navigationController.pushViewController(detailViewController, animated: true)
+
+    }
 }
