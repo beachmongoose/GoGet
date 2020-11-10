@@ -18,7 +18,7 @@ enum CellType {
 }
 
 protocol DetailViewModelType {
-    func presentPopover(indexPath: IndexPath, dimensions: CGRect, selectedID: Property<String?>)
+    func presentPopover(selectedID: Property<String?>)
     func saveItem()
     func clearDetails()
     func observeValidationUpdates()
@@ -127,8 +127,8 @@ final class DetailViewModel: DetailViewModelType {
 
 // MARK: - Categories
 extension DetailViewModel {
-    func presentPopover(indexPath: IndexPath, dimensions: CGRect, selectedID: Property<String?>) {
-    coordinator.presentPopover(indexPath: indexPath, dimensions: dimensions, selectedID: selectedID)
+    func presentPopover(selectedID: Property<String?>) {
+    coordinator.presentPopover(selectedID: selectedID)
     }
 }
 

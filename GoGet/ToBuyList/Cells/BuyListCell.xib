@@ -31,20 +31,26 @@
                         <color key="textColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <button opaque="NO" contentMode="center" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jTD-E6-u3x">
-                        <rect key="frame" x="13" y="4" width="35" height="35"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <button opaque="NO" contentMode="center" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jTD-E6-u3x">
+                        <rect key="frame" x="21" y="5" width="35" height="35"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="35" id="02i-99-RYc"/>
+                            <constraint firstAttribute="width" constant="35" id="gVJ-Th-BFh"/>
+                        </constraints>
                         <fontDescription key="fontDescription" type="system" pointSize="25"/>
                         <state key="normal">
-                            <imageReference key="image" image="circle" catalog="system" symbolScale="large"/>
+                            <imageReference key="image" image="box-unchecked" symbolScale="large"/>
                             <preferredSymbolConfiguration key="preferredSymbolConfiguration" scale="default" weight="bold"/>
                         </state>
                     </button>
                 </subviews>
                 <constraints>
                     <constraint firstAttribute="bottom" secondItem="nY4-eD-ohQ" secondAttribute="bottom" constant="11" id="4sG-TI-6MN"/>
+                    <constraint firstItem="jTD-E6-u3x" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="5" id="7I0-lt-zGb"/>
                     <constraint firstItem="nY4-eD-ohQ" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="12" id="cdF-7d-yR3"/>
+                    <constraint firstItem="jTD-E6-u3x" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="21" id="nce-lT-Ube"/>
                     <constraint firstAttribute="trailing" secondItem="nY4-eD-ohQ" secondAttribute="trailing" constant="16" id="s0m-7Y-hJk"/>
+                    <constraint firstAttribute="bottom" secondItem="jTD-E6-u3x" secondAttribute="bottom" constant="4" id="zuN-RR-SyH"/>
                 </constraints>
             </tableViewCellContentView>
             <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
@@ -57,6 +63,6 @@
         </tableViewCell>
     </objects>
     <resources>
-        <image name="circle" catalog="system" width="128" height="121"/>
+        <image name="box-unchecked" width="66" height="66"/>
     </resources>
 </document>

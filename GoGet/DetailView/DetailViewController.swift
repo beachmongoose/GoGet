@@ -127,12 +127,7 @@ extension DetailViewController {
         let cell = tableView.dequeueReusableCell(CategoryInputCell.self, for: indexPath)
         cell.viewModel = viewModel
         cell.inputButton.reactive.tapGesture().observeNext { _ in
-            let buttonFrame = cell.inputButton.frame
-            let initialRect = cell.convert(buttonFrame, to: self.tableView)
-            let showRect = self.tableView.convert(initialRect, to: self.view)
-
-            let indexPath = self.tableView.indexPath(for: cell)
-            self.viewModel.presentPopover(indexPath: indexPath!, dimensions: showRect, selectedID: viewModel.updatedValue)
+            self.viewModel.presentPopover(selectedID: viewModel.updatedValue)
         }
         .dispose(in: cell.bag)
         return cell
