@@ -73,8 +73,7 @@ final class NewDetailViewModel: DetailViewModelType {
     }
 
     func saveItem() {
-      let updatedValues = cellViewModels.value.map { return $0.updatedValue.value }
-
+        let updatedValues = cellViewModels.value.map { return $0.updatedValue.value }
         let adjustedItem = Item(
             name: updatedValues[0] ?? "",
             id: UUID().uuidString,
@@ -93,6 +92,7 @@ final class NewDetailViewModel: DetailViewModelType {
 
     func clearDetails() {
         categoryID.value = nil
+        bought.value = false
         buildCellViewModels()
     }
 }

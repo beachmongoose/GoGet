@@ -9,8 +9,36 @@
 import UIKit
 
 extension UIViewController {
+    func presentCategoryOptions(handler: ((UIAlertAction, SelectedOption) -> Void)?) {
+        let optionsController = UIAlertController(title: "Options", message: nil, preferredStyle: .alert)
+        let renameOption = UIAlertAction(title: "Rename", style: .default) { action in
+            let type: SelectedOption = .rename
+            handler!(action, type)
+        }
+        let deleteOption = UIAlertAction(title: "Delete", style: .default) { action in
+            let type: SelectedOption = .delete
+            handler!(action, type)
+        }
+        optionsController.addAction(renameOption)
+        optionsController.addAction(deleteOption)
+        optionsController.addAction(UIAlertAction(title: "Cancel", style: .cancel))
+        present(optionsController, animated: true)
+    }
+
+    func presentRename(handler: ((UIAlertAction, String) -> Void)?) {
+        let renameController = UIAlertController(title: "Enter Category Name", message: nil, preferredStyle: .alert)
+        renameController.addTextField()
+        let submitNewName = UIAlertAction(title: "OK", style: .default) { [weak renameController] action in
+            guard let category = renameController?.textFields?[0].text else { return }
+            handler!(action, category)
+        }
+        renameController.addAction(submitNewName)
+        renameController.addAction(UIAlertAction(title: "Cancel", style: .cancel))
+        present(renameController, animated: true)
+    }
+
     func presentDeleteAlert(handler: ((UIAlertAction) -> Void)?) {
-        let deleteController = UIAlertController(title: "Delete Item?", message: nil, preferredStyle: .alert)
+        let deleteController = UIAlertController(title: "Delete Category?", message: nil, preferredStyle: .alert)
         deleteController.addAction(UIAlertAction(title: "Yes", style: .default, handler: handler))
         deleteController.addAction(UIAlertAction(title: "No", style: .cancel))
         present(deleteController, animated: true)
@@ -62,5 +90,17 @@ extension UIViewController {
         let errorAlert = UIAlertController(title: "Error", message: "\(message)", preferredStyle: .alert)
         errorAlert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
         present(errorAlert, animated: true)
+    }
+}
+
+extension UIViewController {
+    func hideKeyboardWhenTappedAround() {
+        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(UIViewController.dismissKeyboard))
+        tap.cancelsTouchesInView = false
+        view.addGestureRecognizer(tap)
+    }
+
+    @objc func dismissKeyboard() {
+        view.endEditing(true)
     }
 }

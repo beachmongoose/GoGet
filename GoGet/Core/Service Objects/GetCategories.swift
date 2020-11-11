@@ -13,6 +13,7 @@ protocol GetCategoriesType {
     func load() -> [Category]
     func save(_ categories: [Category])
     func createCategory(for category: String)
+    func renameCategory(_ index: Int, to newName: String)
     func deleteCategory(_ id: String)
     func checkIfDuplicate(_ newCategory: String?) -> Bool
     func forID(_ id: String) -> (Int, String)
@@ -82,6 +83,12 @@ class GetCategories: GetCategoriesType {
         var categories = load()
         let index = forID(id)
         categories.remove(at: index.0)
+        save(categories)
+    }
+
+    func renameCategory(_ index: Int, to newName: String) {
+        var categories = load()
+        categories[index].name = newName
         save(categories)
     }
 }

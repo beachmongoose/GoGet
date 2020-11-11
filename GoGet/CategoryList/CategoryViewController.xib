@@ -11,8 +11,6 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="CategoryViewController" customModule="GoGet" customModuleProvider="target">
             <connections>
-                <outlet property="createNewButton" destination="MfE-RV-Qkx" id="keG-hJ-Hah"/>
-                <outlet property="noneButton" destination="qvS-s1-pNP" id="7Ln-KX-2Tt"/>
                 <outlet property="tableView" destination="UrQ-my-LkW" id="x2V-a0-qND"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
@@ -23,31 +21,17 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="UrQ-my-LkW">
-                    <rect key="frame" x="0.0" y="79" width="414" height="783"/>
+                    <rect key="frame" x="0.0" y="44" width="414" height="818"/>
                     <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                 </tableView>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MfE-RV-Qkx">
-                    <rect key="frame" x="291" y="48" width="103" height="36"/>
-                    <fontDescription key="fontDescription" type="system" pointSize="20"/>
-                    <state key="normal" title="Create New"/>
-                </button>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qvS-s1-pNP">
-                    <rect key="frame" x="20" y="48" width="47" height="36"/>
-                    <fontDescription key="fontDescription" type="system" pointSize="20"/>
-                    <state key="normal" title="None"/>
-                </button>
             </subviews>
             <viewLayoutGuide key="safeArea" id="fnl-2z-Ty3"/>
             <color key="backgroundColor" systemColor="systemBackgroundColor"/>
             <constraints>
-                <constraint firstItem="qvS-s1-pNP" firstAttribute="baseline" secondItem="MfE-RV-Qkx" secondAttribute="baseline" id="3CZ-KJ-hxI"/>
-                <constraint firstAttribute="trailing" secondItem="UrQ-my-LkW" secondAttribute="trailing" id="Vgy-0Y-2gu"/>
-                <constraint firstItem="MfE-RV-Qkx" firstAttribute="trailing" secondItem="i5M-Pr-FkT" secondAttribute="trailingMargin" id="YIv-6E-Lm1"/>
-                <constraint firstItem="MfE-RV-Qkx" firstAttribute="top" secondItem="fnl-2z-Ty3" secondAttribute="top" constant="4" id="cpp-K4-xVz"/>
-                <constraint firstItem="qvS-s1-pNP" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leadingMargin" id="dMv-t2-F8x"/>
-                <constraint firstItem="UrQ-my-LkW" firstAttribute="bottom" secondItem="fnl-2z-Ty3" secondAttribute="bottom" id="gzb-Rt-5v6"/>
-                <constraint firstItem="UrQ-my-LkW" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="m6O-Ow-ahB"/>
-                <constraint firstItem="UrQ-my-LkW" firstAttribute="top" secondItem="fnl-2z-Ty3" secondAttribute="top" constant="35" id="wqy-SX-afj"/>
+                <constraint firstItem="UrQ-my-LkW" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" id="56G-Fo-nC5"/>
+                <constraint firstItem="UrQ-my-LkW" firstAttribute="top" secondItem="fnl-2z-Ty3" secondAttribute="top" id="8ll-eA-eBZ"/>
+                <constraint firstItem="UrQ-my-LkW" firstAttribute="trailing" secondItem="fnl-2z-Ty3" secondAttribute="trailing" id="rXw-cy-Ykt"/>
+                <constraint firstItem="UrQ-my-LkW" firstAttribute="bottom" secondItem="fnl-2z-Ty3" secondAttribute="bottom" id="vQY-He-1um"/>
             </constraints>
             <point key="canvasLocation" x="140.57971014492756" y="135.9375"/>
         </view>

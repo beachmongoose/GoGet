@@ -78,7 +78,7 @@ extension BuyListViewController {
                                  target: nil,
                                  action: nil)
     sortButton.reactive.tap.bind(to: self) { $0.presentSortOptions(handler: self.sortMethod(action:))}
-    confirmButton = UIBarButtonItem(title: "Move",
+    confirmButton = UIBarButtonItem(title: "Bought",
                                     style: .plain,
                                     target: nil,
                                     action: nil)
@@ -89,14 +89,6 @@ extension BuyListViewController {
     navigationItem.rightBarButtonItem = sortButton
     navigationItem.leftBarButtonItem = confirmButton
   }
-
-//  func observeLeftButton() {
-//    viewModel.itemsAreChecked.observeNext { bool in
-//      let button = (bool) ? self.confirmButton : self.selectAllButton
-//      self.navigationItem.leftBarButtonItem = button
-//    }
-//    .dispose(in: bag)
-//  }
 
   @objc func sortMethod(action: UIAlertAction) {
     viewModel.sortBy(action.title!.lowercased())

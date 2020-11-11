@@ -11,8 +11,8 @@ import ReactiveKit
 import UIKit
 
 class CategoryViewController: UIViewController {
-    @IBOutlet var createNewButton: UIButton!
-    @IBOutlet var noneButton: UIButton!
+    var addNewButton: UIBarButtonItem!
+    var noneButton: UIBarButtonItem!
     @IBOutlet var tableView: UITableView!
     private var viewModel: CategoryListViewModelType
 
@@ -25,16 +25,15 @@ class CategoryViewController: UIViewController {
     }
     override func viewDidLoad() {
         tableView.tableFooterView = UIView()
-        setupTable()
-        createNewCategory()
-        clearCategory()
+        setUpTable()
+        setUpNavigation()
         super.viewDidLoad()
     }
 }
 
 extension CategoryViewController: UITableViewDelegate, UIGestureRecognizerDelegate {
 
-    func setupTable() {
+    func setUpTable() {
         tableView.register(UINib(nibName: "CategoryListCell", bundle: nil), forCellReuseIdentifier: "CategoryListCell")
 
         viewModel.tableData.bind(to: tableView) { dataSource, indexPath, tableView in
@@ -53,7 +52,7 @@ extension CategoryViewController: UITableViewDelegate, UIGestureRecognizerDelega
             .dispose(in: self.bag)
             cell.reactive.longPressGesture().observeNext { _ in
                 self.viewModel.changeSelectedIndex(to: indexPath.row)
-                self.presentDeleteAlert(handler: self.viewModel.deleteCategory(action:))
+                self.presentCategoryOptions(handler: self.categoryOptions)
             }
             .dispose(in: cell.bag)
 
@@ -66,34 +65,18 @@ extension CategoryViewController: UITableViewDelegate, UIGestureRecognizerDelega
             let touchPoint = longPress.location(in: tableView)
             if let selectedItem = tableView.indexPathForRow(at: touchPoint) {
                 viewModel.changeSelectedIndex(to: selectedItem.row)
-                presentDeleteAlert(handler: viewModel.deleteCategory(action:))
+                presentCategoryOptions(handler: categoryOptions)
             }
         }
     }
-}
 
-extension CategoryViewController {
-    func createNewCategory() {
-        createNewButton.reactive.tapGesture().observeNext { [weak self] _ in
-            self?.addCategory(handler: self?.checkName)
+    func categoryOptions(action: UIAlertAction, option: SelectedOption) {
+        switch option {
+        case .rename:
+            addCategory(handler: viewModel.renameCategory)
+        case .delete:
+            presentDeleteAlert(handler: viewModel.deleteCategory)
         }
-        .dispose(in: bag)
-    }
-
-    func clearCategory() {
-        noneButton.reactive.tapGesture().observeNext { [weak self ] _ in
-            self?.viewModel.changeSelectedIndex(to: nil)
-            self?.viewModel.changeSelectedCategory(for: nil)
-            self?.dismiss(animated: true, completion: nil)
-        }
-        .dispose(in: bag)
-    }
-
-    func checkName(action: UIAlertAction, category: String?) {
-        guard category != nil || category != "None" else { presentError(message: "Name not entered.")
-            return }
-        if viewModel.isDuplicate(category!) { presentError(message: "Category already exists")}
-        viewModel.createNewCategory(for: category!)
     }
 }
 
@@ -102,11 +85,41 @@ extension CategoryViewController: UIPopoverPresentationControllerDelegate {
         return .none
     }
 
-  //UIPopoverPresentationControllerDelegate
     func popoverPresentationControllerDidDismissPopover(_ popoverPresentationController: UIPopoverPresentationController) {
     }
 
     func popoverPresentationControllerShouldDismissPopover(_ popoverPresentationController: UIPopoverPresentationController) -> Bool {
         return true
+    }
+}
+
+extension CategoryViewController {
+    func setUpNavigation() {
+        noneButton = UIBarButtonItem(title: "None",
+                                     style: .plain,
+                                     target: self,
+                                     action: nil)
+        noneButton.reactive.tap.bind(to: self) {$0.clearCategory()}
+
+        addNewButton = UIBarButtonItem(title: "Add New",
+                                       style: .plain,
+                                       target: self,
+                                       action: nil)
+        addNewButton.reactive.tap.bind(to: self) { $0.addCategory(handler: self.checkName)}
+        navigationItem.rightBarButtonItem = noneButton
+        navigationItem.leftBarButtonItem = addNewButton
+    }
+
+    func clearCategory() {
+        viewModel.changeSelectedIndex(to: nil)
+        viewModel.changeSelectedCategory(for: nil)
+        dismiss(animated: true, completion: nil)
+    }
+
+    func checkName(action: UIAlertAction, category: String?) {
+        guard category != nil || category != "None" else { presentError(message: "Name not entered.")
+            return }
+        if viewModel.isDuplicate(category!) { presentError(message: "Category already exists")}
+        viewModel.createNewCategory(for: category!)
     }
 }
