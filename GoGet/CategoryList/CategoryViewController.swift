@@ -49,7 +49,7 @@ extension CategoryViewController: UITableViewDelegate, UIGestureRecognizerDelega
                 self?.viewModel.changeSelectedCategory(for: indexPath.row)
                 self?.dismiss(animated: true, completion: nil)
             }
-            .dispose(in: self.bag)
+            .dispose(in: cell.bag)
             cell.reactive.longPressGesture().observeNext { _ in
                 self.viewModel.changeSelectedIndex(to: indexPath.row)
                 self.presentCategoryOptions(handler: self.categoryOptions)
@@ -57,16 +57,6 @@ extension CategoryViewController: UITableViewDelegate, UIGestureRecognizerDelega
             .dispose(in: cell.bag)
 
             return cell
-        }
-    }
-
-    @objc func longPress(longPress: UILongPressGestureRecognizer) {
-        if longPress.state == UIGestureRecognizer.State.began {
-            let touchPoint = longPress.location(in: tableView)
-            if let selectedItem = tableView.indexPathForRow(at: touchPoint) {
-                viewModel.changeSelectedIndex(to: selectedItem.row)
-                presentCategoryOptions(handler: categoryOptions)
-            }
         }
     }
 
@@ -105,7 +95,7 @@ extension CategoryViewController {
                                        style: .plain,
                                        target: self,
                                        action: nil)
-        addNewButton.reactive.tap.bind(to: self) { $0.addCategory(handler: self.checkName)}
+        addNewButton.reactive.tap.bind(to: self) { $0.addCategory(handler: $0.viewModel.createNewCategory)}
         navigationItem.rightBarButtonItem = noneButton
         navigationItem.leftBarButtonItem = addNewButton
     }
@@ -114,12 +104,5 @@ extension CategoryViewController {
         viewModel.changeSelectedIndex(to: nil)
         viewModel.changeSelectedCategory(for: nil)
         dismiss(animated: true, completion: nil)
-    }
-
-    func checkName(action: UIAlertAction, category: String?) {
-        guard category != nil || category != "None" else { presentError(message: "Name not entered.")
-            return }
-        if viewModel.isDuplicate(category!) { presentError(message: "Category already exists")}
-        viewModel.createNewCategory(for: category!)
     }
 }

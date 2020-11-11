@@ -18,9 +18,8 @@ enum SelectedOption: String {
 
 protocol CategoryListViewModelType {
     var tableData: MutableObservableArray<CategoryCell> { get }
-    func isDuplicate(_ input: String) -> Bool
     func changeSelectedCategory(for index: Int?)
-    func createNewCategory(for category: String)
+    func createNewCategory(action: UIAlertAction, for category: String)
     func renameCategory(action: UIAlertAction, with name: String)
     func deleteCategory(action: UIAlertAction)
     func changeSelectedIndex(to index: Int?)
@@ -68,13 +67,6 @@ extension CategoryViewModel {
         tableData.replace(with: categoryList)
     }
 
-    func isDuplicate(_ input: String) -> Bool {
-        for category in categories where category.name == input {
-            return true
-        }
-        return false
-    }
-
     func changeSelectedCategory(for index: Int?) {
         guard let index = index else { selectedID.value = nil
             return
@@ -87,15 +79,14 @@ extension CategoryViewModel {
         selectedIndex = index
     }
 
-    func createNewCategory(for category: String) {
+    func createNewCategory(action: UIAlertAction, for category: String) {
+        guard isValidName(category) == true else { return }
         let getCategories: GetCategoriesType = GetCategories()
         getCategories.createCategory(for: category)
     }
 
     func renameCategory(action: UIAlertAction, with name: String) {
-        guard name != "" || name != "None" else { coordinator.nameError(message: "Name not entered.")
-            return
-        }
+        guard isValidName(name) == true else { return }
         guard let index = selectedIndex else { return }
         getCategories.renameCategory(index, to: name)
     }
@@ -104,5 +95,17 @@ extension CategoryViewModel {
         guard let index = selectedIndex else { return }
         let category = categories[index]
         getCategories.deleteCategory(category.id)
+    }
+
+    func isValidName(_ category: String?) -> Bool {
+        guard category != nil && category != "None" && category != " " else {
+            coordinator.nameError(message: "Name not entered.")
+            return false
+        }
+        for entry in categories where entry.name == category {
+            coordinator.nameError(message: "Duplicate name.")
+            return false
+        }
+        return true
     }
 }
