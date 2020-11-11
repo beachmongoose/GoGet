@@ -13,6 +13,7 @@ import UIKit
 class DateCell: UITableViewCell {
     @IBOutlet var dateLabel: UILabel!
     @IBOutlet var dateField: UITextField!
+    var datePicker: UIDatePicker!
 
     var boughtStatusCell: SegmentedControlCell?
     var viewModel: DateCellViewModelType? {
@@ -49,9 +50,10 @@ extension DateCell {
 // Formatting date
 extension DateCell {
     func addDatePicker() {
-        let datePicker = UIDatePicker()
-        datePicker.preferredDatePickerStyle = .wheels
+        datePicker = UIDatePicker()
+        datePicker.preferredDatePickerStyle = .inline
         datePicker.datePickerMode = UIDatePicker.Mode.date
+        datePicker.transform = CGAffineTransform(scaleX: 275.0 / 350.0, y: 275.0 / 350.0)
 
         datePicker.addTarget(self, action: #selector(datePicked(sender:)),
                              for: UIControl.Event.valueChanged)
@@ -61,7 +63,6 @@ extension DateCell {
     @objc func datePicked(sender: UIDatePicker) {
         dateField.text = sender.date.convertedToString()
     }
-
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         self.endEditing(true)
     }

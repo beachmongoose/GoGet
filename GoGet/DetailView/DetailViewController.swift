@@ -11,24 +11,26 @@ import ReactiveKit
 import UIKit
 
 class DetailViewController: UIViewController, UIPopoverPresentationControllerDelegate {
-  var saveButton: UIBarButtonItem!
-  var clearButton: UIBarButtonItem!
-  private let viewModel: DetailViewModelType
-  @IBOutlet var tableView: UITableView!
+    var saveButton: UIBarButtonItem!
+    var clearButton: UIBarButtonItem!
+    private let viewModel: DetailViewModelType
+    @IBOutlet var tableView: UITableView!
 
-  init(viewModel: DetailViewModelType) {
+    @IBOutlet var dateWheel: UIDatePicker!
+    init(viewModel: DetailViewModelType) {
     self.viewModel = viewModel
     super.init(nibName: nil, bundle: nil)
-  }
+    }
 
-  required init?(coder: NSCoder) {
-    fatalError("init(coder:) has not been implemented")
-  }
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 
-  override func viewDidLoad() {
-    tableSetUp()
-    addNavigationButtons()
-      super.viewDidLoad()
+    override func viewDidLoad() {
+        tableSetUp()
+        addNavigationButtons()
+        self.hideKeyboardWhenTappedAround()
+        super.viewDidLoad()
     }
 }
 
@@ -67,7 +69,8 @@ extension DetailViewController {
                                      style: .plain,
                                      target: self,
                                      action: nil)
-    saveButton.reactive.tap.bind(to: self) { $0.viewModel.saveItem() }
+    saveButton.reactive.tap.bind(to: self) { $0.view.endEditing(true)
+        $0.viewModel.saveItem() }
     viewModel.isValid.bind(to: saveButton.reactive.isEnabled)
     clearButton = UIBarButtonItem(title: "Clear",
                                   style: .plain,

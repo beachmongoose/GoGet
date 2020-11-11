@@ -11,11 +11,17 @@ import ReactiveKit
 
 typealias CategoryCell = CategoryViewModel.CellViewModel
 
+enum SelectedOption: String {
+    case rename
+    case delete
+}
+
 protocol CategoryListViewModelType {
     var tableData: MutableObservableArray<CategoryCell> { get }
     func isDuplicate(_ input: String) -> Bool
     func changeSelectedCategory(for index: Int?)
     func createNewCategory(for category: String)
+    func renameCategory(action: UIAlertAction, with name: String)
     func deleteCategory(action: UIAlertAction)
     func changeSelectedIndex(to index: Int?)
 }
@@ -84,6 +90,14 @@ extension CategoryViewModel {
     func createNewCategory(for category: String) {
         let getCategories: GetCategoriesType = GetCategories()
         getCategories.createCategory(for: category)
+    }
+
+    func renameCategory(action: UIAlertAction, with name: String) {
+        guard name != "" || name != "None" else { coordinator.nameError(message: "Name not entered.")
+            return
+        }
+        guard let index = selectedIndex else { return }
+        getCategories.renameCategory(index, to: name)
     }
 
     func deleteCategory(action: UIAlertAction) {
