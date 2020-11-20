@@ -3,6 +3,7 @@ PODS:
     - Differ (~> 1.4)
     - ReactiveKit (~> 3.14)
   - Differ (1.4.5)
+  - Nimble (9.0.0)
   - PromiseKit (6.13.1):
     - PromiseKit/CorePromise (= 6.13.1)
     - PromiseKit/Foundation (= 6.13.1)
@@ -12,12 +13,15 @@ PODS:
     - PromiseKit/CorePromise
   - PromiseKit/UIKit (6.13.1):
     - PromiseKit/CorePromise
+  - Quick (3.0.0)
   - ReactiveKit (3.17.4)
   - SwiftLint (0.40.2)
 
 DEPENDENCIES:
   - Bond
+  - Nimble
   - PromiseKit (~> 6.8)
+  - Quick
   - ReactiveKit
   - SwiftLint
 
@@ -25,17 +29,21 @@ SPEC REPOS:
   trunk:
     - Bond
     - Differ
+    - Nimble
     - PromiseKit
+    - Quick
     - ReactiveKit
     - SwiftLint
 
 SPEC CHECKSUMS:
   Bond: 9e7d901cf4ed825b6004a93dd0a7f1c7479e2834
   Differ: 3b6bd78e2b20cc795d9a86f7641d087524e4273e
+  Nimble: 3b4ec3fd40f1dc178058e0981107721c615643d8
   PromiseKit: 28fda91c973cc377875d8c0ea4f973013c05b6db
+  Quick: 6d9559f40647bc4d510103842ef2fdd882d753e2
   ReactiveKit: f9f9e079efa39312c597bf1508ef4810d111ce76
   SwiftLint: 1216c910d27c2633ade33b4f071bb6b930982e62
 
-PODFILE CHECKSUM: 7d842d760529177c079e838cbc11b33f0a2752d9
+PODFILE CHECKSUM: e4cbd476abe2ca2b722ac237654a9d310dd20da9
 
 COCOAPODS: 1.9.3

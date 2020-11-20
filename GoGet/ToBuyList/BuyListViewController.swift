@@ -60,7 +60,7 @@ extension BuyListViewController: UITableViewDelegate {
   }
 
   func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-    viewModel.presentDetail(in: indexPath.section, for: indexPath.row)
+    viewModel.presentDetail(for: indexPath)
   }
 }
 
@@ -68,11 +68,11 @@ extension BuyListViewController: UITableViewDelegate {
 extension BuyListViewController {
 //TODO: ADJUST UI FOR SELECT ALL BUTTON
   func addNavigationButtons() {
-    selectAllButton = UIBarButtonItem(title: "Select All",
-                                      style: .plain,
-                                      target: nil,
-                                      action: nil)
-    selectAllButton.reactive.tap.bind(to: self) { $0.addAllToSelected() }
+//    selectAllButton = UIBarButtonItem(title: "Select All",
+//                                      style: .plain,
+//                                      target: nil,
+//                                      action: nil)
+//    selectAllButton.reactive.tap.bind(to: self) { $0.addAllToSelected() }
     sortButton = UIBarButtonItem(title: "Sort",
                                  style: .plain,
                                  target: nil,

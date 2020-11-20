@@ -28,6 +28,36 @@
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       shouldUseLaunchSchemeArgsEnv = "YES">
       <Testables>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "9F433DDC25670B4A00E361D6"
+               BuildableName = "GoGetUITests.xctest"
+               BlueprintName = "GoGetUITests"
+               ReferencedContainer = "container:GoGet.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "9F433E15256818D700E361D6"
+               BuildableName = "GoGetTests.xctest"
+               BlueprintName = "GoGetTests"
+               ReferencedContainer = "container:GoGet.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "9F433E502568308800E361D6"
+               BuildableName = "BuyListViewControllerSpec.xctest"
+               BlueprintName = "BuyListViewControllerSpec"
+               ReferencedContainer = "container:GoGet.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
    </TestAction>
    <LaunchAction

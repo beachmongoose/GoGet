@@ -1,8 +1,6 @@
-# Uncomment the next line to define a global platform for your project
-# platform :ios, '9.0'
+platform :ios, '11.0'
 
 target 'GoGet' do
-  # Comment the next line if you don't want to use dynamic frameworks
   use_frameworks!
 
   # Pods for GoGet
@@ -12,10 +10,19 @@ target 'GoGet' do
   pod 'PromiseKit', '~> 6.8'
 end
 
+target 'GoGetTests' do
+    use_frameworks!
+    inherit! :search_paths
+    pod 'Quick'
+    pod 'Nimble'
+    pod 'Bond'
+    pod 'ReactiveKit'
+end
+
 post_install do |pi|
     pi.pods_project.targets.each do |t|
       t.build_configurations.each do |config|
-        config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '9.0'
+        config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '11.0'
       end
     end
 end

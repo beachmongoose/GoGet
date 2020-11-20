@@ -7,6 +7,7 @@
 //
 
 import Bond
+import Foundation
 import ReactiveKit
 import UIKit
 
@@ -80,7 +81,8 @@ extension FullListViewController {
                                        style: .plain,
                                        target: self,
                                        action: nil)
-        cancelButton.reactive.tap.bind(to: self) { $0.viewModel.clearSelectedItems()
+        cancelButton.reactive.tap.bind(to: self) {
+//            $0.viewModel.clearSelectedItems()
             $0.viewModel.changeEditing() }
         navigationItem.rightBarButtonItem = sortButton
     }

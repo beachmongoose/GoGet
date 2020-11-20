@@ -1,0 +1,6 @@
+${PODS_ROOT}/Target Support Files/Pods-GoGetTests/Pods-GoGetTests-frameworks.sh
+${BUILT_PRODUCTS_DIR}/Bond/Bond.framework
+${BUILT_PRODUCTS_DIR}/Differ/Differ.framework
+${BUILT_PRODUCTS_DIR}/ReactiveKit/ReactiveKit.framework
+${BUILT_PRODUCTS_DIR}/Nimble/Nimble.framework
+${BUILT_PRODUCTS_DIR}/Quick/Quick.framework

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		8C783C4FEDAC2174272C553B /* Pods_GoGetTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F0CF0BC76516FD353258516B /* Pods_GoGetTests.framework */; };
 		9F03404D250298F100B27BF3 /* BuyListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F03404B250298F100B27BF3 /* BuyListCell.swift */; };
 		9F03404E250298F100B27BF3 /* BuyListCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9F03404C250298F100B27BF3 /* BuyListCell.xib */; };
 		9F0340502502A90F00B27BF3 /* BuyListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F03404F2502A90F00B27BF3 /* BuyListViewModel.swift */; };
@@ -31,6 +32,10 @@
 		9F34058C24FED63E0035A385 /* FullListViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9F34058A24FED63E0035A385 /* FullListViewController.xib */; };
 		9F34059024FED6580035A385 /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F34058E24FED6580035A385 /* DetailViewController.swift */; };
 		9F34059124FED6580035A385 /* DetailViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9F34058F24FED6580035A385 /* DetailViewController.xib */; };
+		9F433E19256818D700E361D6 /* GoGetTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F433E18256818D700E361D6 /* GoGetTests.swift */; };
+		9F433E32256826D200E361D6 /* FullListViewControllerSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F433E31256826D200E361D6 /* FullListViewControllerSpec.swift */; };
+		9F433E62256853FF00E361D6 /* BuyListViewControllerSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F433E61256853FF00E361D6 /* BuyListViewControllerSpec.swift */; };
+		9F433E6D2568625300E361D6 /* Item+Test.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F433E6C2568625300E361D6 /* Item+Test.swift */; };
 		9F62A38E2512A92800F5AF63 /* Category.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F62A38D2512A92800F5AF63 /* Category.swift */; };
 		9F62A3942512B43300F5AF63 /* GetCategories.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F62A3932512B43300F5AF63 /* GetCategories.swift */; };
 		9F62A3962512B4EF00F5AF63 /* Data.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F62A3952512B4EF00F5AF63 /* Data.swift */; };
@@ -70,10 +75,22 @@
 		C6FE7913255BBF8F81AF4624 /* Pods_GoGet.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 259A21156006B2C8B1F243DE /* Pods_GoGet.framework */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		9F433E1B256818D700E361D6 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 9F930BEA24FEC55E0034C8F7 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 9F930BF124FEC55E0034C8F7;
+			remoteInfo = GoGet;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
+		16909B9FD48D7997684AE21E /* Pods-GoGetTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GoGetTests.release.xcconfig"; path = "Target Support Files/Pods-GoGetTests/Pods-GoGetTests.release.xcconfig"; sourceTree = "<group>"; };
 		259A21156006B2C8B1F243DE /* Pods_GoGet.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_GoGet.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		460F234745EDC6291E7939D7 /* Pods-GoGet.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GoGet.debug.xcconfig"; path = "Target Support Files/Pods-GoGet/Pods-GoGet.debug.xcconfig"; sourceTree = "<group>"; };
 		5C002AAA7A80A0F76A003FC7 /* Pods-GoGet.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GoGet.release.xcconfig"; path = "Target Support Files/Pods-GoGet/Pods-GoGet.release.xcconfig"; sourceTree = "<group>"; };
+		68C9A4D5DDD7903F7F11C055 /* Pods-GoGetTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GoGetTests.debug.xcconfig"; path = "Target Support Files/Pods-GoGetTests/Pods-GoGetTests.debug.xcconfig"; sourceTree = "<group>"; };
 		9F03404B250298F100B27BF3 /* BuyListCell.swift */ = {isa = PBXFileReference; indentWidth = 4; lastKnownFileType = sourcecode.swift; path = BuyListCell.swift; sourceTree = "<group>"; tabWidth = 4; };
 		9F03404C250298F100B27BF3 /* BuyListCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = BuyListCell.xib; sourceTree = "<group>"; };
 		9F03404F2502A90F00B27BF3 /* BuyListViewModel.swift */ = {isa = PBXFileReference; indentWidth = 4; lastKnownFileType = sourcecode.swift; path = BuyListViewModel.swift; sourceTree = "<group>"; tabWidth = 4; };
@@ -98,6 +115,14 @@
 		9F34058A24FED63E0035A385 /* FullListViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FullListViewController.xib; sourceTree = "<group>"; };
 		9F34058E24FED6580035A385 /* DetailViewController.swift */ = {isa = PBXFileReference; indentWidth = 4; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; tabWidth = 4; };
 		9F34058F24FED6580035A385 /* DetailViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = DetailViewController.xib; sourceTree = "<group>"; };
+		9F433E16256818D700E361D6 /* GoGetTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GoGetTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		9F433E18256818D700E361D6 /* GoGetTests.swift */ = {isa = PBXFileReference; indentWidth = 4; lastKnownFileType = sourcecode.swift; path = GoGetTests.swift; sourceTree = "<group>"; tabWidth = 4; };
+		9F433E1A256818D700E361D6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		9F433E31256826D200E361D6 /* FullListViewControllerSpec.swift */ = {isa = PBXFileReference; indentWidth = 4; lastKnownFileType = sourcecode.swift; path = FullListViewControllerSpec.swift; sourceTree = "<group>"; tabWidth = 4; };
+		9F433E532568308800E361D6 /* BuyListViewControllerSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuyListViewControllerSpec.swift; sourceTree = "<group>"; };
+		9F433E552568308800E361D6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		9F433E61256853FF00E361D6 /* BuyListViewControllerSpec.swift */ = {isa = PBXFileReference; indentWidth = 4; lastKnownFileType = sourcecode.swift; path = BuyListViewControllerSpec.swift; sourceTree = "<group>"; tabWidth = 4; };
+		9F433E6C2568625300E361D6 /* Item+Test.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Item+Test.swift"; sourceTree = "<group>"; };
 		9F62A38D2512A92800F5AF63 /* Category.swift */ = {isa = PBXFileReference; indentWidth = 4; lastKnownFileType = sourcecode.swift; path = Category.swift; sourceTree = "<group>"; tabWidth = 4; };
 		9F62A3932512B43300F5AF63 /* GetCategories.swift */ = {isa = PBXFileReference; indentWidth = 4; lastKnownFileType = sourcecode.swift; path = GetCategories.swift; sourceTree = "<group>"; tabWidth = 4; };
 		9F62A3952512B4EF00F5AF63 /* Data.swift */ = {isa = PBXFileReference; indentWidth = 4; lastKnownFileType = sourcecode.swift; path = Data.swift; sourceTree = "<group>"; tabWidth = 4; };
@@ -136,9 +161,18 @@
 		9FE4BA15250FD77000960506 /* UIViewController+Extensions.swift */ = {isa = PBXFileReference; indentWidth = 4; lastKnownFileType = sourcecode.swift; path = "UIViewController+Extensions.swift"; sourceTree = "<group>"; tabWidth = 4; };
 		9FEFE9322553135900512C9F /* NewDetailViewModel.swift */ = {isa = PBXFileReference; indentWidth = 4; lastKnownFileType = sourcecode.swift; path = NewDetailViewModel.swift; sourceTree = "<group>"; tabWidth = 4; };
 		9FF9124D253635CF0007B5D1 /* ReactiveKit+Extensions.swift */ = {isa = PBXFileReference; indentWidth = 4; lastKnownFileType = sourcecode.swift; path = "ReactiveKit+Extensions.swift"; sourceTree = "<group>"; tabWidth = 4; };
+		F0CF0BC76516FD353258516B /* Pods_GoGetTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_GoGetTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		9F433E13256818D700E361D6 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8C783C4FEDAC2174272C553B /* Pods_GoGetTests.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		9F930BEF24FEC55E0034C8F7 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -155,6 +189,8 @@
 			children = (
 				460F234745EDC6291E7939D7 /* Pods-GoGet.debug.xcconfig */,
 				5C002AAA7A80A0F76A003FC7 /* Pods-GoGet.release.xcconfig */,
+				68C9A4D5DDD7903F7F11C055 /* Pods-GoGetTests.debug.xcconfig */,
+				16909B9FD48D7997684AE21E /* Pods-GoGetTests.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -163,6 +199,7 @@
 			isa = PBXGroup;
 			children = (
 				259A21156006B2C8B1F243DE /* Pods_GoGet.framework */,
+				F0CF0BC76516FD353258516B /* Pods_GoGetTests.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -295,6 +332,51 @@
 			path = DetailView;
 			sourceTree = "<group>";
 		};
+		9F433E17256818D700E361D6 /* GoGetTests */ = {
+			isa = PBXGroup;
+			children = (
+				9F433E6B256861F900E361D6 /* TestModels */,
+				9F433E60256853EC00E361D6 /* BuyList */,
+				9F433E30256826B900E361D6 /* FullList */,
+				9F433E18256818D700E361D6 /* GoGetTests.swift */,
+				9F433E1A256818D700E361D6 /* Info.plist */,
+			);
+			path = GoGetTests;
+			sourceTree = "<group>";
+		};
+		9F433E30256826B900E361D6 /* FullList */ = {
+			isa = PBXGroup;
+			children = (
+				9F433E31256826D200E361D6 /* FullListViewControllerSpec.swift */,
+			);
+			path = FullList;
+			sourceTree = "<group>";
+		};
+		9F433E522568308800E361D6 /* BuyListViewControllerSpec */ = {
+			isa = PBXGroup;
+			children = (
+				9F433E532568308800E361D6 /* BuyListViewControllerSpec.swift */,
+				9F433E552568308800E361D6 /* Info.plist */,
+			);
+			path = BuyListViewControllerSpec;
+			sourceTree = "<group>";
+		};
+		9F433E60256853EC00E361D6 /* BuyList */ = {
+			isa = PBXGroup;
+			children = (
+				9F433E61256853FF00E361D6 /* BuyListViewControllerSpec.swift */,
+			);
+			path = BuyList;
+			sourceTree = "<group>";
+		};
+		9F433E6B256861F900E361D6 /* TestModels */ = {
+			isa = PBXGroup;
+			children = (
+				9F433E6C2568625300E361D6 /* Item+Test.swift */,
+			);
+			path = TestModels;
+			sourceTree = "<group>";
+		};
 		9F62A3972512B97500F5AF63 /* Entities */ = {
 			isa = PBXGroup;
 			children = (
@@ -328,6 +410,8 @@
 			isa = PBXGroup;
 			children = (
 				9F930BF424FEC55E0034C8F7 /* GoGet */,
+				9F433E17256818D700E361D6 /* GoGetTests */,
+				9F433E522568308800E361D6 /* BuyListViewControllerSpec */,
 				9F930BF324FEC55E0034C8F7 /* Products */,
 				930931492F7206B0D5B10E9D /* Pods */,
 				97D66A87900E53D8DA4A8A48 /* Frameworks */,
@@ -338,6 +422,7 @@
 			isa = PBXGroup;
 			children = (
 				9F930BF224FEC55E0034C8F7 /* GoGet.app */,
+				9F433E16256818D700E361D6 /* GoGetTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -432,6 +517,26 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		9F433E15256818D700E361D6 /* GoGetTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 9F433E1F256818D700E361D6 /* Build configuration list for PBXNativeTarget "GoGetTests" */;
+			buildPhases = (
+				95A139FBF7562D443D7A7DD1 /* [CP] Check Pods Manifest.lock */,
+				9F433E12256818D700E361D6 /* Sources */,
+				9F433E13256818D700E361D6 /* Frameworks */,
+				9F433E14256818D700E361D6 /* Resources */,
+				F7F30FED6204F83EE738AB8F /* [CP] Embed Pods Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				9F433E1C256818D700E361D6 /* PBXTargetDependency */,
+			);
+			name = GoGetTests;
+			productName = GoGetTests;
+			productReference = 9F433E16256818D700E361D6 /* GoGetTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 		9F930BF124FEC55E0034C8F7 /* GoGet */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 9F930C0624FEC55F0034C8F7 /* Build configuration list for PBXNativeTarget "GoGet" */;
@@ -458,10 +563,14 @@
 		9F930BEA24FEC55E0034C8F7 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 1150;
+				LastSwiftUpdateCheck = 1200;
 				LastUpgradeCheck = 1200;
 				ORGANIZATIONNAME = "Maggie Maldjian";
 				TargetAttributes = {
+					9F433E15256818D700E361D6 = {
+						CreatedOnToolsVersion = 12.0;
+						TestTargetID = 9F930BF124FEC55E0034C8F7;
+					};
 					9F930BF124FEC55E0034C8F7 = {
 						CreatedOnToolsVersion = 11.5;
 					};
@@ -481,11 +590,19 @@
 			projectRoot = "";
 			targets = (
 				9F930BF124FEC55E0034C8F7 /* GoGet */,
+				9F433E15256818D700E361D6 /* GoGetTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		9F433E14256818D700E361D6 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		9F930BF024FEC55E0034C8F7 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -533,6 +650,28 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
+		95A139FBF7562D443D7A7DD1 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-GoGetTests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
 		9F62A38C25126EEF00F5AF63 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -567,9 +706,37 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-GoGet/Pods-GoGet-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
+		F7F30FED6204F83EE738AB8F /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-GoGetTests/Pods-GoGetTests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-GoGetTests/Pods-GoGetTests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-GoGetTests/Pods-GoGetTests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		9F433E12256818D700E361D6 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				9F433E6D2568625300E361D6 /* Item+Test.swift in Sources */,
+				9F433E32256826D200E361D6 /* FullListViewControllerSpec.swift in Sources */,
+				9F433E19256818D700E361D6 /* GoGetTests.swift in Sources */,
+				9F433E62256853FF00E361D6 /* BuyListViewControllerSpec.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		9F930BEE24FEC55E0034C8F7 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -624,6 +791,14 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXTargetDependency section */
+		9F433E1C256818D700E361D6 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 9F930BF124FEC55E0034C8F7 /* GoGet */;
+			targetProxy = 9F433E1B256818D700E361D6 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
 /* Begin PBXVariantGroup section */
 		9F930C0024FEC55F0034C8F7 /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
@@ -636,6 +811,48 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		9F433E1D256818D700E361D6 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 68C9A4D5DDD7903F7F11C055 /* Pods-GoGetTests.debug.xcconfig */;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 4DW86QYDM7;
+				INFOPLIST_FILE = GoGetTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.example.GoGetTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/GoGet.app/GoGet";
+			};
+			name = Debug;
+		};
+		9F433E1E256818D700E361D6 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 16909B9FD48D7997684AE21E /* Pods-GoGetTests.release.xcconfig */;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 4DW86QYDM7;
+				INFOPLIST_FILE = GoGetTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.example.GoGetTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/GoGet.app/GoGet";
+			};
+			name = Release;
+		};
 		9F930C0424FEC55F0034C8F7 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -793,6 +1010,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		9F433E1F256818D700E361D6 /* Build configuration list for PBXNativeTarget "GoGetTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				9F433E1D256818D700E361D6 /* Debug */,
+				9F433E1E256818D700E361D6 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		9F930BED24FEC55E0034C8F7 /* Build configuration list for PBXProject "GoGet" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

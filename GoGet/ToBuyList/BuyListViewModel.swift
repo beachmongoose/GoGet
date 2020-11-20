@@ -12,7 +12,7 @@ import ReactiveKit
 protocol BuyListViewModelType {
     var tableData: MutableObservableArray2D<String, BuyListCellViewModel> { get }
     var itemsAreChecked: Property<Bool> { get }
-    func presentDetail(in section: Int, for row: Int)
+    func presentDetail(for index: IndexPath)
     func markAsBought()
     func sortBy(_ element: String?)
     func selectDeselectIndex(_ index: IndexPath)
@@ -92,10 +92,10 @@ extension BuyListViewModel {
 
 // MARK: - Item Handling
 
-    func presentDetail(in section: Int, for row: Int) {
-        let category = tableData.collection.sections[section].metadata
+    func presentDetail(for index: IndexPath) {
+        let category = tableData.collection.sections[index.section].metadata
         let itemCategory = dictionary[category]
-        guard let item = itemCategory?[row] else { fatalError("Unable to edit item, out of range.")}
+        guard let item = itemCategory?[index.row] else { fatalError("Unable to edit item, out of range.")}
         coordinator.presentDetail(item)
     }
 
