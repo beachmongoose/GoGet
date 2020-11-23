@@ -10,7 +10,7 @@ import UIKit
 
 class CategoryListCell: UITableViewCell {
     @IBOutlet var nameLabel: UILabel!
-    var viewModel: CategoryViewModel.CellViewModel? {
+    var viewModel: CategoryListCellViewModel? {
         didSet { setupCell() }
     }
 }

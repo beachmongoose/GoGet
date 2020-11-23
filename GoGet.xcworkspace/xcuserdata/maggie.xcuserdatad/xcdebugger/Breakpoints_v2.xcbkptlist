@@ -16,55 +16,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "68"
             endingLineNumber = "68"
-            landmarkName = "longPress(longPress:)"
-            landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "D53F98BB-081B-41E0-B72D-6C8289BCA454 - ff1eaa8881eb41d3"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "GoGet.CategoryViewController.categoryOptions(action: __C.UIAlertAction, option: GoGet.SelectedOption) -&gt; ()"
-                  moduleName = "GoGet"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/maggie/Development/iOS/GoGet/GoGet/CategoryList/CategoryViewController.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "68"
-                  endingLineNumber = "68"
-                  offsetFromSymbolStart = "276">
-               </Location>
-               <Location
-                  uuid = "D53F98BB-081B-41E0-B72D-6C8289BCA454 - fbe138ecd4330abb"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "implicit closure #4 (__C.UIAlertAction) -&gt; () in implicit closure #3 (GoGet.CategoryListViewModelType) -&gt; (__C.UIAlertAction) -&gt; () in GoGet.CategoryViewController.categoryOptions(action: __C.UIAlertAction, option: GoGet.SelectedOption) -&gt; ()"
-                  moduleName = "GoGet"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/maggie/Development/iOS/GoGet/GoGet/CategoryList/CategoryViewController.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "68"
-                  endingLineNumber = "68"
-                  offsetFromSymbolStart = "34">
-               </Location>
-            </Locations>
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "011D5011-845A-49F8-8D41-CCB348CDC4CB"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "GoGet/DetailView/NewDetailViewModel.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "97"
-            endingLineNumber = "97"
-            landmarkName = "clearDetails()"
+            landmarkName = "categoryOptions(action:option:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -87,32 +39,32 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "F36D23F1-EF8F-43FE-A194-440AE27E9F5D"
-            shouldBeEnabled = "No"
+            uuid = "D5E76B3E-D6C5-4BD5-B629-B09006A88266"
+            shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "GoGet/DetailView/DetailViewCoordinator.swift"
+            filePath = "GoGet/CategoryList/CategoryListViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "65"
-            endingLineNumber = "65"
-            landmarkName = "presentPopover(selectedID:)"
+            startingLineNumber = "48"
+            endingLineNumber = "48"
+            landmarkName = "setUpTable()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "A7103264-20E8-4790-A013-A492CAFC4459"
+            uuid = "4C07E992-CDEC-4801-A41A-DBC306DF9FD8"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "GoGet/DetailView/DetailViewCoordinator.swift"
+            filePath = "GoGetTests/FullList/FullListViewControllerSpec.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "74"
-            endingLineNumber = "74"
-            landmarkName = "presentPopover(selectedID:)"
+            startingLineNumber = "51"
+            endingLineNumber = "51"
+            landmarkName = "spec()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

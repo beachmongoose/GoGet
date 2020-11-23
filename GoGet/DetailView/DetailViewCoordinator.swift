@@ -40,7 +40,7 @@ class DetailViewCoordinator: DetailViewCoordinatorType {
 
 // Edit Item
     func start(with item: Item) -> UIViewController {
-        let viewModel = DetailViewModel(coordinator: self, item: item)
+        let viewModel = EditDetailViewModel(coordinator: self, item: item)
         let viewController = DetailViewController(viewModel: viewModel)
         viewController.title = "Edit Item"
         self.viewController = viewController
@@ -64,7 +64,7 @@ class DetailViewCoordinator: DetailViewCoordinatorType {
     func presentPopover(selectedID: Property<String?>) {
         guard let viewController = viewController else { return }
 
-        let categoryController = CategoryViewCoordinator().start(selectedID: selectedID)
+        let categoryController = CategoryListViewCoordinator().start(selectedID: selectedID)
         categoryController.modalPresentationStyle = .popover
         if let presentationController = categoryController.popoverPresentationController {
             presentationController.permittedArrowDirections = .up

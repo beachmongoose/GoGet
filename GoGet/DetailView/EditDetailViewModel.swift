@@ -9,35 +9,13 @@ import Bond
 import PromiseKit
 import ReactiveKit
 
-enum CellType {
-    case nameInput(TextInputCellViewModelType)
-    case boughtStatusInput(SegmentedControlCellViewModelType)
-    case dateInput(DateCellViewModelType)
-    case numberInput(NumberInputCellViewModelType)
-    case categoryInput(CategoryInputCellViewModelType)
-}
-
-protocol DetailViewModelType {
-    func presentPopover(selectedID: Property<String?>)
-    func saveItem()
-    func clearDetails()
-    func observeValidationUpdates()
-
-    var tableData: MutableObservableArray<CellType> { get }
-
-    var isValid: Property<Bool> { get }
-    var newItem: Bool { get }
-}
-
-final class DetailViewModel: DetailViewModelType {
-    var item: Item
-    var newItem = false
-
+final class EditDetailViewModel: DetailViewModelType {
 // Data field bindings
     let bought = Property<Bool>(false)
-    let isValid = Property<Bool>(true)
     let categoryID = Property<String?>(nil)
-
+    let isValid = Property<Bool>(true)
+    var item: Item
+    var newItem = false
     var tableData = MutableObservableArray<CellType>([])
 
     private var cellViewModels = Property<[InputCellViewModelType]>([])
@@ -126,14 +104,14 @@ final class DetailViewModel: DetailViewModelType {
 }
 
 // MARK: - Categories
-extension DetailViewModel {
+extension EditDetailViewModel {
     func presentPopover(selectedID: Property<String?>) {
     coordinator.presentPopover(selectedID: selectedID)
     }
 }
 
 // MARK: - Format Values
-extension DetailViewModel {
+extension EditDetailViewModel {
     func finalInt(_ string: String?) -> Int {
         guard let int = string else {
             fatalError("Failed to create item, quantity was nil")

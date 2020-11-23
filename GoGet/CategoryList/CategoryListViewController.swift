@@ -10,7 +10,7 @@ import Bond
 import ReactiveKit
 import UIKit
 
-class CategoryViewController: UIViewController {
+class CategoryListViewController: UIViewController {
     var addNewButton: UIBarButtonItem!
     var noneButton: UIBarButtonItem!
     @IBOutlet var tableView: UITableView!
@@ -31,7 +31,7 @@ class CategoryViewController: UIViewController {
     }
 }
 
-extension CategoryViewController: UITableViewDelegate, UIGestureRecognizerDelegate {
+extension CategoryListViewController: UITableViewDelegate, UIGestureRecognizerDelegate {
 
     func setUpTable() {
         tableView.register(UINib(nibName: "CategoryListCell", bundle: nil), forCellReuseIdentifier: "CategoryListCell")
@@ -70,7 +70,7 @@ extension CategoryViewController: UITableViewDelegate, UIGestureRecognizerDelega
     }
 }
 
-extension CategoryViewController: UIPopoverPresentationControllerDelegate {
+extension CategoryListViewController: UIPopoverPresentationControllerDelegate {
     func adaptivePresentationStyle(for controller: UIPresentationController) -> UIModalPresentationStyle {
         return .none
     }
@@ -83,7 +83,7 @@ extension CategoryViewController: UIPopoverPresentationControllerDelegate {
     }
 }
 
-extension CategoryViewController {
+extension CategoryListViewController {
     func setUpNavigation() {
         noneButton = UIBarButtonItem(title: "None",
                                      style: .plain,

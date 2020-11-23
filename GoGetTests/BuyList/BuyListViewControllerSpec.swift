@@ -22,39 +22,55 @@ extension BuyListViewControllerSpec {
         beforeEach {
             subject = self.newSubject
         }
-//        describe("sort button") {
-//            context("when tapped") {
-//                beforeEach {
-//                    UIApplication.shared.sendAction(
-//                        subject.sortButton.action!,
-//                        to: subject.sortButton.target!,
-//                        from: nil,
-//                        for: nil
-//                    )
-//                }
-//            }
-//        }
-//        describe("confirm button") {
-//            context("when tapped") {
-//                beforeEach {
-//                    UIApplication.shared.sendAction(
-//                        subject.confirmButton.action!,
-//                        to: subject.confirmButton.target!,
-//                        from: nil,
-//                        for: nil
-//                    )
-//                }
-//            }
-//        }
+        describe("sort button") {
+            context("when tapped") {
+                beforeEach {
+                    UIApplication.shared.sendAction(
+                        subject.sortButton.action!,
+                        to: subject.sortButton.target!,
+                        from: nil,
+                        for: nil
+                    )
+                }
+                it("presents sort options alert") {
+                }
+            }
+        }
+        describe("confirm button") {
+            context("when tapped") {
+                beforeEach {
+                    UIApplication.shared.sendAction(
+                        subject.confirmButton.action!,
+                        to: subject.confirmButton.target!,
+                        from: nil,
+                        for: nil
+                    )
+                }
+                it("presents confirm alert") {
+                }
+            }
+        }
         describe("tableview") {
-            //when the tableData has data
-            // it dequeues the proper cell
-            // it gives that cell the correct view model
-            
+            var cell: UITableViewCell?
+            context("when cell viewModel is BuyListCellViewModel") {
+                beforeEach {
+                    self.viewModel.tableData.replace(with: self.mockTableData())
+                    cell = subject.tableView.dataSource?.tableView(subject.tableView, cellForRowAt: [0, 0])
+                }
+                it("dequeues the proper cell") {
+                    expect(cell).to(beAKindOf(BuyListCell.self))
+                }
+                it("configures the cell with the proper viewModel") {
+                    let buyListCell = cell as? BuyListCell
+                    let expectedViewModel = BuyListCellViewModel(item: .test, isSelected: false)
+                    expect(buyListCell?.viewModel).to(beAKindOf(BuyListCellViewModel.self))
+                    let cellViewModel = buyListCell?.viewModel
+                    expect(cellViewModel).to(equal(expectedViewModel))
+                }
+            }
             context("cell tapped") {
                 beforeEach {
-                    let data = self.createTableData()
-                    self.viewModel.tableData.replace(with: Array2D(sections: data))
+                    self.viewModel.tableData.replace(with: self.mockTableData())
                     subject.tableView(subject.tableView, didSelectRowAt: IndexPath(row: 0, section: 0))
                 }
                 it("calls viewModel.presentDetail") {
@@ -65,9 +81,10 @@ extension BuyListViewControllerSpec {
         }
     }
 
-    func createTableData() -> [Array2D<String, BuyListCellViewModel>.Section] {
+    func mockTableData() -> Array2D<String, BuyListCellViewModel> {
         let cell = BuyListCellViewModel(item: .test, isSelected: false)
-        let array = [Array2D.Section(metadata: "metadata", items: [cell])]
+        let data = [Array2D.Section(metadata: "metadata", items: [cell])]
+        let array = Array2D(sections: data)
         return array
     }
 }

@@ -38,13 +38,13 @@ extension FullListViewController: UITableViewDelegate {
     func setupTable() {
         tableView.register(UINib(nibName: "FullListCell", bundle: nil), forCellReuseIdentifier: "FullListCell")
         let dataSource =
-            SectionedTableViewBinderDataSource<FullListViewModel.CellViewModel>(createCell: createCell)
+            SectionedTableViewBinderDataSource<FullListCellViewModel>(createCell: createCell)
         viewModel.tableData.bind(to: tableView, using: dataSource)
         tableView.delegate = self
         tableView.tableFooterView = UIView()
     }
 
-    private func createCell(dataSource: Array2D<String, FullListViewModel.CellViewModel>,
+    private func createCell(dataSource: Array2D<String, FullListCellViewModel>,
                             indexPath: IndexPath,
                             tableView: UITableView) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(
@@ -55,9 +55,9 @@ extension FullListViewController: UITableViewDelegate {
         }
         let cellViewModel = dataSource[childAt: indexPath].item
         cell.viewModel = cellViewModel
-        cell.reactive.longPressGesture().removeDuplicates().observeNext { _ in
-            self.viewModel.selectDeselectIndex(at: indexPath)
-            self.viewModel.inDeleteMode.value.toggle()
+        cell.reactive.longPressGesture().removeDuplicates().observeNext { [weak self] _ in
+            self?.viewModel.selectDeselectIndex(at: indexPath)
+            self?.viewModel.changeEditing()
         }
         .dispose(in: cell.bag)
         return cell
@@ -82,7 +82,6 @@ extension FullListViewController {
                                        target: self,
                                        action: nil)
         cancelButton.reactive.tap.bind(to: self) {
-//            $0.viewModel.clearSelectedItems()
             $0.viewModel.changeEditing() }
         navigationItem.rightBarButtonItem = sortButton
     }
@@ -97,14 +96,13 @@ extension FullListViewController {
     }
 
     func observeEditModeUpdates() {
-        viewModel.inDeleteMode.observeNext { [self] _ in
-            let deleteMode = viewModel.inDeleteMode.value
-            tableView.allowsMultipleSelection = deleteMode
-            if deleteMode == false {
-                viewModel.clearSelectedItems()
-                addSortButton()
+        viewModel.inDeleteMode.removeDuplicates().observeNext { [weak self] deleteMode in
+            self?.tableView.allowsMultipleSelection = deleteMode
+            if !deleteMode {
+                self?.viewModel.clearSelectedItems()
+                self?.addSortButton()
             } else {
-                confirmAndCancelButtons()
+                self?.confirmAndCancelButtons()
             }
         }
         .dispose(in: bag)

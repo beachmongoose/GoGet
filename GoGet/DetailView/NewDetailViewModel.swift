@@ -12,11 +12,10 @@ import ReactiveKit
 final class NewDetailViewModel: DetailViewModelType {
 // Data field bindings
     let bought = Property<Bool>(false)
-    let isValid = Property<Bool>(false)
     let categoryID = Property<String?>(nil)
-
-    var tableData = MutableObservableArray<CellType>([])
+    let isValid = Property<Bool>(false)
     var newItem = true
+    var tableData = MutableObservableArray<CellType>([])
 
     private var cellViewModels = Property<[InputCellViewModelType]>([])
     private let coordinator: DetailViewCoordinatorType

@@ -17,8 +17,7 @@ class BuyListCell: UITableViewCell {
 
     var viewModel: BuyListCellViewModel? {
         didSet {
-            setupCell()
-        }
+            setupCell() }
     }
 }
 

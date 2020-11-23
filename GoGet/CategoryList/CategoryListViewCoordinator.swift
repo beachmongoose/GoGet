@@ -9,18 +9,18 @@ import Bond
 import ReactiveKit
 import UIKit
 
-protocol CategoryViewCoordinatorType {
+protocol CategoryListViewCoordinatorType {
     func start(selectedID: Property<String?>) -> UINavigationController
     func nameError(message: String)
 }
 
-class CategoryViewCoordinator: CategoryViewCoordinatorType {
+class CategoryListViewCoordinator: CategoryListViewCoordinatorType {
 
-    weak var viewController: CategoryViewController?
+    weak var viewController: CategoryListViewController?
 
     func start(selectedID: Property<String?>) -> UINavigationController {
-        let viewModel = CategoryViewModel(coordinator: self, selectedID: selectedID)
-        let viewController = CategoryViewController(viewModel: viewModel)
+        let viewModel = CategoryListViewModel(coordinator: self, selectedID: selectedID)
+        let viewController = CategoryListViewController(viewModel: viewModel)
         viewController.title = "Categories"
         self.viewController = viewController
         return UINavigationController(rootViewController: viewController)
