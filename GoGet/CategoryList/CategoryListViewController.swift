@@ -50,9 +50,9 @@ extension CategoryListViewController: UITableViewDelegate, UIGestureRecognizerDe
                 self?.dismiss(animated: true, completion: nil)
             }
             .dispose(in: cell.bag)
-            cell.reactive.longPressGesture().observeNext { _ in
-                self.viewModel.changeSelectedIndex(to: indexPath.row)
-                self.presentCategoryOptions(handler: self.categoryOptions)
+            cell.reactive.longPressGesture().observeNext { [weak self] _ in
+                self?.viewModel.changeSelectedIndex(to: indexPath.row)
+                self?.presentCategoryOptions(handler: self?.categoryOptions)
             }
             .dispose(in: cell.bag)
 

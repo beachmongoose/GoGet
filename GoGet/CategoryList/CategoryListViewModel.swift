@@ -15,6 +15,7 @@ enum SelectedOption: String {
 }
 
 protocol CategoryListViewModelType {
+//    var alert: SafePassthroughSubject<Alert> { get }
     var tableData: MutableObservableArray<CategoryListCellViewModel> { get }
     func changeSelectedCategory(for index: Int?)
     func createNewCategory(action: UIAlertAction, for category: String)
@@ -25,6 +26,7 @@ protocol CategoryListViewModelType {
 
 final class CategoryListViewModel: CategoryListViewModelType {
 
+//    var alert: SafePassthroughSubject<Alert>
     private let bag = DisposeBag()
     var tableData = MutableObservableArray<CategoryListCellViewModel>([])
     private var categories: [Category] = []

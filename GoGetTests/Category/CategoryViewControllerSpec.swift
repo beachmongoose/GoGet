@@ -56,7 +56,7 @@ extension CategoryListViewControllerSpec {
                     cell = subject.tableView.dataSource?.tableView(subject.tableView, cellForRowAt: [0, 0])
                     cell?.gestureRecognizers?.first?.longPress()
                 }
-                it("brings up delete request alert") {
+                it("brings up options alert") {
                     // check that presentDeleteAlert is called
                 }
             }
@@ -77,7 +77,7 @@ extension CategoryListViewControllerSpec {
         }
     }
 
-    func mockTableData() -> Array<CategoryListCellViewModel> {
+    func mockTableData() -> [CategoryListCellViewModel] {
         let cell = CategoryListCellViewModel(category: .testCategory)
         let data = [cell]
         return data

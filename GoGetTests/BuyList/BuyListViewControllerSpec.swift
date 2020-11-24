@@ -33,6 +33,8 @@ extension BuyListViewControllerSpec {
                     )
                 }
                 it("presents sort options alert") {
+                    //presents sort options
+                    expect(self.viewModel.sortByCallCount).to(equal(1))
                 }
             }
         }
@@ -47,6 +49,8 @@ extension BuyListViewControllerSpec {
                     )
                 }
                 it("presents confirm alert") {
+                    //hit confirm
+                     expect(self.viewModel.markAsBoughtCallCount).to(equal(1))
                 }
             }
         }
@@ -125,10 +129,5 @@ final class MockBuyListViewModel: BuyListViewModelType {
     func selectDeselectIndex(_ index: IndexPath) {
         selectDeselectIndexCallCount += 0
         selectDeselectIndexEntry = index
-    }
-
-    var selectAllCallCount = 0
-    func selectAll() {
-        selectAllCallCount += 1
     }
 }

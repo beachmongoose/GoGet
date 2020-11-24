@@ -68,42 +68,43 @@ extension FullListViewControllerSpec {
                         for: nil
                     )
                 }
-                it("calls viewModel.Clear") {
+                it("calls viewModel.clearSelectedItems") {
                     expect(self.viewModel.clearSelectedItemsCallCount).to(equal(1))
                     expect(self.viewModel.changeEditingCallCount).to(equal(1))
                 }
             }
         }
-//        describe("sort button") {
-//            context("when tapped") {
-//                beforeEach {
-//                    UIApplication.shared.sendAction(
-//                        subject.sortButton.action!,
-//                        to: subject.sortButton.target!,
-//                        from: nil,
-//                        for: nil
-//                    )
-//                    //calls presentSortOptions. Select dateAdded
-//                    //expect
-//                }
-//                it("calls presentSortOptions") {
-//                    expect(self.viewModel.sortByCallCount).to(equal(1))
-//                }
-//            }
-//        }
-//        describe("confirm button") {
-//            context("when tapped") {
-//                beforeEach {
-//                    UIApplication.shared.sendAction(
-//                        subject.confirmButton.action!,
-//                        to: subject.confirmButton.target!,
-//                        from: nil,
-//                        for: nil)
-//                    //activates presentConfirmRequest. If yes
-//                    //expect(self.viewModel.removeItemsCallCount).to(equal(1))
-//                }
-//            }
-//        }
+        describe("sort button") {
+            context("when tapped") {
+                beforeEach {
+                    UIApplication.shared.sendAction(
+                        subject.sortButton.action!,
+                        to: subject.sortButton.target!,
+                        from: nil,
+                        for: nil
+                    )
+                }
+                it("calls presentSortOptions") {
+                    //calls presentSortOptions. Select dateAdded
+                    //expect(self.viewModel.sortByCallCount).to(equal(1))
+                }
+            }
+        }
+        describe("confirm button") {
+            context("when tapped") {
+                beforeEach {
+                    UIApplication.shared.sendAction(
+                        subject.confirmButton.action!,
+                        to: subject.confirmButton.target!,
+                        from: nil,
+                        for: nil)
+                }
+                it("calls presentConfirmRequest") {
+                    //activates presentConfirmRequest. If yes
+                    //expect(self.viewModel.removeItemsCallCount).to(equal(1))
+                }
+            }
+        }
     }
 
     func mockTableData() -> Array2D<String, FullListCellViewModel> {
