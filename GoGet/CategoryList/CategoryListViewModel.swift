@@ -9,15 +9,14 @@
 import Bond
 import ReactiveKit
 
-typealias CategoryCell = CategoryViewModel.CellViewModel
-
 enum SelectedOption: String {
     case rename
     case delete
 }
 
 protocol CategoryListViewModelType {
-    var tableData: MutableObservableArray<CategoryCell> { get }
+//    var alert: SafePassthroughSubject<Alert> { get }
+    var tableData: MutableObservableArray<CategoryListCellViewModel> { get }
     func changeSelectedCategory(for index: Int?)
     func createNewCategory(action: UIAlertAction, for category: String)
     func renameCategory(action: UIAlertAction, with name: String)
@@ -25,24 +24,18 @@ protocol CategoryListViewModelType {
     func changeSelectedIndex(to index: Int?)
 }
 
-final class CategoryViewModel: CategoryListViewModelType {
+final class CategoryListViewModel: CategoryListViewModelType {
 
-    struct CellViewModel {
-        var name: String
-        init(category: Category) {
-            self.name = category.name
-        }
-    }
-
+//    var alert: SafePassthroughSubject<Alert>
     private let bag = DisposeBag()
-    var tableData = MutableObservableArray<CategoryCell>([])
+    var tableData = MutableObservableArray<CategoryListCellViewModel>([])
     private var categories: [Category] = []
     var selectedID: Property<String?>
     var selectedIndex: Int?
-    private let coordinator: CategoryViewCoordinatorType
+    private let coordinator: CategoryListViewCoordinatorType
     private let getCategories: GetCategoriesType
 
-    init(coordinator: CategoryViewCoordinatorType,
+    init(coordinator: CategoryListViewCoordinatorType,
          getCategories: GetCategoriesType = GetCategories(),
          selectedID: Property<String?>) {
         self.coordinator = coordinator
@@ -53,7 +46,7 @@ final class CategoryViewModel: CategoryListViewModelType {
     }
 }
 
-extension CategoryViewModel {
+extension CategoryListViewModel {
 
     func observeCategoryUpdates() {
         defaults.reactive.keyPath("Categories", ofType: Data?.self, context: .immediateOnMain).ignoreNils().observeNext { _ in
@@ -63,7 +56,7 @@ extension CategoryViewModel {
     }
     func fetchTableData() {
         categories = getCategories.load()
-        let categoryList = (categories.isEmpty) ? ([]) : categories.map(CellViewModel.init)
+        let categoryList = (categories.isEmpty) ? ([]) : categories.map(CategoryListCellViewModel.init)
         tableData.replace(with: categoryList)
     }
 

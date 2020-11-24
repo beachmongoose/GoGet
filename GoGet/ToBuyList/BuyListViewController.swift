@@ -49,7 +49,7 @@ extension BuyListViewController: UITableViewDelegate {
                           tableView: UITableView) -> UITableViewCell {
     guard let cell = tableView.dequeueReusableCell(withIdentifier: "BuyListCell",
                                                    for: indexPath) as? BuyListCell else {
-                                                   fatalError("Unable to dequeue") }
+                                                   fatalError("Unable to dequeue BuyListCell") }
     let cellViewModel = dataSource[childAt: indexPath].item
     cell.viewModel = cellViewModel
     cell.checkButton.reactive.tapGesture().removeDuplicates().observeNext { [weak self] _ in
@@ -98,7 +98,7 @@ extension BuyListViewController {
     self.viewModel.markAsBought()
   }
 
-  func addAllToSelected() {
-    viewModel.selectAll()
-  }
+//  func addAllToSelected() {
+//    viewModel.selectAll()
+//  }
 }

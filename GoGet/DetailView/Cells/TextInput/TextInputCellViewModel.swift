@@ -44,5 +44,13 @@ final class TextInputCellViewModel: TextInputCellViewModelType {
         }
         .dispose(in: bag)
     }
+}
 
+extension TextInputCellViewModel: Equatable {
+    static func == (lhs: TextInputCellViewModel, rhs: TextInputCellViewModel) -> Bool {
+        return  lhs.title == rhs.title &&
+                lhs.initialValue == rhs.initialValue &&
+                lhs.isValid.value == rhs.isValid.value &&
+                lhs.updatedValue.value == rhs.updatedValue.value
+    }
 }

@@ -53,3 +53,13 @@ final class DateCellViewModel: DateCellViewModelType {
         .dispose(in: bag)
     }
 }
+
+extension DateCellViewModel: Equatable {
+    static func == (lhs: DateCellViewModel, rhs: DateCellViewModel) -> Bool {
+        return  lhs.title == rhs.title &&
+                lhs.initialValue == rhs.initialValue &&
+                lhs.updatedValue.value == rhs.updatedValue.value &&
+                lhs.isEnabled.value == rhs.isEnabled.value &&
+                lhs.isValid.value == rhs.isValid.value
+    }
+}

@@ -16,7 +16,7 @@ protocol BuyListViewModelType {
     func markAsBought()
     func sortBy(_ element: String?)
     func selectDeselectIndex(_ index: IndexPath)
-    func selectAll()
+//    func selectAll()
 }
 
 final class BuyListViewModel: BuyListViewModelType {
@@ -108,13 +108,13 @@ extension BuyListViewModel {
         }
     }
 
-    func selectAll() {
-        _ = dictionary.mapValues {
-            $0.map { item in
-                selectedItems.value.insert(item.id)
-            }
-        }
-    }
+//    func selectAll() {
+//        _ = dictionary.mapValues {
+//            $0.map { item in
+//                selectedItems.value.insert(item.id)
+//            }
+//        }
+//    }
 
     func markAsBought() {
         var allItems = getItems.load()

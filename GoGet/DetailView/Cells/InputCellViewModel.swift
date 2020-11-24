@@ -19,3 +19,11 @@ protocol InputCellViewModelType {
     var isValid: Property<Bool> { get }
 //    var validationSignal: SafePassthroughSubject<Void> { get }
 }
+
+enum CellType {
+    case nameInput(TextInputCellViewModelType)
+    case boughtStatusInput(SegmentedControlCellViewModelType)
+    case dateInput(DateCellViewModelType)
+    case numberInput(NumberInputCellViewModelType)
+    case categoryInput(CategoryInputCellViewModelType)
+}

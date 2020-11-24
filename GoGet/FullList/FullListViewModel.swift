@@ -12,8 +12,8 @@ import UIKit
 
 protocol FullListViewModelType {
     var inDeleteMode: Property<Bool> { get }
-    var tableData: MutableObservableArray2D<String, FullListViewModel.CellViewModel> { get }
-    var tableCategories: [[FullListViewModel.CellViewModel]] { get }
+    var tableData: MutableObservableArray2D<String, FullListCellViewModel> { get }
+    var tableCategories: [[FullListCellViewModel]] { get }
     func changeEditing()
     func presentDetail(_ index: IndexPath)
     func selectDeselectIndex(at indexPath: IndexPath)
@@ -24,25 +24,10 @@ protocol FullListViewModelType {
 
 final class FullListViewModel: FullListViewModelType {
 
-    struct CellViewModel: Equatable {
-        var name: String
-        var id: String
-        var quantity: String
-        var buyData: String
-        var isSelected: Bool
-
-        init(item: Item, isSelected: Bool) {
-            self.name = item.name
-            self.id = item.id
-            self.quantity = String(item.quantity)
-            self.buyData = item.buyData
-            self.isSelected = isSelected
-        }
-    }
     var inDeleteMode = Property<Bool>(false)
     var dictionary: [String: [Item]] = [: ]
-    var tableCategories = [[CellViewModel]]()
-    let tableData = MutableObservableArray2D<String, FullListViewModel.CellViewModel>(Array2D(sections: []))
+    var tableCategories = [[FullListCellViewModel]]()
+    let tableData = MutableObservableArray2D<String, FullListCellViewModel>(Array2D(sections: []))
     private var selectedItems = MutableObservableArray<String>([])
     private let bag = DisposeBag()
     private let coordinator: FullListCoordinatorType
@@ -80,19 +65,19 @@ extension FullListViewModel {
         tableData.replace(with: Array2D(sections: sections))
     }
 
-    func createDictionary() -> [String: [CellViewModel]] {
+    func createDictionary() -> [String: [FullListCellViewModel]] {
         dictionary = getItems.fetchByCategory(.fullList)
-        let formattedDict: [String: [CellViewModel]] = dictionary.mapValues {
+        let formattedDict: [String: [FullListCellViewModel]] = dictionary.mapValues {
             $0.map { item in
                 let isSelected = selectedItems.array.contains(item.id)
-                return CellViewModel(item: item, isSelected: isSelected)
+                return FullListCellViewModel(item: item, isSelected: isSelected)
             }
         }
         return formattedDict
     }
 
   // MARK: - Organzing
-    func reOrder(_ array: [(String, [CellViewModel])]) -> [(String, [CellViewModel])] {
+    func reOrder(_ array: [(String, [FullListCellViewModel])]) -> [(String, [FullListCellViewModel])] {
         var data = array
         guard data.contains(where: {$0.0 == "Uncategorized"}) else { return data }
         let index = data.firstIndex(where: { $0.0 == "Uncategorized" })
@@ -160,8 +145,8 @@ extension FullListViewModel {
   }
 
   func observeSelectedItems() {
-    selectedItems.observeNext { _ in
-      self.fetchTableData()
+    selectedItems.observeNext { [weak self] _ in
+      self?.fetchTableData()
     }
     .dispose(in: bag)
   }

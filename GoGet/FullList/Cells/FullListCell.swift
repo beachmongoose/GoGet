@@ -11,7 +11,7 @@ import UIKit
 class FullListCell: UITableViewCell {
     @IBOutlet var item: UILabel!
     @IBOutlet var dateBought: UILabel!
-    var viewModel: FullListViewModel.CellViewModel? {
+    var viewModel: FullListCellViewModel? {
         didSet { setupCell() }
     }
 }

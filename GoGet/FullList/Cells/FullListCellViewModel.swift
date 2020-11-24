@@ -1,15 +1,15 @@
 //
-//  BuyListCellViewModel.swift
+//  FullListCellViewModel.swift
 //  GoGet
 //
-//  Created by Maggie Maldjian on 10/21/20.
+//  Created by Maggie Maldjian on 11/23/20.
 //  Copyright © 2020 Maggie Maldjian. All rights reserved.
 //
 
 import Bond
 import ReactiveKit
 
-struct BuyListCellViewModel: Equatable {
+struct FullListCellViewModel: Equatable {
     var name: String
     var id: String
     var quantity: String
