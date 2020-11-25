@@ -11,7 +11,8 @@ import Foundation
 import ReactiveKit
 import UIKit
 
-class FullListViewController: UIViewController {
+class FullListViewController: UIViewController, AlertPresenter {
+    public var alertController = UIAlertController()
     var sortButton: UIBarButtonItem!
     var confirmButton: UIBarButtonItem!
     var cancelButton: UIBarButtonItem!
@@ -28,6 +29,7 @@ class FullListViewController: UIViewController {
     override func viewDidLoad() {
         setupTable()
         setupNavigationBar()
+        setUpAlerts()
         observeEditModeUpdates()
         super.viewDidLoad()
     }
@@ -67,11 +69,16 @@ extension FullListViewController: UITableViewDelegate {
 extension FullListViewController {
 
     func setupNavigationBar() {
+//        sortButton = UIBarButtonItem(title: "Sort",
+//                                     style: .plain,
+//                                     target: nil,
+//                                     action: nil)
+//        sortButton.reactive.tap.bind(to: self) { $0.presentSortOptions(handler: $0.sortMethod(action:)) }
         sortButton = UIBarButtonItem(title: "Sort",
                                      style: .plain,
                                      target: nil,
                                      action: nil)
-        sortButton.reactive.tap.bind(to: self) { $0.presentSortOptions(handler: $0.sortMethod(action:)) }
+        sortButton.reactive.tap.bind(to: self) { $0.viewModel.presentSortOptions() }
         confirmButton = UIBarButtonItem(title: "Delete",
                                         style: .plain,
                                         target: self,
@@ -128,5 +135,9 @@ extension FullListViewController: UIGestureRecognizerDelegate {
     @objc func sortMethod(action: UIAlertAction) {
         viewModel.sortBy(action.title!.lowercased())
         tableView.reloadData()
+    }
+
+    func setUpAlerts() {
+        viewModel.alert.bind(to: self) { $0.show(alert: $1)}
     }
 }
