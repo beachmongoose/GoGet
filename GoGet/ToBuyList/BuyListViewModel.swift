@@ -9,10 +9,17 @@
 import Bond
 import ReactiveKit
 
+enum InputType: Equatable {
+    case new
+    case rename
+}
+
 protocol BuyListViewModelType {
+    var alert: SafePassthroughSubject<Alert> { get }
     var tableData: MutableObservableArray2D<String, BuyListCellViewModel> { get }
     var itemsAreChecked: Property<Bool> { get }
     func presentDetail(for index: IndexPath)
+    func presentSortOptions()
     func markAsBought()
     func sortBy(_ element: String?)
     func selectDeselectIndex(_ index: IndexPath)
@@ -20,6 +27,7 @@ protocol BuyListViewModelType {
 }
 
 final class BuyListViewModel: BuyListViewModelType {
+    var alert = SafePassthroughSubject<Alert>()
     let bag = DisposeBag()
     var dictionary: [String: [Item]] = [: ]
     let tableData = MutableObservableArray2D<String, BuyListCellViewModel>(Array2D(sections: []))
@@ -143,5 +151,40 @@ extension BuyListViewModel {
             self?.fetchTableData()
         }
         .dispose(in: bag)
+    }
+}
+
+extension BuyListViewModel {
+    func presentSortOptions() {
+        let added = Alert.Action(title: addArrowTo("added")) { [weak self] in
+            self?.sortTypeInstance.changeSortType(to: .added)
+            self?.fetchTableData()
+        }
+        let name = Alert.Action(title: addArrowTo("name")) { [weak self] in
+            self?.sortTypeInstance.changeSortType(to: .name)
+            self?.fetchTableData()
+        }
+        let date = Alert.Action(title: addArrowTo("date")) { [weak self] in
+            self?.sortTypeInstance.changeSortType(to: .date)
+            self?.fetchTableData()
+        }
+        let sortOptionsAlert = Alert(title: "Sort by...", message: nil, otherActions: [name, date, added], style: .actionSheet)
+        alert.send(sortOptionsAlert)
+    }
+
+    func addArrowTo(_ title: String) -> String {
+        let sortTypeInstance: SortingInstanceType = SortingInstance.shared
+        guard sortTypeInstance.sortType == SortType(rawValue: title.lowercased()) else {
+            return "\(title) ↑" }
+        return (sortTypeInstance.sortAscending == true) ? "\(title) ↓" : "\(title) ↑"
+    }
+
+    func presentBoughtAlert() {
+        let confirmOption = Alert.Action(title: "Yes") { [weak self] in
+            self?.markAsBought()
+        }
+        let cancelOption = Alert.Action(title: "Cancel")
+        let boughtAlert = Alert(title: "Mark as Bought?", message: nil, cancelAction: cancelOption, otherActions: [confirmOption])
+        alert.send(boughtAlert)
     }
 }

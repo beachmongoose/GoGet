@@ -10,6 +10,11 @@ import Bond
 import Foundation
 import ReactiveKit
 
+public enum HasTextField {
+    case yes(_ data: Property<String>)
+    case no
+}
+
 /// A means to hold information and functionality Alert
 public struct Alert {
 
@@ -42,8 +47,8 @@ public struct Alert {
     public let otherActions: [Action]
 
     public let style: UIAlertController.Style
-    
-    public let textField: Bool?
+
+    public let textFieldData: HasTextField?
 
     /// Initialize an Alert.
     ///
@@ -63,7 +68,7 @@ public struct Alert {
                 cancelAction: Action? = nil,
                 otherActions: [Action] = [],
                 style: UIAlertController.Style? = nil,
-                textField: Bool? = nil) {
+                textFieldData: HasTextField? = nil) {
         self.title = title
         self.message = message
 
@@ -81,10 +86,10 @@ public struct Alert {
             self.style = UIAlertController.Style.alert
         }
 
-        if let textField = textField {
-            self.textField = textField
+        if let textFieldData = textFieldData {
+            self.textFieldData = textFieldData
         } else {
-            self.textField = false
+            self.textFieldData = .no
         }
     }
 }

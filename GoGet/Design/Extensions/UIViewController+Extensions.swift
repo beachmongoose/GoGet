@@ -9,22 +9,6 @@
 import UIKit
 
 extension UIViewController {
-    func presentCategoryOptions(handler: ((UIAlertAction, SelectedOption) -> Void)?) {
-        let optionsController = UIAlertController(title: "Options", message: nil, preferredStyle: .alert)
-        let renameOption = UIAlertAction(title: "Rename", style: .default) { action in
-            let type: SelectedOption = .rename
-            handler!(action, type)
-        }
-        let deleteOption = UIAlertAction(title: "Delete", style: .default) { action in
-            let type: SelectedOption = .delete
-            handler!(action, type)
-        }
-        optionsController.addAction(renameOption)
-        optionsController.addAction(deleteOption)
-        optionsController.addAction(UIAlertAction(title: "Cancel", style: .cancel))
-        present(optionsController, animated: true)
-    }
-
     func presentRename(handler: ((UIAlertAction, String) -> Void)?) {
         let renameController = UIAlertController(title: "Enter Category Name", message: nil, preferredStyle: .alert)
         renameController.addTextField()

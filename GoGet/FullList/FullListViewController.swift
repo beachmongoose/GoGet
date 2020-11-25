@@ -12,7 +12,7 @@ import ReactiveKit
 import UIKit
 
 class FullListViewController: UIViewController, AlertPresenter {
-    public var alertController = UIAlertController()
+    var alertController = UIAlertController()
     var sortButton: UIBarButtonItem!
     var confirmButton: UIBarButtonItem!
     var cancelButton: UIBarButtonItem!
