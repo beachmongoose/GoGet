@@ -6,33 +6,6 @@
 //  Copyright © 2020 Maggie Maldjian. All rights reserved.
 //
 
-//import UIKit
-//
-//public protocol AlertPresenter {
-//    var presenter: UIAlertController { get }
-//}
-//
-//extension AlertPresenter {
-//    func presentAlert(_ alert: Alert) {
-//        let alertController = UIAlertController(title: alert.title, message: nil, preferredStyle: .alert )
-//        for action in alert.otherActions {
-//            alertController.addAction(UIAlertAction(title: action.title, style: .default))
-//        }
-//        alertController.addAction(UIAlertAction(title: alert.cancelAction.title, style: .cancel))
-//        presenter.present(alertController, animated: true)
-//    }
-//
-//    func presentAlertWithTextField(_ alert: Alert) {
-//        let alertController = UIAlertController(title: alert.title, message: nil, preferredStyle: .alert)
-//        alertController.addTextField()
-//        for action in alert.otherActions {
-//            alertController.addAction(UIAlertAction(title: action.title, style: .default))
-//        }
-//        alertController.addAction(UIAlertAction(title: alert.cancelAction.title, style: .cancel))
-//        presenter.present(alertController, animated: true)
-//    }
-//}
-
 import Bond
 import ReactiveKit
 import UIKit
@@ -41,7 +14,6 @@ import UIKit
 protocol AlertPresenter: AnyObject {
     /// UIAlertController to present. This value should only directly be referenced when mocking a UIAlertController in tests.
     var alertController: UIAlertController { get set }
-//    var bag: DisposeBag()
 }
 
 extension AlertPresenter where Self: UIViewController {
@@ -68,24 +40,25 @@ extension AlertPresenter where Self: UIViewController {
 // MARK: - Alert Helper Methods
 extension UIViewController {
 
-//    func buildAlertController(with model: Alert) -> UIAlertController {
-//        let alertController = UIAlertController(title: model.title, message: model.message, preferredStyle: model.style)
-//        let actions: [Alert.Action] = model.otherActions + [model.cancelAction]
-//        actions.map(UIAlertAction.init).forEach(alertController.addAction(_:))
-//        return alertController
-//    }
-
     func buildAlertController(with model: Alert) -> UIAlertController {
         let alertController = UIAlertController(title: model.title, message: model.message, preferredStyle: model.style)
         let actions: [Alert.Action] = model.otherActions + [model.cancelAction]
         actions.map(UIAlertAction.init).forEach(alertController.addAction(_:))
 
+        switch model.textFieldData {
+        case .no:
+            return alertController
+        case let .yes(textInput):
             alertController.addTextField()
             let ok = UIAlertAction(title: "OK", style: .default) { [weak alertController] _ in
                 guard let name = alertController?.textFields?[0].text else { return }
+                textInput.value = name
             }
             alertController.addAction(ok)
         return alertController
+        default:
+            return alertController
+        }
     }
 }
 

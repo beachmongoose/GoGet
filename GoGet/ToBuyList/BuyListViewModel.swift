@@ -20,7 +20,7 @@ protocol BuyListViewModelType {
     var itemsAreChecked: Property<Bool> { get }
     func presentDetail(for index: IndexPath)
     func presentSortOptions()
-    func markAsBought()
+    func presentBoughtAlert()
     func sortBy(_ element: String?)
     func selectDeselectIndex(_ index: IndexPath)
 //    func selectAll()

@@ -69,11 +69,6 @@ extension FullListViewController: UITableViewDelegate {
 extension FullListViewController {
 
     func setupNavigationBar() {
-//        sortButton = UIBarButtonItem(title: "Sort",
-//                                     style: .plain,
-//                                     target: nil,
-//                                     action: nil)
-//        sortButton.reactive.tap.bind(to: self) { $0.presentSortOptions(handler: $0.sortMethod(action:)) }
         sortButton = UIBarButtonItem(title: "Sort",
                                      style: .plain,
                                      target: nil,
@@ -83,7 +78,7 @@ extension FullListViewController {
                                         style: .plain,
                                         target: self,
                                         action: nil)
-        confirmButton.reactive.tap.bind(to: self) { $0.presentConfirmRequest(handler: $0.removeItems(action:))}
+        confirmButton.reactive.tap.bind(to: self) { $0.viewModel.presentDeleteAlert() }
         cancelButton = UIBarButtonItem(title: "Cancel",
                                        style: .plain,
                                        target: self,
@@ -125,16 +120,6 @@ extension FullListViewController: UIGestureRecognizerDelegate {
         } else {
             viewModel.selectDeselectIndex(at: indexPath)
         }
-    }
-
-    @objc func removeItems(action: UIAlertAction) {
-        viewModel.removeItems()
-        viewModel.changeEditing()
-    }
-
-    @objc func sortMethod(action: UIAlertAction) {
-        viewModel.sortBy(action.title!.lowercased())
-        tableView.reloadData()
     }
 
     func setUpAlerts() {
