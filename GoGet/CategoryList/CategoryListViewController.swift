@@ -10,7 +10,8 @@ import Bond
 import ReactiveKit
 import UIKit
 
-class CategoryListViewController: UIViewController {
+class CategoryListViewController: UIViewController, AlertPresenter {
+    var alertController = UIAlertController()
     var addNewButton: UIBarButtonItem!
     var noneButton: UIBarButtonItem!
     @IBOutlet var tableView: UITableView!
@@ -53,20 +54,11 @@ extension CategoryListViewController: UITableViewDelegate, UIGestureRecognizerDe
             .dispose(in: cell.bag)
             cell.reactive.longPressGesture().observeNext { [weak self] _ in
                 self?.viewModel.changeSelectedIndex(to: indexPath.row)
-                self?.presentCategoryOptions(handler: self?.categoryOptions)
+                self?.viewModel.longPressAlert()
             }
             .dispose(in: cell.bag)
 
             return cell
-        }
-    }
-
-    func categoryOptions(action: UIAlertAction, option: SelectedOption) {
-        switch option {
-        case .rename:
-            addCategory(handler: viewModel.renameCategory)
-        case .delete:
-            presentDeleteAlert(handler: viewModel.deleteCategory)
         }
     }
 }
@@ -87,8 +79,9 @@ extension CategoryListViewController: UIPopoverPresentationControllerDelegate {
 extension CategoryListViewController {
 
     func setUpAlerts() {
-//        viewModel.alert.bind(to: self) { }
+        viewModel.alert.bind(to: self) { $0.show(alert: $1) }
     }
+
     func setUpNavigation() {
         noneButton = UIBarButtonItem(title: "None",
                                      style: .plain,
@@ -100,7 +93,7 @@ extension CategoryListViewController {
                                        style: .plain,
                                        target: self,
                                        action: nil)
-        addNewButton.reactive.tap.bind(to: self) { $0.addCategory(handler: $0.viewModel.createNewCategory)}
+        addNewButton.reactive.tap.bind(to: self) { $0.viewModel.newCategoryAlert()}
         navigationItem.rightBarButtonItem = noneButton
         navigationItem.leftBarButtonItem = addNewButton
     }

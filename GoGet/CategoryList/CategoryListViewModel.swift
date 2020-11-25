@@ -9,24 +9,24 @@
 import Bond
 import ReactiveKit
 
-enum SelectedOption: String {
-    case rename
-    case delete
-}
-
 protocol CategoryListViewModelType {
     var alert: SafePassthroughSubject<Alert> { get }
+    var alertText: SafePassthroughSubject<Alert> { get }
     var tableData: MutableObservableArray<CategoryListCellViewModel> { get }
     func changeSelectedCategory(for index: Int?)
-    func createNewCategory(action: UIAlertAction, for category: String)
-    func renameCategory(action: UIAlertAction, with name: String)
-    func deleteCategory(action: UIAlertAction)
+    func deleteCategory()
     func changeSelectedIndex(to index: Int?)
+    func longPressAlert()
+    func newCategoryAlert()
+    var nameData: Property<String> { get }
 }
 
 final class CategoryListViewModel: CategoryListViewModelType {
 
     var alert = SafePassthroughSubject<Alert>()
+    var alertText = SafePassthroughSubject<Alert>()
+    var nameData = Property<String>("")
+    var newCategory = true
     var vc = UIViewController()
     private let bag = DisposeBag()
     var tableData = MutableObservableArray<CategoryListCellViewModel>([])
@@ -43,6 +43,7 @@ final class CategoryListViewModel: CategoryListViewModelType {
         self.selectedID = selectedID
         self.getCategories = getCategories
         fetchTableData()
+        observeNameUpdates()
         observeCategoryUpdates()
     }
 }
@@ -52,6 +53,17 @@ extension CategoryListViewModel {
     func observeCategoryUpdates() {
         defaults.reactive.keyPath("Categories", ofType: Data?.self, context: .immediateOnMain).ignoreNils().observeNext { _ in
             self.fetchTableData()
+        }
+        .dispose(in: bag)
+    }
+
+    func observeNameUpdates() {
+        nameData.observeNext { [weak self] data in
+            if self?.newCategory == true {
+                self?.createNewCategory(for: data)
+            } else {
+                self?.renameCategory(with: data)
+            }
         }
         .dispose(in: bag)
     }
@@ -73,19 +85,19 @@ extension CategoryListViewModel {
         selectedIndex = index
     }
 
-    func createNewCategory(action: UIAlertAction, for category: String) {
+    func createNewCategory(for category: String) {
         guard isValidName(category) == true else { return }
         let getCategories: GetCategoriesType = GetCategories()
         getCategories.createCategory(for: category)
     }
 
-    func renameCategory(action: UIAlertAction, with name: String) {
+    func renameCategory(with name: String) {
         guard isValidName(name) == true else { return }
         guard let index = selectedIndex else { return }
         getCategories.renameCategory(index, to: name)
     }
 
-    func deleteCategory(action: UIAlertAction) {
+    func deleteCategory() {
         guard let index = selectedIndex else { return }
         let category = categories[index]
         getCategories.deleteCategory(category.id)
@@ -104,38 +116,46 @@ extension CategoryListViewModel {
     }
 }
 
-//extension CategoryListViewModel {
-//
-//    func nameError(_ title: String) {
-//        let invalidNameAlert = Alert(title: title)
-//        alert.send(invalidNameAlert)
-//    }
-//
-//    func longPressAlert() {
-//        let deleteOption = Alert.Action(title: "Delete", action: deleteAlert)
-//        let editOption = Alert.Action(title: "Edit", action: renameAlert)
-//        let deleteOrRenameAlert = Alert(title: "Category Selected", message: "", otherActions: [deleteOption, editOption])
-//        alert.send(deleteOrRenameAlert)
-//    }
-//
-//    func deleteAlert() {
-//        let deleteConfirm = Alert.Action(title: "Yes", action: deleteCategory)
-//        let deleteAlert = Alert(title: "Delete Category?", message: "", otherActions: [deleteConfirm])
-//        alert.send(deleteAlert)
-//    }
-//
-//    func renameAlert() {
-//        let renameConfirm = Alert.Action(title: "OK", action: rename)
-//        let renameCategory = Alert(title: "Enter Category Name", message: "", otherActions: [renameConfirm])
-//        alert.send(renameCategory)
-//    }
-//
-//    func rename() {
-//
-//    }
-//
-//    func addCategoryAlert() {
-//        let confirmAlert = Alert(title: "Category Saved", message: "")
-//        alert.send(confirmAlert)
-//    }
-//}
+extension CategoryListViewModel {
+
+    func longPressAlert() {
+        let deleteOption = Alert.Action(title: "Delete", action: deleteAlert)
+        let editOption = Alert.Action(title: "Rename", action: renameAlert)
+        let deleteOrRenameAlert = Alert(title: "Category Selected", message: nil, otherActions: [deleteOption, editOption])
+        alert.send(deleteOrRenameAlert)
+    }
+
+    func deleteAlert() {
+        let deleteOption = Alert.Action(title: "Yes") { [weak self] in
+            self?.deleteCategory()
+        }
+        let noOption = Alert.Action(title: "No")
+        let delete = Alert(title: "Delete Category?", message: nil, cancelAction: noOption, otherActions: [deleteOption])
+        alert.send(delete)
+    }
+
+    func renameAlert() {
+        let cancelOption = Alert.Action(title: "Cancel")
+        let renameCategory = Alert(title: "Enter Category Name", message: nil, cancelAction: cancelOption, textFieldData: .yes(nameData))
+        newCategory = false
+        alert.send(renameCategory)
+    }
+
+    func newCategoryAlert() {
+        let cancelOption = Alert.Action(title: "Cancel")
+        let nameCategory = Alert(title: "Enter Category Name", message: nil, cancelAction: cancelOption, textFieldData: .yes(nameData))
+        newCategory = true
+        alert.send(nameCategory)
+    }
+
+    func nameError() {
+        let invalidName = Alert(title: "Invalid Name", message: nil)
+        alert.send(invalidName)
+    }
+
+    func addCategoryAlert() {
+        let okOption = Alert.Action(title: "OK")
+        let confirmCategory = Alert(title: "Category Saved", message: nil, cancelAction: okOption)
+        alert.send(confirmCategory)
+    }
+}
