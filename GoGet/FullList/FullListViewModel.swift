@@ -11,6 +11,7 @@ import ReactiveKit
 import UIKit
 
 protocol FullListViewModelType {
+    var alert: SafePassthroughSubject<Alert> { get }
     var inDeleteMode: Property<Bool> { get }
     var tableData: MutableObservableArray2D<String, FullListCellViewModel> { get }
     var tableCategories: [[FullListCellViewModel]] { get }
@@ -20,10 +21,12 @@ protocol FullListViewModelType {
     func clearSelectedItems()
     func removeItems()
     func sortBy(_ element: String?)
+    func presentSortOptions()
 }
 
 final class FullListViewModel: FullListViewModelType {
 
+    var alert = SafePassthroughSubject<Alert>()
     var inDeleteMode = Property<Bool>(false)
     var dictionary: [String: [Item]] = [: ]
     var tableCategories = [[FullListCellViewModel]]()
@@ -142,6 +145,10 @@ extension FullListViewModel {
       self.fetchTableData()
     }
     .dispose(in: bag)
+
+//    sortTypeInstance.sortType.observeNext { [weak self] _ in
+//        self?.fetchTableData()
+//    }
   }
 
   func observeSelectedItems() {
@@ -150,4 +157,30 @@ extension FullListViewModel {
     }
     .dispose(in: bag)
   }
+}
+
+extension FullListViewModel {
+    func presentSortOptions() {
+        let added = Alert.Action(title: addArrowTo("added")) { [weak self] in
+            self?.sortTypeInstance.changeSortType(to: .added)
+            self?.fetchTableData()
+        }
+        let name = Alert.Action(title: addArrowTo("name")) { [weak self] in
+            self?.sortTypeInstance.changeSortType(to: .name)
+            self?.fetchTableData()
+        }
+        let date = Alert.Action(title: addArrowTo("date")) { [weak self] in
+            self?.sortTypeInstance.changeSortType(to: .date)
+            self?.fetchTableData()
+        }
+        let sortOptionsAlert = Alert(title: "Sort by...", message: nil, otherActions: [name, date, added], style: .actionSheet)
+        alert.send(sortOptionsAlert)
+    }
+
+    func addArrowTo(_ title: String) -> String {
+        let sortTypeInstance: SortingInstanceType = SortingInstance.shared
+        guard sortTypeInstance.sortType == SortType(rawValue: title.lowercased()) else {
+            return "\(title) ↑" }
+        return (sortTypeInstance.sortAscending == true) ? "\(title) ↓" : "\(title) ↑"
+    }
 }

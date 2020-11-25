@@ -26,6 +26,7 @@ class CategoryListViewController: UIViewController {
     override func viewDidLoad() {
         tableView.tableFooterView = UIView()
         setUpTable()
+        setUpAlerts()
         setUpNavigation()
         super.viewDidLoad()
     }
@@ -84,6 +85,10 @@ extension CategoryListViewController: UIPopoverPresentationControllerDelegate {
 }
 
 extension CategoryListViewController {
+
+    func setUpAlerts() {
+//        viewModel.alert.bind(to: self) { }
+    }
     func setUpNavigation() {
         noneButton = UIBarButtonItem(title: "None",
                                      style: .plain,

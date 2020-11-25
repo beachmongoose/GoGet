@@ -6,7 +6,9 @@
 //  Copyright © 2020 Maggie Maldjian. All rights reserved.
 //
 
+import Bond
 import Foundation
+import ReactiveKit
 
 protocol SortingInstanceType {
     var sortType: SortType { get }

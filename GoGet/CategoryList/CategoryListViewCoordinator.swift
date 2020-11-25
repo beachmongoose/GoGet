@@ -12,6 +12,7 @@ import UIKit
 protocol CategoryListViewCoordinatorType {
     func start(selectedID: Property<String?>) -> UINavigationController
     func nameError(message: String)
+    func dismissAlert()
 }
 
 class CategoryListViewCoordinator: CategoryListViewCoordinatorType {
@@ -31,4 +32,12 @@ class CategoryListViewCoordinator: CategoryListViewCoordinatorType {
         errorAlert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
         viewController?.present(errorAlert, animated: true)
     }
+
+    func dismissAlert() {
+        guard let navigationController = viewController?.navigationController else {
+            return
+        }
+        navigationController.popViewController(animated: true)
+    }
+
 }

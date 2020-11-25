@@ -15,7 +15,7 @@ enum SelectedOption: String {
 }
 
 protocol CategoryListViewModelType {
-//    var alert: SafePassthroughSubject<Alert> { get }
+    var alert: SafePassthroughSubject<Alert> { get }
     var tableData: MutableObservableArray<CategoryListCellViewModel> { get }
     func changeSelectedCategory(for index: Int?)
     func createNewCategory(action: UIAlertAction, for category: String)
@@ -26,7 +26,8 @@ protocol CategoryListViewModelType {
 
 final class CategoryListViewModel: CategoryListViewModelType {
 
-//    var alert: SafePassthroughSubject<Alert>
+    var alert = SafePassthroughSubject<Alert>()
+    var vc = UIViewController()
     private let bag = DisposeBag()
     var tableData = MutableObservableArray<CategoryListCellViewModel>([])
     private var categories: [Category] = []
@@ -102,3 +103,39 @@ extension CategoryListViewModel {
         return true
     }
 }
+
+//extension CategoryListViewModel {
+//
+//    func nameError(_ title: String) {
+//        let invalidNameAlert = Alert(title: title)
+//        alert.send(invalidNameAlert)
+//    }
+//
+//    func longPressAlert() {
+//        let deleteOption = Alert.Action(title: "Delete", action: deleteAlert)
+//        let editOption = Alert.Action(title: "Edit", action: renameAlert)
+//        let deleteOrRenameAlert = Alert(title: "Category Selected", message: "", otherActions: [deleteOption, editOption])
+//        alert.send(deleteOrRenameAlert)
+//    }
+//
+//    func deleteAlert() {
+//        let deleteConfirm = Alert.Action(title: "Yes", action: deleteCategory)
+//        let deleteAlert = Alert(title: "Delete Category?", message: "", otherActions: [deleteConfirm])
+//        alert.send(deleteAlert)
+//    }
+//
+//    func renameAlert() {
+//        let renameConfirm = Alert.Action(title: "OK", action: rename)
+//        let renameCategory = Alert(title: "Enter Category Name", message: "", otherActions: [renameConfirm])
+//        alert.send(renameCategory)
+//    }
+//
+//    func rename() {
+//
+//    }
+//
+//    func addCategoryAlert() {
+//        let confirmAlert = Alert(title: "Category Saved", message: "")
+//        alert.send(confirmAlert)
+//    }
+//}
