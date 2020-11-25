@@ -19,9 +19,8 @@ protocol FullListViewModelType {
     func presentDetail(_ index: IndexPath)
     func selectDeselectIndex(at indexPath: IndexPath)
     func clearSelectedItems()
-    func removeItems()
-    func sortBy(_ element: String?)
     func presentSortOptions()
+    func presentDeleteAlert()
 }
 
 final class FullListViewModel: FullListViewModelType {
@@ -182,5 +181,15 @@ extension FullListViewModel {
         guard sortTypeInstance.sortType == SortType(rawValue: title.lowercased()) else {
             return "\(title) ↑" }
         return (sortTypeInstance.sortAscending == true) ? "\(title) ↓" : "\(title) ↑"
+    }
+
+    func presentDeleteAlert() {
+        let yesOption = Alert.Action(title: "Yes") { [ weak self] in
+            self?.removeItems()
+            self?.changeEditing()
+        }
+        let noOption = Alert.Action(title: "No")
+        let deleteAlertOptions = Alert(title: "Delete Selected?", message: nil, cancelAction: noOption, otherActions: [yesOption])
+        alert.send(deleteAlertOptions)
     }
 }

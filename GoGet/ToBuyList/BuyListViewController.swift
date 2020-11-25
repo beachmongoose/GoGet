@@ -87,17 +87,9 @@ extension BuyListViewController {
         confirmButton.reactive.tap.bind(to: self) { guard $0.viewModel.itemsAreChecked.value else {
             $0.presentError(message: "No items selected.")
             return }
-            self.presentBoughtAlert(handler: self.markAsBought(action:)) }
+            $0.viewModel.presentBoughtAlert() }
         navigationItem.rightBarButtonItem = sortButton
         navigationItem.leftBarButtonItem = confirmButton
-    }
-
-    @objc func sortMethod(action: UIAlertAction) {
-        viewModel.sortBy(action.title!.lowercased())
-    }
-
-    @objc func markAsBought(action: UIAlertAction) {
-        self.viewModel.markAsBought()
     }
 
     func setUpAlerts() {
