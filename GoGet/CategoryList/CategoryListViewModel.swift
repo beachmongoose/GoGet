@@ -11,7 +11,7 @@ import ReactiveKit
 
 protocol CategoryListViewModelType {
     var alert: SafePassthroughSubject<Alert> { get }
-    var alertText: SafePassthroughSubject<Alert> { get }
+
     var tableData: MutableObservableArray<CategoryListCellViewModel> { get }
     func changeSelectedCategory(for index: Int?)
     func deleteCategory()
@@ -24,7 +24,6 @@ protocol CategoryListViewModelType {
 final class CategoryListViewModel: CategoryListViewModelType {
 
     var alert = SafePassthroughSubject<Alert>()
-    var alertText = SafePassthroughSubject<Alert>()
     var nameData = Property<String>("")
     var newCategory = true
     var vc = UIViewController()
@@ -51,8 +50,8 @@ final class CategoryListViewModel: CategoryListViewModelType {
 extension CategoryListViewModel {
 
     func observeCategoryUpdates() {
-        defaults.reactive.keyPath("Categories", ofType: Data?.self, context: .immediateOnMain).ignoreNils().observeNext { _ in
-            self.fetchTableData()
+        defaults.reactive.keyPath("Categories", ofType: Data?.self, context: .immediateOnMain).ignoreNils().observeNext { [weak self] _ in
+            self?.fetchTableData()
         }
         .dispose(in: bag)
     }

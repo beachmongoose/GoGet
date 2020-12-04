@@ -62,6 +62,14 @@ extension FullListViewController: UITableViewDelegate {
             self?.viewModel.changeEditing()
         }
         .dispose(in: cell.bag)
+        cell.reactive.tapGesture().removeDuplicates().observeNext { [weak self] _ in
+            if self?.viewModel.inDeleteMode.value == false {
+                self?.viewModel.presentDetail(indexPath)
+            } else {
+                self?.viewModel.selectDeselectIndex(at: indexPath)
+            }
+        }
+        .dispose(in: bag)
         return cell
     }
 }
@@ -113,14 +121,6 @@ extension FullListViewController {
 
 // MARK: - User Input
 extension FullListViewController: UIGestureRecognizerDelegate {
-
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if viewModel.inDeleteMode.value == false {
-            viewModel.presentDetail(indexPath)
-        } else {
-            viewModel.selectDeselectIndex(at: indexPath)
-        }
-    }
 
     func setUpAlerts() {
         viewModel.alert.bind(to: self) { $0.show(alert: $1)}

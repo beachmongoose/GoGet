@@ -57,7 +57,9 @@ extension CategoryListViewControllerSpec {
                     cell?.gestureRecognizers?.first?.longPress()
                 }
                 it("brings up options alert") {
-                    // check that presentDeleteAlert is called
+                    expect(self.viewModel.changeSelectedIndexCallCount).to(equal(1))
+                    expect(self.viewModel
+                            .longPressAlertCallCount).to(equal(1))
                 }
             }
         }
@@ -71,7 +73,8 @@ extension CategoryListViewControllerSpec {
                         for: nil)
                 }
                 it("sets category to None") {
-                expect(self.viewModel.changeSelectedCategoryCallCount).to(equal(1))
+                    expect(self.viewModel.changeSelectedCategoryCallCount).to(equal(1))
+                    expect(self.viewModel.changeSelectedIndexCallCount).to(equal(1))
                 }
             }
         }
@@ -94,6 +97,25 @@ extension CategoryListViewControllerSpec {
 }
 
 final class MockCategoryListViewModel: CategoryListViewModelType {
+    var alert = SafePassthroughSubject<Alert>()
+
+    var deleteCategoryCallCount = 0
+    func deleteCategory() {
+        deleteCategoryCallCount += 1
+    }
+
+    var longPressAlertCallCount = 0
+    func longPressAlert() {
+        longPressAlertCallCount += 1
+    }
+
+    var newCategoryAlertCallCount = 0
+    func newCategoryAlert() {
+        newCategoryAlertCallCount += 1
+    }
+
+    var nameData = Property<String>("")
+
     var tableData = MutableObservableArray<CategoryListCellViewModel>([])
 
     var changeSelectedCategoryCallCount = 0
@@ -109,11 +131,6 @@ final class MockCategoryListViewModel: CategoryListViewModelType {
     var renameCategoryCallCount = 0
     func renameCategory(action: UIAlertAction, with name: String) {
         renameCategoryCallCount += 1
-    }
-
-    var deleteCategoryCallCount = 0
-    func deleteCategory(action: UIAlertAction) {
-        deleteCategoryCallCount += 1
     }
 
     var changeSelectedIndexCallCount = 0

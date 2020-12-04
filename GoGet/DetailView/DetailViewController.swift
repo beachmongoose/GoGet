@@ -10,7 +10,8 @@ import Bond
 import ReactiveKit
 import UIKit
 
-class DetailViewController: UIViewController, UIPopoverPresentationControllerDelegate {
+class DetailViewController: UIViewController, UIPopoverPresentationControllerDelegate, AlertPresenter {
+    var alertController = UIAlertController()
     var saveButton: UIBarButtonItem!
     var clearButton: UIBarButtonItem!
     private let viewModel: DetailViewModelType
