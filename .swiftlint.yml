@@ -4,6 +4,7 @@ disabled_rules:
   - empty_enum_arguments
   - unused_capture_list
   - line_length
+  - function_body_length
 
 excluded:
   - Pods

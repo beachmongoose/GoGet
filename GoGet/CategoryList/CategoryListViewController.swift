@@ -38,7 +38,7 @@ extension CategoryListViewController: UITableViewDelegate, UIGestureRecognizerDe
     func setUpTable() {
         tableView.register(UINib(nibName: "CategoryListCell", bundle: nil), forCellReuseIdentifier: "CategoryListCell")
 
-        viewModel.tableData.bind(to: tableView) { dataSource, indexPath, tableView in
+        viewModel.tableData.bind(to: tableView) { [ weak self ] dataSource, indexPath, tableView in
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "CategoryListCell",
                                                            for: indexPath) as? CategoryListCell else {
                 fatalError("Failed to populate Category Table")
@@ -87,13 +87,13 @@ extension CategoryListViewController {
                                      style: .plain,
                                      target: self,
                                      action: nil)
-        noneButton.reactive.tap.bind(to: self) {$0.clearCategory()}
+        noneButton.reactive.tap.bind(to: self) { $0.clearCategory() }
 
         addNewButton = UIBarButtonItem(title: "Add New",
                                        style: .plain,
                                        target: self,
                                        action: nil)
-        addNewButton.reactive.tap.bind(to: self) { $0.viewModel.newCategoryAlert()}
+        addNewButton.reactive.tap.bind(to: self) { $0.viewModel.newCategoryAlert() }
         navigationItem.rightBarButtonItem = noneButton
         navigationItem.leftBarButtonItem = addNewButton
     }

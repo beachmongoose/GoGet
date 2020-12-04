@@ -33,14 +33,16 @@ extension BuyListViewControllerSpec {
                     )
                 }
                 it("presents sort options alert") {
-                    //presents sort options
-                    expect(self.viewModel.sortByCallCount).to(equal(1))
+                    expect(self.viewModel.presentSortOptionsCallCount).to(equal(1))
                 }
             }
         }
         describe("confirm button") {
             context("when tapped") {
                 beforeEach {
+                    self.viewModel.tableData.replace(with: self.mockTableData())
+                    let cell = subject.tableView.dataSource?.tableView(subject.tableView, cellForRowAt: [0, 0]) as? BuyListCell
+                    cell?.checkButton.gestureRecognizers?.first?.tap()
                     UIApplication.shared.sendAction(
                         subject.confirmButton.action!,
                         to: subject.confirmButton.target!,
@@ -48,9 +50,8 @@ extension BuyListViewControllerSpec {
                         for: nil
                     )
                 }
-                it("presents confirm alert") {
-                    //hit confirm
-                     expect(self.viewModel.markAsBoughtCallCount).to(equal(1))
+                it("presents bought alert") {
+                     expect(self.viewModel.presentBoughtAlertCallCount).to(equal(1))
                 }
             }
         }
@@ -75,7 +76,8 @@ extension BuyListViewControllerSpec {
             context("cell tapped") {
                 beforeEach {
                     self.viewModel.tableData.replace(with: self.mockTableData())
-                    subject.tableView(subject.tableView, didSelectRowAt: IndexPath(row: 0, section: 0))
+                    let cell = subject.tableView.dataSource?.tableView(subject.tableView, cellForRowAt: [0, 0]) as? BuyListCell
+                    cell?.gestureRecognizers?.first?.tap()
                 }
                 it("calls viewModel.presentDetail") {
                     expect(self.viewModel.presentDetailCallCount).to(equal(1))
@@ -103,6 +105,18 @@ extension BuyListViewControllerSpec {
 }
 
 final class MockBuyListViewModel: BuyListViewModelType {
+    var alert = SafePassthroughSubject<Alert>()
+
+    var presentSortOptionsCallCount = 0
+    func presentSortOptions() {
+        presentSortOptionsCallCount += 1
+    }
+
+    var presentBoughtAlertCallCount = 0
+    func presentBoughtAlert() {
+        presentBoughtAlertCallCount += 1
+    }
+
     var tableData = MutableObservableArray2D<String, BuyListCellViewModel>(Array2D(sections: []))
 
     var itemsAreChecked = Property<Bool>(false)

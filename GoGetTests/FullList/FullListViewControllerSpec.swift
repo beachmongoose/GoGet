@@ -41,18 +41,12 @@ extension FullListViewControllerSpec {
             }
             context("when a cell receives long press") {
                 beforeEach {
-                    self.viewModel.inDeleteMode.observeNext { [weak self] _ in
-                        self?.viewModel.inDeleteModeChangeCount += 1
-                    }
-                    .dispose(in: self.bag)
-
                     self.viewModel.tableData.replace(with: self.mockTableData())
                     cell = subject.tableView.dataSource?.tableView(subject.tableView, cellForRowAt: [0, 0])
                     cell?.gestureRecognizers?.first?.longPress()
                 }
                 it("activates delete mode") {
                     expect(self.viewModel.inDeleteMode.value).to(equal(true))
-                    expect(self.viewModel.inDeleteModeChangeCount).to(equal(1))
                     expect(self.viewModel.changeEditingCallCount).to(equal(1))
                 }
             }
@@ -60,7 +54,6 @@ extension FullListViewControllerSpec {
         describe("cancel button") {
             context("when tapped") {
                 beforeEach {
-                    self.viewModel.inDeleteMode.value = true
                     UIApplication.shared.sendAction(
                         subject.cancelButton.action!,
                         to: subject.cancelButton.target!,
@@ -85,23 +78,24 @@ extension FullListViewControllerSpec {
                     )
                 }
                 it("calls presentSortOptions") {
-                    //calls presentSortOptions. Select dateAdded
-                    //expect(self.viewModel.sortByCallCount).to(equal(1))
+                    expect(self.viewModel.presentSortOptionsCallCount).to(equal(1))
                 }
             }
         }
         describe("confirm button") {
             context("when tapped") {
                 beforeEach {
+                    self.viewModel.tableData.replace(with: self.mockTableData())
+                    let cell = subject.tableView.dataSource?.tableView(subject.tableView, cellForRowAt: [0, 0])
+                    cell?.gestureRecognizers?.first?.longPress()
                     UIApplication.shared.sendAction(
                         subject.confirmButton.action!,
                         to: subject.confirmButton.target!,
                         from: nil,
                         for: nil)
                 }
-                it("calls presentConfirmRequest") {
-                    //activates presentConfirmRequest. If yes
-                    //expect(self.viewModel.removeItemsCallCount).to(equal(1))
+                it("calls presentDeleteAlert") {
+                    expect(self.viewModel.presentDeleteAlertCallCount).to(equal(1))
                 }
             }
         }
@@ -125,12 +119,22 @@ extension FullListViewControllerSpec {
 }
 
 final class MockFullListViewModel: FullListViewModelType {
+    var alert = SafePassthroughSubject<Alert>()
+
+    var presentSortOptionsCallCount = 0
+    func presentSortOptions() {
+        presentSortOptionsCallCount += 1
+    }
+
+    var presentDeleteAlertCallCount = 0
+    func presentDeleteAlert() {
+        presentDeleteAlertCallCount += 1
+    }
+
     let bag = DisposeBag()
     var inDeleteMode = Property<Bool>(false)
     var tableData = MutableObservableArray2D<String, FullListCellViewModel>(Array2D(sections: []))
     var tableCategories: [[FullListCellViewModel]] = []
-
-    var inDeleteModeChangeCount = 0
 
     var changeEditingCallCount = 0
     func changeEditing() {

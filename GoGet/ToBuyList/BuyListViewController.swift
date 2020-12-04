@@ -58,11 +58,11 @@ extension BuyListViewController: UITableViewDelegate {
             self?.viewModel.selectDeselectIndex(indexPath)
         }
         .dispose(in: bag)
+        cell.reactive.tapGesture().removeDuplicates().observeNext { [weak self] _ in
+            self?.viewModel.presentDetail(for: indexPath)
+        }
+        .dispose(in: bag)
         return cell
-    }
-
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        viewModel.presentDetail(for: indexPath)
     }
 }
 

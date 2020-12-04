@@ -16,6 +16,23 @@ class TextInputCellSpec: QuickSpec {
     var viewModel: MockTextInputCellViewModel!
 }
 
+extension TextInputCellSpec {
+//    override func spec() {
+//        var subject: TextInputCell!
+//        beforeEach {
+//            subject = self.newSubject
+//        }
+//    }
+}
+
+extension TextInputCellSpec {
+    var newSubject: TextInputCell {
+        viewModel = MockTextInputCellViewModel()
+        let viewController = TextInputCell()
+        return viewController
+    }
+}
+
 class MockTextInputCellViewModel: TextInputCellViewModelType {
     var title = "Name"
     var initialValue = ""
