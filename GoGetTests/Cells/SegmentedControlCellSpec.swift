@@ -18,9 +18,6 @@ class SegmentedControllCellSpec: QuickSpec {
 
 final class MockSegmentedControlCellViewModel: SegmentedControlCellViewModelType {
     var title = ""
-    
     var initialValue = false
-    
     var updatedValue = Property<Bool>(false)
-    
 }

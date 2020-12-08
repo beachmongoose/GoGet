@@ -60,12 +60,12 @@ extension CategoryInputCellViewModel {
         }
         .dispose(in: bag)
     }
-    func checkForCategory(_ id: String?) {
-        guard let id = id else { updatedValue.value = "None"
-            return
-        }
-    let data = getCategories.forID(id)
-    selectedCategoryIndex = data.0
-    selectedCategoryName.value = data.1
-    }
+//    func checkForCategory(_ id: String?) {
+//        guard let id = id else { updatedValue.value = "None"
+//            return
+//        }
+//    let data = getCategories.forID(id)
+//    selectedCategoryIndex = data.0
+//    selectedCategoryName.value = data.1
+//    }
 }

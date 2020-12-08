@@ -11,11 +11,11 @@ import ReactiveKit
 
 protocol CategoryListViewModelType {
     var alert: SafePassthroughSubject<Alert> { get }
-
     var tableData: MutableObservableArray<CategoryListCellViewModel> { get }
     func changeSelectedCategory(for index: Int?)
     func deleteCategory()
     func changeSelectedIndex(to index: Int?)
+    func changeSelection(to input: Int?)
     func longPressAlert()
     func newCategoryAlert()
     var nameData: Property<String> { get }
@@ -76,12 +76,17 @@ extension CategoryListViewModel {
         guard let index = index else { selectedID.value = nil
             return
         }
-        let category = getCategories.load()[index]
+        let category = categories[index]
         selectedID.value = category.id
     }
 
     func changeSelectedIndex(to index: Int?) {
         selectedIndex = index
+    }
+
+    func changeSelection(to input: Int?) {
+        changeSelectedIndex(to: input)
+        changeSelectedCategory(for: input)
     }
 
     func createNewCategory(for category: String) {

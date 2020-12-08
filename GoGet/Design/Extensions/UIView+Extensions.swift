@@ -19,3 +19,16 @@ extension UIView {
         UINib(nibName: reuseIdentifier, bundle: bundle)
     }
 }
+
+extension UIView {
+    static func fromNib<View: UIView>() -> View {
+        let bundle = Bundle(for: self)
+        let nib = bundle.loadNibNamed(String(describing: self), owner: nil, options: nil)
+        let subject = nib!.first as? View
+        return subject!
+    }
+
+    class func cellFromNib<T: UIView>() -> T {
+        (Bundle(for: T.self).loadNibNamed(String(describing: T.self), owner: nil, options: nil)![0] as? T)!
+    }
+}

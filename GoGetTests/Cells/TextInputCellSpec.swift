@@ -17,19 +17,30 @@ class TextInputCellSpec: QuickSpec {
 }
 
 extension TextInputCellSpec {
-//    override func spec() {
-//        var subject: TextInputCell!
-//        beforeEach {
-//            subject = self.newSubject
-//        }
-//    }
+    override func spec() {
+        var subject: TextInputCell!
+        beforeEach {
+            subject = self.newSubject
+        }
+        describe("viewModel") {
+            it("is correct type") {
+                expect(subject.viewModel).to(beAKindOf(TextInputCellViewModelType.self))
+            }
+            it("is configured correctly") {
+                let blank = ""
+                expect(subject.viewModel?.title).to(equal("Name"))
+                expect(subject.viewModel?.initialValue).to(equal(blank))
+            }
+        }
+    }
 }
 
 extension TextInputCellSpec {
     var newSubject: TextInputCell {
+        let subject: TextInputCell = UIView.cellFromNib()
         viewModel = MockTextInputCellViewModel()
-        let viewController = TextInputCell()
-        return viewController
+        subject.viewModel = viewModel
+        return subject
     }
 }
 
