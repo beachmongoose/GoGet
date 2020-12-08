@@ -25,13 +25,10 @@ extension BuyListViewModelSpec {
         beforeEach {
             subject = self.newSubject
         }
-        describe("Table Data") {
-            context("when tableData is fetched") {
-                beforeEach {
-                    subject.fetchTableData()
-                }
-                it("calls load function") {
-                    expect(self.getItems.loadCallCount).to(equal(1))
+        describe("viewModel") {
+            context("when created") {
+                it("calls fetchByCategory") {
+                    expect(self.getItems.fetchByCategoryCallCount).to(equal(1))
                 }
             }
         }
@@ -42,15 +39,10 @@ extension BuyListViewModelSpec {
     var newSubject: BuyListViewModel {
         coordinator = BuyListCoordinator()
         getItems = MockGetItems()
-        let getCategories = GetCategories()
-        let sortTypeInstance = SortingInstance.shared
 
-        return BuyListViewModel(
-            coordinator: coordinator,
-            getItems: getItems,
-            getCategories: getCategories,
-            sortTypeInstance: sortTypeInstance
-        )
+        let viewModel = BuyListViewModel(coordinator: coordinator, getItems: getItems)
+
+        return viewModel
     }
 }
 

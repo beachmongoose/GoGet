@@ -80,9 +80,6 @@
 		9FCFAC11256C1B4800D0A3FB /* CategoryListCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FCFAC10256C1B4800D0A3FB /* CategoryListCellViewModel.swift */; };
 		9FCFAC1D256C2CAC00D0A3FB /* UIGestureRecognizer+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FCFAC1C256C2CAC00D0A3FB /* UIGestureRecognizer+Extensions.swift */; };
 		9FDCAF0C25797FA200C58671 /* SegmentedControlCellSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FDCAF0B25797FA200C58671 /* SegmentedControlCellSpec.swift */; };
-		9FDCAF102579805900C58671 /* DateCellSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FDCAF0F2579805900C58671 /* DateCellSpec.swift */; };
-		9FDCAF142579825300C58671 /* NumberInputCellSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FDCAF132579825300C58671 /* NumberInputCellSpec.swift */; };
-		9FDCAF18257983DF00C58671 /* CategoryInputCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FDCAF17257983DE00C58671 /* CategoryInputCell.swift */; };
 		9FE4BA16250FD77000960506 /* UIViewController+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FE4BA15250FD77000960506 /* UIViewController+Extensions.swift */; };
 		9FEFE9332553135900512C9F /* NewDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FEFE9322553135900512C9F /* NewDetailViewModel.swift */; };
 		9FF9124E253635CF0007B5D1 /* ReactiveKit+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FF9124D253635CF0007B5D1 /* ReactiveKit+Extensions.swift */; };
@@ -181,9 +178,6 @@
 		9FCFAC10256C1B4800D0A3FB /* CategoryListCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryListCellViewModel.swift; sourceTree = "<group>"; };
 		9FCFAC1C256C2CAC00D0A3FB /* UIGestureRecognizer+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIGestureRecognizer+Extensions.swift"; sourceTree = "<group>"; };
 		9FDCAF0B25797FA200C58671 /* SegmentedControlCellSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SegmentedControlCellSpec.swift; sourceTree = "<group>"; };
-		9FDCAF0F2579805900C58671 /* DateCellSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateCellSpec.swift; sourceTree = "<group>"; };
-		9FDCAF132579825300C58671 /* NumberInputCellSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NumberInputCellSpec.swift; sourceTree = "<group>"; };
-		9FDCAF17257983DE00C58671 /* CategoryInputCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryInputCell.swift; sourceTree = "<group>"; };
 		9FE4BA15250FD77000960506 /* UIViewController+Extensions.swift */ = {isa = PBXFileReference; indentWidth = 4; lastKnownFileType = sourcecode.swift; path = "UIViewController+Extensions.swift"; sourceTree = "<group>"; tabWidth = 4; };
 		9FEFE9322553135900512C9F /* NewDetailViewModel.swift */ = {isa = PBXFileReference; indentWidth = 4; lastKnownFileType = sourcecode.swift; path = NewDetailViewModel.swift; sourceTree = "<group>"; tabWidth = 4; };
 		9FF9124D253635CF0007B5D1 /* ReactiveKit+Extensions.swift */ = {isa = PBXFileReference; indentWidth = 4; lastKnownFileType = sourcecode.swift; path = "ReactiveKit+Extensions.swift"; sourceTree = "<group>"; tabWidth = 4; };
@@ -485,9 +479,6 @@
 			children = (
 				9F9E3C45256D62F400B26338 /* TextInputCellSpec.swift */,
 				9FDCAF0B25797FA200C58671 /* SegmentedControlCellSpec.swift */,
-				9FDCAF0F2579805900C58671 /* DateCellSpec.swift */,
-				9FDCAF132579825300C58671 /* NumberInputCellSpec.swift */,
-				9FDCAF17257983DE00C58671 /* CategoryInputCell.swift */,
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -787,15 +778,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				9F9E3C46256D62F400B26338 /* TextInputCellSpec.swift in Sources */,
-				9FDCAF142579825300C58671 /* NumberInputCellSpec.swift in Sources */,
 				9F433E6D2568625300E361D6 /* Item+Test.swift in Sources */,
 				9FDCAF0C25797FA200C58671 /* SegmentedControlCellSpec.swift in Sources */,
 				9F433E32256826D200E361D6 /* FullListViewControllerSpec.swift in Sources */,
 				9FA8A50925695F95009ECBD5 /* DetailViewControllerSpec.swift in Sources */,
 				9FA8A52025698C31009ECBD5 /* CategoryViewControllerSpec.swift in Sources */,
-				9FDCAF102579805900C58671 /* DateCellSpec.swift in Sources */,
 				9F60919B257EAFD400CA89D2 /* BuyListViewModelSpec.swift in Sources */,
-				9FDCAF18257983DF00C58671 /* CategoryInputCell.swift in Sources */,
 				9F433E62256853FF00E361D6 /* BuyListViewControllerSpec.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
