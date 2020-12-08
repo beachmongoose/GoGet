@@ -16,6 +16,14 @@ class CategoryInputCell: UITableViewCell, UIPopoverPresentationControllerDelegat
     var viewModel: CategoryInputCellViewModelType? {
         didSet { setupCell() }
     }
+    override func awakeFromNib() {
+        inputButton.backgroundColor = .clear
+        inputButton.contentEdgeInsets = UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)
+        inputButton.layer.cornerRadius = 5
+        inputButton.layer.borderWidth = 0.25
+        inputButton.layer.borderColor = UIColor.lightGray.cgColor
+        selectionStyle = .none
+    }
 }
 
 extension CategoryInputCell {
@@ -27,11 +35,5 @@ extension CategoryInputCell {
             self.inputButton.setTitle(category, for: .normal)
         }
         .dispose(in: bag)
-        inputButton.backgroundColor = .clear
-        inputButton.contentEdgeInsets = UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)
-        inputButton.layer.cornerRadius = 5
-        inputButton.layer.borderWidth = 0.25
-        inputButton.layer.borderColor = UIColor.lightGray.cgColor
-        selectionStyle = .none
     }
 }

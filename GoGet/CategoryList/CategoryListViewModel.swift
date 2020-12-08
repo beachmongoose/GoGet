@@ -76,7 +76,7 @@ extension CategoryListViewModel {
         guard let index = index else { selectedID.value = nil
             return
         }
-        let category = getCategories.load()[index]
+        let category = categories[index]
         selectedID.value = category.id
     }
 

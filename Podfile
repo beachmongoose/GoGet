@@ -17,6 +17,7 @@ target 'GoGetTests' do
     pod 'Nimble'
     pod 'Bond'
     pod 'ReactiveKit'
+    pod 'PromiseKit', '~> 6.8'
 end
 
 post_install do |pi|

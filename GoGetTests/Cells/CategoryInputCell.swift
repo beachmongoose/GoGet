@@ -12,8 +12,32 @@ import Nimble
 import Quick
 import ReactiveKit
 
-class categoryInputCellSpec: QuickSpec {
+class CategoryInputCellSpec: QuickSpec {
     var viewModel: MockCategoryInputCellViewModel!
+}
+
+extension CategoryInputCellSpec {
+    override func spec() {
+        var cell: CategoryInputCell!
+        describe("viewModel") {
+            context("when set") {
+                beforeEach {
+                    cell = CategoryInputCell()
+                    cell.viewModel = MockCategoryInputCellViewModel()
+                }
+                it("is configured correctly") {
+                    expect(cell.viewModel?.title).to(equal("Category"))
+                }
+            }
+        }
+    }
+}
+
+extension CategoryInputCellSpec {
+    var newSubject: CategoryInputCellViewModelType {
+        let cell = CategoryInputCellViewModel(title: "Category", initialValue: "", updatedValue: Property<String?>(nil))
+        return cell
+    }
 }
 
 final class MockCategoryInputCellViewModel: CategoryInputCellViewModelType {
