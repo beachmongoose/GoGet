@@ -122,7 +122,7 @@ extension FullListViewModel {
   }
 
   func removeItems() {
-    var allItems = getItems.load()
+    var allItems = getItems.items.array
     for id in selectedItems.array {
       let index = getItems.indexNumber(for: id, in: allItems)
       allItems.remove(at: index)
@@ -139,9 +139,8 @@ extension FullListViewModel {
 // MARK: - Data Observation
 extension FullListViewModel {
   func observeItemUpdates() {
-    let defaults = UserDefaults.standard
-    defaults.reactive.keyPath("Items", ofType: Data?.self, context: .immediateOnMain).ignoreNils().observeNext { _ in
-      self.fetchTableData()
+    getItems.items.observeNext { _ in
+        self.fetchTableData()
     }
     .dispose(in: bag)
 

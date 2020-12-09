@@ -46,7 +46,7 @@ extension CategoryListViewController: UITableViewDelegate, UIGestureRecognizerDe
             let viewModel = dataSource[indexPath.row]
             cell.viewModel = viewModel
 
-            cell.reactive.tapGesture().dropFirst(1).observeNext { [weak self] _ in
+            cell.reactive.tapGesture().observeNext { [weak self] _ in
                 self?.viewModel.changeSelection(to: indexPath.row)
                 self?.dismiss(animated: true, completion: nil)
             }

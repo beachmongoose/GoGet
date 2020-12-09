@@ -6,21 +6,24 @@
 //  Copyright © 2020 Maggie Maldjian. All rights reserved.
 //
 
+import Bond
 import Foundation
+import ReactiveKit
 
 // TODO: SORT CATEGORIES OPTION
 protocol GetCategoriesType {
-    func load() -> [Category]
     func save(_ categories: [Category])
     func createCategory(for category: String)
     func renameCategory(_ index: Int, to newName: String)
     func deleteCategory(_ id: String)
     func checkIfDuplicate(_ newCategory: String?) -> Bool
     func forID(_ id: String) -> (Int, String)
+    var categories: MutableObservableArray<Category> { get }
 }
 
 class GetCategories: GetCategoriesType {
-
+    var bag = DisposeBag()
+    var categories = MutableObservableArray<Category>([])
     let sortTypeInstance: SortingInstanceType
     private var sortType: SortType {
         sortTypeInstance.sortType
@@ -28,6 +31,8 @@ class GetCategories: GetCategoriesType {
 
     init(sortTypeInstance: SortingInstanceType = SortingInstance.shared) {
         self.sortTypeInstance = sortTypeInstance
+        load()
+        observeCategoriesUpdates()
     }
 
     func save(_ categories: [Category]) {
@@ -38,57 +43,57 @@ class GetCategories: GetCategoriesType {
         saveData(persistenceData)
     }
 
-    func load() -> [Category] {
-        var loadedCategories = [Category]()
+    func load() {
         let data = loadData(for: "Categories")
-        guard data != nil else { return [] }
+        guard data != nil else { return }
         do {
             let loadedData = try jsonDecoder.decode([Category].self, from: data!)
-            loadedCategories = loadedData
+            categories.replace(with: loadedData)
         } catch {
             print("Failed to load categories")
         }
-        return loadedCategories
     }
 
     func createCategory(for category: String) {
         let newCategory = Category(name: category, date: Date())
-        var categoryList = load()
-        categoryList.append(newCategory)
-        save(categoryList)
+        categories.append(newCategory)
+        save(categories.array)
     }
 
     func checkIfDuplicate(_ newCategory: String?) -> Bool {
-        let categories = load()
-        return (categories.map {$0.name == newCategory}).contains(true)
+        return (categories.array.map {$0.name == newCategory}).contains(true)
     }
 
     func updateCategory(_ category: Category, with newName: String) {
-        var categories = load()
         for index in 0..<categories.count
         where categories[index].id == category.id {
             categories[index].name = newName
         }
-        save(categories)
+        save(categories.array)
     }
 
     func forID(_ id: String) -> (Int, String) {
-        let categories = load()
-        let category = categories.first(where: { $0.id == id})
-        let index = Int(categories.firstIndex(of: category!) ?? 0)
+        let category = categories.array.first(where: { $0.id == id})
+        let index = Int(categories.array.firstIndex(of: category!) ?? 0)
         return (index, category!.name)
     }
 
     func deleteCategory(_ id: String) {
-        var categories = load()
         let index = forID(id)
         categories.remove(at: index.0)
-        save(categories)
+        save(categories.array)
     }
 
     func renameCategory(_ index: Int, to newName: String) {
-        var categories = load()
         categories[index].name = newName
-        save(categories)
+        save(categories.array)
+    }
+
+    func observeCategoriesUpdates() {
+        let defaults = UserDefaults.standard
+        defaults.reactive.keyPath("Categories", ofType: Data?.self, context: .immediateOnMain).ignoreNils().observeNext { _ in
+            self.load()
+        }
+        .dispose(in: bag)
     }
 }

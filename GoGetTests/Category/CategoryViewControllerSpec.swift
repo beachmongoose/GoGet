@@ -97,6 +97,10 @@ extension CategoryListViewControllerSpec {
 }
 
 final class MockCategoryListViewModel: CategoryListViewModelType {
+    func changeSelection(to input: Int?) {
+        
+    }
+    
     var alert = SafePassthroughSubject<Alert>()
 
     var deleteCategoryCallCount = 0
