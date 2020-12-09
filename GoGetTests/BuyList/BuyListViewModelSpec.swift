@@ -47,7 +47,7 @@ extension BuyListViewModelSpec {
 }
 
 final class MockGetItems: GetItemsType {
-
+    var items = [Item.test]
     var saveCallCount = 0
     func save(_ items: [Item]) {
         saveCallCount += 1
@@ -123,8 +123,7 @@ final class MockGetItems: GetItemsType {
 
     func loadPromise() -> Promise<[Item]> {
         return Promise<[Item]> { seal in
-            let array = load()
-            seal.fulfill(array)
+            seal.fulfill(items)
         }
     }
 

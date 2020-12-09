@@ -125,7 +125,7 @@ extension BuyListViewModel {
 //    }
 
     func markAsBought() {
-        var allItems = getItems.load()
+        var allItems = getItems.items.array
         for id in selectedItems.value {
             let index = getItems.indexNumber(for: id, in: allItems)
             var item = allItems[index]
@@ -140,12 +140,17 @@ extension BuyListViewModel {
 // MARK: - Data Observation
 extension BuyListViewModel {
     func observeItemUpdates() {
-        let defaults = UserDefaults.standard
-        defaults.reactive.keyPath("Items", ofType: Data?.self, context: .immediateOnMain).ignoreNils().observeNext { _ in
+        getItems.items.observeNext { _ in
             self.fetchTableData()
         }
         .dispose(in: bag)
     }
+//        let defaults = UserDefaults.standard
+//        defaults.reactive.keyPath("Items", ofType: Data?.self, context: .immediateOnMain).ignoreNils().observeNext { _ in
+//            self.fetchTableData()
+//        }
+//        .dispose(in: bag)
+//    }
     func observeSelectedItems() {
         selectedItems.observeNext { [weak self] _ in
             self?.fetchTableData()
@@ -173,7 +178,6 @@ extension BuyListViewModel {
     }
 
     func addArrowTo(_ title: String) -> String {
-        let sortTypeInstance: SortingInstanceType = SortingInstance.shared
         guard sortTypeInstance.sortType == SortType(rawValue: title.lowercased()) else {
             return "\(title) ↑" }
         return (sortTypeInstance.sortAscending == true) ? "\(title) ↓" : "\(title) ↑"

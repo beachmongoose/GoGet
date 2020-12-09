@@ -46,9 +46,9 @@
             filePath = "GoGetTests/Category/CategoryViewControllerSpec.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "123"
-            endingLineNumber = "123"
-            landmarkName = "changeSelectedCategory(for:)"
+            startingLineNumber = "127"
+            endingLineNumber = "127"
+            landmarkName = "createNewCategory(action:for:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -103,79 +103,94 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "8660B47B-2B4C-47A5-93DF-61CCD4C34EB0"
+            uuid = "DABE0FC7-D40D-49C7-98F5-62EE79DA1186"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "GoGet/ToBuyList/BuyListViewModel.swift"
+            filePath = "GoGet/Core/Service Objects/GetCategories.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "151"
-            endingLineNumber = "151"
-            landmarkName = "observeSelectedItems()"
+            startingLineNumber = "39"
+            endingLineNumber = "39"
+            landmarkName = "save(_:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "0F6E89AF-F82A-47A8-9B44-0D542D32BEC6"
+            uuid = "DB9E5481-ABCC-4F59-BB16-4A125F491A53"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "GoGet/Core/Service Objects/Data.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "18"
+            endingLineNumber = "18"
+            landmarkName = "saveData(_:)"
+            landmarkType = "9">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "18B4DD28-124E-4327-8E10-44517E97B569"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "GoGet/ToBuyList/BuyListViewModel.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "145"
-            endingLineNumber = "145"
-            landmarkName = "observeItemUpdates()"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "672049BF-6FB9-4815-B7D6-E5FFCE23A25B"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "GoGet/CategoryList/CategoryListViewModel.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "53"
-            endingLineNumber = "53"
-            landmarkName = "observeCategoryUpdates()"
+            startingLineNumber = "65"
+            endingLineNumber = "65"
+            landmarkName = "fetchTableData()"
             landmarkType = "7">
             <Locations>
                <Location
-                  uuid = "672049BF-6FB9-4815-B7D6-E5FFCE23A25B - 7ced06962fd290bd"
+                  uuid = "18B4DD28-124E-4327-8E10-44517E97B569 - 2df13bafb94455d1"
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
-                  symbolName = "GoGet.CategoryListViewModel.observeCategoryUpdates() -&gt; ()"
+                  symbolName = "GoGet.BuyListViewModel.fetchTableData() -&gt; ()"
                   moduleName = "GoGet"
                   usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/maggie/Development/iOS/GoGet/GoGet/CategoryList/CategoryListViewModel.swift"
+                  urlString = "file:///Users/maggie/Development/iOS/GoGet/GoGet/ToBuyList/BuyListViewModel.swift"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "53"
-                  endingLineNumber = "53"
-                  offsetFromSymbolStart = "32">
+                  startingLineNumber = "65"
+                  endingLineNumber = "65"
+                  offsetFromSymbolStart = "77">
                </Location>
                <Location
-                  uuid = "672049BF-6FB9-4815-B7D6-E5FFCE23A25B - a71e75ffeb193d92"
+                  uuid = "18B4DD28-124E-4327-8E10-44517E97B569 - 4c935cfe319a80af"
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
-                  symbolName = "closure #1 (Foundation.Data) -&gt; () in GoGet.CategoryListViewModel.observeCategoryUpdates() -&gt; ()"
+                  symbolName = "closure #1 ((key: Swift.String, value: Swift.Array&lt;GoGet.BuyListCellViewModel&gt;)) -&gt; (Swift.String, Swift.Array&lt;GoGet.BuyListCellViewModel&gt;) in GoGet.BuyListViewModel.fetchTableData() -&gt; ()"
                   moduleName = "GoGet"
                   usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/maggie/Development/iOS/GoGet/GoGet/CategoryList/CategoryListViewModel.swift"
+                  urlString = "file:///Users/maggie/Development/iOS/GoGet/GoGet/ToBuyList/BuyListViewModel.swift"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "53"
-                  endingLineNumber = "53"
-                  offsetFromSymbolStart = "46">
+                  startingLineNumber = "65"
+                  endingLineNumber = "65"
+                  offsetFromSymbolStart = "39">
+               </Location>
+               <Location
+                  uuid = "18B4DD28-124E-4327-8E10-44517E97B569 - 4c51bb13802e5f00"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #2 ((Swift.String, Swift.Array&lt;GoGet.BuyListCellViewModel&gt;), (Swift.String, Swift.Array&lt;GoGet.BuyListCellViewModel&gt;)) -&gt; Swift.Bool in GoGet.BuyListViewModel.fetchTableData() -&gt; ()"
+                  moduleName = "GoGet"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/maggie/Development/iOS/GoGet/GoGet/ToBuyList/BuyListViewModel.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "65"
+                  endingLineNumber = "65"
+                  offsetFromSymbolStart = "59">
                </Location>
             </Locations>
          </BreakpointContent>
@@ -183,16 +198,160 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "EE4FA08E-5926-4741-949A-96F1893982EF"
+            uuid = "FBB581EE-421D-43E1-98C2-6CC57401582E"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "GoGet/Core/Service Objects/GetItems.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "55"
+            endingLineNumber = "55"
+            landmarkName = "save(_:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "DE247FB3-8EA3-43E4-A9BE-3CA64215B16A"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "GoGet/DetailView/NewDetailViewModel.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "85"
+            endingLineNumber = "85"
+            landmarkName = "saveItem()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "5912FA05-FD29-4C71-B15E-E0C6948721AA"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "GoGet/Core/Service Objects/GetItems.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "127"
+            endingLineNumber = "127"
+            landmarkName = "upSert(_:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "5912FA05-FD29-4C71-B15E-E0C6948721AA - af4cf8893a63989"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "GoGet.GetItems.upSert(GoGet.Item) -&gt; PromiseKit.Promise&lt;()&gt;"
+                  moduleName = "GoGet"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/maggie/Development/iOS/GoGet/GoGet/Core/Service%20Objects/GetItems.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "127"
+                  endingLineNumber = "127"
+                  offsetFromSymbolStart = "90">
+               </Location>
+               <Location
+                  uuid = "5912FA05-FD29-4C71-B15E-E0C6948721AA - c9ce285fcb1a5a0f"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (PromiseKit.Resolver&lt;()&gt;) -&gt; () in GoGet.GetItems.upSert(GoGet.Item) -&gt; PromiseKit.Promise&lt;()&gt;"
+                  moduleName = "GoGet"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/maggie/Development/iOS/GoGet/GoGet/Core/Service%20Objects/GetItems.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "128"
+                  endingLineNumber = "128"
+                  offsetFromSymbolStart = "187">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "255B4AF4-3073-4DCF-AC1D-7C8D93932059"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "GoGet/Core/Service Objects/GetItems.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "167"
+            endingLineNumber = "167"
+            landmarkName = "savePromise(_:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "255B4AF4-3073-4DCF-AC1D-7C8D93932059 - 119126a459e85830"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "GoGet.GetItems.savePromise(Swift.Array&lt;GoGet.Item&gt;) -&gt; PromiseKit.Promise&lt;()&gt;"
+                  moduleName = "GoGet"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/maggie/Development/iOS/GoGet/GoGet/Core/Service%20Objects/GetItems.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "167"
+                  endingLineNumber = "167"
+                  offsetFromSymbolStart = "34">
+               </Location>
+               <Location
+                  uuid = "255B4AF4-3073-4DCF-AC1D-7C8D93932059 - 2111e02b07fddf7a"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (PromiseKit.Resolver&lt;()&gt;) -&gt; () in GoGet.GetItems.savePromise(Swift.Array&lt;GoGet.Item&gt;) -&gt; PromiseKit.Promise&lt;()&gt;"
+                  moduleName = "GoGet"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/maggie/Development/iOS/GoGet/GoGet/Core/Service%20Objects/GetItems.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "168"
+                  endingLineNumber = "168"
+                  offsetFromSymbolStart = "107">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "954826F9-D49F-4227-816B-84BC52958E3B"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "GoGet/CategoryList/CategoryListViewModel.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "70"
-            endingLineNumber = "70"
-            landmarkName = "fetchTableData()"
+            startingLineNumber = "94"
+            endingLineNumber = "94"
+            landmarkName = "createNewCategory(for:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "E64B0DB5-C95F-44DD-8EC5-A4ED31344F25"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "GoGet/Core/Service Objects/GetCategories.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "58"
+            endingLineNumber = "58"
+            landmarkName = "createCategory(for:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

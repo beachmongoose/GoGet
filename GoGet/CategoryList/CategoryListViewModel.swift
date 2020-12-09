@@ -29,7 +29,7 @@ final class CategoryListViewModel: CategoryListViewModelType {
     var vc = UIViewController()
     private let bag = DisposeBag()
     var tableData = MutableObservableArray<CategoryListCellViewModel>([])
-    private var categories: [Category] = []
+//    private var categories: [Category] = []
     var selectedID: Property<String?>
     var selectedIndex: Int?
     private let coordinator: CategoryListViewCoordinatorType
@@ -50,14 +50,15 @@ final class CategoryListViewModel: CategoryListViewModelType {
 extension CategoryListViewModel {
 
     func observeCategoryUpdates() {
-        defaults.reactive.keyPath("Categories", ofType: Data?.self, context: .immediateOnMain).ignoreNils().observeNext { [weak self] _ in
-            self?.fetchTableData()
+        getCategories.categories.observeNext { _ in
+            self.fetchTableData()
         }
         .dispose(in: bag)
     }
 
     func observeNameUpdates() {
-        nameData.observeNext { [weak self] data in
+        nameData.removeDuplicates().observeNext { [weak self] data in
+            guard data != "" else { return }
             if self?.newCategory == true {
                 self?.createNewCategory(for: data)
             } else {
@@ -67,7 +68,7 @@ extension CategoryListViewModel {
         .dispose(in: bag)
     }
     func fetchTableData() {
-        categories = getCategories.load()
+        let categories = getCategories.categories.array
         let categoryList = (categories.isEmpty) ? ([]) : categories.map(CategoryListCellViewModel.init)
         tableData.replace(with: categoryList)
     }
@@ -76,7 +77,7 @@ extension CategoryListViewModel {
         guard let index = index else { selectedID.value = nil
             return
         }
-        let category = categories[index]
+        let category = getCategories.categories.array[index]
         selectedID.value = category.id
     }
 
@@ -91,7 +92,6 @@ extension CategoryListViewModel {
 
     func createNewCategory(for category: String) {
         guard isValidName(category) == true else { return }
-        let getCategories: GetCategoriesType = GetCategories()
         getCategories.createCategory(for: category)
     }
 
@@ -103,16 +103,17 @@ extension CategoryListViewModel {
 
     func deleteCategory() {
         guard let index = selectedIndex else { return }
-        let category = categories[index]
+        let category = getCategories.categories[index]
         getCategories.deleteCategory(category.id)
     }
 
     func isValidName(_ category: String?) -> Bool {
-        guard category != nil && category != "None" && category != " " else {
+        let blank = ""
+        guard category != nil && category != "None" && category != blank else {
             coordinator.nameError(message: "Name not entered.")
             return false
         }
-        for entry in categories where entry.name == category {
+        for entry in getCategories.categories.array where entry.name == category {
             coordinator.nameError(message: "Duplicate name.")
             return false
         }
@@ -132,6 +133,7 @@ extension CategoryListViewModel {
     func deleteAlert() {
         let deleteOption = Alert.Action(title: "Yes") { [weak self] in
             self?.deleteCategory()
+            self?.changeSelection(to: nil)
         }
         let noOption = Alert.Action(title: "No")
         let delete = Alert(title: "Delete Category?", message: nil, cancelAction: noOption, otherActions: [deleteOption])

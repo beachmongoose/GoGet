@@ -34,7 +34,7 @@ final class CategoryInputCellViewModel: CategoryInputCellViewModelType {
         self.initialValue = initialValue
         self.updatedValue = updatedValue
         self.getCategories = getCategories
-        categories = getCategories.load()
+        categories = getCategories.categories.array
         fetchCategory()
         observeInput()
   }

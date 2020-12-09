@@ -24,7 +24,7 @@ enum ListView: String {
 
 protocol GetItemsType {
     func save(_ items: [Item])
-    func load() -> [Item]
+    var items: MutableObservableArray<Item> { get }
     func indexNumber(for item: String, in array: [Item]) -> Int
     func fetchByCategory(_ view: ListView) -> [String: [Item]]
     func isDuplicate(_ name: String) -> Bool
@@ -39,12 +39,15 @@ class GetItems: GetItemsType {
     let sortTypeInstance: SortingInstanceType
     let categoryStore: CategoryStoreType
     let bag = DisposeBag()
+    var items = MutableObservableArray<Item>([])
 
     init(sortTypeInstance: SortingInstanceType = SortingInstance.shared,
          categoryStore: CategoryStoreType = CategoryStore.shared) {
         self.sortTypeInstance = sortTypeInstance
         self.categoryStore = categoryStore
-        removeDeletedCategoryID()
+        load()
+        observeItemsUpdates()
+//        removeDeletedCategoryID()
   }
 
 // MARK: - Data Handling
@@ -55,13 +58,13 @@ class GetItems: GetItemsType {
     saveData(persistenceData)
   }
 
-    func load() -> [Item] {
+    func load() {
         let sortType = sortTypeInstance.sortType
         let sortAscending = sortTypeInstance.sortAscending
         var loadedItems = [Item]()
         var finalItemData = [Item]()
         let data = loadData(for: "Items")
-        guard data != nil else { return [] }
+        guard data != nil else { return }
 
         do {
             let item = try jsonDecoder.decode([Item].self, from: data!)
@@ -75,7 +78,7 @@ class GetItems: GetItemsType {
         case .date: finalItemData = byDate(loadedItems)
         case .added: finalItemData = byAdded(loadedItems)
         }
-        return (sortAscending == true) ? finalItemData : finalItemData.reversed()
+        items.replace(with: (sortAscending == true) ? finalItemData : finalItemData.reversed())
     }
 
     func indexNumber(for item: String, in array: [Item]) -> Int {
@@ -84,7 +87,7 @@ class GetItems: GetItemsType {
     }
 
     func fetchByCategory(_ view: ListView) -> [String: [Item]] {
-        let data = load()
+        let data = items.array
         let items = (view == .buyList) ? data.filter { $0.needToBuy } : data
         let categories = categoryStore.getDictionary()
 
@@ -99,8 +102,7 @@ class GetItems: GetItemsType {
     }
 
     func isDuplicate(_ name: String) -> Bool {
-        let items = load()
-        return (items.map {$0.name.lowercased() == name.lowercased()}).contains(true)
+        return (items.array.map {$0.name.lowercased() == name.lowercased()}).contains(true)
     }
 
 // MARK: - Saving
@@ -139,7 +141,7 @@ class GetItems: GetItemsType {
 
     func loadPromise() -> Promise<[Item]> {
         return Promise<[Item]> { seal in
-            let array = load()
+            let array = items.array
             seal.fulfill(array)
         }
     }
@@ -188,26 +190,34 @@ class GetItems: GetItemsType {
         return array.sorted(by: { $0.dateAdded ?? Date() < $1.dateAdded ?? Date()})
     }
 
-    func removeDeletedCategoryID() {
-        defaults.reactive.keyPath("Categories", ofType: Data?.self, context: .immediateOnMain).ignoreNils().observeNext { _ in
-            var items = self.load()
-            let categories = self.categoryStore.getDictionary()
-            var deletedID: String? {
-                for item in items {
-                    guard item.categoryID != nil else { continue }
-                    let noKey = categories[item.categoryID!] == nil
-                    if noKey {
-                        return item.categoryID
-                    }
-                }
-                return nil
-            }
-            guard deletedID != nil else { return }
-            for index in 0..<items.count where items[index].categoryID == deletedID {
-                items[index].categoryID = nil
-            }
-            self.save(items)
+    func observeItemsUpdates() {
+        let defaults = UserDefaults.standard
+        defaults.reactive.keyPath("Items", ofType: Data?.self, context: .immediateOnMain).ignoreNils().observeNext { _ in
+            self.load()
         }
         .dispose(in: bag)
     }
-}
+    }
+
+//    func removeDeletedCategoryID() {
+//        defaults.reactive.keyPath("Categories", ofType: Data?.self, context: .immediateOnMain).ignoreNils().observeNext { _ in
+//            let categories = self.categoryStore.getDictionary()
+//            var deletedID: String? {
+//                for item in self.items {
+//                    guard item.categoryID != nil else { continue }
+//                    let noKey = categories[item.categoryID!] == nil
+//                    if noKey {
+//                        return item.categoryID
+//                    }
+//                }
+//                return nil
+//            }
+//            guard deletedID != nil else { return }
+//            for index in 0..<self.items.count where self.items[index].categoryID == deletedID {
+//                self.items[index].categoryID = nil
+//            }
+//            self.save(self.items)
+//        }
+//        .dispose(in: bag)
+//    }
+//}
