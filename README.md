@@ -29,11 +29,11 @@ UIAlerts are controlled by the ViewModel, but are sent to the View Controller vi
 Each tab's view is built with a standard View Controller, with a Table View added via XIB file. The Buy List, Full List, and Category List each have their own custom cell. The Detail View has one custom cell for each input line.
 
 ## Required Pods:
-Bond
-PromiseKit
-ReactiveKit
-SwiftLint
-Quick & Nimble (Unit Testing Only)
+- Bond
+- PromiseKit
+- ReactiveKit
+- SwiftLint
+- Quick & Nimble (Unit Testing Only)
 
 ## Planned Changes
 Select All button
