@@ -36,10 +36,10 @@ Each tab's view is built with a standard View Controller, with a Table View adde
 - Quick & Nimble (Unit Testing Only)
 
 ## Planned Changes
-Select All button
-Sort by Category option
-Implement custom headers
-Allow user to change font style and background color
+- Select All button
+- Sort by Category option
+- Implement custom headers
+- Allow user to change font style and background color
 
 ## Contributing
 Anyone is welcome to contribute or suggest improvements.
