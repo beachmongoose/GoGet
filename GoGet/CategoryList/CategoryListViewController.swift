@@ -34,7 +34,6 @@ class CategoryListViewController: UIViewController, AlertPresenter {
 }
 
 extension CategoryListViewController: UITableViewDelegate, UIGestureRecognizerDelegate {
-
     func setUpTable() {
         tableView.register(UINib(nibName: "CategoryListCell", bundle: nil), forCellReuseIdentifier: "CategoryListCell")
 
@@ -46,12 +45,12 @@ extension CategoryListViewController: UITableViewDelegate, UIGestureRecognizerDe
             let viewModel = dataSource[indexPath.row]
             cell.viewModel = viewModel
 
-            cell.reactive.tapGesture().observeNext { [weak self] _ in
+            cell.reactive.tapGesture().removeDuplicates().observeNext { [weak self] _ in
                 self?.viewModel.changeSelection(to: indexPath.row)
                 self?.dismiss(animated: true, completion: nil)
             }
             .dispose(in: cell.bag)
-            cell.reactive.longPressGesture().observeNext { [weak self] _ in
+            cell.reactive.longPressGesture().removeDuplicates().observeNext { [weak self] _ in
                 self?.viewModel.changeSelectedIndex(to: indexPath.row)
                 self?.viewModel.longPressAlert()
             }
@@ -86,7 +85,9 @@ extension CategoryListViewController {
                                      style: .plain,
                                      target: self,
                                      action: nil)
-        noneButton.reactive.tap.bind(to: self) { $0.clearCategory() }
+        noneButton.reactive.tap.bind(to: self) { $0.viewModel.changeSelection(to: nil)
+            $0.dismiss(animated: true, completion: nil)
+        }
 
         addNewButton = UIBarButtonItem(title: "Add New",
                                        style: .plain,
@@ -97,8 +98,8 @@ extension CategoryListViewController {
         navigationItem.leftBarButtonItem = addNewButton
     }
 
-    func clearCategory() {
-        viewModel.changeSelection(to: nil)
-        dismiss(animated: true, completion: nil)
-    }
+//    func clearCategory() {
+//        viewModel.changeSelection(to: nil)
+//        dismiss(animated: true, completion: nil)
+//    }
 }

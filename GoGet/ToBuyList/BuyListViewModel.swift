@@ -53,14 +53,12 @@ final class BuyListViewModel: BuyListViewModelType {
         self.getItems = getItems
         self.getCategories = getCategories
         self.sortTypeInstance = sortTypeInstance
-        observeItemUpdates()
-        observeSelectedItems()
+        observeDataUpdates()
     }
 }
 
 // MARK: - Datasource Helper
 extension BuyListViewModel {
-
     func fetchTableData() {
         let data = createDictionary().map { ($0.key, $0.value) }.sorted(by: { $0.0 < $1.0 })
         let sortedData = reOrder(data)
@@ -81,7 +79,7 @@ extension BuyListViewModel {
         return formattedDict
     }
 
-// MARK: - Organizing
+// MARK: - Organizing TableData
     func reOrder(_ array: [(String, [BuyListCellViewModel])]) -> [(String, [BuyListCellViewModel])] {
         var data = array
         guard data.contains(where: {$0.0 == "Uncategorized"}) else { return data }
@@ -99,7 +97,6 @@ extension BuyListViewModel {
     }
 
 // MARK: - Item Handling
-
     func presentDetail(for index: IndexPath) {
         let category = tableData.collection.sections[index.section].metadata
         let itemCategory = dictionary[category]
@@ -139,20 +136,9 @@ extension BuyListViewModel {
 }
 // MARK: - Data Observation
 extension BuyListViewModel {
-    func observeItemUpdates() {
-        getItems.items.observeNext { _ in
-            self.fetchTableData()
-        }
-        .dispose(in: bag)
-    }
-//        let defaults = UserDefaults.standard
-//        defaults.reactive.keyPath("Items", ofType: Data?.self, context: .immediateOnMain).ignoreNils().observeNext { _ in
-//            self.fetchTableData()
-//        }
-//        .dispose(in: bag)
-//    }
-    func observeSelectedItems() {
-        selectedItems.observeNext { [weak self] _ in
+    func observeDataUpdates() {
+        let itemsAndSelections = combineLatest(getItems.items, selectedItems)
+        itemsAndSelections.observeNext { [weak self] _, _ in
             self?.fetchTableData()
         }
         .dispose(in: bag)

@@ -91,8 +91,8 @@ class GetCategories: GetCategoriesType {
 
     func observeCategoriesUpdates() {
         let defaults = UserDefaults.standard
-        defaults.reactive.keyPath("Categories", ofType: Data?.self, context: .immediateOnMain).ignoreNils().observeNext { _ in
-            self.load()
+        defaults.reactive.keyPath("Categories", ofType: Data?.self, context: .immediateOnMain).ignoreNils().observeNext { [weak self] _ in
+            self?.load()
         }
         .dispose(in: bag)
     }

@@ -41,8 +41,7 @@ extension BuyListViewControllerSpec {
             context("when tapped") {
                 beforeEach {
                     self.viewModel.tableData.replace(with: self.mockTableData())
-                    let cell = subject.tableView.dataSource?.tableView(subject.tableView, cellForRowAt: [0, 0]) as? BuyListCell
-                    cell?.checkButton.gestureRecognizers?.first?.tap()
+                    self.viewModel.itemsAreChecked.value = true
                     UIApplication.shared.sendAction(
                         subject.confirmButton.action!,
                         to: subject.confirmButton.target!,
@@ -118,7 +117,6 @@ final class MockBuyListViewModel: BuyListViewModelType {
     }
 
     var tableData = MutableObservableArray2D<String, BuyListCellViewModel>(Array2D(sections: []))
-
     var itemsAreChecked = Property<Bool>(false)
 
     var presentDetailCallCount = 0

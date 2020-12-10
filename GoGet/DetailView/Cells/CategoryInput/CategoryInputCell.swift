@@ -31,8 +31,8 @@ extension CategoryInputCell {
         guard let viewModel = viewModel else { return }
         categoryLabel.text = viewModel.title
         inputButton.setTitle(viewModel.selectedCategoryName.value, for: .normal)
-        viewModel.selectedCategoryName.observeNext { category in
-            self.inputButton.setTitle(category, for: .normal)
+        viewModel.selectedCategoryName.observeNext { [weak self] category in
+            self?.inputButton.setTitle(category, for: .normal)
         }
         .dispose(in: bag)
     }

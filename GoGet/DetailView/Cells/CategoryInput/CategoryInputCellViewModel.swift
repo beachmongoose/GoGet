@@ -52,11 +52,11 @@ extension CategoryInputCellViewModel {
     }
 
     func observeInput() {
-        updatedValue.observeNext { value in
-            guard value != "None" else { self.updatedValue.value = value
+        updatedValue.observeNext { [weak self] value in
+            guard value != "None" else { self?.updatedValue.value = value
                 return
             }
-            self.fetchCategory()
+            self?.fetchCategory()
         }
         .dispose(in: bag)
     }

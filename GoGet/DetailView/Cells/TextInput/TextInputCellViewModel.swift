@@ -32,15 +32,15 @@ final class TextInputCellViewModel: TextInputCellViewModelType {
   }
 
     func observeValueUpdates() {
-        updatedValue.observeNext { value in
-            self.isValid.value = (value != "")
+        updatedValue.observeNext { [weak self] value in
+            self?.isValid.value = (value != "")
         }
         .dispose(in: bag)
     }
 
     func observeValidUpdates() {
-        isValid.removeDuplicates().observeNext { _ in
-            self.validationSignal.send()
+        isValid.removeDuplicates().observeNext { [weak self] _ in
+            self?.validationSignal.send()
         }
         .dispose(in: bag)
     }

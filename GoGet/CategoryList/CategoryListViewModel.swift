@@ -41,7 +41,6 @@ final class CategoryListViewModel: CategoryListViewModelType {
         self.coordinator = coordinator
         self.selectedID = selectedID
         self.getCategories = getCategories
-        fetchTableData()
         observeNameUpdates()
         observeCategoryUpdates()
     }
@@ -50,8 +49,8 @@ final class CategoryListViewModel: CategoryListViewModelType {
 extension CategoryListViewModel {
 
     func observeCategoryUpdates() {
-        getCategories.categories.observeNext { _ in
-            self.fetchTableData()
+        getCategories.categories.observeNext { [weak self] _ in
+            self?.fetchTableData()
         }
         .dispose(in: bag)
     }

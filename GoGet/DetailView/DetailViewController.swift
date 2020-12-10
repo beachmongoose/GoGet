@@ -130,8 +130,8 @@ extension DetailViewController {
     func categoryInputCell(with viewModel: CategoryInputCellViewModelType, at indexPath: IndexPath) -> CategoryInputCell {
         let cell = tableView.dequeueReusableCell(CategoryInputCell.self, for: indexPath)
         cell.viewModel = viewModel
-        cell.inputButton.reactive.tapGesture().observeNext { _ in
-            self.viewModel.presentPopover(selectedID: viewModel.updatedValue)
+        cell.inputButton.reactive.tapGesture().observeNext { [weak self] _ in
+            self?.viewModel.presentPopover(selectedID: viewModel.updatedValue)
         }
         .dispose(in: cell.bag)
         return cell
