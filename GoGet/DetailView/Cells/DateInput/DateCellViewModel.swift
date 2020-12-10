@@ -36,19 +36,19 @@ final class DateCellViewModel: DateCellViewModelType {
   }
 
     func observeValueUpdates() {
-        updatedValue.observeNext { value in
-            guard value != nil else { self.isValid.value = true
+        updatedValue.observeNext { [weak self] value in
+            guard value != nil else { self?.isValid.value = true
             return
             }
             guard let value = value else { return }
-            self.isValid.value = (value.dateFromString() <= Date())
+            self?.isValid.value = (value.dateFromString() <= Date())
         }
         .dispose(in: bag)
     }
 
     func observeValidUpdates() {
-        isValid.removeDuplicates().observeNext { _ in
-            self.validationSignal.send()
+        isValid.removeDuplicates().observeNext { [weak self] _ in
+            self?.validationSignal.send()
         }
         .dispose(in: bag)
     }

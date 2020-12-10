@@ -58,8 +58,7 @@ extension CategoryListViewControllerSpec {
                 }
                 it("brings up options alert") {
                     expect(self.viewModel.changeSelectedIndexCallCount).to(equal(1))
-                    expect(self.viewModel
-                            .longPressAlertCallCount).to(equal(1))
+                    expect(self.viewModel.longPressAlertCallCount).to(equal(1))
                 }
             }
         }
@@ -73,6 +72,7 @@ extension CategoryListViewControllerSpec {
                         for: nil)
                 }
                 it("sets category to None") {
+                    expect(self.viewModel.changeSelectionCallCount).to(equal(1))
                     expect(self.viewModel.changeSelectedCategoryCallCount).to(equal(1))
                     expect(self.viewModel.changeSelectedIndexCallCount).to(equal(1))
                 }
@@ -97,11 +97,24 @@ extension CategoryListViewControllerSpec {
 }
 
 final class MockCategoryListViewModel: CategoryListViewModelType {
-    func changeSelection(to input: Int?) {
-        
-    }
-    
     var alert = SafePassthroughSubject<Alert>()
+
+    var changeSelectionCallCount = 0
+    func changeSelection(to input: Int?) {
+        changeSelectionCallCount += 1
+        changeSelectedIndex(to: nil)
+        changeSelectedCategory(for: nil)
+    }
+
+    var changeSelectedIndexCallCount = 0
+    func changeSelectedIndex(to index: Int?) {
+        changeSelectedIndexCallCount += 1
+    }
+
+    var changeSelectedCategoryCallCount = 0
+    func changeSelectedCategory(for index: Int?) {
+        changeSelectedCategoryCallCount += 1
+    }
 
     var deleteCategoryCallCount = 0
     func deleteCategory() {
@@ -119,13 +132,7 @@ final class MockCategoryListViewModel: CategoryListViewModelType {
     }
 
     var nameData = Property<String>("")
-
     var tableData = MutableObservableArray<CategoryListCellViewModel>([])
-
-    var changeSelectedCategoryCallCount = 0
-    func changeSelectedCategory(for index: Int?) {
-        changeSelectedCategoryCallCount += 1
-    }
 
     var createNewCategoryCallCount = 0
     func createNewCategory(action: UIAlertAction, for category: String) {
@@ -137,8 +144,4 @@ final class MockCategoryListViewModel: CategoryListViewModelType {
         renameCategoryCallCount += 1
     }
 
-    var changeSelectedIndexCallCount = 0
-    func changeSelectedIndex(to index: Int?) {
-        changeSelectedCategoryCallCount += 1
-    }
 }

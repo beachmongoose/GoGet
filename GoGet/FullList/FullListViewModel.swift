@@ -13,14 +13,14 @@ import UIKit
 protocol FullListViewModelType {
     var alert: SafePassthroughSubject<Alert> { get }
     var inDeleteMode: Property<Bool> { get }
-    var tableData: MutableObservableArray2D<String, FullListCellViewModel> { get }
     var tableCategories: [[FullListCellViewModel]] { get }
+    var tableData: MutableObservableArray2D<String, FullListCellViewModel> { get }
     func changeEditing()
-    func presentDetail(_ index: IndexPath)
-    func selectDeselectIndex(at indexPath: IndexPath)
     func clearSelectedItems()
+    func presentDetail(_ index: IndexPath)
     func presentSortOptions()
     func presentDeleteAlert()
+    func selectDeselectIndex(at indexPath: IndexPath)
 }
 
 final class FullListViewModel: FullListViewModelType {
@@ -28,30 +28,30 @@ final class FullListViewModel: FullListViewModelType {
     var alert = SafePassthroughSubject<Alert>()
     var inDeleteMode = Property<Bool>(false)
     var dictionary: [String: [Item]] = [: ]
+    private var selectedItems = MutableObservableArray<String>([])
     var tableCategories = [[FullListCellViewModel]]()
     let tableData = MutableObservableArray2D<String, FullListCellViewModel>(Array2D(sections: []))
-    private var selectedItems = MutableObservableArray<String>([])
+
     private let bag = DisposeBag()
     private let coordinator: FullListCoordinatorType
-    private let getItems: GetItemsType
     private let getCategories: GetCategoriesType
-    private let sortTypeInstance: SortingInstanceType
+    private let getItems: GetItemsType
     private var sortType: SortType {
         sortTypeInstance.sortType
     }
+    private let sortTypeInstance: SortingInstanceType
 
     init(coordinator: FullListCoordinatorType,
-         getItems: GetItemsType = GetItems(),
          getCategories: GetCategoriesType = GetCategories(),
+         getItems: GetItemsType = GetItems(),
          sortTypeInstance: SortingInstanceType = SortingInstance.shared
     ) {
         self.coordinator = coordinator
-        self.getItems = getItems
         self.getCategories = getCategories
+        self.getItems = getItems
         self.sortTypeInstance = sortTypeInstance
         fetchTableData()
-        observeItemUpdates()
-        observeSelectedItems()
+        observeDataUpdates()
     }
 }
 
@@ -138,23 +138,14 @@ extension FullListViewModel {
 
 // MARK: - Data Observation
 extension FullListViewModel {
-  func observeItemUpdates() {
-    getItems.items.observeNext { _ in
-        self.fetchTableData()
-    }
-    .dispose(in: bag)
 
-//    sortTypeInstance.sortType.observeNext { [weak self] _ in
-//        self?.fetchTableData()
-//    }
-  }
-
-  func observeSelectedItems() {
-    selectedItems.observeNext { [weak self] _ in
-      self?.fetchTableData()
+    func observeDataUpdates() {
+        let itemsAndSelections = combineLatest(getItems.items, selectedItems)
+        itemsAndSelections.observeNext { [weak self] _, _ in
+            self?.fetchTableData()
+        }
+        .dispose(in: bag)
     }
-    .dispose(in: bag)
-  }
 }
 
 extension FullListViewModel {

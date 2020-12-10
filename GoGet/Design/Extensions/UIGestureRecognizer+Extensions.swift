@@ -10,7 +10,7 @@ import UIKit
 
 extension UIGestureRecognizer {
     func tap() {
-        setValue(UITapGestureRecognizer.State.began.rawValue, forKey: "state")
+        setValue(UIGestureRecognizer.State.began.rawValue, forKey: "state")
         RunLoop.main.run(until: Date(timeIntervalSinceNow: 0.0015))
     }
 
