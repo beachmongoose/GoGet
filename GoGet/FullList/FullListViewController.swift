@@ -61,7 +61,7 @@ extension FullListViewController: UITableViewDelegate {
             self?.viewModel.selectDeselectIndex(at: indexPath)
             self?.viewModel.changeEditing()
         }
-        .dispose(in: cell.bag)
+        .dispose(in: bag)
         cell.reactive.tapGesture().removeDuplicates().observeNext { [weak self] _ in
             if self?.viewModel.inDeleteMode.value == false {
                 self?.viewModel.presentDetail(indexPath)

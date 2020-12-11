@@ -132,7 +132,7 @@ extension FullListViewModel {
   }
 
   func clearSelectedItems() {
-    selectedItems.removeAll()
+    if selectedItems.isEmpty { selectedItems.removeAll() }
   }
 }
 

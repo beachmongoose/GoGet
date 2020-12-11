@@ -36,26 +36,28 @@ class CategoryListViewController: UIViewController, AlertPresenter {
 extension CategoryListViewController: UITableViewDelegate, UIGestureRecognizerDelegate {
     func setUpTable() {
         tableView.register(UINib(nibName: "CategoryListCell", bundle: nil), forCellReuseIdentifier: "CategoryListCell")
-
         viewModel.tableData.bind(to: tableView) { [ weak self ] dataSource, indexPath, tableView in
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: "CategoryListCell",
-                                                           for: indexPath) as? CategoryListCell else {
+            guard let self = self else { return UITableViewCell() }
+            guard let cell = tableView.dequeueReusableCell(
+                    withIdentifier: "CategoryListCell",
+                    for: indexPath
+            ) as? CategoryListCell else {
                 fatalError("Failed to populate Category Table")
             }
+
             let viewModel = dataSource[indexPath.row]
             cell.viewModel = viewModel
 
-            cell.reactive.tapGesture().removeDuplicates().observeNext { [weak self] _ in
+            cell.reactive.tapGesture().observeNext { [weak self] _ in
                 self?.viewModel.changeSelection(to: indexPath.row)
                 self?.dismiss(animated: true, completion: nil)
             }
             .dispose(in: cell.bag)
-            cell.reactive.longPressGesture().removeDuplicates().observeNext { [weak self] _ in
-                self?.viewModel.changeSelectedIndex(to: indexPath.row)
-                self?.viewModel.longPressAlert()
-            }
-            .dispose(in: cell.bag)
 
+            cell.reactive.longPressGesture().bind(to: self) { _self, _ in
+                _self.viewModel.changeSelectedIndex(to: indexPath.row)
+                _self.viewModel.longPressAlert()
+            }
             return cell
         }
     }
@@ -97,9 +99,4 @@ extension CategoryListViewController {
         navigationItem.rightBarButtonItem = noneButton
         navigationItem.leftBarButtonItem = addNewButton
     }
-
-//    func clearCategory() {
-//        viewModel.changeSelection(to: nil)
-//        dismiss(animated: true, completion: nil)
-//    }
 }

@@ -46,7 +46,6 @@ extension FullListViewControllerSpec {
                     cell?.gestureRecognizers?.first?.longPress()
                 }
                 it("activates delete mode") {
-                    expect(self.viewModel.inDeleteMode.value).to(equal(true))
                     expect(self.viewModel.changeEditingCallCount).to(equal(1))
                 }
             }
@@ -54,6 +53,7 @@ extension FullListViewControllerSpec {
         describe("cancel button") {
             context("when tapped") {
                 beforeEach {
+                    self.viewModel.inDeleteMode.value = true
                     UIApplication.shared.sendAction(
                         subject.cancelButton.action!,
                         to: subject.cancelButton.target!,
@@ -61,8 +61,10 @@ extension FullListViewControllerSpec {
                         for: nil
                     )
                 }
-                it("calls viewModel.clearSelectedItems") {
-                    expect(self.viewModel.clearSelectedItemsCallCount).to(equal(1))
+                it("clears selectedItems array") {
+                    expect(self.viewModel.clearSelectedItemsCallCount).to(equal(2))
+                }
+                it("calls viewModel.changeEditing") {
                     expect(self.viewModel.changeEditingCallCount).to(equal(1))
                 }
             }
@@ -86,8 +88,8 @@ extension FullListViewControllerSpec {
             context("when tapped") {
                 beforeEach {
                     self.viewModel.tableData.replace(with: self.mockTableData())
-                    let cell = subject.tableView.dataSource?.tableView(subject.tableView, cellForRowAt: [0, 0])
-                    cell?.gestureRecognizers?.first?.longPress()
+                    self.viewModel.inDeleteMode.value = true
+                    self.viewModel.selectedItems.append("itemID")
                     UIApplication.shared.sendAction(
                         subject.confirmButton.action!,
                         to: subject.confirmButton.target!,
@@ -120,6 +122,7 @@ extension FullListViewControllerSpec {
 
 final class MockFullListViewModel: FullListViewModelType {
     var alert = SafePassthroughSubject<Alert>()
+    var selectedItems = MutableObservableArray<String>([])
 
     var presentSortOptionsCallCount = 0
     func presentSortOptions() {
