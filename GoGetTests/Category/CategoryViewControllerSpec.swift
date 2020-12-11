@@ -24,14 +24,16 @@ extension CategoryListViewControllerSpec {
         }
         describe("tableView") {
             var cell: UITableViewCell?
-            context("when cell viewModel is CategoryListCellViewModel") {
+            context("when the datasource contains CategoryListCellViewModels") {
                 beforeEach {
                     self.viewModel.tableData.replace(with: self.mockTableData())
                     cell = subject.tableView.dataSource?.tableView(subject.tableView, cellForRowAt: [0, 0])
                 }
+
                 it("dequeues the proper cell") {
-                expect(cell).to(beAKindOf(CategoryListCell.self))
+                    expect(cell).to(beAKindOf(CategoryListCell.self))
                 }
+
                 it("configures the cell with the proper viewModel") {
                     let viewModel = CategoryListCellViewModel(category: .testCategory)
                     let categoryListCell = cell as? CategoryListCell
@@ -39,26 +41,25 @@ extension CategoryListViewControllerSpec {
                     let categoryViewModel = categoryListCell?.viewModel
                     expect(categoryViewModel).to(equal(viewModel))
                 }
-            }
-            context("cell tapped") {
-                beforeEach {
-                    self.viewModel.tableData.replace(with: self.mockTableData())
-                    cell = subject.tableView.dataSource?.tableView(subject.tableView, cellForRowAt: [0, 0])
-                    cell?.gestureRecognizers?.first?.tap()
+
+                context("cell tapped") {
+                    beforeEach { cell?.gestureRecognizers?.first?.tap() }
+
+                    it("changes selected category") {
+                        expect(self.viewModel.changeSelectedCategoryCallCount).to(equal(1))
+                    }
                 }
-                it("changes selected category") {
-                    expect(self.viewModel.changeSelectedCategoryCallCount).to(equal(1))
-                }
-            }
-            context("cell receives long press") {
-                beforeEach {
-                    self.viewModel.tableData.replace(with: self.mockTableData())
-                    cell = subject.tableView.dataSource?.tableView(subject.tableView, cellForRowAt: [0, 0])
-                    cell?.gestureRecognizers?.first?.longPress()
-                }
-                it("brings up options alert") {
-                    expect(self.viewModel.changeSelectedIndexCallCount).to(equal(1))
-                    expect(self.viewModel.longPressAlertCallCount).to(equal(1))
+
+                context("cell receives long press") {
+                    beforeEach {
+                        cell?.gestureRecognizers?.first?.longPress()
+                    }
+
+                    it("brings up options alert") {
+                        //TODO: 🥐 Test
+                        expect(self.viewModel.changeSelectedIndexCallCount).to(equal(1))
+                        expect(self.viewModel.longPressAlertCallCount).toEventually(equal(1))
+                    }
                 }
             }
         }

@@ -29,3 +29,11 @@ public init(
     return sections[section].metadata
   }
 }
+
+//public final class TableViewBinderDataSource<Data>: TableViewBinderDataSource<TreeChangeset<Data>> {
+//    public typealias CategoryChangeset = TreeChangeset<Data>
+//    public init(
+//        createCell: @escaping([Data], IndexPath, UITableView) -> UITableViewCell) {
+//        super.init(createCell)
+//    }
+//}
