@@ -36,9 +36,8 @@ final class FullListViewModel: FullListViewModelType {
     private let coordinator: FullListCoordinatorType
     private let getCategories: GetCategoriesType
     private let getItems: GetItemsType
-    private var sortType: SortType {
-        sortTypeInstance.sortType
-    }
+
+    private var sortSubject: SortSubject = .item
     private let sortTypeInstance: SortingInstanceType
 
     init(coordinator: FullListCoordinatorType,
@@ -149,28 +148,65 @@ extension FullListViewModel {
 }
 
 extension FullListViewModel {
+
+//    func presentSortAlert() {
+//        let items = Alert.Action(title: "Items") { [weak self] in
+//            self?.sortSubject = .item
+//            self?.presentSortOptions()
+//        }
+//        let categories = Alert.Action(title: "Categories") { [weak self] in
+//            self?.sortSubject = .category
+//            self?.presentSortOptions()
+//        }
+//        let sortOptionsAlert = Alert(title: "Sort", message: nil, otherActions: [items, categories], style: .actionSheet)
+//        alert.send(sortOptionsAlert)
+//    }
     func presentSortOptions() {
-        let added = Alert.Action(title: addArrowTo("added")) { [weak self] in
-            self?.sortTypeInstance.changeSortType(to: .added)
-            self?.fetchTableData()
+        sortSubject = .item
+        let added = Alert.Action(title: addArrowTo("Added")) { [weak self] in
+            self?.changeSortType(to: .added)
         }
-        let name = Alert.Action(title: addArrowTo("name")) { [weak self] in
-            self?.sortTypeInstance.changeSortType(to: .name)
-            self?.fetchTableData()
+        let name = Alert.Action(title: addArrowTo("Name")) { [weak self] in
+            self?.changeSortType(to: .name)
         }
-        let date = Alert.Action(title: addArrowTo("date")) { [weak self] in
-            self?.sortTypeInstance.changeSortType(to: .date)
-            self?.fetchTableData()
+        let date = Alert.Action(title: addArrowTo("Date")) { [weak self] in
+            self?.changeSortType(to: .date)
         }
-        let sortOptionsAlert = Alert(title: "Sort by...", message: nil, otherActions: [name, date, added], style: .actionSheet)
+        let category = Alert.Action(title: "Category") { [weak self] in
+            self?.sortSubject = .category
+            self?.sortByCategory()
+        }
+        let sortOptionsAlert = Alert(title: "Sort by...", message: nil, otherActions: [name, date, added, category], style: .actionSheet)
         alert.send(sortOptionsAlert)
     }
 
+    func sortByCategory() {
+        let name = Alert.Action(title: addArrowTo("Name")) { [weak self] in
+            self?.changeSortType(to: .name)
+        }
+        let added = Alert.Action(title: addArrowTo("Added")) { [weak self] in
+            self?.changeSortType(to: .added)
+        }
+        let sortCategoryAlert = Alert(title: "Sort Categories by...", message: nil, otherActions: [name, added], style: .actionSheet)
+        alert.send(sortCategoryAlert)
+    }
+
+    func changeSortType(to method: SortType) {
+        switch sortSubject {
+        case .item:
+            sortTypeInstance.changeSortType(to: method)
+        case .category:
+            sortTypeInstance.changeCategorySortType(to: method)
+        }
+        fetchTableData()
+    }
+
     func addArrowTo(_ title: String) -> String {
-        let sortTypeInstance: SortingInstanceType = SortingInstance.shared
-        guard sortTypeInstance.sortType == SortType(rawValue: title.lowercased()) else {
+        let sortAscending = (sortSubject == .item) ? sortTypeInstance.itemSortAscending : sortTypeInstance.categorySortAscending
+        let sortType = (sortSubject == .item) ? sortTypeInstance.itemSortType.value : sortTypeInstance.categorySortType
+        guard sortType == SortType(rawValue: title.lowercased()) else {
             return "\(title) ↑" }
-        return (sortTypeInstance.sortAscending == true) ? "\(title) ↓" : "\(title) ↑"
+        return (sortAscending == true) ? "\(title) ↓" : "\(title) ↑"
     }
 
     func presentDeleteAlert() {

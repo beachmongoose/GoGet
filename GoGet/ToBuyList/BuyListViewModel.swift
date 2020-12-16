@@ -40,9 +40,6 @@ final class BuyListViewModel: BuyListViewModelType {
     private let getItems: GetItemsType
     private let getCategories: GetCategoriesType
     private let sortTypeInstance: SortingInstanceType
-    private var sortType: SortType {
-        sortTypeInstance.sortType
-    }
 
     init(
         coordinator: BuyListCoordinatorType,
@@ -120,7 +117,6 @@ extension BuyListViewModel {
 //            }
 //        }
 //    }
-//TODO: ACCOUNT FOR ITEMS THAT MAY HAVE BEEN DELETED SINCE SELECTION
     func markAsBought() {
         var allItems = getItems.items.array
         for id in selectedItems.value {
@@ -164,9 +160,9 @@ extension BuyListViewModel {
     }
 
     func addArrowTo(_ title: String) -> String {
-        guard sortTypeInstance.sortType == SortType(rawValue: title.lowercased()) else {
+        guard sortTypeInstance.itemSortType.value == SortType(rawValue: title.lowercased()) else {
             return "\(title) ↑" }
-        return (sortTypeInstance.sortAscending == true) ? "\(title) ↓" : "\(title) ↑"
+        return (sortTypeInstance.itemSortAscending == true) ? "\(title) ↓" : "\(title) ↑"
     }
 
     func presentBoughtAlert() {
