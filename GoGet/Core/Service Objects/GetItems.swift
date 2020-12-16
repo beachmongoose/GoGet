@@ -17,6 +17,11 @@ enum SortType: String {
     case added
 }
 
+enum SortSubject: String {
+    case item
+    case category
+}
+
 enum ListView: String {
     case buyList
     case fullList
@@ -40,50 +45,41 @@ class GetItems: GetItemsType {
     let categoryStore: CategoryStoreType
     let bag = DisposeBag()
     var items = MutableObservableArray<Item>([])
+    var rawData = [Item]()
 
     init(sortTypeInstance: SortingInstanceType = SortingInstance.shared,
          categoryStore: CategoryStoreType = CategoryStore.shared) {
         self.sortTypeInstance = sortTypeInstance
         self.categoryStore = categoryStore
-        load()
+        observeSortTypeUpdates()
         observeItemsUpdates()
 //        removeDeletedCategoryID()
   }
 
 // MARK: - Data Handling
-    func save(_ items: [Item]) {
-        guard let persistenceData = items.persistenceData else { print("Error")
-        return
-    }
-    saveData(persistenceData)
-  }
-
     func load() {
-        let sortType = sortTypeInstance.sortType
-        let sortAscending = sortTypeInstance.sortAscending
-        var loadedItems = [Item]()
-        var finalItemData = [Item]()
         let data = loadData(for: "Items")
         guard data != nil else { return }
 
         do {
             let item = try jsonDecoder.decode([Item].self, from: data!)
-            loadedItems = item
+            rawData = item
+            orderData()
         } catch {
             print("Error when loading Items. Failed to Load.")
         }
-
-        switch sortType {
-        case .name: finalItemData = byName(loadedItems)
-        case .date: finalItemData = byDate(loadedItems)
-        case .added: finalItemData = byAdded(loadedItems)
-        }
-        items.replace(with: (sortAscending == true) ? finalItemData : finalItemData.reversed())
     }
 
-    func indexNumber(for item: String, in array: [Item]) -> Int {
-        guard let index = (array.firstIndex { $0.id == item }) else { fatalError("Item index not found")}
-        return index
+    func orderData() {
+        var sortedData = [Item]()
+        let sortType = sortTypeInstance.itemSortType
+        let sortAscending = sortTypeInstance.itemSortAscending
+        switch sortType.value {
+        case .name: sortedData = byName(rawData)
+        case .date: sortedData = byDate(rawData)
+        case .added: sortedData = byAdded(rawData)
+        }
+        items.replace(with: (sortAscending == true) ? sortedData : sortedData.reversed())
     }
 
     func fetchByCategory(_ view: ListView) -> [String: [Item]] {
@@ -101,8 +97,20 @@ class GetItems: GetItemsType {
         return tableData
     }
 
+    func save(_ items: [Item]) {
+        guard let persistenceData = items.persistenceData else { print("Error")
+        return
+    }
+    saveData(persistenceData)
+  }
+
     func isDuplicate(_ name: String) -> Bool {
         return (items.array.map {$0.name.lowercased() == name.lowercased()}).contains(true)
+    }
+
+    func indexNumber(for item: String, in array: [Item]) -> Int {
+        guard let index = (array.firstIndex { $0.id == item }) else { fatalError("Item index not found")}
+        return index
     }
 
 // MARK: - Saving
@@ -197,7 +205,14 @@ class GetItems: GetItemsType {
         }
         .dispose(in: bag)
     }
+
+    func observeSortTypeUpdates() {
+        sortTypeInstance.itemSortType.observeNext { [weak self] _ in
+            self?.orderData()
+        }
+        .dispose(in: bag)
     }
+}
 
 //    func removeDeletedCategoryID() {
 //        defaults.reactive.keyPath("Categories", ofType: Data?.self, context: .immediateOnMain).ignoreNils().observeNext { _ in

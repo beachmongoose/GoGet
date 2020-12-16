@@ -11,23 +11,36 @@ import Foundation
 import ReactiveKit
 
 protocol SortingInstanceType {
-    var sortType: SortType { get }
-    var sortAscending: Bool { get }
+    var itemSortType: Property<SortType> { get }
+    var itemSortAscending: Bool { get }
+    var categorySortType: SortType { get }
+    var categorySortAscending: Bool { get }
     func changeSortType(to method: SortType)
+    func changeCategorySortType(to method: SortType)
 }
 
 class SortingInstance: SortingInstanceType {
 
     static var shared = SortingInstance()
-    var sortType: SortType = .added
-    var sortAscending = true
+    var itemSortType = Property<SortType>(.added)
+    var itemSortAscending = true
+    var categorySortType: SortType = .date
+    var categorySortAscending = true
 
     func changeSortType(to method: SortType) {
-        if method == sortType {
-            sortAscending.toggle()
+        if method == itemSortType.value {
+            itemSortAscending.toggle()
         } else {
-            sortAscending = true
+            itemSortAscending = true
         }
-        sortType = method
+        itemSortType.value = method
+    }
+    func changeCategorySortType(to method: SortType) {
+        if method == categorySortType {
+            itemSortAscending.toggle()
+        } else {
+            itemSortAscending = true
+        }
+        categorySortType = method
     }
 }

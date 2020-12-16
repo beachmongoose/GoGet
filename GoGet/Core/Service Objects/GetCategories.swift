@@ -25,14 +25,12 @@ class GetCategories: GetCategoriesType {
     var bag = DisposeBag()
     var categories = MutableObservableArray<Category>([])
     let sortTypeInstance: SortingInstanceType
-    private var sortType: SortType {
-        sortTypeInstance.sortType
-    }
 
     init(sortTypeInstance: SortingInstanceType = SortingInstance.shared) {
         self.sortTypeInstance = sortTypeInstance
         load()
         observeCategoriesUpdates()
+        observeSortTypeUpdates()
     }
 
     func save(_ categories: [Category]) {
@@ -44,15 +42,43 @@ class GetCategories: GetCategoriesType {
     }
 
     func load() {
+        let sortType = sortTypeInstance.categorySortType
+        let sortAscending = sortTypeInstance.categorySortAscending
+        var loadedCategories = [Category]()
+        var finalCategoryData = [Category]()
         let data = loadData(for: "Categories")
         guard data != nil else { return }
         do {
             let loadedData = try jsonDecoder.decode([Category].self, from: data!)
-            categories.replace(with: loadedData)
+            loadedCategories = loadedData
         } catch {
             print("Failed to load categories")
         }
+        switch sortType {
+        case .name: finalCategoryData = byName(loadedCategories)
+        default: finalCategoryData = byAdded(loadedCategories)
+        }
+        categories.replace(with: (sortAscending == true) ? finalCategoryData : finalCategoryData.reversed())
     }
+
+    func byName(_ array: [Category]) -> [Category] {
+        return array.sorted(by: { $0.name < $1.name })
+    }
+
+    func byAdded(_ array: [Category]) -> [Category] {
+        return array.sorted(by: { $0.date < $1.date})
+    }
+//
+//    func load() {
+//        let data = loadData(for: "Categories")
+//        guard data != nil else { return }
+//        do {
+//            let loadedData = try jsonDecoder.decode([Category].self, from: data!)
+//            categories.replace(with: loadedData)
+//        } catch {
+//            print("Failed to load categories")
+//        }
+//    }
 
     func createCategory(for category: String) {
         let newCategory = Category(name: category, date: Date())
@@ -95,5 +121,9 @@ class GetCategories: GetCategoriesType {
             self?.load()
         }
         .dispose(in: bag)
+    }
+
+    func observeSortTypeUpdates() {
+        
     }
 }
