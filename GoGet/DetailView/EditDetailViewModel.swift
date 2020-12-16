@@ -36,8 +36,9 @@ final class EditDetailViewModel: DetailViewModelType {
         let titleCellViewModel = TextInputCellViewModel(title: "Item", initialValue: item.name)
         let titleCell: CellType = .nameInput(titleCellViewModel)
 
+        let boughtStatus = (item.boughtStatus != .notBought) ? true : false
         let boughtCellViewModel = SegmentedControlCellViewModel(title: "Bought",
-                                                                initialValue: bought.value,
+                                                                initialValue: boughtStatus,
                                                                 updatedValue: bought)
         let boughtCell: CellType = .boughtStatusInput(boughtCellViewModel)
 

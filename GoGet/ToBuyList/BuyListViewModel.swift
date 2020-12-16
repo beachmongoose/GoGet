@@ -120,7 +120,7 @@ extension BuyListViewModel {
 //            }
 //        }
 //    }
-
+//TODO: ACCOUNT FOR ITEMS THAT MAY HAVE BEEN DELETED SINCE SELECTION
     func markAsBought() {
         var allItems = getItems.items.array
         for id in selectedItems.value {
