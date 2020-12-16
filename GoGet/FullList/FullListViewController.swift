@@ -109,9 +109,11 @@ extension FullListViewController {
         viewModel.inDeleteMode.removeDuplicates().observeNext { [weak self] deleteMode in
             self?.tableView.allowsMultipleSelection = deleteMode
             if !deleteMode {
+                self?.tabBarController?.tabBar.isHidden = false
                 self?.viewModel.clearSelectedItems()
                 self?.addSortButton()
             } else {
+                self?.tabBarController?.tabBar.isHidden = true
                 self?.confirmAndCancelButtons()
             }
         }
