@@ -80,7 +80,7 @@ extension BuyListViewController {
                                      target: nil,
                                      action: nil)
         sortButton.reactive.tap.bind(to: self) { $0.viewModel.presentSortOptions()}
-        confirmButton = UIBarButtonItem(title: "Bought",
+        confirmButton = UIBarButtonItem(title: "Confirm",
                                         style: .plain,
                                         target: nil,
                                         action: nil)

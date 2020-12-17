@@ -10,27 +10,27 @@ import Bond
 import Foundation
 import ReactiveKit
 
-// TODO: SORT CATEGORIES OPTION
 protocol GetCategoriesType {
-    func save(_ categories: [Category])
-    func createCategory(for category: String)
-    func renameCategory(_ index: Int, to newName: String)
-    func deleteCategory(_ id: String)
-    func checkIfDuplicate(_ newCategory: String?) -> Bool
-    func forID(_ id: String) -> (Int, String)
     var categories: MutableObservableArray<Category> { get }
+    func checkIfDuplicate(_ newCategory: String?) -> Bool
+    func createCategory(for category: String)
+    func deleteCategory(_ id: String)
+    func forID(_ id: String) -> (Int, String)
+    func renameCategory(_ index: Int, to newName: String)
+    func save(_ categories: [Category])
 }
 
 class GetCategories: GetCategoriesType {
     var bag = DisposeBag()
     var categories = MutableObservableArray<Category>([])
+    var rawData = [Category]()
     let sortTypeInstance: SortingInstanceType
 
     init(sortTypeInstance: SortingInstanceType = SortingInstance.shared) {
         self.sortTypeInstance = sortTypeInstance
         load()
-        observeCategoriesUpdates()
         observeSortTypeUpdates()
+        observeCategoriesUpdates()
     }
 
     func save(_ categories: [Category]) {
@@ -42,23 +42,23 @@ class GetCategories: GetCategoriesType {
     }
 
     func load() {
-        let sortType = sortTypeInstance.categorySortType
-        let sortAscending = sortTypeInstance.categorySortAscending
-        var loadedCategories = [Category]()
-        var finalCategoryData = [Category]()
         let data = loadData(for: "Categories")
         guard data != nil else { return }
         do {
-            let loadedData = try jsonDecoder.decode([Category].self, from: data!)
-            loadedCategories = loadedData
+            rawData = try jsonDecoder.decode([Category].self, from: data!)
         } catch {
             print("Failed to load categories")
         }
-        switch sortType {
-        case .name: finalCategoryData = byName(loadedCategories)
-        default: finalCategoryData = byAdded(loadedCategories)
+        orderData()
+    }
+
+    func orderData() {
+        var sortedCategories = [Category]()
+        if sortTypeInstance.categorySortType.value == .name { sortedCategories = byName(rawData)
+        } else {
+            sortedCategories = byAdded(rawData)
         }
-        categories.replace(with: (sortAscending == true) ? finalCategoryData : finalCategoryData.reversed())
+        categories.replace(with: (sortTypeInstance.categorySortAscending == true) ? sortedCategories : sortedCategories.reversed())
     }
 
     func byName(_ array: [Category]) -> [Category] {
@@ -68,17 +68,6 @@ class GetCategories: GetCategoriesType {
     func byAdded(_ array: [Category]) -> [Category] {
         return array.sorted(by: { $0.date < $1.date})
     }
-//
-//    func load() {
-//        let data = loadData(for: "Categories")
-//        guard data != nil else { return }
-//        do {
-//            let loadedData = try jsonDecoder.decode([Category].self, from: data!)
-//            categories.replace(with: loadedData)
-//        } catch {
-//            print("Failed to load categories")
-//        }
-//    }
 
     func createCategory(for category: String) {
         let newCategory = Category(name: category, date: Date())
@@ -124,6 +113,10 @@ class GetCategories: GetCategoriesType {
     }
 
     func observeSortTypeUpdates() {
-        
+        sortTypeInstance.categorySortType.observeNext { [weak self] _ in
+            if self?.rawData == [] { return }
+            self?.orderData()
+        }
+        .dispose(in: bag)
     }
 }
