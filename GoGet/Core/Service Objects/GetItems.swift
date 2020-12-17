@@ -208,6 +208,7 @@ class GetItems: GetItemsType {
 
     func observeSortTypeUpdates() {
         sortTypeInstance.itemSortType.observeNext { [weak self] _ in
+            if self?.rawData == [] { return }
             self?.orderData()
         }
         .dispose(in: bag)

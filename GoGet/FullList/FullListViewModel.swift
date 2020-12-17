@@ -17,9 +17,9 @@ protocol FullListViewModelType {
     var tableData: MutableObservableArray2D<String, FullListCellViewModel> { get }
     func changeEditing()
     func clearSelectedItems()
+    func presentDeleteAlert()
     func presentDetail(_ index: IndexPath)
     func presentSortOptions()
-    func presentDeleteAlert()
     func selectDeselectIndex(at indexPath: IndexPath)
 }
 
@@ -27,17 +27,17 @@ final class FullListViewModel: FullListViewModelType {
 
     var alert = SafePassthroughSubject<Alert>()
     var inDeleteMode = Property<Bool>(false)
-    var dictionary: [String: [Item]] = [: ]
-    private var selectedItems = MutableObservableArray<String>([])
     var tableCategories = [[FullListCellViewModel]]()
     let tableData = MutableObservableArray2D<String, FullListCellViewModel>(Array2D(sections: []))
 
     private let bag = DisposeBag()
     private let coordinator: FullListCoordinatorType
+    var dictionary: [String: [Item]] = [: ]
+    private var selectedItems = MutableObservableArray<String>([])
+    private var sortSubject: SortSubject = .item
+
     private let getCategories: GetCategoriesType
     private let getItems: GetItemsType
-
-    private var sortSubject: SortSubject = .item
     private let sortTypeInstance: SortingInstanceType
 
     init(coordinator: FullListCoordinatorType,
@@ -139,8 +139,8 @@ extension FullListViewModel {
 extension FullListViewModel {
 
     func observeDataUpdates() {
-        let itemsAndSelections = combineLatest(getItems.items, selectedItems)
-        itemsAndSelections.observeNext { [weak self] _, _ in
+        let itemsAndSelections = combineLatest(getItems.items, selectedItems, getCategories.categories)
+        itemsAndSelections.observeNext { [weak self] _, _, _ in
             self?.fetchTableData()
         }
         .dispose(in: bag)
@@ -149,31 +149,18 @@ extension FullListViewModel {
 
 extension FullListViewModel {
 
-//    func presentSortAlert() {
-//        let items = Alert.Action(title: "Items") { [weak self] in
-//            self?.sortSubject = .item
-//            self?.presentSortOptions()
-//        }
-//        let categories = Alert.Action(title: "Categories") { [weak self] in
-//            self?.sortSubject = .category
-//            self?.presentSortOptions()
-//        }
-//        let sortOptionsAlert = Alert(title: "Sort", message: nil, otherActions: [items, categories], style: .actionSheet)
-//        alert.send(sortOptionsAlert)
-//    }
     func presentSortOptions() {
         sortSubject = .item
         let added = Alert.Action(title: addArrowTo("Added")) { [weak self] in
-            self?.changeSortType(to: .added)
+            self?.sortTypeInstance.changeSortType(to: .added)
         }
         let name = Alert.Action(title: addArrowTo("Name")) { [weak self] in
-            self?.changeSortType(to: .name)
+            self?.sortTypeInstance.changeSortType(to: .name)
         }
         let date = Alert.Action(title: addArrowTo("Date")) { [weak self] in
-            self?.changeSortType(to: .date)
+            self?.sortTypeInstance.changeSortType(to: .date)
         }
         let category = Alert.Action(title: "Category") { [weak self] in
-            self?.sortSubject = .category
             self?.sortByCategory()
         }
         let sortOptionsAlert = Alert(title: "Sort by...", message: nil, otherActions: [name, date, added, category], style: .actionSheet)
@@ -181,29 +168,20 @@ extension FullListViewModel {
     }
 
     func sortByCategory() {
+        sortSubject = .category
         let name = Alert.Action(title: addArrowTo("Name")) { [weak self] in
-            self?.changeSortType(to: .name)
+            self?.sortTypeInstance.changeCategorySortType(to: .name)
         }
         let added = Alert.Action(title: addArrowTo("Added")) { [weak self] in
-            self?.changeSortType(to: .added)
+            self?.sortTypeInstance.changeCategorySortType(to: .added)
         }
         let sortCategoryAlert = Alert(title: "Sort Categories by...", message: nil, otherActions: [name, added], style: .actionSheet)
         alert.send(sortCategoryAlert)
     }
 
-    func changeSortType(to method: SortType) {
-        switch sortSubject {
-        case .item:
-            sortTypeInstance.changeSortType(to: method)
-        case .category:
-            sortTypeInstance.changeCategorySortType(to: method)
-        }
-        fetchTableData()
-    }
-
     func addArrowTo(_ title: String) -> String {
         let sortAscending = (sortSubject == .item) ? sortTypeInstance.itemSortAscending : sortTypeInstance.categorySortAscending
-        let sortType = (sortSubject == .item) ? sortTypeInstance.itemSortType.value : sortTypeInstance.categorySortType
+        let sortType = (sortSubject == .item) ? sortTypeInstance.itemSortType.value : sortTypeInstance.categorySortType.value
         guard sortType == SortType(rawValue: title.lowercased()) else {
             return "\(title) ↑" }
         return (sortAscending == true) ? "\(title) ↓" : "\(title) ↑"

@@ -35,6 +35,7 @@ final class BuyListViewModel: BuyListViewModelType {
         return Property<Bool>(!selectedItems.value.isEmpty)
     }
     private var selectedItems = Property<Set<String>>(Set())
+    private var sortSubject: SortSubject = .item
 
     private let coordinator: BuyListCoordinatorType
     private let getItems: GetItemsType
@@ -57,7 +58,7 @@ final class BuyListViewModel: BuyListViewModelType {
 // MARK: - Datasource Helper
 extension BuyListViewModel {
     func fetchTableData() {
-        let data = createDictionary().map { ($0.key, $0.value) }.sorted(by: { $0.0 < $1.0 })
+        let data = createDictionary().map { ($0.key, $0.value) }
         let sortedData = reOrder(data)
         let sections = sortedData.map { entry in
             return Array2D.Section(metadata: entry.0, items: entry.1)
@@ -133,8 +134,8 @@ extension BuyListViewModel {
 // MARK: - Data Observation
 extension BuyListViewModel {
     func observeDataUpdates() {
-        let itemsAndSelections = combineLatest(getItems.items, selectedItems)
-        itemsAndSelections.observeNext { [weak self] _, _ in
+        let itemsAndSelections = combineLatest(getItems.items, selectedItems, getCategories.categories)
+        itemsAndSelections.observeNext { [weak self] _, _, _ in
             self?.fetchTableData()
         }
         .dispose(in: bag)
@@ -143,26 +144,41 @@ extension BuyListViewModel {
 
 extension BuyListViewModel {
     func presentSortOptions() {
-        let added = Alert.Action(title: addArrowTo("added")) { [weak self] in
+        sortSubject = .item
+        let added = Alert.Action(title: addArrowTo("Added")) { [weak self] in
             self?.sortTypeInstance.changeSortType(to: .added)
-            self?.fetchTableData()
         }
-        let name = Alert.Action(title: addArrowTo("name")) { [weak self] in
+        let name = Alert.Action(title: addArrowTo("Name")) { [weak self] in
             self?.sortTypeInstance.changeSortType(to: .name)
-            self?.fetchTableData()
         }
-        let date = Alert.Action(title: addArrowTo("date")) { [weak self] in
+        let date = Alert.Action(title: addArrowTo("Date")) { [weak self] in
             self?.sortTypeInstance.changeSortType(to: .date)
-            self?.fetchTableData()
         }
-        let sortOptionsAlert = Alert(title: "Sort by...", message: nil, otherActions: [name, date, added], style: .actionSheet)
+        let category = Alert.Action(title: "Category") { [weak self] in
+            self?.presentCategorySortOptions()
+        }
+        let sortOptionsAlert = Alert(title: "Sort by...", message: nil, otherActions: [name, date, added, category], style: .actionSheet)
         alert.send(sortOptionsAlert)
     }
 
+    func presentCategorySortOptions() {
+        sortSubject = .category
+        let name = Alert.Action(title: addArrowTo("Name")) { [weak self] in
+            self?.sortTypeInstance.changeCategorySortType(to: .name)
+        }
+        let added = Alert.Action(title: addArrowTo("Added")) { [weak self] in
+            self?.sortTypeInstance.changeCategorySortType(to: .added)
+        }
+        let sortCategoryAlert = Alert(title: "Sort Categories by...", message: nil, otherActions: [name, added], style: .actionSheet)
+        alert.send(sortCategoryAlert)
+    }
+
     func addArrowTo(_ title: String) -> String {
-        guard sortTypeInstance.itemSortType.value == SortType(rawValue: title.lowercased()) else {
+        let sortAscending = (sortSubject == .item) ? sortTypeInstance.itemSortAscending : sortTypeInstance.categorySortAscending
+        let sortType = (sortSubject == .item) ? sortTypeInstance.itemSortType.value : sortTypeInstance.categorySortType.value
+        guard sortType == SortType(rawValue: title.lowercased()) else {
             return "\(title) ↑" }
-        return (sortTypeInstance.itemSortAscending == true) ? "\(title) ↓" : "\(title) ↑"
+        return (sortAscending == true) ? "\(title) ↓" : "\(title) ↑"
     }
 
     func presentBoughtAlert() {
