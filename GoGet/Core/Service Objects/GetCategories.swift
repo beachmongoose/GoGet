@@ -23,13 +23,11 @@ protocol GetCategoriesType {
 class GetCategories: GetCategoriesType {
     var bag = DisposeBag()
     var categories = MutableObservableArray<Category>([])
-    var rawData = [Category]()
     let sortTypeInstance: SortingInstanceType
 
     init(sortTypeInstance: SortingInstanceType = SortingInstance.shared) {
         self.sortTypeInstance = sortTypeInstance
         load()
-        observeSortTypeUpdates()
         observeCategoriesUpdates()
     }
 
@@ -45,28 +43,10 @@ class GetCategories: GetCategoriesType {
         let data = loadData(for: "Categories")
         guard data != nil else { return }
         do {
-            rawData = try jsonDecoder.decode([Category].self, from: data!)
+            categories.replace(with: try jsonDecoder.decode([Category].self, from: data!))
         } catch {
             print("Failed to load categories")
         }
-        orderData()
-    }
-
-    func orderData() {
-        var sortedCategories = [Category]()
-        if sortTypeInstance.categorySortType.value == .name { sortedCategories = byName(rawData)
-        } else {
-            sortedCategories = byAdded(rawData)
-        }
-        categories.replace(with: (sortTypeInstance.categorySortAscending == true) ? sortedCategories : sortedCategories.reversed())
-    }
-
-    func byName(_ array: [Category]) -> [Category] {
-        return array.sorted(by: { $0.name < $1.name })
-    }
-
-    func byAdded(_ array: [Category]) -> [Category] {
-        return array.sorted(by: { $0.date < $1.date})
     }
 
     func createCategory(for category: String) {
@@ -108,14 +88,6 @@ class GetCategories: GetCategoriesType {
         let defaults = UserDefaults.standard
         defaults.reactive.keyPath("Categories", ofType: Data?.self, context: .immediateOnMain).ignoreNils().observeNext { [weak self] _ in
             self?.load()
-        }
-        .dispose(in: bag)
-    }
-
-    func observeSortTypeUpdates() {
-        sortTypeInstance.categorySortType.observeNext { [weak self] _ in
-            if self?.rawData == [] { return }
-            self?.orderData()
         }
         .dispose(in: bag)
     }

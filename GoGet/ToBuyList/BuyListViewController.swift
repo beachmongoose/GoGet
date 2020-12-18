@@ -74,7 +74,7 @@ extension BuyListViewController {
 //                                      style: .plain,
 //                                      target: nil,
 //                                      action: nil)
-//    selectAllButton.reactive.tap.bind(to: self) { $0.addAllToSelected() }
+//        selectAllButton.reactive.tap.bind(to: self) { $0.viewModel.}
         sortButton = UIBarButtonItem(title: "Sort",
                                      style: .plain,
                                      target: nil,
@@ -90,10 +90,17 @@ extension BuyListViewController {
             $0.viewModel.presentBoughtAlert() }
         navigationItem.rightBarButtonItem = sortButton
         navigationItem.leftBarButtonItem = confirmButton
+
+//        viewModel.itemsAreChecked.bind(to: self) { [weak self ] _, itemsAreChecked in
+//            self?.navigationItem.leftBarButtonItem = (itemsAreChecked == true) ? self?.confirmButton : self?.selectAllButton
+//        }
     }
 
     func setUpAlerts() {
         viewModel.alert.bind(to: self) { $0.show(alert: $1)}
+    }
+
+    func observeSelections() {
     }
 
 //  func addAllToSelected() {
