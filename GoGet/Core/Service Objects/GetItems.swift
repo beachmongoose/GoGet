@@ -11,12 +11,6 @@ import Foundation
 import PromiseKit
 import ReactiveKit
 
-enum SortType: String {
-    case name
-    case date
-    case added
-}
-
 enum SortSubject: String {
     case item
     case category
@@ -73,7 +67,7 @@ class GetItems: GetItemsType {
     func orderData() {
         var sortedData = [Item]()
         let sortType = sortTypeInstance.itemSortType
-        let sortAscending = sortTypeInstance.itemSortAscending
+        let sortAscending = sortTypeInstance.itemSortAscending.value
         switch sortType.value {
         case .name: sortedData = byName(rawData)
         case .date: sortedData = byDate(rawData)
