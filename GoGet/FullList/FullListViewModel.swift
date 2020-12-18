@@ -58,9 +58,9 @@ final class FullListViewModel: FullListViewModelType {
 extension FullListViewModel {
 
     func fetchTableData() {
-        let data = createDictionary().map { ($0.key, $0.value) }.sorted(by: (sortTypeInstance.categorySortAscending.value == true) ? { $0.0 < $1.0 } : { $0.0 > $1.0 })
-        let sortedData = reOrder(data)
-        let sections = sortedData.map { entry in
+        let sortedAscending = sortTypeInstance.categorySortAscending.value
+        let data = createDictionary().map { ($0.key, $0.value) }.sorted(by: (sortedAscending == true) ? { $0.0 < $1.0 } : { $0.0 > $1.0 })
+        let sections = reOrder(data).map { entry in
             return Array2D.Section(metadata: entry.0, items: entry.1)
         }
         tableData.replace(with: Array2D(sections: sections))
@@ -175,7 +175,7 @@ extension FullListViewModel {
         guard sort.itemSortType.value == SortType(rawValue: title.lowercased()) else {
         return "\(title) ↑"
         }
-        return (sort.itemSortAscending == true) ? "\(title) ↓" : "\(title) ↑"
+        return (sort.itemSortAscending.value == true) ? "\(title) ↓" : "\(title) ↑"
     }
 
     func presentDeleteAlert() {

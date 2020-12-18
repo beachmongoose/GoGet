@@ -26,3 +26,12 @@ extension Array where Element == Category {
         return (data, "Categories")
     }
 }
+
+extension SortPreferences {
+    var persistenceData: SaveData? {
+        guard let data = try? jsonEncoder.encode(self) else {
+            return nil
+        }
+        return (data, "SortPreferences")
+    }
+}
